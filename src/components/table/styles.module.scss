@@ -1,0 +1,88 @@
+.table_container {
+	position: relative;
+
+	:global(.ant-table-thead) {
+		:global(th) {
+			line-height: 18px;
+		}
+	}
+
+	.table {
+		margin-top: 12px;
+
+		:global(.table-header ) {
+			display: flex;
+			gap: 2em;
+			align-items: center;
+
+			:global(.rows-count) {
+				color: red;
+				font-size: 16px;
+			}
+		}
+
+		:global(.ant-table-pagination.ant-pagination) {
+			margin: 0 4px 16px 0;
+		}
+
+		:global(.ant-table.ant-table-middle) {
+			line-height: 18px;
+
+			:global(.ant-table-tbody) {
+				:global(td) {
+					padding: 6px 10px;
+					min-width: 80px;
+
+					:global(.ant-typography-copy) {
+						display: inline-block;
+						//margin-left: 10px;
+						visibility: hidden;
+					}
+
+					&:hover {
+						:global(.ant-typography-copy) {
+							visibility: visible;
+							//color: rgba(10, 10, 10, .0 .7);
+
+							&:hover {
+								color: #6694bd;
+							}
+
+							&:active {
+								color: #2763a1;
+							}
+						}
+					}
+				}
+
+				:global(.ant-btn-link) {
+					//color: #184785;
+					//
+					//&:hover {
+					//	color: #0256c6;
+					//}
+				}
+
+			}
+		}
+
+
+	}
+
+	.pagination_reload_btn {
+		position: absolute;
+		top: 0;
+		left: 170px;
+		//padding: 4px 8px;
+	}
+
+	&:global(.empty.with-loading) {
+		.table {
+			padding-top: 48px;
+		}
+	}
+
+
+
+
+}

@@ -1,0 +1,15 @@
+.payments {
+	.ant-table {
+		td {
+			&.date,
+			&.fromInn,
+			&.toInn{
+				width: 150px;
+			}
+
+			&.incomingSum {
+				min-width: 100px;
+			}
+		}
+	}
+}

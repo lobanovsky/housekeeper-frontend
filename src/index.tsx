@@ -2,9 +2,14 @@
 import React from 'react';
 // @ts-ignore
 import ReactDOM from 'react-dom/client';
+import dayjs from 'dayjs';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './backend/axios';
+
+
+dayjs.locale('ru')
 
 // @ts-ignore
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -4,7 +4,6 @@
 
 /** Generate by swagger-axios-codegen */
 /* eslint-disable */
-
 // @ts-nocheck
 import axiosStatic, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
@@ -101,7 +100,7 @@ export class PaymentReportControllerService {
   findAllOutgoingPaymentsByFilter(
     params: {
       /** requestBody */
-      body?: CompanyPaymentsFilter;
+      body?: OutgoingPaymentsFilter;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
@@ -122,16 +121,13 @@ export class PaymentReportControllerService {
    */
   findPaymentsFromCompany(
     params: {
-      /**  */
-      inn: string;
       /** requestBody */
-      body?: CompanyPaymentsFilter;
+      body?: IncomingPaymentsFilter;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/reports/counterparties/{inn}/incoming-payments';
-      url = url.replace('{inn}', params['inn'] + '');
+      let url = basePath + '/reports/counterparties/incoming-payments';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -155,6 +151,98 @@ export class PaymentReportControllerService {
     return new Promise((resolve, reject) => {
       let url = basePath + '/reports/incoming-payments/{year}';
       url = url.replace('{year}', params['year'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class PaymentControllerService {
+  /**
+   * Find outgoing payments with filter
+   */
+  findOutgoingPayments(
+    params: {
+      /**  */
+      pageNum?: number;
+      /**  */
+      pageSize?: number;
+      /** requestBody */
+      body?: OutgoingPaymentsFilter;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/payments/outgoing';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      configs.params = { pageNum: params['pageNum'], pageSize: params['pageSize'] };
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Find incoming payments with filter
+   */
+  findIncomingPayments(
+    params: {
+      /**  */
+      pageNum?: number;
+      /**  */
+      pageSize?: number;
+      /** requestBody */
+      body?: IncomingPaymentsFilter;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/payments/incoming';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      configs.params = { pageNum: params['pageNum'], pageSize: params['pageSize'] };
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Getting taxable and tax-free payments for year (incoming payments)
+   */
+  findAnnualIncomingPayments1(
+    params: {
+      /**  */
+      year: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/payments/{year}/incoming';
+      url = url.replace('{year}', params['year'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Find all deposits made (outgoing payments)
+   */
+  findAllDeposits(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/payments/deposits';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -370,39 +458,6 @@ export class DecisionControllerService {
   }
 }
 
-export class CounterpartyControllerService {
-  /**
-   * Find payments from from company
-   */
-  findAllFromCompanyByFilter(
-    params: {
-      /**  */
-      inn: string;
-      /**  */
-      pageNum?: number;
-      /**  */
-      pageSize?: number;
-      /** requestBody */
-      body?: CompanyPaymentsFilter;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/counterparties/{inn}/payments';
-      url = url.replace('{inn}', params['inn'] + '');
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-      configs.params = { pageNum: params['pageNum'], pageSize: params['pageSize'] };
-
-      let data = params.body;
-
-      configs.data = data;
-
-      axios(configs, resolve, reject);
-    });
-  }
-}
-
 export class RoomReportControllerService {
   /**
    * Print rooms
@@ -479,44 +534,6 @@ export class DecisionReportControllerService {
   }
 }
 
-export class PaymentControllerService {
-  /**
-   * Getting taxable and tax-free payments for year (incoming payments)
-   */
-  findAnnualIncomingPayments1(
-    params: {
-      /**  */
-      year: number;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/payments/{year}/incoming';
-      url = url.replace('{year}', params['year'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Find all deposits made (outgoing payments)
-   */
-  findAllDeposits(options: IRequestOptions = {}): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/payments/deposits';
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject);
-    });
-  }
-}
-
 export class ActuatorService {
   /**
    * Actuator root web endpoint
@@ -562,13 +579,7 @@ export class ActuatorService {
   }
 }
 
-export interface CompanyPaymentsFilter {
-  /**  */
-  fromName?: string;
-
-  /**  */
-  fromInn?: string;
-
+export interface OutgoingPaymentsFilter {
   /**  */
   toName?: string;
 
@@ -579,7 +590,24 @@ export interface CompanyPaymentsFilter {
   purpose?: string;
 
   /**  */
-  sum?: number;
+  taxable?: boolean;
+
+  /**  */
+  startDate?: Date;
+
+  /**  */
+  endDate?: Date;
+}
+
+export interface IncomingPaymentsFilter {
+  /**  */
+  fromName?: string;
+
+  /**  */
+  fromInn?: string;
+
+  /**  */
+  purpose?: string;
 
   /**  */
   taxable?: boolean;
@@ -589,6 +617,128 @@ export interface CompanyPaymentsFilter {
 
   /**  */
   endDate?: Date;
+}
+
+export interface PagePaymentVO {
+  /**  */
+  totalPages?: number;
+
+  /**  */
+  totalElements?: number;
+
+  /**  */
+  size?: number;
+
+  /**  */
+  content?: PaymentVO[];
+
+  /**  */
+  number?: number;
+
+  /**  */
+  sort?: SortObject;
+
+  /**  */
+  pageable?: PageableObject;
+
+  /**  */
+  numberOfElements?: number;
+
+  /**  */
+  first?: boolean;
+
+  /**  */
+  last?: boolean;
+
+  /**  */
+  empty?: boolean;
+}
+
+export interface PageableObject {
+  /**  */
+  offset?: number;
+
+  /**  */
+  sort?: SortObject;
+
+  /**  */
+  paged?: boolean;
+
+  /**  */
+  unpaged?: boolean;
+
+  /**  */
+  pageNumber?: number;
+
+  /**  */
+  pageSize?: number;
+}
+
+export interface PaymentVO {
+  /**  */
+  uuid?: string;
+
+  /**  */
+  date?: Date;
+
+  /**  */
+  fromAccount?: string;
+
+  /**  */
+  fromInn?: string;
+
+  /**  */
+  fromName?: string;
+
+  /**  */
+  toAccount?: string;
+
+  /**  */
+  toInn?: string;
+
+  /**  */
+  toName?: string;
+
+  /**  */
+  outgoingSum?: number;
+
+  /**  */
+  incomingSum?: number;
+
+  /**  */
+  docNumber?: string;
+
+  /**  */
+  vo?: string;
+
+  /**  */
+  bik?: string;
+
+  /**  */
+  bankName?: string;
+
+  /**  */
+  purpose?: string;
+
+  /**  */
+  tag?: EnumPaymentVOTag;
+
+  /**  */
+  taxable?: boolean;
+
+  /**  */
+  deposit?: boolean;
+}
+
+export interface SortObject {
+  /**  */
+  empty?: boolean;
+
+  /**  */
+  unsorted?: boolean;
+
+  /**  */
+  sorted?: boolean;
 }
 
 export interface AccountRegistryResponse {
@@ -722,142 +872,6 @@ export interface MailingResponse {
   sentEmail?: number;
 }
 
-export interface PagePaymentVO {
-  /**  */
-  totalPages?: number;
-
-  /**  */
-  totalElements?: number;
-
-  /**  */
-  size?: number;
-
-  /**  */
-  content?: PaymentVO[];
-
-  /**  */
-  number?: number;
-
-  /**  */
-  sort?: SortObject;
-
-  /**  */
-  pageable?: PageableObject;
-
-  /**  */
-  numberOfElements?: number;
-
-  /**  */
-  first?: boolean;
-
-  /**  */
-  last?: boolean;
-
-  /**  */
-  empty?: boolean;
-}
-
-export interface PageableObject {
-  /**  */
-  offset?: number;
-
-  /**  */
-  sort?: SortObject;
-
-  /**  */
-  unpaged?: boolean;
-
-  /**  */
-  paged?: boolean;
-
-  /**  */
-  pageNumber?: number;
-
-  /**  */
-  pageSize?: number;
-}
-
-export interface PaymentResponse {
-  /**  */
-  counterpartyInn?: string;
-
-  /**  */
-  counterpartyName?: string;
-
-  /**  */
-  totalSum?: number;
-
-  /**  */
-  payments?: PagePaymentVO;
-}
-
-export interface PaymentVO {
-  /**  */
-  uuid?: string;
-
-  /**  */
-  date?: Date;
-
-  /**  */
-  fromAccount?: string;
-
-  /**  */
-  fromInn?: string;
-
-  /**  */
-  fromName?: string;
-
-  /**  */
-  toAccount?: string;
-
-  /**  */
-  toInn?: string;
-
-  /**  */
-  toName?: string;
-
-  /**  */
-  outgoingSum?: number;
-
-  /**  */
-  incomingSum?: number;
-
-  /**  */
-  docNumber?: string;
-
-  /**  */
-  vo?: string;
-
-  /**  */
-  bik?: string;
-
-  /**  */
-  bankName?: string;
-
-  /**  */
-  purpose?: string;
-
-  /**  */
-  tag?: EnumPaymentVOTag;
-
-  /**  */
-  taxable?: boolean;
-
-  /**  */
-  deposit?: boolean;
-}
-
-export interface SortObject {
-  /**  */
-  empty?: boolean;
-
-  /**  */
-  unsorted?: boolean;
-
-  /**  */
-  sorted?: boolean;
-}
-
 export interface AnnualPaymentVO {
   /**  */
   year?: number;
@@ -942,118 +956,10 @@ export enum EnumMonthPaymentVOMonth {
   'DECEMBER' = 'DECEMBER'
 }
 
-export enum DocTypeEnum {
-  'PASSPORT_MAIN' = 'PASSPORT_MAIN',
-  'PASSPORT_ADDRESS' = 'PASSPORT_ADDRESS',
-  'PASSPORT_18' = 'PASSPORT_18',
-  'PASSPORT_CHILDREN' = 'PASSPORT_CHILDREN',
-  'PASSPORT_ARMY' = 'PASSPORT_ARMY',
-  'PASSPORT_MARRIAGE' = 'PASSPORT_MARRIAGE',
-  'JOURNAL' = 'JOURNAL',
-  'ARMY' = 'ARMY',
-  'DIPLOMA' = 'DIPLOMA',
-  'STDR' = 'STDR',
-  'STDPFR' = 'STDPFR',
-  'INN' = 'INN',
-  'SNILS' = 'SNILS',
-  'ACCOUNT_INFO' = 'ACCOUNT_INFO',
-  'FORM' = 'FORM',
-  'MARRIAGE' = 'MARRIAGE',
-  'REGISTRATION' = 'REGISTRATION',
-  'REVENUE' = 'REVENUE',
-  'CERTIFICATE' = 'CERTIFICATE',
-  'STUDY_CERTIFICATE' = 'STUDY_CERTIFICATE'
-}
-
-export interface SimpleDocument {
-	documentId: number;
-	loadFileTimestamp?: string;
-	requestId: number;
-	status: EnumDocumentStatus;
-	documentType: DocTypeEnum;
-	comment?: string;
-}
-
-export interface AccountInfo {
-	documentId: number;
-	requestId: number;
-	loadFileTimestamp?: string;
-	status: EnumDocumentStatus;
-	documentType: DocTypeEnum;
-	receiver?: string;
-	account?: string;
-	bic?: string;
-	bankName?: string;
-	corrAccount?: string;
-	inn?: string;
-	kpp?: string;
-	divisionAddress?: string;
-	divisionCity?: string;
-}
-
-
-export interface Passport {
-	documentId: number;
-	loadFileTimestamp?: string;
-	requestId: number;
-	status: EnumDocumentStatus;
-	documentType: DocTypeEnum;
-	lastName?: string;
-	firstName?: string;
-	patronymicName?: string;
-	series?: string;
-	number?: string;
-	birthDate?: Date;
-	issueDate?: Date;
-	gender?: string;
-	birthPlace?: string;
-	unitCode?: string;
-	issuedBy?: string;
-	comment?: string;
-	address?: string;
-	registrationDate?: Date;
-}
-
-export interface Snils extends SimpleDocument{
-	number?: string;
-}
-
-export interface Inn extends SimpleDocument{
-	number?: string;
-}
-
-export interface Passport18 extends SimpleDocument{}
-
-export interface Passport19 extends SimpleDocument{}
-
-export interface PassportAddress extends SimpleDocument{}
-
-export interface PassportArmy extends SimpleDocument{}
-
-export interface PassportMarriage extends SimpleDocument{}
-
-export interface PassportChildren extends SimpleDocument{}
-
-export interface Journal extends SimpleDocument{}
-
-export interface STDR extends SimpleDocument{}
-
-export interface STDRPFR extends SimpleDocument{}
-
-export interface Marriage extends SimpleDocument{}
-
-export interface Registration extends SimpleDocument{}
-
-export interface Revenue extends SimpleDocument{}
-
-export interface Certificate extends SimpleDocument{}
-
-export interface Form extends SimpleDocument{}
-
-export interface StudyCertificate extends SimpleDocument{}
-
-
-export const RequestService = new RequestsService();
-export const DocumentService = new DocumentsService();
-export const FileService = new FilesService();
-export const InteractionService = new InteractionControllerService();
+export const PaymentService = new PaymentControllerService();
+export const PaymentReportService = new PaymentReportControllerService();
+export const FileService = new FileControllerService();
+export const DecisionService = new DecisionControllerService();
+export const DecisionReportService = new DecisionReportControllerService();
+export const RoomReportService = new RoomReportControllerService();
+	

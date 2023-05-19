@@ -2,11 +2,15 @@
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import { Layout } from 'antd';
 import { HouseIcon } from 'icons/house';
+import PageHeader from 'layout/page-header';
 import { Sider } from 'layout/sider';
 import Contacts from 'pages/contacts';
 import Counters from 'pages/counters';
-import Payments from 'pages/payments';
+import IncomingPayments from 'pages/payments/incoming';
+import OutgoingPayments from 'pages/payments/outgoing';
+
 import './App.scss';
+
 
 const { Header, Content } = Layout;
 
@@ -20,6 +24,7 @@ function App() {
 					<Layout>
 						<Sider />
 						<Content>
+							<PageHeader />
 							<Routes>
 								<Route
 									path='/contacts'
@@ -30,8 +35,12 @@ function App() {
 									element={<Counters />}
 								/>
 								<Route
-									path='/payments'
-									element={<Payments />}
+									path='/payments-incoming'
+									element={<IncomingPayments />}
+								/>
+								<Route
+									path='/payments-outgoing'
+									element={<OutgoingPayments />}
 								/>
 								{/*<Route*/}
 								{/*	path='*'*/}
