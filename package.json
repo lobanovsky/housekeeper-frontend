@@ -9,6 +9,7 @@
     "antd": "^5.5.0",
     "axios": "^1.4.0",
     "dayjs": "^1.11.7",
+    "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.11.2",
@@ -20,7 +21,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "swagger:codegen": "NODE_ENV=production node src/backend/task.js"
   },
   "eslintConfig": {
     "extends": [
@@ -41,7 +43,12 @@
     ]
   },
   "devDependencies": {
+    "dotenv": "^16.0.3",
+    "env-cmd": "^10.1.0",
+    "path": "^0.12.7",
+    "replace-in-file": "^6.3.5",
     "sass": "^1.62.1",
+    "swagger-axios-codegen": "^0.15.11",
     "typescript-plugin-css-modules": "^5.0.1"
   }
 }

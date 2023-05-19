@@ -1,12 +1,12 @@
 // @ts-ignore
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import { Layout } from 'antd';
-import { UserOutlined, DashboardOutlined, DollarOutlined } from '@ant-design/icons';
-import './App.scss';
+import { HouseIcon } from 'icons/house';
+import { Sider } from 'layout/sider';
 import Contacts from 'pages/contacts';
 import Counters from 'pages/counters';
 import Payments from 'pages/payments';
-import { Sider } from 'layout/sider';
+import './App.scss';
 
 const { Header, Content } = Layout;
 
@@ -16,7 +16,7 @@ function App() {
 		<div className='App'>
 			<BrowserRouter>
 				<Layout>
-					<Header>HouseKeeper</Header>
+					<Header style={{ paddingInline: 24 }}><HouseIcon style={{ marginRight: 5, fontSize: '26px' }} />HouseKeeper</Header>
 					<Layout>
 						<Sider />
 						<Content>
