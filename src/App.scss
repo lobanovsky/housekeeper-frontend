@@ -1,0 +1,16 @@
+.App {
+  height: 100vh;
+
+  .ant-layout {
+    height: 100%;
+
+    .ant-layout-content {
+      padding: 10px;
+    }
+
+    .ant-layout-header {
+      color: white;
+      font-size: 18px;
+    }
+  }
+}
