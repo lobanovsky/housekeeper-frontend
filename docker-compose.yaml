@@ -18,8 +18,6 @@ services:
       - BUILD_NUMBER=${TAG}
     networks:
       - housekeeper-network
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
 
 networks:
   housekeeper-network:
