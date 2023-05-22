@@ -1,7 +1,6 @@
 import React, { useCallback, useImperativeHandle, useState } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, DatePicker,Select } from 'antd';
-import Ru_RU from 'antd/lib/date-picker/locale/ru_RU';
 
 import { filterOption } from 'utils/utils';
 import { FilterFieldsConfig, IFilterFieldConfig } from './types';
@@ -56,7 +55,6 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 		if (type === 'date-range') {
 			input = <DatePicker.RangePicker
 				allowClear
-				locale={Ru_RU}
 				placeholder={['c', 'по']}
 				value={filterValues[name]}
 				onChange={(dates) => {
@@ -66,7 +64,6 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 		} else if (type === 'date') {
 			input = <DatePicker
 				allowClear
-				locale={Ru_RU}
 				value={filterValues[name]}
 				onChange={(dates) => {
 					onChangeFilter({ [name]: dates });
