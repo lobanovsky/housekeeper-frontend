@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: ${DOCKERFILE:-Dockerfile}
     image: ${CONTAINER_REGISTRY}/housekeeper-frontend:${TAG}
-    container_name: teams-ui
+    container_name: housekeeper-frontend
     restart: always
     volumes:
       - ".:/usr/src/app"
