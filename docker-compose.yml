@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+
+  housekeeper-frontend:
+    build:
+      context: .
+      dockerfile: ${DOCKERFILE:-Dockerfile}
+    image: ${CONTAINER_REGISTRY}/housekeeper-frontend:${TAG}
+    container_name: teams-ui
+    restart: always
+    volumes:
+      - ".:/usr/src/app"
+      - "/usr/src/app/node_modules"
+    ports:
+      - "8141:80"
+    environment:
+      - BUILD_NUMBER=${TAG}
+    networks:
+      - housekeeper-network
+
+networks:
+  housekeeper-network:
+    external: true

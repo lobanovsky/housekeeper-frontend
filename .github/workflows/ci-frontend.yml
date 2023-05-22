@@ -1,0 +1,60 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: yandex cloud container registry Login
+        uses: yc-actions/yc-cr-login@v1.2.0
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_CR_SA_JSON_CREDENTIALS }}
+
+      - name: build, tag, and push image to Yandex Cloud Container Registry
+        env:
+          CR_REGISTRY: ${{ vars.YC_CR_REGISTRY_ID }}
+          CR_REPOSITORY: housekeeper-frontend
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG .
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPOSITORY:$IMAGE_TAG
+
+      - name: create env variables file for Docker
+        run: |
+          echo "CONTAINER_REGISTRY=cr.yandex/${{ vars.YC_CR_REGISTRY_ID }}" > .env
+          echo "TAG=${{ github.sha }}" >> .env
+
+      - name: copy files to host
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST_IP }}
+          username: ${{ secrets.HOST_USERNAME }}
+          key: ${{ secrets.HOST_KEY }}
+          source: ".env, docker-compose.yaml"
+          target: ${{ secrets.HOST_PROJECT_PATH }}
+
+      - name: docker pull && up
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_IP }}
+          username: ${{ secrets.HOST_USERNAME }}
+          key: ${{ secrets.HOST_KEY }}
+          script: |
+            docker login --username json_key --password-stdin cr.yandex <<< '${{ secrets.YC_ADMIN_SA_JSON_CREDENTIALS }}'
+            cd ${{ secrets.HOST_PROJECT_PATH }}            
+            docker compose pull
+            docker compose up -d
+            docker logout cr.yandex
