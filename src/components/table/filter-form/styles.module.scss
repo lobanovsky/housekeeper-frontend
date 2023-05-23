@@ -21,6 +21,11 @@
 		display: flex;
 		align-items: flex-start;
 		margin-top: 10px;
+		margin-left: 20px;
+
+		:global(.ant-btn:not(:last-child)) {
+			margin-right: 10px;
+		}
 	}
 
 	.search_icon {

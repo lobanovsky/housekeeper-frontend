@@ -39,6 +39,11 @@ const paymentColumns = [
 	{
 		dataIndex: 'purpose',
 		title: 'Назначение платежа'
+	},
+	{
+		dataIndex: 'taxable',
+		title: 'Налог',
+		render: (isTaxable: boolean) => <span className={isTaxable ? 'YES' : 'NO'}>{isTaxable ? 'Да': ''}</span>
 	}
 ].map(column => ({
 	...column,

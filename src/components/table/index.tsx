@@ -213,7 +213,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 					position: ['topRight'],
 					showSizeChanger: true,
 					current: pagination.pageNum,
-					pageSizeOptions: [10, 20, 30, 50],
+					pageSizeOptions: [10, 20, 50, 100],
 					locale: {
 						items_per_page: '/ стр'
 					},

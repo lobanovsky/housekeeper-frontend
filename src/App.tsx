@@ -20,7 +20,7 @@ function App() {
 		<div className='App'>
 			<BrowserRouter>
 				<Layout>
-					<Header style={{ paddingInline: 24 }}><HouseIcon style={{ marginRight: 5, fontSize: '26px' }} />HouseKeeper</Header>
+					<Header style={{ paddingInline: 25 }}><HouseIcon style={{ marginRight: 5, fontSize: '26px' }} />HouseKeeper</Header>
 					<Layout>
 						<Sider />
 						<Content>

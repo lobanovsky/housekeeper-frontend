@@ -1,25 +1,55 @@
 .payments {
 	.ant-table {
+		border-collapse: collapse;
+
 		td {
+			&:first-child {
+				border-left: 1px solid rgb(240, 240, 240);
+			}
+
+			&:not(:last-child) {
+				border-right: 1px solid rgb(240, 240, 240);
+			}
+
+
 			&.date,
 			&.fromInn,
-			&.toInn{
+			&.toInn {
 				width: 150px;
+			}
+
+			&.bankName {
+				min-width: 170px;
+				max-width: 300px;
+			}
+
+			&.fromName,
+			&.toName {
+				min-width: 150px;
+				max-width: 360px;
 			}
 
 			&.incomingSum {
 				min-width: 110px;
+				max-width: 150px;
 				text-align: end;
 			}
 
 			&.purpose {
 				max-width: 800px;
-				min-width: 500px;
+				min-width: 300px;
+				//word-break: break-all;
 			}
 
 			&.date {
 				.time {
 					color: #185dbd;
+				}
+			}
+
+			&.taxable {
+				.YES {
+					color: #c91c80;
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 import React, { useCallback, useImperativeHandle, useState } from 'react';
-import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, DatePicker,Select } from 'antd';
+import { SearchOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { Button, Input, DatePicker, Select } from 'antd';
 
 import { filterOption } from 'utils/utils';
 import { FilterFieldsConfig, IFilterFieldConfig } from './types';
@@ -12,7 +12,7 @@ interface IFilterFormProps {
 	filters: FilterFieldsConfig;
 	extraControls?: React.ReactNode[];
 	onChangeFilters: (filters: any) => void;
-	onSearchBtnClick: () => void
+	onSearchBtnClick: () => void;
 }
 
 
@@ -50,7 +50,7 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 	}, [JSON.stringify(filterValues), setFilterValues, onChangeFilters]);
 
 	const renderField = useCallback((props: IFilterFieldConfig) => {
-		const { name, title, type = 'input', options, getChangeAdditionalParams, mode,placeholder } = props;
+		const { name, title, type = 'input', options, getChangeAdditionalParams, mode, placeholder } = props;
 		let input = null;
 		if (type === 'date-range') {
 			input = <DatePicker.RangePicker
@@ -126,11 +126,17 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 				<Button
 					key='search'
 					className={styles.search_btn}
-					// disabled={loading}
 					type='primary'
 					onClick={onSearchBtnClick}
 				>
-					<SearchOutlined /> Найти
+					<SearchOutlined style={{ marginRight: 5 }} /> Найти
+				</Button>
+				<Button
+					key='clear'
+					className={styles.clear_btn}
+					onClick={clearValues}
+				>
+					<CloseCircleOutlined style={{ marginRight: 5 }} /> Очистить
 				</Button>
 				{!!extraControls.length && (
 					<div className={`${styles.extra_controls} extra-controls`}>
