@@ -8,7 +8,13 @@
 			}
 
 			&.incomingSum {
-				min-width: 100px;
+				min-width: 110px;
+				text-align: end;
+			}
+
+			&.purpose {
+				max-width: 800px;
+				min-width: 500px;
 			}
 		}
 	}

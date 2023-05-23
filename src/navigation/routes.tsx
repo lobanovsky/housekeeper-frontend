@@ -1,6 +1,14 @@
-import { DashboardOutlined, DollarOutlined, UserOutlined,ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import {
+	CloudUploadOutlined,
+	DashboardOutlined,
+	DollarOutlined,
+	UserOutlined,
+	ArrowUpOutlined,
+	ArrowDownOutlined
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { MenuItemType, SubMenuType } from 'antd/es/menu/hooks/useItems';
+import { showPaymentsImportModal } from 'pages/payments/import';
 
 interface NavigationItemType extends MenuItemType {
 	title: string;
@@ -35,6 +43,15 @@ export const NavigationItems: any = [
 				icon: <ArrowUpOutlined />,
 				title: 'Исходящие платежи',
 				label: <Link to='/payments-outgoing'>Исходящие платежи</Link>
+			},
+			{
+				key: '/import-payments',
+				icon: <CloudUploadOutlined />,
+				title: 'Загрузить файл с платежами',
+				label: <a
+					href='javascript:;'
+					onClick={showPaymentsImportModal}
+				>Загрузить файл с платежами</a>
 			},
 		]
 	}

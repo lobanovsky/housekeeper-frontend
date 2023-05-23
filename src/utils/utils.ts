@@ -42,10 +42,10 @@ export const summRenderer = (amount: number | string) => {
 
 
 	const formatter = new Intl.NumberFormat('ru-RU', {
-		style: 'currency',
-		minimumFractionDigits: 0,
+		style: 'decimal',
+		minimumFractionDigits: 2,
 		currency: 'RUB',
-		currencyDisplay: 'symbol'
+		// currencyDisplay: 'symbol'
 	});
 
 	let formattedString = formatter.format(amountNumber);

@@ -13,9 +13,23 @@ const paymentColumns = [
 		outgoing: false
 	},
 	{
+		dataIndex: 'fromName',
+		title: 'Отправитель',
+		outgoing: false
+	},
+	{
 		dataIndex: 'toInn',
 		title: 'ИНН получателя',
 		outgoing: true
+	},
+	{
+		dataIndex: 'toName',
+		title: 'Получатель',
+		outgoing: true
+	},
+	{
+		dataIndex: 'bankName',
+		title: 'Банк'
 	},
 	{
 		dataIndex: 'incomingSum',

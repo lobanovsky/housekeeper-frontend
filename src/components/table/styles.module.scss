@@ -26,12 +26,12 @@
 		}
 
 		:global(.ant-table.ant-table-middle) {
-			line-height: 18px;
+			line-height: 16px;
 
 			:global(.ant-table-tbody) {
 				:global(td) {
 					padding: 6px 10px;
-					min-width: 80px;
+					//min-width: 80px;
 
 					:global(.ant-typography-copy) {
 						display: inline-block;

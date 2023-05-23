@@ -163,7 +163,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 			onSearchBtnClick={reloadTable}
 			extraControls={extraControls}
 		/> : null,
-		[filtersChangeId]);
+		[filtersChangeId, JSON.stringify(selectedFilters)]);
 
 	const getTableHeader = useCallback(() => {
 		let header: string | JSX.Element = '';
