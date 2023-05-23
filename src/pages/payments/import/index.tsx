@@ -52,7 +52,7 @@ const PaymentsImportForm = () => {
 				loading={uploading}
 				style={{ marginTop: 16 }}
 			>
-				{uploading && <LoadingOutlined />}
+				{/*{uploading && <LoadingOutlined />}*/}
 				{uploading ? 'Загружаем файл' : 'Загрузить файл'}
 			</Button>
 		</>

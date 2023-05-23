@@ -6,7 +6,7 @@ import './style.scss';
 export const Sider = () => {
 	const location = useLocation();
 
-	return <Layout.Sider collapsible width={260}>
+	return <Layout.Sider collapsible width={320}>
 		<Menu
 			theme='dark'
 			defaultSelectedKeys={[location.pathname]}
