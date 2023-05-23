@@ -30,8 +30,11 @@ export const dateRenderer = (date: Dayjs | string | number | Date, format: strin
 export const convertDateForServer = (date?: Dayjs | string | number | Date) => date ? dateRenderer(date, 'YYYY-MM-DD') : '';
 
 export const dateTimeRenderer = (date: Dayjs | string | number) => {
-	return dateRenderer(date, 'DD.MM.YYYY HH:mm');
-
+	return <>
+		<span className='date'>{dateRenderer(date, 'DD.MM.YYYY')}</span>
+		&nbsp;
+		<span className='time'>{dateRenderer(date, 'HH:mm')}</span>
+	</>
 }
 
 export const summRenderer = (amount: number | string) => {

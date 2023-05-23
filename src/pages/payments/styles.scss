@@ -16,6 +16,12 @@
 				max-width: 800px;
 				min-width: 500px;
 			}
+
+			&.date {
+				.time {
+					color: #185dbd;
+				}
+			}
 		}
 	}
 }
