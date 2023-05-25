@@ -1,12 +1,19 @@
 import { ColumnsType } from 'antd/es/table';
 import { EnumRoomVOType, OwnerVO, RoomVO } from 'backend/services/backend';
 import { Button } from 'antd';
-import { CarOutlined, HomeOutlined, ShopOutlined } from '@ant-design/icons';
+import { ShopOutlined } from '@ant-design/icons';
+import { FlatIcon } from 'icons/flat';
+import { CarIcon } from 'icons/car';
 
 const DISPLAY_OWNER_COUNT = 1;
 
 const showPeopleModal = () => {
 };
+
+const accountNumberRenderer = (account: string = '') => {
+	const groups = [account.slice(0, 6), account.slice(6)];
+	return groups?.join(' ') || '';
+}
 
 const peopleRenderer = (people: OwnerVO[] = []) => {
 	if (!people.length) {
@@ -31,41 +38,39 @@ export const roomColumns: ColumnsType<RoomVO> = [
 	{
 		dataIndex: 'type',
 		title: '',
-		render: (type: EnumRoomVOType) => {
-			if (type === EnumRoomVOType.FLAT) {
-				return <HomeOutlined />
-			}
-
-			if (type === EnumRoomVOType.GARAGE) {
-				return <CarOutlined />
-			}
-
-			if (type === EnumRoomVOType.OFFICE) {
-				return <ShopOutlined />
-			}
-
-			return ''
-		}
+		render: (type: EnumRoomVOType) => (
+			<div className={type}>
+				{type === EnumRoomVOType.FLAT && <FlatIcon />}
+				{type === EnumRoomVOType.GARAGE && <CarIcon />}
+				{type === EnumRoomVOType.OFFICE && <ShopOutlined />}
+			</div>
+		)
 	},
 	{
-		dataIndex: 'street',
-		title: 'Дом',
-		render: (street: string, { building }: RoomVO) => `${street} ${building}`
+		dataIndex: 'account',
+		title: 'Лицевой счёт',
+		render: accountNumberRenderer
 	},
 	{
 		dataIndex: 'number',
 		title: '№ квартиры',
 	},
 	{
-		dataIndex: 'square',
-		title: 'Площадь',
-		render: (square: number, { percentage }: RoomVO) => `${square} (${percentage})%`
+		dataIndex: 'ownerName',
+		title: 'Собственник',
+		// render: (owners: OwnerVO[]) => peopleRenderer(owners)
 	},
 	{
-		dataIndex: 'owners',
-		title: 'Собственник',
-		render: (owners: OwnerVO[]) => peopleRenderer(owners)
+		dataIndex: 'square',
+		title: 'Площадь (кв. м)',
+		render: (square: number, { percentage }: RoomVO) => `${square} (${percentage}%)`
+	},
+	{
+		dataIndex: 'street',
+		title: 'Дом',
+		render: (street: string, { building }: RoomVO) => `${street} ${building}`
 	}
+
 ].map(column => ({
 	...column,
 	className: column.dataIndex

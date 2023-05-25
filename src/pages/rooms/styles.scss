@@ -16,4 +16,28 @@
 			}
 		}
 	}
+
+
+	.ant-table.ant-table-middle {
+		td {
+			&.type {
+				.anticon {
+					font-size: 20px;
+				}
+
+				.FLAT {
+					color: #0958d9;
+				}
+
+				.GARAGE {
+					color: #389e0d;
+				}
+
+				.OFFICE {
+					color: #c41d7f;
+				}
+			}
+		}
+
+	}
 }

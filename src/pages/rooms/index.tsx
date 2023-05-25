@@ -29,8 +29,6 @@ const Rooms = () => {
 	return (
 		<div className='rooms'>
 			<Table
-				//todo уникальынй id
-				rowKey='square'
 				columns={roomColumns}
 				loadDataFn={RoomService.makeRoomsReport}
 				filters={tableFilters}
