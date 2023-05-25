@@ -58,7 +58,15 @@ export const roomColumns: ColumnsType<RoomVO> = [
 	{
 		dataIndex: 'ownerName',
 		title: 'Собственник',
-		// render: (owners: OwnerVO[]) => peopleRenderer(owners)
+		render: (ownerName: string) => {
+			const owners = ownerName.split(', ');
+			return <>
+				{owners.map(name => <>
+					{name}
+					<br />
+				</>)}
+			</>
+		}
 	},
 	{
 		dataIndex: 'square',
