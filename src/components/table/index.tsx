@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { Button, Table as AntTable } from 'antd';
+import { Button, Table as AntTable, TableProps } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
 import debounce from 'lodash/debounce';
 
@@ -8,17 +8,18 @@ import { showError } from 'utils/notifications';
 import { IPagination } from 'utils/types';
 import FilterForm from './filter-form';
 import styles from './styles.module.scss';
+import { PaymentVO } from 'backend/services/backend';
 
-interface ITableProps {
-	columns: any[],
-	className?: string;
-	toolbar?: JSX.Element;
-	title?: string;
+interface ITableProps extends TableProps<any>{
+	// columns: any[],
+	// className?: string;
+	toolbar?: React.ReactNode;
 	filters?: FilterFieldsConfig;
 	defaultPagination?: IPagination;
 	defaultFilterValues?: Record<string, string | string[] | number[]>,
 	additionalRequestParams?: any,
 	onChangePagination?: (pagination: IPagination) => void,
+	// onSelectionChange?: (selectedIds: Array<number | string>)=> void;
 	onRow?: (record: any) => React.HTMLAttributes<any> | React.TdHTMLAttributes<any>,
 	extraControls?: React.ReactNode[],
 	rowKey?: string;
@@ -31,8 +32,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 	const {
 		loadDataFn,
 		columns,
-		toolbar,
-		title = '',
+		toolbar = '',
 		className,
 		defaultPagination = { pageNum: 1, pageSize: 10 },
 		defaultFilterValues = {},
@@ -165,24 +165,6 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 		/> : null,
 		[filtersChangeId, JSON.stringify(selectedFilters)]);
 
-	const getTableHeader = useCallback(() => {
-		let header: string | JSX.Element = '';
-
-		if (title) {
-			header = <div className='simple-header'>
-				<div className='header'>{title}</div>
-				{toolbar && <div className='toolbar'>{toolbar}</div>}
-			</div>
-		}
-
-		if (!title) {
-			header = toolbar || '';
-		}
-
-		return header;
-	}, [!!title, !!toolbar]);
-
-
 	useImperativeHandle(ref, () => ({
 		reloadTable,
 		resetTable,
@@ -196,6 +178,8 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 	return (
 		<div className={`${styles.table_container} app-table ${className} ${loading ? 'with-loading' : ''} ${!total ? 'empty' : ''}`}>
 			{filterForm}
+			{/* @ts-ignore*/}
+			{!!toolbar && <div className='table-toolbar'>{toolbar}</div>}
 			<AntTable
 				bordered={false}
 				className={`${styles.table}  ${!data.length ? 'empty-table' : ''}`}

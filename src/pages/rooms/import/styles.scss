@@ -1,0 +1,28 @@
+.ant-modal.ant-modal-confirm.ant-modal-confirm-info.payments-import-modal {
+	.ant-modal-content {
+		.ant-modal-body {
+			.ant-modal-confirm-body {
+				.anticon.anticon-info-circle {
+					display: none;
+				}
+
+				.ant-modal-confirm-title {
+					flex: 0 0 100%;
+				}
+
+				.ant-modal-confirm-content {
+					margin-inline-start: 12px;
+					min-height: 120px;
+
+					//.reason_form {
+					//}
+				}
+			}
+
+			.ant-modal-confirm-btns {
+				display: none;
+			}
+		}
+
+	}
+}

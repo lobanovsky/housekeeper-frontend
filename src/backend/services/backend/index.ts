@@ -93,6 +93,50 @@ export class PagedResultDto<T = any> implements IPagedResult<T> {
 // customer definition
 // empty
 
+export class RoomControllerService {
+  /**
+   * Get all rooms with filter
+   */
+  makeRoomsReport(
+    params: {
+      /**  */
+      pageNum?: number;
+      /**  */
+      pageSize?: number;
+      /** requestBody */
+      body?: RoomFilter;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/rooms';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      configs.params = { pageNum: params['pageNum'], pageSize: params['pageSize'] };
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get all types of room
+   */
+  getRoomTypes(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/rooms/types';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export class PaymentReportControllerService {
   /**
    * Find all outgoing payments by filter
@@ -462,7 +506,7 @@ export class RoomReportControllerService {
   /**
    * Print rooms
    */
-  makeRoomsReport(options: IRequestOptions = {}): Promise<any> {
+  makeRoomsReport1(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/reports/rooms';
 
@@ -579,6 +623,147 @@ export class ActuatorService {
   }
 }
 
+export interface RoomFilter {
+  /**  */
+  account?: string;
+
+  /**  */
+  type?: EnumRoomFilterType;
+
+  /**  */
+  number?: string;
+
+  /**  */
+  building?: string;
+
+  /**  */
+  street?: string;
+
+  /**  */
+  ownerName?: string;
+}
+
+export interface OwnerVO {
+  /**  */
+  fullName?: string;
+
+  /**  */
+  emails?: string[];
+
+  /**  */
+  phones?: string[];
+
+  /**  */
+  active?: boolean;
+
+  /**  */
+  dateOfLeft?: Date;
+}
+
+export interface PageRoomVO {
+  /**  */
+  totalPages?: number;
+
+  /**  */
+  totalElements?: number;
+
+  /**  */
+  size?: number;
+
+  /**  */
+  content?: RoomVO[];
+
+  /**  */
+  number?: number;
+
+  /**  */
+  sort?: SortObject;
+
+  /**  */
+  pageable?: PageableObject;
+
+  /**  */
+  numberOfElements?: number;
+
+  /**  */
+  first?: boolean;
+
+  /**  */
+  last?: boolean;
+
+  /**  */
+  empty?: boolean;
+}
+
+export interface PageableObject {
+  /**  */
+  offset?: number;
+
+  /**  */
+  sort?: SortObject;
+
+  /**  */
+  unpaged?: boolean;
+
+  /**  */
+  paged?: boolean;
+
+  /**  */
+  pageNumber?: number;
+
+  /**  */
+  pageSize?: number;
+}
+
+export interface RoomVO {
+  /**  */
+  street?: string;
+
+  /**  */
+  building?: string;
+
+  /**  */
+  cadastreNumber?: string;
+
+  /**  */
+  account?: string;
+
+  /**  */
+  ownerName?: string;
+
+  /**  */
+  number?: string;
+
+  /**  */
+  certificate?: string;
+
+  /**  */
+  square?: number;
+
+  /**  */
+  percentage?: number;
+
+  /**  */
+  type?: EnumRoomVOType;
+
+  /**  */
+  owners?: OwnerVO[];
+
+  /**  */
+  tenants?: OwnerVO[];
+}
+
+export interface SortObject {
+  /**  */
+  empty?: boolean;
+
+  /**  */
+  unsorted?: boolean;
+
+  /**  */
+  sorted?: boolean;
+}
+
 export interface OutgoingPaymentsFilter {
   /**  */
   toName?: string;
@@ -654,26 +839,6 @@ export interface PagePaymentVO {
   empty?: boolean;
 }
 
-export interface PageableObject {
-  /**  */
-  offset?: number;
-
-  /**  */
-  sort?: SortObject;
-
-  /**  */
-  paged?: boolean;
-
-  /**  */
-  unpaged?: boolean;
-
-  /**  */
-  pageNumber?: number;
-
-  /**  */
-  pageSize?: number;
-}
-
 export interface PaymentVO {
   /**  */
   uuid?: string;
@@ -728,17 +893,6 @@ export interface PaymentVO {
 
   /**  */
   deposit?: boolean;
-}
-
-export interface SortObject {
-  /**  */
-  empty?: boolean;
-
-  /**  */
-  unsorted?: boolean;
-
-  /**  */
-  sorted?: boolean;
 }
 
 export interface AccountRegistryResponse {
@@ -872,6 +1026,14 @@ export interface MailingResponse {
   sentEmail?: number;
 }
 
+export interface RoomTypeResponse {
+  /**  */
+  name?: string;
+
+  /**  */
+  description?: string;
+}
+
 export interface AnnualPaymentVO {
   /**  */
   year?: number;
@@ -930,6 +1092,16 @@ export interface Link {
   /**  */
   templated?: boolean;
 }
+export enum EnumRoomFilterType {
+  'FLAT' = 'FLAT',
+  'GARAGE' = 'GARAGE',
+  'OFFICE' = 'OFFICE'
+}
+export enum EnumRoomVOType {
+  'FLAT' = 'FLAT',
+  'GARAGE' = 'GARAGE',
+  'OFFICE' = 'OFFICE'
+}
 export enum EnumPaymentVOTag {
   'RED' = 'RED',
   'ORANGE' = 'ORANGE',
@@ -961,5 +1133,6 @@ export const PaymentReportService = new PaymentReportControllerService();
 export const FileService = new FileControllerService();
 export const DecisionService = new DecisionControllerService();
 export const DecisionReportService = new DecisionReportControllerService();
+export const RoomService = new RoomControllerService();
 export const RoomReportService = new RoomReportControllerService();
 	

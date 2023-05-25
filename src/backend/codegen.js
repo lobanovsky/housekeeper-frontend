@@ -21,6 +21,7 @@ export const PaymentReportService = new PaymentReportControllerService();
 export const FileService = new FileControllerService();
 export const DecisionService = new DecisionControllerService();
 export const DecisionReportService = new DecisionReportControllerService();
+export const RoomService = new RoomControllerService();
 export const RoomReportService = new RoomReportControllerService();
 	`, (err) => {
 				if (err) {

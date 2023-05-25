@@ -1,0 +1,19 @@
+.rooms {
+	.filter-form {
+		.filter-fields {
+			.filter-field {
+				&.building {
+					width: 120px;
+				}
+
+				&.number {
+					width: 150px;
+				}
+
+				&.type {
+					width: 180px;
+				}
+			}
+		}
+	}
+}

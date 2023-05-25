@@ -22,9 +22,9 @@ export interface IPagination {
 	pageSize: number;
 }
 
-export interface ISelectOption {
-	label: string;
-	value: number;
+export interface DictionaryItem {
+	name: string;
+	description: string;
 }
 
 export type ActionFinishCallback = (isSuccess: boolean) => void;

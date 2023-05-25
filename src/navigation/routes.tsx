@@ -2,25 +2,21 @@ import {
 	CloudUploadOutlined,
 	DashboardOutlined,
 	DollarOutlined,
-	UserOutlined,
+	HomeOutlined,
 	ArrowUpOutlined,
 	ArrowDownOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { MenuItemType, SubMenuType } from 'antd/es/menu/hooks/useItems';
 import { showPaymentsImportModal } from 'pages/payments/import';
-import { Typography } from 'antd';
 
-interface NavigationItemType extends MenuItemType {
-	title: string;
-}
 
 export const NavigationItems: any = [
 	{
-		key: '/contacts',
-		icon: <UserOutlined />,
-		title: 'Контакты',
-		label: <Link to='/contacts'>Контакты</Link>
+		key: '/rooms',
+		icon: <HomeOutlined />,
+		title: 'Помещения',
+		label: <Link to='/rooms'>Помещения</Link>
 	},
 	{
 		key: '/counters',
@@ -71,8 +67,6 @@ export const getNavigationItemByPathname = (pathname: string, item: MenuItemType
 		result = item;
 		// @ts-ignore
 	} else if ((item.children || []).length) {
-		// Use a for loop instead of forEach to avoid nested functions
-		// Otherwise "return" will not work properly
 		// @ts-ignore
 		const children = item.children || [];
 		for (let i = 0; i <= children.length && !result; i++) {

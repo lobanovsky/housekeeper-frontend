@@ -10,6 +10,7 @@ import IncomingPayments from 'pages/payments/incoming';
 import OutgoingPayments from 'pages/payments/outgoing';
 
 import './App.scss';
+import Rooms from 'pages/rooms';
 
 
 const { Header, Content } = Layout;
@@ -27,8 +28,8 @@ function App() {
 							<PageHeader />
 							<Routes>
 								<Route
-									path='/contacts'
-									element={<Contacts />}
+									path='/rooms'
+									element={<Rooms />}
 								/>
 								<Route
 									path='/counters'

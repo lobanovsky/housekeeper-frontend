@@ -75,6 +75,7 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 				mode={mode}
 				showArrow
 				allowClear
+				popupMatchSelectWidth={false}
 				placeholder={placeholder || title}
 				filterOption={filterOption}
 				value={filterValues[name]}
@@ -96,6 +97,7 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 			input = <Input
 				// className={styles.full_name}
 				allowClear
+				placeholder={placeholder }
 				value={filterValues[name]}
 				onChange={({ target: { value } }) => {
 					onChangeFilter({ [name]: value });
