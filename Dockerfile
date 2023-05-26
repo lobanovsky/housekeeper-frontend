@@ -1,5 +1,5 @@
 # build environment
-FROM node:20 as builder
+FROM node:18 as builder
 ARG ENV
 RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
