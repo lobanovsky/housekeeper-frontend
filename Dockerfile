@@ -1,11 +1,10 @@
 # build environment
-FROM node:18 as builder
+FROM node:20 as builder
 ARG ENV
 RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 COPY package.json /usr/src/app/package.json
-RUN npm cache clean --force
 RUN npm install --silent
 COPY . /usr/src/app
 RUN if [ "$ENV" = "DEV" ]; then npm run build:dev; else npm run build; fi
