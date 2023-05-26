@@ -1,5 +1,5 @@
 {
-  "name": "housekeeper-frontnend",
+  "name": "housekeeper-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,6 +9,7 @@
     "antd": "^5.5.0",
     "axios": "^1.4.0",
     "dayjs": "^1.11.7",
+    "file-saver": "^2.0.5",
     "lodash.debounce": "^4.0.8",
     "qs": "^6.11.2",
     "react": "^18.2.0",
@@ -44,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.5",
     "@types/lodash": "^4.14.194",
     "dotenv": "^16.0.3",
     "env-cmd": "^10.1.0",

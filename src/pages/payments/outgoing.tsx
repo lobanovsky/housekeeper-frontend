@@ -9,6 +9,7 @@ const OutgoingPayments = () => (
 		<Table
 			rowKey='uuid'
 			columns={getPaymentColumns(true)}
+			exportURL='reports/payments/outgoing'
 			loadDataFn={PaymentService.findOutgoingPayments}
 			filters={getPaymentFilters(true)}
 		/>

@@ -16,20 +16,21 @@ const IncomingPayments = () => {
 		<div className='payments incoming'>
 			<Table
 				rowKey='uuid'
+				columns={getPaymentColumns(false)}
+				loadDataFn={PaymentService.findIncomingPayments}
+				filters={getPaymentFilters(false)}
+				exportURL='reports/payments/incoming'
+				rowSelection={{
+					onChange: (selectedRowKeys: React.Key[], selectedRecords: PaymentVO[]) => {
+						setSelectedRows(selectedRecords);
+					}
+				}}
 				toolbar={<Button
 					onClick={setTaxable}
 					disabled={!selectedRows.length}
 				>
 					Пометить как налогооблагаемые
 				</Button>}
-				columns={getPaymentColumns(false)}
-				loadDataFn={PaymentService.findIncomingPayments}
-				filters={getPaymentFilters(false)}
-				rowSelection={{
-					onChange: (selectedRowKeys: React.Key[], selectedRecords: PaymentVO[]) => {
-						setSelectedRows(selectedRecords);
-					}
-				}}
 			/>
 		</div>
 	)

@@ -1,15 +1,18 @@
 import React, { useCallback, useImperativeHandle, useState } from 'react';
-import { SearchOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { Button, Input, DatePicker, Select } from 'antd';
+import { CloseCircleOutlined, DownloadOutlined, LoadingOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, DatePicker, Input, Select } from 'antd';
 
 import { filterOption } from 'utils/utils';
 import { FilterFieldsConfig, IFilterFieldConfig } from './types';
 import styles from './styles.module.scss';
+import { useLoading } from 'hooks/use-loading';
+import { ActionFinishCallback } from 'utils/types';
 
 
 interface IFilterFormProps {
 	defaultFilterValues?: Record<string, string | string[] | number[]>;
 	filters: FilterFieldsConfig;
+	exportToFile?: (onFinish: ActionFinishCallback) => void;
 	extraControls?: React.ReactNode[];
 	onChangeFilters: (filters: any) => void;
 	onSearchBtnClick: () => void;
@@ -21,8 +24,11 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 		onChangeFilters,
 		filters,
 		onSearchBtnClick,
+		exportToFile = null,
 		extraControls = []
 	} = props;
+
+	const [isExporting, showExportLoading, hideExportLoading] = useLoading();
 
 	const [filterValues, setFilterValues] = useState<any>(() => {
 		return ({
@@ -97,7 +103,7 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 			input = <Input
 				// className={styles.full_name}
 				allowClear
-				placeholder={placeholder }
+				placeholder={placeholder}
 				value={filterValues[name]}
 				onChange={({ target: { value } }) => {
 					onChangeFilter({ [name]: value });
@@ -115,6 +121,16 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 			</div>
 		)
 	}, [JSON.stringify(filterValues)]);
+
+
+	const exportTableToFile = useCallback(() => {
+		if (!exportToFile) {
+			return;
+		}
+
+		showExportLoading();
+		exportToFile(hideExportLoading);
+	}, [exportToFile]);
 
 	useImperativeHandle(ref, () => ({
 		clearValues,
@@ -140,6 +156,15 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 				>
 					<CloseCircleOutlined style={{ marginRight: 5 }} /> Очистить
 				</Button>
+				{!!exportToFile && <Button
+					key='export'
+					className={styles.export_btn}
+					type='primary'
+					onClick={exportTableToFile}
+				>
+					{isExporting ? <LoadingOutlined style={{ marginRight: 5 }} /> :
+						<DownloadOutlined style={{ marginRight: 5 }} />} Выгрузить в файл
+				</Button>}
 				{!!extraControls.length && (
 					<div className={`${styles.extra_controls} extra-controls`}>
 						{extraControls}

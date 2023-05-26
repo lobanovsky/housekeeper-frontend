@@ -1,4 +1,19 @@
 .payments {
+	.filter-form {
+		.filter-fields {
+			.filter-field {
+				&.startDate,
+				&.endDate {
+					width: 150px;
+
+					.ant-picker {
+						width: 100%;
+					}
+				}
+			}
+		}
+	}
+
 	.ant-table {
 		border-collapse: collapse;
 

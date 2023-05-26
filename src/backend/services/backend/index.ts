@@ -5,7 +5,7 @@
 /** Generate by swagger-axios-codegen */
 /* eslint-disable */
 // @ts-nocheck
-import axiosStatic, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 export interface IRequestOptions extends AxiosRequestConfig {
   /** only in axios interceptor config*/
@@ -139,17 +139,40 @@ export class RoomControllerService {
 
 export class PaymentReportControllerService {
   /**
-   * Find all outgoing payments by filter
+   * Export outgoing payments by filter to excel
    */
-  findAllOutgoingPaymentsByFilter(
-    params: {
-      /** requestBody */
-      body?: OutgoingPaymentsFilter;
-    } = {} as any,
-    options: IRequestOptions = {}
+  exportOutgoingPayments(
+      params: {
+        /** requestBody */
+        body?: OutgoingPaymentsFilter;
+      } = {} as any,
+      options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/reports/outgoing-payments';
+      let url = basePath + '/reports/payments/outgoing';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Export incoming payments by filter to excel
+   */
+  exportIncomingPayments(
+      params: {
+        /** requestBody */
+        body?: IncomingPaymentsFilter;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/reports/payments/incoming';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
@@ -703,10 +726,10 @@ export interface PageableObject {
   sort?: SortObject;
 
   /**  */
-  unpaged?: boolean;
+  paged?: boolean;
 
   /**  */
-  paged?: boolean;
+  unpaged?: boolean;
 
   /**  */
   pageNumber?: number;
@@ -716,6 +739,9 @@ export interface PageableObject {
 }
 
 export interface RoomVO {
+  /**  */
+  id?: number;
+
   /**  */
   street?: string;
 
@@ -1135,4 +1161,3 @@ export const DecisionService = new DecisionControllerService();
 export const DecisionReportService = new DecisionReportControllerService();
 export const RoomService = new RoomControllerService();
 export const RoomReportService = new RoomReportControllerService();
-	

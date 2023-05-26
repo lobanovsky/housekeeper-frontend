@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { Button, Table as AntTable, TableProps } from 'antd';
-import { ReloadOutlined } from '@ant-design/icons';
+import { Table as AntTable, TableProps } from 'antd';
 import debounce from 'lodash/debounce';
 
 import { FilterFieldsConfig } from 'components/table/filter-form/types';
@@ -8,9 +7,9 @@ import { showError } from 'utils/notifications';
 import { IPagination } from 'utils/types';
 import FilterForm from './filter-form';
 import styles from './styles.module.scss';
-import { PaymentVO } from 'backend/services/backend';
+import { downloadFile } from 'utils/utils';
 
-interface ITableProps extends TableProps<any>{
+interface ITableProps extends TableProps<any> {
 	// columns: any[],
 	// className?: string;
 	toolbar?: React.ReactNode;
@@ -21,6 +20,7 @@ interface ITableProps extends TableProps<any>{
 	onChangePagination?: (pagination: IPagination) => void,
 	// onSelectionChange?: (selectedIds: Array<number | string>)=> void;
 	onRow?: (record: any) => React.HTMLAttributes<any> | React.TdHTMLAttributes<any>,
+	exportURL?: string,
 	extraControls?: React.ReactNode[],
 	rowKey?: string;
 	requestParamsConverter?: (filters: any) => any,
@@ -41,6 +41,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 		filters = [],
 		onChangePagination = null,
 		extraControls = [],
+		exportURL = '',
 		...tableProps
 	} = props;
 
@@ -65,11 +66,9 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 		}))
 	}, []);
 
-	const loadData = useCallback((params: { filters: any, pagination: IPagination }) => {
-		const { filters, pagination: { pageNum, pageSize } } = params;
-
+	const getProcessedFilters = useCallback((selectedFilterValues: any) => {
 		const convertedFilters = {};
-		Object.entries(filters).forEach(([filterName, filterValue]) => {
+		Object.entries(selectedFilterValues).forEach(([filterName, filterValue]) => {
 			const isDate = filterName.endsWith('Date');
 			if (isDate) {
 				// @ts-ignore
@@ -83,6 +82,21 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 			}
 
 		})
+
+		return convertedFilters;
+	}, []);
+
+
+	const exportToFile = useCallback((onFinish: (isSuccess: boolean) => void) => {
+		const convertedFilters = getProcessedFilters(selectedFilters);
+		downloadFile(exportURL, convertedFilters, onFinish);
+	}, [JSON.stringify(selectedFilters)]);
+
+	const loadData = useCallback((params: { filters: any, pagination: IPagination }) => {
+		const { filters, pagination: { pageNum, pageSize } } = params;
+		const convertedFilters = getProcessedFilters(filters);
+
+
 		setLoading(true);
 		let requestParams: any & IPagination = {
 			pageNum: pageNum - 1,
@@ -158,6 +172,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 	const filterForm = useMemo(() => filters.length ? <FilterForm
 			defaultFilterValues={defaultFilterValues}
 			ref={filterFormRef}
+			exportToFile={exportToFile}
 			filters={filters}
 			onChangeFilters={onChangeFilters}
 			onSearchBtnClick={reloadTable}

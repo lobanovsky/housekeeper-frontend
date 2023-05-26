@@ -26,6 +26,17 @@
 		:global(.ant-btn:not(:last-child)) {
 			margin-right: 10px;
 		}
+
+		.export_btn {
+			margin-left: 20px;
+			//background-color: rgb(22, 156, 127);
+			background-color: #7361d3;
+
+			&:hover,
+			&:focus {
+				background-color: rgb(128, 108, 255);
+			}
+		}
 	}
 
 	.search_icon {
