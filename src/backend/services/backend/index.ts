@@ -160,7 +160,6 @@ export class PaymentReportControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Export incoming payments by filter to excel
    */
@@ -310,6 +309,118 @@ export class PaymentControllerService {
   findAllDeposits(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/payments/deposits';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class LogEntryControllerService {
+  /**
+   * Get all log entries
+   */
+  findAllLogEntries(
+      params: {
+        /**  */
+        pageNum?: number;
+        /**  */
+        pageSize?: number;
+        /** requestBody */
+        body?: LogEntryFilter;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/log-entries';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      configs.params = { pageNum: params['pageNum'], pageSize: params['pageSize'] };
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Get all statuses of log entry
+   */
+  getLogEntryStatuses(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/log-entries/statuses';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Get top by phone number
+   */
+  getTopByPhoneNumber(
+      params: {
+        /**  */
+        gateId?: number;
+        /**  */
+        startDate?: string;
+        /**  */
+        endDate?: string;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/log-entries/phone-number/top';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { gateId: params['gateId'], startDate: params['startDate'], endDate: params['endDate'] };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Get top by flat number
+   */
+  getTopByFlatNumber(
+      params: {
+        /**  */
+        gateId?: number;
+        /**  */
+        startDate?: string;
+        /**  */
+        endDate?: string;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/log-entries/flat-number/top';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { gateId: params['gateId'], startDate: params['startDate'], endDate: params['endDate'] };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Get all access-methods of log entry
+   */
+  getLogEntryAccessMethods(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/log-entries/access-methods';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -490,6 +601,25 @@ export class FileControllerService {
   }
 }
 
+export class MailingControllerService {
+  /**
+   * Refusal Of Paper Receipts
+   */
+  sendEmails(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/emails/refusal-of-paper-receipts';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export class DecisionControllerService {
   /**
    * Prepare decisions
@@ -585,12 +715,30 @@ export class DecisionReportControllerService {
       axios(configs, resolve, reject);
     });
   }
+
   /**
    * Print not voted decisions
    */
   makeNotVotedDecisionsReport(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/reports/decisions/decisions/not-voted';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class GateControllerService {
+  /**
+   * Get all gates
+   */
+  getAllGates(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/gates';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -921,6 +1069,96 @@ export interface PaymentVO {
   deposit?: boolean;
 }
 
+export interface LogEntryFilter {
+  /**  */
+  gateId?: number;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  userName?: string;
+
+  /**  */
+  flatNumber?: string;
+
+  /**  */
+  status?: EnumLogEntryFilterStatus;
+
+  /**  */
+  method?: EnumLogEntryFilterMethod;
+
+  /**  */
+  startDate?: Date;
+
+  /**  */
+  endDate?: Date;
+}
+
+export interface LogEntryResponse {
+  /**  */
+  id?: number;
+
+  /**  */
+  dateTime?: Date;
+
+  /**  */
+  status?: string;
+
+  /**  */
+  userName?: string;
+
+  /**  */
+  flatNumber?: string;
+
+  /**  */
+  method?: string;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  gateId?: number;
+
+  /**  */
+  gateName?: string;
+}
+
+export interface PageLogEntryResponse {
+  /**  */
+  totalPages?: number;
+
+  /**  */
+  totalElements?: number;
+
+  /**  */
+  size?: number;
+
+  /**  */
+  content?: LogEntryResponse[];
+
+  /**  */
+  number?: number;
+
+  /**  */
+  sort?: SortObject;
+
+  /**  */
+  pageable?: PageableObject;
+
+  /**  */
+  numberOfElements?: number;
+
+  /**  */
+  first?: boolean;
+
+  /**  */
+  last?: boolean;
+
+  /**  */
+  empty?: boolean;
+}
+
 export interface AccountRegistryResponse {
   /**  */
   fileName?: string;
@@ -1111,6 +1349,50 @@ export interface DepositResponse {
   payment?: PaymentVO;
 }
 
+export interface LogEntryStatusResponse {
+  /**  */
+  name?: string;
+
+  /**  */
+  description?: string;
+}
+
+export interface TopRatingResponse {
+  /**  */
+  count?: number;
+
+  /**  */
+  flatNumber?: string;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  userName?: string;
+}
+
+export interface LogEntryAccessMethodResponse {
+  /**  */
+  name?: string;
+
+  /**  */
+  description?: string;
+}
+
+export interface GateResponse {
+  /**  */
+  id?: number;
+
+  /**  */
+  name?: string;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  imei?: string;
+}
+
 export interface Link {
   /**  */
   href?: string;
@@ -1118,6 +1400,7 @@ export interface Link {
   /**  */
   templated?: boolean;
 }
+
 export enum EnumRoomFilterType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
@@ -1139,6 +1422,21 @@ export enum EnumPaymentVOTag {
   'BLACK' = 'BLACK',
   'WHITE' = 'WHITE'
 }
+
+export enum EnumLogEntryFilterStatus {
+  'OPENED' = 'OPENED',
+  'AUTH_FAILED' = 'AUTH_FAILED',
+  'NUM_DELETED' = 'NUM_DELETED',
+  'USER_ADDED' = 'USER_ADDED',
+  'UNDEFINED' = 'UNDEFINED'
+}
+
+export enum EnumLogEntryFilterMethod {
+  'CALL' = 'CALL',
+  'APP' = 'APP',
+  'UNDEFINED' = 'UNDEFINED'
+}
+
 export enum EnumMonthPaymentVOMonth {
   'JANUARY' = 'JANUARY',
   'FEBRUARY' = 'FEBRUARY',
@@ -1161,3 +1459,4 @@ export const DecisionService = new DecisionControllerService();
 export const DecisionReportService = new DecisionReportControllerService();
 export const RoomService = new RoomControllerService();
 export const RoomReportService = new RoomReportControllerService();
+export const GateService = new LogEntryControllerService();

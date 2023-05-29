@@ -4,13 +4,13 @@ import { Layout } from 'antd';
 import { HouseIcon } from 'icons/house';
 import PageHeader from 'layout/page-header';
 import { Sider } from 'layout/sider';
-import Contacts from 'pages/contacts';
 import Counters from 'pages/counters';
 import IncomingPayments from 'pages/payments/incoming';
 import OutgoingPayments from 'pages/payments/outgoing';
 
 import './App.scss';
 import Rooms from 'pages/rooms';
+import Gates from 'pages/gates';
 
 
 const { Header, Content } = Layout;
@@ -34,6 +34,10 @@ function App() {
 								<Route
 									path='/counters'
 									element={<Counters />}
+								/>
+								<Route
+									path='/gates'
+									element={<Gates />}
 								/>
 								<Route
 									path='/payments-incoming'

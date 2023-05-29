@@ -1,14 +1,15 @@
 import {
+	ArrowDownOutlined,
+	ArrowUpOutlined,
 	CloudUploadOutlined,
 	DashboardOutlined,
 	DollarOutlined,
-	HomeOutlined,
-	ArrowUpOutlined,
-	ArrowDownOutlined
+	HomeOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { MenuItemType, SubMenuType } from 'antd/es/menu/hooks/useItems';
 import { showPaymentsImportModal } from 'pages/payments/import';
+import { GateIcon } from 'icons/gate';
 
 
 export const NavigationItems: any = [
@@ -24,6 +25,13 @@ export const NavigationItems: any = [
 		title: 'Счётчики',
 		label: <Link to='/counters'>Счётчики</Link>
 	},
+	{
+		key: '/gates',
+		icon: <GateIcon />,
+		title: 'Шлагбаумы',
+		label: <Link to='/gates'>Шлагбаумы</Link>
+	},
+
 	{
 		key: '/payments',
 		icon: <DollarOutlined />,

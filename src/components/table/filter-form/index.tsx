@@ -7,12 +7,15 @@ import { FilterFieldsConfig, IFilterFieldConfig } from './types';
 import styles from './styles.module.scss';
 import { useLoading } from 'hooks/use-loading';
 import { ActionFinishCallback } from 'utils/types';
+import RemoteSelect from 'components/remote-select';
+import { Dayjs } from 'dayjs';
 
 
 interface IFilterFormProps {
-	defaultFilterValues?: Record<string, string | string[] | number[]>;
+	allowClear?: boolean;
+	defaultFilterValues?: Record<string, string | string[] | number[] | Dayjs>;
 	filters: FilterFieldsConfig;
-	exportToFile?: (onFinish: ActionFinishCallback) => void;
+	exportToFile?: ((onFinish: ActionFinishCallback) => void) | null;
 	extraControls?: React.ReactNode[];
 	onChangeFilters: (filters: any) => void;
 	onSearchBtnClick: () => void;
@@ -24,6 +27,7 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 		onChangeFilters,
 		filters,
 		onSearchBtnClick,
+		allowClear = true,
 		exportToFile = null,
 		extraControls = []
 	} = props;
@@ -56,7 +60,17 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 	}, [JSON.stringify(filterValues), setFilterValues, onChangeFilters]);
 
 	const renderField = useCallback((props: IFilterFieldConfig) => {
-		const { name, title, type = 'input', options, getChangeAdditionalParams, mode, placeholder } = props;
+		const {
+			name,
+			title,
+			type = 'input',
+			options,
+			optionsURL,
+			getChangeAdditionalParams,
+			mode,
+			placeholder,
+			...fieldProps
+		} = props;
 		let input = null;
 		if (type === 'date-range') {
 			input = <DatePicker.RangePicker
@@ -81,6 +95,7 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 				mode={mode}
 				showArrow
 				allowClear
+				{...fieldProps}
 				popupMatchSelectWidth={false}
 				placeholder={placeholder || title}
 				filterOption={filterOption}
@@ -99,6 +114,17 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 					onChangeFilter(changeObject);
 				}}
 			>{options}</Select>
+		} else if (type === 'remote-select') {
+			input = <RemoteSelect
+				{...fieldProps}
+				allowClear
+				optionsURL={optionsURL || ''}
+				placeholder={placeholder}
+				value={filterValues[name]}
+				onChange={(selectedOption, options) => {
+					onChangeFilter({ [name]: selectedOption });
+				}}
+			/>
 		} else if (type === 'input') {
 			input = <Input
 				// className={styles.full_name}
@@ -149,13 +175,14 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 				>
 					<SearchOutlined style={{ marginRight: 5 }} /> Найти
 				</Button>
-				<Button
+				{allowClear && <Button
 					key='clear'
 					className={styles.clear_btn}
 					onClick={clearValues}
 				>
 					<CloseCircleOutlined style={{ marginRight: 5 }} /> Очистить
-				</Button>
+				</Button>}
+
 				{!!exportToFile && <Button
 					key='export'
 					className={styles.export_btn}

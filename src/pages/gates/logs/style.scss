@@ -1,0 +1,49 @@
+.gates.view {
+	.gate-selector {
+		width: 200px;
+
+		.ant-select-selector {
+			//font-size: 16px;
+			.ant-select-selection-item {
+
+				color: #eb2f96;
+				//font-weight: 500;
+			}
+		}
+	}
+
+	.gates-log {
+		.filter-form {
+			.filter-fields {
+				.filter-field {
+					.ant-select {
+						width: 200px;
+					}
+
+
+					.ant-picker {
+						width: 150px;
+					}
+				}
+			}
+		}
+
+		.ant-table {
+
+			td {
+
+				&.dateTime {
+					width: 150px;
+				}
+
+				&.dateTime {
+					.time {
+						color: #185dbd;
+					}
+				}
+			}
+		}
+	}
+
+
+}

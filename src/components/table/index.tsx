@@ -8,6 +8,11 @@ import { IPagination } from 'utils/types';
 import FilterForm from './filter-form';
 import styles from './styles.module.scss';
 import { downloadFile } from 'utils/utils';
+import { Dayjs } from 'dayjs';
+
+export interface TableRequestParams<T> extends IPagination {
+	body: T
+}
 
 interface ITableProps extends TableProps<any> {
 	// columns: any[],
@@ -15,8 +20,9 @@ interface ITableProps extends TableProps<any> {
 	toolbar?: React.ReactNode;
 	filters?: FilterFieldsConfig;
 	defaultPagination?: IPagination;
-	defaultFilterValues?: Record<string, string | string[] | number[]>,
+	defaultFilterValues?: Record<string, string | string[] | number[] | Dayjs>,
 	additionalRequestParams?: any,
+	loadDataOnInit?: boolean;
 	onChangePagination?: (pagination: IPagination) => void,
 	// onSelectionChange?: (selectedIds: Array<number | string>)=> void;
 	onRow?: (record: any) => React.HTMLAttributes<any> | React.TdHTMLAttributes<any>,
@@ -172,7 +178,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 	const filterForm = useMemo(() => filters.length ? <FilterForm
 			defaultFilterValues={defaultFilterValues}
 			ref={filterFormRef}
-			exportToFile={exportToFile}
+			exportToFile={exportURL ? exportToFile : null}
 			filters={filters}
 			onChangeFilters={onChangeFilters}
 			onSearchBtnClick={reloadTable}
