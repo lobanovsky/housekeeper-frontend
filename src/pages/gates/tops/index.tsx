@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Table } from 'antd';
+import { Table, Typography } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 
 import { GateService } from 'backend/services/backend';
@@ -8,7 +8,8 @@ import { gateTopFilters } from 'pages/gates/tops/filters';
 import { showError } from 'utils/notifications';
 import { getRandomId } from 'utils/utils';
 import './style.scss';
-import { topColumns } from 'pages/gates/tops/columns';
+import { topByFlatColumns, topByUserColumns } from 'pages/gates/tops/columns';
+import { useLoading } from 'hooks/use-loading';
 
 interface TopFilterValues {
 	type: string;
@@ -47,12 +48,19 @@ const DefaultFilters = {
 };
 const GateTopUsers = ({ gateId }: { gateId: number }) => {
 	const [selectedFilters, setFilters] = useState<TopFilterValues>(DefaultFilters as TopFilterValues);
-	const [tops, setTops] = useState<TopResponse[]>([]);
-	const [currentPage, setCurrentPage] = useState(1);
-	const tableRef = useRef(null);
+	const [topsByFlat, setTopsByFlat] = useState<TopResponse[]>([]);
+	const [topsByUser, setTopsByUser] = useState<TopResponse[]>([]);
+	const [currentFlatPage, setCurrentFlatPage] = useState(1);
+	const [currentUserPage, setCurrentUserPage] = useState(1);
+	const [isLoadingByFlat, showLoadingByFlat, hideLoadingByFlat] = useLoading();
+	const [isLoadingByUser, showLoadingByUser, hideLoadingByUser] = useLoading();
+
+	const tableByFlatRef = useRef(null);
+	const tableByUserRef = useRef(null);
 	const loadTops = useCallback(() => {
 		const { type, startDate, endDate } = selectedFilters;
-		const promise = type === 'flat' ? GateService.getTopByFlatNumber : GateService.getTopByPhoneNumber;
+		showLoadingByFlat();
+		showLoadingByUser();
 		const requestFilters: TopFilterServer = { gateId };
 		if (startDate) {
 			requestFilters.startDate = startDate.format('YYYY-MM-DD')
@@ -62,15 +70,31 @@ const GateTopUsers = ({ gateId }: { gateId: number }) => {
 			requestFilters.endDate = endDate.format('YYYY-MM-DD')
 		}
 
-		promise(requestFilters)
+		GateService.getTopByFlatNumber(requestFilters)
 			.then((data) => {
-				setTops(data.map((item: any) => ({
+				hideLoadingByFlat();
+				setTopsByFlat(data.map((item: any) => ({
 					...item,
 					id: getRandomId()
 				})));
-			}).catch(e => {
-			showError('Не удалось загрузить список топов', e);
-		})
+			})
+			.catch(e => {
+				hideLoadingByFlat();
+				showError('Не удалось загрузить список топов по квартире', e);
+			});
+
+		GateService.getTopByPhoneNumber(requestFilters)
+			.then((data) => {
+				hideLoadingByUser();
+				setTopsByUser(data.map((item: any) => ({
+					...item,
+					id: getRandomId()
+				})));
+			})
+			.catch(e => {
+				hideLoadingByUser();
+				showError('Не удалось загрузить список топов по жильцам', e);
+			});
 	}, [JSON.stringify(selectedFilters), gateId]);
 
 	useEffect(() => {
@@ -81,10 +105,8 @@ const GateTopUsers = ({ gateId }: { gateId: number }) => {
 	}, [gateId]);
 
 	useEffect(() => {
-		setCurrentPage(1)
-	}, [selectedFilters.type])
-
-	useEffect(() => {
+		setCurrentUserPage(1);
+		setCurrentFlatPage(1)
 		loadTops();
 	}, [JSON.stringify(selectedFilters)]);
 
@@ -101,20 +123,44 @@ const GateTopUsers = ({ gateId }: { gateId: number }) => {
 					endDate: today
 				}}
 			/>
-			<Table
-				ref={tableRef}
-				rowKey='id'
-				size='small'
-				columns={topColumns}
-				dataSource={tops}
-				pagination={{
-					current: currentPage,
-					position: ['topRight'],
-					onChange: (newPage) => {
-						setCurrentPage(newPage)
-					}
-				}}
-			/>
+			<div className='tables'>
+				<div className='table by-flat'>
+					<Typography.Title level={5}>По квартирам</Typography.Title>
+					<Table
+						ref={tableByFlatRef}
+						rowKey='id'
+						size='small'
+						columns={topByFlatColumns}
+						loading={isLoadingByFlat}
+						dataSource={topsByFlat}
+						pagination={{
+							current: currentFlatPage,
+							position: ['bottomRight'],
+							onChange: (newPage) => {
+								setCurrentFlatPage(newPage)
+							}
+						}}
+					/>
+				</div>
+				<div className='table by-user'>
+					<Typography.Title level={5}>По пользователям</Typography.Title>
+					<Table
+						ref={tableByUserRef}
+						rowKey='id'
+						size='small'
+						loading={isLoadingByUser}
+						columns={topByUserColumns}
+						dataSource={topsByUser}
+						pagination={{
+							current: currentUserPage,
+							position: ['bottomRight'],
+							onChange: (newPage) => {
+								setCurrentUserPage(newPage)
+							}
+						}}
+					/>
+				</div>
+			</div>
 		</div>
 	)
 }
