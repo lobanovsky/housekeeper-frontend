@@ -44,10 +44,35 @@
 		padding-top: 10px;
 	}
 
-	.field {
+	:global(.filter-field) {
 		:global(.ant-select),
 		:global(.ant-input) {
 			width: 100%;
+		}
+
+		&:global(.required) {
+			:global(.label) {
+				&::after {
+					content: ' *';
+					color: rgba(226, 75, 75, 0.9);
+				}
+			}
+
+			&:global(.empty) {
+				:global(.label) {
+					&::after {
+						color: red;
+					}
+				}
+
+				:global(.ant-input),
+				:global(.ant-select-selector),
+				:global(.ant-picker) {
+					border-color: red;
+					box-shadow: 0 0 0 1px rgba(249, 167, 167, 0.75);
+				}
+
+			}
 		}
 	}
 

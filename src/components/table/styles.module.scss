@@ -8,6 +8,10 @@
 		}
 	}
 
+	:global(.table-toolbar) {
+		padding: 0 8px;
+	}
+
 	.table {
 		margin-top: 12px;
 
@@ -82,8 +86,6 @@
 			padding-top: 48px;
 		}
 	}
-
-
 
 
 }

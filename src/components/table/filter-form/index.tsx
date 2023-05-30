@@ -19,6 +19,7 @@ interface IFilterFormProps {
 	extraControls?: React.ReactNode[];
 	onChangeFilters: (filters: any) => void;
 	onSearchBtnClick: () => void;
+	isValidForm?: (filters: any) => boolean;
 }
 
 
@@ -29,7 +30,8 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 		onSearchBtnClick,
 		allowClear = true,
 		exportToFile = null,
-		extraControls = []
+		extraControls = [],
+		isValidForm = () => true
 	} = props;
 
 	const [isExporting, showExportLoading, hideExportLoading] = useLoading();
@@ -69,9 +71,11 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 			getChangeAdditionalParams,
 			mode,
 			placeholder,
+			required = false,
 			...fieldProps
 		} = props;
 		let input = null;
+		const isEmptyValue = !filterValues[name];
 		if (type === 'date-range') {
 			input = <DatePicker.RangePicker
 				allowClear
@@ -116,8 +120,8 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 			>{options}</Select>
 		} else if (type === 'remote-select') {
 			input = <RemoteSelect
-				{...fieldProps}
 				allowClear
+				{...fieldProps}
 				optionsURL={optionsURL || ''}
 				placeholder={placeholder}
 				value={filterValues[name]}
@@ -140,9 +144,9 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 		return (
 			<div
 				key={name}
-				className={`${styles.field} ${name} filter-field`}
+				className={`${styles.field} ${name} filter-field ${isEmptyValue ? 'empty' : ''} ${required ? 'required' : ''}`}
 			>
-				<div className={styles.field_label}>{title}</div>
+				<div className={`${styles.field_label} label`}>{title}</div>
 				{input}
 			</div>
 		)
@@ -172,6 +176,7 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
 					className={styles.search_btn}
 					type='primary'
 					onClick={onSearchBtnClick}
+					disabled={!isValidForm(filterValues)}
 				>
 					<SearchOutlined style={{ marginRight: 5 }} /> Найти
 				</Button>

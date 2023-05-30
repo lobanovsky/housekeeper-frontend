@@ -16,6 +16,22 @@ module.exports = async (options) => {
 		});
 
 			await fs.appendFile(outFile, `
+			
+export interface TopResponse {
+	count: number,
+	id: number,
+	flatNumber?: string,
+	phoneNumber?: string,
+	userName: string
+};
+
+export interface TopFilter {
+	gateId?: number;
+	startDate?: string;
+	endDate?: string;
+}
+
+
 export const PaymentService = new PaymentControllerService();
 export const PaymentReportService = new PaymentReportControllerService();
 export const FileService = new FileControllerService();

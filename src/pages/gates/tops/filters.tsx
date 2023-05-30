@@ -3,22 +3,16 @@ import { FilterFieldType } from 'components/table/filter-form/types';
 
 
 export const gateTopFilters = [
-	// {
-	// 	name: 'type',
-	// 	title: 'Тип рейтинга',
-	// 	allowClear: false,
-	// 	type: 'select' as FilterFieldType,
-	// 	options: [
-	// 		<Select.Option
-	// 			key='flat'
-	// 			value='flat'
-	// 		>По квартире</Select.Option>,
-	// 		<Select.Option
-	// 			key='user'
-	// 			value='user'
-	// 		>По пользователю</Select.Option>
-	// 	]
-	// },
+	{
+		name: 'gateId',
+		allowClear: false,
+		required: true,
+		type: 'remote-select' as FilterFieldType,
+		idFieldName: 'id',
+		displayFieldName: 'name',
+		optionsURL: '/gates',
+		title: 'Шлагбаум'
+	},
 	{
 		name: 'startDate',
 		title: 'Дата с',

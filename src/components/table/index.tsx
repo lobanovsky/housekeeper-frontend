@@ -19,6 +19,7 @@ interface ITableProps extends TableProps<any> {
 	// className?: string;
 	toolbar?: React.ReactNode;
 	filters?: FilterFieldsConfig;
+	isValidForm?: (filters: any) => boolean,
 	defaultPagination?: IPagination;
 	defaultFilterValues?: Record<string, string | string[] | number[] | Dayjs>,
 	additionalRequestParams?: any,
@@ -48,6 +49,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 		onChangePagination = null,
 		extraControls = [],
 		exportURL = '',
+		isValidForm = () => true,
 		...tableProps
 	} = props;
 
@@ -56,7 +58,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 	const [total, setTotal] = useState<number>(0);
 	const [selectedRows, setSelectedRows] = useState<any[]>([]);
 	const [pagination, setPagination] = useState<IPagination>(defaultPagination);
-	const [loading, setLoading] = useState<boolean>(true);
+	const [loading, setLoading] = useState<boolean>(false);
 	const [selectedFilters, setSelectedFilters] = useState<any>(() => ({
 		...defaultFilterValues
 	}));
@@ -99,7 +101,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 	}, [JSON.stringify(selectedFilters)]);
 
 	const loadData = useCallback((params: { filters: any, pagination: IPagination }) => {
-		const { filters, pagination: { pageNum, pageSize } } = params;
+		const { filters, pagination: { pageNum = 0, pageSize = 10 } = {} } = params;
 		const convertedFilters = getProcessedFilters(filters);
 
 
@@ -113,7 +115,6 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 		if (requestParamsConverter) {
 			requestParams = requestParamsConverter(requestParams);
 		}
-
 		loadDataFn(requestParams)
 			.then((responseData: any) => {
 				if (responseDataConverter) {
@@ -180,6 +181,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 			ref={filterFormRef}
 			exportToFile={exportURL ? exportToFile : null}
 			filters={filters}
+			isValidForm={isValidForm}
 			onChangeFilters={onChangeFilters}
 			onSearchBtnClick={reloadTable}
 			extraControls={extraControls}
@@ -189,11 +191,15 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 	useImperativeHandle(ref, () => ({
 		reloadTable,
 		resetTable,
-		getFilters
+		getFilters,
+		loadData
 	}), [reloadTable, resetTable, getFilters]);
 
 	useEffect(() => {
-		delayedSearch({ filters: selectedFilters, pagination });
+		if (isValidForm(selectedFilters)) {
+			delayedSearch({ filters: selectedFilters, pagination });
+		}
+
 	}, [JSON.stringify(selectedFilters), pagination.pageSize, pagination.pageNum]);
 
 	return (
@@ -210,7 +216,6 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 				loading={loading}
 				columns={columns}
 				dataSource={data}
-				{...tableProps}
 				pagination={{
 					total,
 					size: 'default',
@@ -230,6 +235,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 						}
 					}
 				}}
+				{...tableProps}
 			/>
 			{/*<Button*/}
 			{/*	className={styles.pagination_reload_btn}*/}

@@ -347,7 +347,6 @@ export class LogEntryControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Get all statuses of log entry
    */
@@ -362,7 +361,6 @@ export class LogEntryControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Get top by phone number
    */
@@ -388,7 +386,6 @@ export class LogEntryControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Get top by flat number
    */
@@ -414,7 +411,6 @@ export class LogEntryControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Get all access-methods of log entry
    */
@@ -715,7 +711,6 @@ export class DecisionReportControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Print not voted decisions
    */
@@ -1400,7 +1395,6 @@ export interface Link {
   /**  */
   templated?: boolean;
 }
-
 export enum EnumRoomFilterType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
@@ -1422,7 +1416,6 @@ export enum EnumPaymentVOTag {
   'BLACK' = 'BLACK',
   'WHITE' = 'WHITE'
 }
-
 export enum EnumLogEntryFilterStatus {
   'OPENED' = 'OPENED',
   'AUTH_FAILED' = 'AUTH_FAILED',
@@ -1430,13 +1423,11 @@ export enum EnumLogEntryFilterStatus {
   'USER_ADDED' = 'USER_ADDED',
   'UNDEFINED' = 'UNDEFINED'
 }
-
 export enum EnumLogEntryFilterMethod {
   'CALL' = 'CALL',
   'APP' = 'APP',
   'UNDEFINED' = 'UNDEFINED'
 }
-
 export enum EnumMonthPaymentVOMonth {
   'JANUARY' = 'JANUARY',
   'FEBRUARY' = 'FEBRUARY',
@@ -1451,6 +1442,22 @@ export enum EnumMonthPaymentVOMonth {
   'NOVEMBER' = 'NOVEMBER',
   'DECEMBER' = 'DECEMBER'
 }
+
+
+export interface TopResponse {
+  count: number,
+  id: number,
+  flatNumber?: string,
+  phoneNumber?: string,
+  userName: string
+};
+
+export interface TopFilter {
+  gateId?: number;
+  startDate?: string;
+  endDate?: string;
+}
+
 
 export const PaymentService = new PaymentControllerService();
 export const PaymentReportService = new PaymentReportControllerService();
