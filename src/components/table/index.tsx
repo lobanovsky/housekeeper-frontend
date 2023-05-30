@@ -176,17 +176,8 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 	const selectedRowKeys = useMemo(() => selectedRows.map(({ id }) => id), [selectedRows.length]);
 	const filtersChangeId = (filters || []).reduce((accum, fieldConfig) => `${accum}, ${fieldConfig.name}-${(fieldConfig.options || []).length}`, '');
 
-	const filterForm = useMemo(() => filters.length ? <FilterForm
-			defaultFilterValues={defaultFilterValues}
-			ref={filterFormRef}
-			exportToFile={exportURL ? exportToFile : null}
-			filters={filters}
-			isValidForm={isValidForm}
-			onChangeFilters={onChangeFilters}
-			onSearchBtnClick={reloadTable}
-			extraControls={extraControls}
-		/> : null,
-		[filtersChangeId, JSON.stringify(selectedFilters)]);
+	// const filterForm = useMemo(() => filters.length ? ,
+	// 	[filtersChangeId, JSON.stringify(selectedFilters)]);
 
 	useImperativeHandle(ref, () => ({
 		reloadTable,
@@ -204,7 +195,16 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 
 	return (
 		<div className={`${styles.table_container} app-table ${className} ${loading ? 'with-loading' : ''} ${!total ? 'empty' : ''}`}>
-			{filterForm}
+			{filters.length > 0 && <FilterForm
+				defaultFilterValues={defaultFilterValues}
+				ref={filterFormRef}
+				exportToFile={exportURL ? exportToFile : null}
+				filters={filters}
+				isValidForm={isValidForm}
+				onChangeFilters={onChangeFilters}
+				onSearchBtnClick={reloadTable}
+				extraControls={extraControls}
+			/>}
 			{/* @ts-ignore*/}
 			{!!toolbar && <div className='table-toolbar'>{toolbar}</div>}
 			<AntTable

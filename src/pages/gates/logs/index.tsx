@@ -20,13 +20,15 @@ const GatesLog = () => {
 	const [isUploading, showUploading, hideUploading] = useLoading();
 
 	const onUploadStatusChange = useCallback((info: UploadChangeParam) => {
-		const { file: { status = '', response = {} } = {} } = info;
+		const { file: { status = '', response = {}, name = '' } = {} } = info;
 		if (status === 'done') {
-			hideUploading();
-			showMessage(`Импорт завершён`);
+			showMessage(`Файл ${name} загружен`);
 		} else if (status === 'error') {
-			hideUploading();
 			showError('Ошибка при импорте', response);
+		}
+
+		if (info.fileList.every(file => file.status === 'error' || file.status === 'done')) {
+			hideUploading();
 		}
 	}, []);
 
@@ -39,7 +41,9 @@ const GatesLog = () => {
 				filters={gateLogFilters}
 				extraControls={[
 					<Upload
+						key='upload'
 						showUploadList={false}
+						multiple={true}
 						onChange={onUploadStatusChange}
 						action={`${process.env.REACT_APP_BACKEND_URL}/files/eldes-gate/importer`}
 						beforeUpload={() => {
@@ -50,6 +54,7 @@ const GatesLog = () => {
 						<Button
 							type='primary'
 							className='upload-btn'
+							// loading={isUploading}
 						>{isUploading ? <LoadingOutlined /> : <UploadOutlined />}Загрузить файл</Button>
 					</Upload>
 				]}
