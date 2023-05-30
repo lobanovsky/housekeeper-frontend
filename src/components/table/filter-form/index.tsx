@@ -13,7 +13,7 @@ import { Dayjs } from 'dayjs';
 
 interface IFilterFormProps {
 	allowClear?: boolean;
-	defaultFilterValues?: Record<string, string | string[] | number[] | Dayjs>;
+	defaultFilterValues?: Record<string, string | string[] | number | number[] | Dayjs>;
 	filters: FilterFieldsConfig;
 	exportToFile?: ((onFinish: ActionFinishCallback) => void) | null;
 	extraControls?: React.ReactNode[];

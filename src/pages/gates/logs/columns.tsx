@@ -1,4 +1,5 @@
 import { dateTimeRenderer } from 'utils/utils';
+import { Typography } from 'antd';
 
 
 export const gateLogColumns = [
@@ -20,7 +21,7 @@ export const gateLogColumns = [
 		title: 'Телефон',
 		render: (phone: string = '') => {
 			const formatted = phone ? phone.replace(/(\d{1})(\d{3})(\d{3})(\d{2})(\d{2})/, '+$1 ($2) $3 $4 $5') : '';
-			return formatted;
+			return <Typography.Text copyable={{ text: phone }}>{formatted}</Typography.Text>
 		}
 	},
 	// {

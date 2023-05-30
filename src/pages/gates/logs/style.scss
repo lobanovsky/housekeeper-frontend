@@ -1,5 +1,14 @@
 
 .gates-log {
+	.upload-btn {
+		background-color: #7361d3;
+
+		&:hover,
+		&:focus {
+			background-color: rgb(128, 108, 255);
+		}
+	}
+
 	.filter-form {
 		.filter-fields {
 			.filter-field {

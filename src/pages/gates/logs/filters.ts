@@ -28,6 +28,11 @@ export const gateLogFilters = [
 		placeholder: '№ квартиры'
 	},
 	{
+		name: 'phoneNumber',
+		title: 'Телефон',
+		placeholder: 'Номер телефона'
+	},
+	{
 		name: 'status',
 		type: 'remote-select' as FilterFieldType,
 		idFieldName: 'name',

@@ -14,9 +14,21 @@
 					width: 200px;
 				}
 
+				&.gateId {
+					.ant-select {
+						width: 150px;
+					}
+				}
+
+				&.method {
+					.ant-select {
+						width: 170px;
+					}
+				}
+
 
 				.ant-picker {
-					width: 150px;
+					width: 130px;
 				}
 
 				&.gateId {

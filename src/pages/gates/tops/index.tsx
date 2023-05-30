@@ -13,6 +13,7 @@ const today = dayjs();
 const monthAgo = dayjs().subtract(1, 'month');
 
 const DefaultFilters = {
+	gateId: 1,
 	startDate: monthAgo,
 	endDate: today
 };

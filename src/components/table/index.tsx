@@ -21,7 +21,7 @@ interface ITableProps extends TableProps<any> {
 	filters?: FilterFieldsConfig;
 	isValidForm?: (filters: any) => boolean,
 	defaultPagination?: IPagination;
-	defaultFilterValues?: Record<string, string | string[] | number[] | Dayjs>,
+	defaultFilterValues?: Record<string, string | string[] | number | number[] | Dayjs>,
 	additionalRequestParams?: any,
 	loadDataOnInit?: boolean;
 	onChangePagination?: (pagination: IPagination) => void,
