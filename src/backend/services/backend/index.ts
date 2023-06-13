@@ -429,6 +429,75 @@ export class LogEntryControllerService {
 
 export class FileControllerService {
   /**
+   *
+   */
+  getAllFiles(
+      params: {
+        /**  */
+        pageNum?: number;
+        /**  */
+        pageSize?: number;
+        /** requestBody */
+        body?: FileFilter;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/files';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      configs.params = { pageNum: params['pageNum'], pageSize: params['pageSize'] };
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Get all types of files
+   */
+  getFileTypes(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/files/types';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Remove data (payments, log-entries etc.) by the file ids
+   */
+  remove(
+      params: {
+        /**  */
+        fileIds: any | null[];
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/files/{fileIds}';
+      url = url.replace('{fileIds}', params['fileIds'] + '');
+
+      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class FileImporterControllerService {
+  /**
    * Import accounts from registry from *.xlsx
    */
   importAccountsFromRegistry(options: IRequestOptions = {}): Promise<any> {
@@ -444,6 +513,7 @@ export class FileControllerService {
       axios(configs, resolve, reject);
     });
   }
+
   /**
    * Import payments from *.xlsx
    */
@@ -460,6 +530,7 @@ export class FileControllerService {
       axios(configs, resolve, reject);
     });
   }
+
   /**
    * Import accounts from "HOMEOWNER" from *.xlsx
    */
@@ -476,6 +547,7 @@ export class FileControllerService {
       axios(configs, resolve, reject);
     });
   }
+
   /**
    * Import eldes gate from *.log
    */
@@ -492,6 +564,7 @@ export class FileControllerService {
       axios(configs, resolve, reject);
     });
   }
+
   /**
    * Import water counters from *.xlsx
    */
@@ -508,6 +581,7 @@ export class FileControllerService {
       axios(configs, resolve, reject);
     });
   }
+
   /**
    * Import counter values from *.xlsx
    */
@@ -524,6 +598,7 @@ export class FileControllerService {
       axios(configs, resolve, reject);
     });
   }
+
   /**
    * Import counterparties from *.xlsx
    */
@@ -540,6 +615,7 @@ export class FileControllerService {
       axios(configs, resolve, reject);
     });
   }
+
   /**
    * Import contacts from *.xlsx
    */
@@ -556,6 +632,7 @@ export class FileControllerService {
       axios(configs, resolve, reject);
     });
   }
+
   /**
    * Import answers from *.xlsx
    */
@@ -564,29 +641,6 @@ export class FileControllerService {
       let url = basePath + '/files/answers/importer';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Remove payments by file id
-   */
-  removePaymentsByFileId(
-    params: {
-      /**  */
-      fileId: number;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/files/payments/{fileId}';
-      url = url.replace('{fileId}', params['fileId'] + '');
-
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
 
       let data = null;
 
@@ -1154,6 +1208,66 @@ export interface PageLogEntryResponse {
   empty?: boolean;
 }
 
+export interface FileFilter {
+  /**  */
+  name?: string;
+
+  /**  */
+  fileType?: EnumFileFilterFileType;
+}
+
+export interface FileVO {
+  /**  */
+  id?: number;
+
+  /**  */
+  name?: string;
+
+  /**  */
+  size?: number;
+
+  /**  */
+  checksum?: string;
+
+  /**  */
+  fileType?: EnumFileVOFileType;
+}
+
+export interface PageFileVO {
+  /**  */
+  totalPages?: number;
+
+  /**  */
+  totalElements?: number;
+
+  /**  */
+  size?: number;
+
+  /**  */
+  content?: FileVO[];
+
+  /**  */
+  number?: number;
+
+  /**  */
+  sort?: SortObject;
+
+  /**  */
+  pageable?: PageableObject;
+
+  /**  */
+  numberOfElements?: number;
+
+  /**  */
+  first?: boolean;
+
+  /**  */
+  last?: boolean;
+
+  /**  */
+  empty?: boolean;
+}
+
 export interface AccountRegistryResponse {
   /**  */
   fileName?: string;
@@ -1388,6 +1502,14 @@ export interface GateResponse {
   imei?: string;
 }
 
+export interface FileTypeResponse {
+  /**  */
+  name?: string;
+
+  /**  */
+  description?: string;
+}
+
 export interface Link {
   /**  */
   href?: string;
@@ -1395,6 +1517,7 @@ export interface Link {
   /**  */
   templated?: boolean;
 }
+
 export enum EnumRoomFilterType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
@@ -1423,11 +1546,39 @@ export enum EnumLogEntryFilterStatus {
   'USER_ADDED' = 'USER_ADDED',
   'UNDEFINED' = 'UNDEFINED'
 }
+
 export enum EnumLogEntryFilterMethod {
   'CALL' = 'CALL',
   'APP' = 'APP',
   'UNDEFINED' = 'UNDEFINED'
 }
+
+export enum EnumFileFilterFileType {
+  'PAYMENTS' = 'PAYMENTS',
+  'COUNTERPARTIES' = 'COUNTERPARTIES',
+  'ROOMS' = 'ROOMS',
+  'CONTACTS' = 'CONTACTS',
+  'REGISTRIES' = 'REGISTRIES',
+  'ACCOUNTS' = 'ACCOUNTS',
+  'LOG_ENTRY' = 'LOG_ENTRY',
+  'DECISIONS' = 'DECISIONS',
+  'DECISION_ANSWERS' = 'DECISION_ANSWERS',
+  'COUNTER_WATER_VALUES' = 'COUNTER_WATER_VALUES'
+}
+
+export enum EnumFileVOFileType {
+  'PAYMENTS' = 'PAYMENTS',
+  'COUNTERPARTIES' = 'COUNTERPARTIES',
+  'ROOMS' = 'ROOMS',
+  'CONTACTS' = 'CONTACTS',
+  'REGISTRIES' = 'REGISTRIES',
+  'ACCOUNTS' = 'ACCOUNTS',
+  'LOG_ENTRY' = 'LOG_ENTRY',
+  'DECISIONS' = 'DECISIONS',
+  'DECISION_ANSWERS' = 'DECISION_ANSWERS',
+  'COUNTER_WATER_VALUES' = 'COUNTER_WATER_VALUES'
+}
+
 export enum EnumMonthPaymentVOMonth {
   'JANUARY' = 'JANUARY',
   'FEBRUARY' = 'FEBRUARY',

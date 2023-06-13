@@ -8,8 +8,11 @@ import {
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { MenuItemType, SubMenuType } from 'antd/es/menu/hooks/useItems';
-import { showPaymentsImportModal } from 'pages/payments/import';
+// import { showPaymentsImportModal } from 'pages/payments/import';
 import { GateIcon } from 'icons/gate';
+// import { showFileUploadModal } from 'components/file-upload/modal';
+import { showPaymentsImportModal } from 'pages/payments/import';
+import { showGatesImportModal } from 'pages/gates/import';
 
 
 export const NavigationItems: any = [
@@ -26,10 +29,27 @@ export const NavigationItems: any = [
 		label: <Link to='/counters'>Счётчики</Link>
 	},
 	{
-		key: '/gates',
+
+		key: '/gates-home',
 		icon: <GateIcon />,
-		title: 'Шлагбаумы',
-		label: <Link to='/gates'>Шлагбаумы</Link>
+		label: 'Шлагбаумы',
+
+		children: [
+			{
+				key: '/gates',
+				icon: <GateIcon />,
+				title: 'Шлагбаумы',
+				label: <Link to='/gates'>Шлагбаумы</Link>,
+			},
+			{
+				key: '/import-gates',
+				icon: <CloudUploadOutlined />,
+				title: 'Загрузить файл с шлагбаумами',
+				onClick: showGatesImportModal,
+				label: 'Загрузить файл с шлагбаумами'
+			},
+
+		]
 	},
 
 	{
@@ -55,10 +75,6 @@ export const NavigationItems: any = [
 				title: 'Загрузить файл с платежами',
 				onClick: showPaymentsImportModal,
 				label: 'Загрузить файл с платежами'
-				// label: <Typography.Text
-				// 	style={{color: 'inherit'}}
-				// 	onClick={showPaymentsImportModal}
-				// >Загрузить файл с платежами</Typography.Text>
 			},
 		]
 	}

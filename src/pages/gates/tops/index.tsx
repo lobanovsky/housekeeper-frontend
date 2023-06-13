@@ -13,9 +13,7 @@ const today = dayjs();
 const monthAgo = dayjs().subtract(1, 'month');
 
 const DefaultFilters = {
-	gateId: 1,
-	startDate: monthAgo,
-	endDate: today
+	gateId: 1
 };
 const GateTopUsers = () => {
 	const [selectedFilters, setFilters] = useState<TopFilterValues>(DefaultFilters as TopFilterValues);

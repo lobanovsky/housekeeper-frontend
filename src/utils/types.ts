@@ -29,5 +29,5 @@ export interface DictionaryItem {
 
 export type ActionFinishCallback = (isSuccess: boolean) => void;
 
-export type ActionWithCallback = (callback: ActionFinishCallback) => void;
+export type ActionCallback = () => void;
 
