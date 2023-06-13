@@ -455,7 +455,6 @@ export class FileControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Get all types of files
    */
@@ -470,7 +469,6 @@ export class FileControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Remove data (payments, log-entries etc.) by the file ids
    */
@@ -513,7 +511,6 @@ export class FileImporterControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Import payments from *.xlsx
    */
@@ -530,7 +527,6 @@ export class FileImporterControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Import accounts from "HOMEOWNER" from *.xlsx
    */
@@ -547,7 +543,6 @@ export class FileImporterControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Import eldes gate from *.log
    */
@@ -564,7 +559,6 @@ export class FileImporterControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Import water counters from *.xlsx
    */
@@ -581,7 +575,6 @@ export class FileImporterControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Import counter values from *.xlsx
    */
@@ -598,7 +591,6 @@ export class FileImporterControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Import counterparties from *.xlsx
    */
@@ -615,7 +607,6 @@ export class FileImporterControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Import contacts from *.xlsx
    */
@@ -632,7 +623,6 @@ export class FileImporterControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Import answers from *.xlsx
    */
@@ -1216,6 +1206,14 @@ export interface FileFilter {
   fileType?: EnumFileFilterFileType;
 }
 
+export interface FileType {
+  /**  */
+  name?: string;
+
+  /**  */
+  description?: string;
+}
+
 export interface FileVO {
   /**  */
   id?: number;
@@ -1230,7 +1228,10 @@ export interface FileVO {
   checksum?: string;
 
   /**  */
-  fileType?: EnumFileVOFileType;
+  type?: FileType;
+
+  /**  */
+  createDate?: Date;
 }
 
 export interface PageFileVO {
@@ -1517,7 +1518,6 @@ export interface Link {
   /**  */
   templated?: boolean;
 }
-
 export enum EnumRoomFilterType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
@@ -1546,13 +1546,11 @@ export enum EnumLogEntryFilterStatus {
   'USER_ADDED' = 'USER_ADDED',
   'UNDEFINED' = 'UNDEFINED'
 }
-
 export enum EnumLogEntryFilterMethod {
   'CALL' = 'CALL',
   'APP' = 'APP',
   'UNDEFINED' = 'UNDEFINED'
 }
-
 export enum EnumFileFilterFileType {
   'PAYMENTS' = 'PAYMENTS',
   'COUNTERPARTIES' = 'COUNTERPARTIES',
@@ -1565,20 +1563,6 @@ export enum EnumFileFilterFileType {
   'DECISION_ANSWERS' = 'DECISION_ANSWERS',
   'COUNTER_WATER_VALUES' = 'COUNTER_WATER_VALUES'
 }
-
-export enum EnumFileVOFileType {
-  'PAYMENTS' = 'PAYMENTS',
-  'COUNTERPARTIES' = 'COUNTERPARTIES',
-  'ROOMS' = 'ROOMS',
-  'CONTACTS' = 'CONTACTS',
-  'REGISTRIES' = 'REGISTRIES',
-  'ACCOUNTS' = 'ACCOUNTS',
-  'LOG_ENTRY' = 'LOG_ENTRY',
-  'DECISIONS' = 'DECISIONS',
-  'DECISION_ANSWERS' = 'DECISION_ANSWERS',
-  'COUNTER_WATER_VALUES' = 'COUNTER_WATER_VALUES'
-}
-
 export enum EnumMonthPaymentVOMonth {
   'JANUARY' = 'JANUARY',
   'FEBRUARY' = 'FEBRUARY',

@@ -4,7 +4,9 @@ import {
 	CloudUploadOutlined,
 	DashboardOutlined,
 	DollarOutlined,
-	HomeOutlined
+	GroupOutlined,
+	HomeOutlined,
+	SettingOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { MenuItemType, SubMenuType } from 'antd/es/menu/hooks/useItems';
@@ -77,7 +79,22 @@ export const NavigationItems: any = [
 				label: 'Загрузить файл с платежами'
 			},
 		]
-	}
+	},
+	{
+
+		key: '/admin',
+		icon: <SettingOutlined />,
+		label: 'Администрирование',
+
+		children: [
+			{
+				key: '/uploaded-files',
+				icon: <GroupOutlined />,
+				title: 'Загруженные файлы',
+				label: <Link to='/uploaded-files'>Загруженные файлы</Link>,
+			}
+		]
+	},
 ]
 
 

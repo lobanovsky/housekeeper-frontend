@@ -4,14 +4,21 @@ import debounce from 'lodash/debounce';
 
 import { FilterFieldsConfig } from 'components/table/filter-form/types';
 import { showError } from 'utils/notifications';
-import { IPagination } from 'utils/types';
-import FilterForm from './filter-form';
+import { EmptyFunction, IPagination } from 'utils/types';
+import FilterForm, { FilterFormValues } from './filter-form';
 import styles from './styles.module.scss';
 import { downloadFile } from 'utils/utils';
 import { Dayjs } from 'dayjs';
 
 export interface TableRequestParams<T> extends IPagination {
 	body: T
+}
+
+export interface TablePublicMethods {
+	reloadTable: EmptyFunction,
+	resetTable: EmptyFunction,
+	getFilters: () => FilterFormValues,
+	loadData: (params: { filters: FilterFormValues, pagination: IPagination }) => void;
 }
 
 interface ITableProps extends TableProps<any> {
@@ -100,7 +107,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 		downloadFile(exportURL, convertedFilters, onFinish);
 	}, [JSON.stringify(selectedFilters)]);
 
-	const loadData = useCallback((params: { filters: any, pagination: IPagination }) => {
+	const loadData = useCallback((params: { filters: FilterFormValues, pagination: IPagination }) => {
 		const { filters, pagination: { pageNum = 0, pageSize = 10 } = {} } = params;
 		const convertedFilters = getProcessedFilters(filters);
 
@@ -179,7 +186,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 	// const filterForm = useMemo(() => filters.length ? ,
 	// 	[filtersChangeId, JSON.stringify(selectedFilters)]);
 
-	useImperativeHandle(ref, () => ({
+	useImperativeHandle(ref, (): TablePublicMethods => ({
 		reloadTable,
 		resetTable,
 		getFilters,

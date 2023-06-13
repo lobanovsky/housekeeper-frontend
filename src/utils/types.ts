@@ -5,6 +5,7 @@ export type Modify<T, R> = Omit<T, keyof R> & R;
 
 export type SimpleFieldValue = string | number | boolean | undefined;
 
+export type EmptyFunction = () => void;
 // @ts-ignore
 export interface ServerError extends Error, AxiosError, AxiosResponse {
 	error?: string;

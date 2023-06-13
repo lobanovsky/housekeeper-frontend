@@ -11,6 +11,7 @@ import OutgoingPayments from 'pages/payments/outgoing';
 import './App.scss';
 import Rooms from 'pages/rooms';
 import Gates from 'pages/gates';
+import UploadedFiles from 'pages/admin/uploaded-files';
 
 
 const { Header, Content } = Layout;
@@ -47,6 +48,11 @@ function App() {
 									path='/payments-outgoing'
 									element={<OutgoingPayments />}
 								/>
+								<Route
+									path='/uploaded-files'
+									element={<UploadedFiles />}
+								/>
+
 								{/*<Route*/}
 								{/*	path='*'*/}
 								{/*	element={<Navigate*/}

@@ -11,15 +11,18 @@ import RemoteSelect from 'components/remote-select';
 import { Dayjs } from 'dayjs';
 
 
+export type FilterValue = string | string[] | number | number[] | boolean | Dayjs | [Dayjs, Dayjs];
+export type FilterFormValues = Record<string, FilterValue>;
+
 interface IFilterFormProps {
 	allowClear?: boolean;
-	defaultFilterValues?: Record<string, string | string[] | number | number[] | Dayjs>;
+	defaultFilterValues?: FilterFormValues;
 	filters: FilterFieldsConfig;
 	exportToFile?: ((onFinish: ActionFinishCallback) => void) | null;
 	extraControls?: React.ReactNode[];
-	onChangeFilters: (filters: any) => void;
+	onChangeFilters: (filters: FilterFormValues) => void;
 	onSearchBtnClick: () => void;
-	isValidForm?: (filters: any) => boolean;
+	isValidForm?: (filters: FilterFormValues) => boolean;
 }
 
 

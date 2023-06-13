@@ -1,0 +1,32 @@
+.uploaded-files {
+	.filter-form {
+		.filter-fields {
+			.filter-field {
+				&.fileType {
+					min-width: 200px;
+				}
+			}
+		}
+	}
+
+	.ant-table {
+		td {
+			&.createDate {
+				width: 150px;
+
+				.time {
+					color: #185dbd;
+				}
+			}
+
+			&.actions {
+				.ant-btn {
+					border: none;
+					padding: 2px 6px;
+					font-size: 16px;
+					height: 28px;
+				}
+			}
+		}
+	}
+}
