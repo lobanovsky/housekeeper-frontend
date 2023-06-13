@@ -5,7 +5,7 @@ import { FileUpload } from 'components/file-upload/index';
 interface FileUploadModalProps extends Omit<FileUploadProps, 'closeModal'>, ModalProps {
 }
 
-export const showFileUploadModal = ({ title, width = 600, className = '', ...uploadProps }: FileUploadModalProps) => {
+export const showFileUploadModal = ({ title, width = 800, className = '', ...uploadProps }: FileUploadModalProps) => {
 	let modal: any = null;
 
 	const closeModal = () => {

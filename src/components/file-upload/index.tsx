@@ -1,64 +1,117 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, Upload } from 'antd';
 import { UploadFile } from 'antd/lib';
 import { RcFile } from 'antd/es/upload';
 import axios from 'axios';
-import { showError, showMessage } from 'utils/notifications';
 import { FileUploadProps } from 'components/file-upload/types';
+import { FileItem } from 'components/file-upload/file-list-renderer';
+import './style.scss';
 
 
-export const FileUpload = ({ url, errorMsg, successMsg, onSuccessUpload, closeModal }: FileUploadProps) => {
-	const [fileList, setFileList] = useState<UploadFile[]>([]);
+export const FileUpload = ({ url, successMsg, onSuccessUpload, closeModal }: FileUploadProps) => {
+	const [selectedFiles, setSelectedFiles] = useState<UploadFile[]>([]);
 	const [uploading, setUploading] = useState(false);
 
-	const uploadFile = () => {
-		const formData = new FormData();
-		formData.append('file', fileList[0] as RcFile);
 
-		setUploading(true);
-		axios.post(url, formData)
+	const uploadFile = (file: RcFile) => {
+		const formData = new FormData();
+		formData.append('file', file);
+		const fileIndex = selectedFiles.findIndex(({ uid }) => uid === file.uid);
+		if (fileIndex > -1) {
+			const newFileList = [...selectedFiles];
+			newFileList[fileIndex].status = 'uploading';
+			setSelectedFiles(newFileList);
+		}
+
+
+		axios
+			.post(url, formData, {
+				timeout: 2 * 60 * 1000,
+			})
 			.then(() => {
-				setUploading(false);
-				showMessage(successMsg);
-				closeModal();
-				if (onSuccessUpload) {
-					onSuccessUpload();
+				if (fileIndex > -1) {
+					const newFiles = [...selectedFiles];
+					newFiles[fileIndex].status = 'success';
+					setSelectedFiles(newFiles);
+					// onChangeSelectedFiles(newFiles);
 				}
 			})
-			.catch(e => {
-				showError(errorMsg, e);
-				setUploading(false);
-			})
+			.catch((e) => {
+				if (fileIndex > -1) {
+					const errorMsg =
+						e.response?.data?.message ||
+						e.response?.data?.error ||
+						e.message ||
+						'ошибка загрузки файла';
+					const newFiles = [...selectedFiles];
+					newFiles[fileIndex].status = 'error';
+					newFiles[fileIndex].error = errorMsg;
+					setSelectedFiles(newFiles);
+				}
+			});
 	};
+
+	const uploadSelectedFiles = () => {
+		const newFiles = selectedFiles.filter(
+			(file) => file.status !== 'success' && file.status !== 'error'
+		);
+		// @ts-ignore
+		newFiles.forEach(uploadFile);
+	};
+
+	const onRemoveFile = useCallback(
+		(file: RcFile) => {
+			const newFiles = [...selectedFiles];
+			const fileIndex = selectedFiles.findIndex((selectedFile) => selectedFile.uid === file.uid);
+			if (fileIndex > -1) {
+				newFiles.splice(fileIndex, 1);
+				setSelectedFiles(newFiles);
+				// onChangeSelectedFiles(newFiles);
+			}
+		},
+		[selectedFiles.length]
+	);
 
 
 	return (
-		<>
+		<div className='file-upload'>
 			<Upload
-				fileList={fileList}
-				beforeUpload={(file) => {
-					setFileList([...fileList, file]);
+				fileList={selectedFiles}
+				multiple
+				showUploadList={false}
+				beforeUpload={(file, fileList) => {
+					setSelectedFiles([...fileList]);
 					return false;
 				}}
 				onRemove={(file) => {
-					const index = fileList.indexOf(file);
-					const newFileList = fileList.slice();
+					const index = selectedFiles.indexOf(file);
+					const newFileList = selectedFiles.slice();
 					newFileList.splice(index, 1);
-					setFileList(newFileList);
+					setSelectedFiles(newFileList);
 				}}
 			>
-				<Button icon={<UploadOutlined />}>Выбрать файл</Button>
+				<Button icon={<UploadOutlined />}>Выбрать файлы</Button>
 			</Upload>
 			<Button
 				type='primary'
-				onClick={uploadFile}
-				disabled={fileList.length === 0}
+				onClick={uploadSelectedFiles}
+				disabled={selectedFiles.length === 0}
 				loading={uploading}
-				style={{ marginTop: 16 }}
+				style={{ marginTop: 16, marginLeft: 20 }}
 			>
-				{uploading ? 'Загружаем файл' : 'Загрузить файл'}
+				{uploading ? 'Загружаем файлы' : 'Загрузить'}
 			</Button>
-		</>
+			<div className='selected-files'>
+				{selectedFiles.map((file, index) => (
+					<FileItem
+						key={file.uid}
+						file={file}
+						index={index}
+						onRemoveFile={onRemoveFile}
+					/>
+				))}
+			</div>
+		</div>
 	);
 }
