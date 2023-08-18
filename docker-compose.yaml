@@ -16,9 +16,12 @@ services:
       - "8141:80"
     environment:
       - BUILD_NUMBER=${TAG}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.housekeeper-ui.rule=Host(`housekeeper.docduck.io`)"
     networks:
-      - housekeeper-network
+      - printdown-network
 
 networks:
-  housekeeper-network:
+  printdown-network:
     external: true
