@@ -1,6 +1,16 @@
-import { dateTimeRenderer, summRenderer } from 'utils/utils';
+import {dateTimeRenderer, summRenderer} from 'utils/utils';
 
+export const accountNumberRenderer = (accountNumber: string = '') => {
+	const groups = [];
 
+	let startIndex = 0;
+
+	for (startIndex = 0; startIndex <= accountNumber.length; startIndex += 4) {
+		groups.push(accountNumber.substring(startIndex, startIndex + 4));
+	}
+
+	return groups.length ? groups.join(' ') : accountNumber;
+};
 const paymentColumns = [
 	{
 		dataIndex: 'date',
@@ -30,6 +40,12 @@ const paymentColumns = [
 	{
 		dataIndex: 'bankName',
 		title: 'Банк'
+	},
+	{
+		dataIndex: 'toAccount',
+		title: 'Счёт поступления',
+		outgoing: false,
+		render: accountNumberRenderer
 	},
 	{
 		dataIndex: 'incomingSum',
