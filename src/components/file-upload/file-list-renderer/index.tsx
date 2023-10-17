@@ -1,8 +1,8 @@
 import React from 'react';
-import { CheckOutlined, CloseOutlined, DeleteOutlined, LoadingOutlined } from '@ant-design/icons';
+import {CheckOutlined, CloseOutlined, DeleteOutlined, LoadingOutlined} from '@ant-design/icons';
 import Button from 'antd/lib/button';
-import { RcFile } from 'antd/es/upload';
-import { UploadFile } from 'antd/lib';
+import {RcFile} from 'antd/es/upload';
+import {UploadFile} from 'antd/lib';
 
 const BYTE_IN_MEGABYTE = 1000;
 const UNITS = ['КБ', 'МБ', 'ГБ', 'ТБ'];
@@ -38,8 +38,10 @@ export const FileItem = ({ file, index, onRemoveFile }: {
 		<div className='index-and-status'>
 			<div className='index'>{index + 1}.</div>
 			<div className='status-icon'>
-				{file.status === 'success' && <CheckOutlined />}
-				{file.status === 'error' && <CloseOutlined />}
+				{/* @ts-ignore*/}
+				{file.status === 'success' && <CheckOutlined/>}
+				{/* @ts-ignore*/}
+				{file.status === 'error' && <CloseOutlined/>}
 			</div>
 		</div>
 
