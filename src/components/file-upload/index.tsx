@@ -1,11 +1,11 @@
-import { useCallback, useState } from 'react';
-import { UploadOutlined } from '@ant-design/icons';
-import { Button, Upload } from 'antd';
-import { UploadFile } from 'antd/lib';
-import { RcFile } from 'antd/es/upload';
+import {useCallback, useState} from 'react';
+import {UploadOutlined} from '@ant-design/icons';
+import {Button, Upload} from 'antd';
+import {UploadFile} from 'antd/lib';
+import {RcFile} from 'antd/es/upload';
 import axios from 'axios';
-import { FileUploadProps } from 'components/file-upload/types';
-import { FileItem } from 'components/file-upload/file-list-renderer';
+import {FileUploadProps} from 'components/file-upload/types';
+import {FileItem} from 'components/file-upload/file-list-renderer';
 import './style.scss';
 
 
@@ -32,6 +32,7 @@ export const FileUpload = ({ url, successMsg, onSuccessUpload, closeModal }: Fil
 			.then(() => {
 				if (fileIndex > -1) {
 					const newFiles = [...selectedFiles];
+					// @ts-ignore
 					newFiles[fileIndex].status = 'success';
 					setSelectedFiles(newFiles);
 					// onChangeSelectedFiles(newFiles);
@@ -54,6 +55,7 @@ export const FileUpload = ({ url, successMsg, onSuccessUpload, closeModal }: Fil
 
 	const uploadSelectedFiles = () => {
 		const newFiles = selectedFiles.filter(
+			// @ts-ignore
 			(file) => file.status !== 'success' && file.status !== 'error'
 		);
 		// @ts-ignore
