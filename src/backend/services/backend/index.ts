@@ -5,7 +5,7 @@
 /** Generate by swagger-axios-codegen */
 /* eslint-disable */
 // @ts-nocheck
-import { AxiosInstance, AxiosRequestConfig } from 'axios';
+import {AxiosInstance, AxiosRequestConfig} from 'axios';
 
 export interface IRequestOptions extends AxiosRequestConfig {
   /** only in axios interceptor config*/
@@ -817,12 +817,30 @@ export class ActuatorService {
       axios(configs, resolve, reject);
     });
   }
+
   /**
    * Actuator web endpoint 'health-path'
    */
   healthPath(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/actuator/health/**';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class AccountControllerService {
+  /**
+   * Find all accounts
+   */
+  findAllAccounts(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/accounts';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -878,6 +896,12 @@ export interface PageRoomVO {
   totalElements?: number;
 
   /**  */
+  pageable?: PageableObject;
+
+  /**  */
+  numberOfElements?: number;
+
+  /**  */
   size?: number;
 
   /**  */
@@ -888,12 +912,6 @@ export interface PageRoomVO {
 
   /**  */
   sort?: SortObject;
-
-  /**  */
-  pageable?: PageableObject;
-
-  /**  */
-  numberOfElements?: number;
 
   /**  */
   first?: boolean;
@@ -907,12 +925,6 @@ export interface PageRoomVO {
 
 export interface PageableObject {
   /**  */
-  offset?: number;
-
-  /**  */
-  sort?: SortObject;
-
-  /**  */
   paged?: boolean;
 
   /**  */
@@ -923,6 +935,12 @@ export interface PageableObject {
 
   /**  */
   pageSize?: number;
+
+  /**  */
+  offset?: number;
+
+  /**  */
+  sort?: SortObject;
 }
 
 export interface RoomVO {
@@ -968,13 +986,13 @@ export interface RoomVO {
 
 export interface SortObject {
   /**  */
-  empty?: boolean;
-
-  /**  */
   unsorted?: boolean;
 
   /**  */
   sorted?: boolean;
+
+  /**  */
+  empty?: boolean;
 }
 
 export interface OutgoingPaymentsFilter {
@@ -1015,6 +1033,9 @@ export interface IncomingPaymentsFilter {
 
   /**  */
   endDate?: Date;
+
+  /**  */
+  toAccounts?: string[];
 }
 
 export interface PagePaymentVO {
@@ -1023,6 +1044,12 @@ export interface PagePaymentVO {
 
   /**  */
   totalElements?: number;
+
+  /**  */
+  pageable?: PageableObject;
+
+  /**  */
+  numberOfElements?: number;
 
   /**  */
   size?: number;
@@ -1035,12 +1062,6 @@ export interface PagePaymentVO {
 
   /**  */
   sort?: SortObject;
-
-  /**  */
-  pageable?: PageableObject;
-
-  /**  */
-  numberOfElements?: number;
 
   /**  */
   first?: boolean;
@@ -1171,6 +1192,12 @@ export interface PageLogEntryResponse {
   totalElements?: number;
 
   /**  */
+  pageable?: PageableObject;
+
+  /**  */
+  numberOfElements?: number;
+
+  /**  */
   size?: number;
 
   /**  */
@@ -1181,12 +1208,6 @@ export interface PageLogEntryResponse {
 
   /**  */
   sort?: SortObject;
-
-  /**  */
-  pageable?: PageableObject;
-
-  /**  */
-  numberOfElements?: number;
 
   /**  */
   first?: boolean;
@@ -1242,6 +1263,12 @@ export interface PageFileVO {
   totalElements?: number;
 
   /**  */
+  pageable?: PageableObject;
+
+  /**  */
+  numberOfElements?: number;
+
+  /**  */
   size?: number;
 
   /**  */
@@ -1252,12 +1279,6 @@ export interface PageFileVO {
 
   /**  */
   sort?: SortObject;
-
-  /**  */
-  pageable?: PageableObject;
-
-  /**  */
-  numberOfElements?: number;
 
   /**  */
   first?: boolean;
@@ -1518,11 +1539,27 @@ export interface Link {
   /**  */
   templated?: boolean;
 }
+
+export interface AccountResponse {
+  /**  */
+  account?: string;
+
+  /**  */
+  default?: boolean;
+
+  /**  */
+  special?: boolean;
+
+  /**  */
+  description?: string;
+}
+
 export enum EnumRoomFilterType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
+
 export enum EnumRoomVOType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
@@ -1602,3 +1639,4 @@ export const DecisionReportService = new DecisionReportControllerService();
 export const RoomService = new RoomControllerService();
 export const RoomReportService = new RoomReportControllerService();
 export const GateService = new LogEntryControllerService();
+export const AccountService = new AccountControllerService();

@@ -1,9 +1,8 @@
 import React from 'react';
-import { FilterFieldType } from 'components/table/filter-form/types';
-import { dateTimeRenderer, summRenderer } from 'utils/utils';
+import {FilterFieldType, IFilterFieldConfig} from 'components/table/filter-form/types';
 
 
-const paymentFilters = [
+const paymentFilters = ({accountOptions = []}: { accountOptions?: React.ReactNode[] }) => [
 	{
 		name: 'toInn',
 		title: 'ИНН получателя',
@@ -38,7 +37,15 @@ const paymentFilters = [
 		title: 'Дата по',
 		type: 'date' as FilterFieldType
 	},
+	{
+		name: 'toAccounts',
+		title: 'Счёт поступления',
+		type: 'select' as FilterFieldType,
+		mode: 'multiple',
+		options: accountOptions,
+		outgoing: false
+	},
 ];
 
-export const getPaymentFilters = (isOutgoing: boolean = false) => paymentFilters.filter(({outgoing}) => typeof outgoing !== 'boolean' || outgoing === isOutgoing);
+export const getPaymentFilters = (isOutgoing: boolean = false, accountOptions: React.ReactNode[] = []): IFilterFieldConfig[] => paymentFilters({accountOptions}).filter(({outgoing}) => typeof outgoing !== 'boolean' || outgoing === isOutgoing);
 
