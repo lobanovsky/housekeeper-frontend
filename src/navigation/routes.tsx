@@ -8,13 +8,13 @@ import {
 	HomeOutlined,
 	SettingOutlined
 } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-import { MenuItemType, SubMenuType } from 'antd/es/menu/hooks/useItems';
+import {Link} from 'react-router-dom';
+import {MenuItemType, SubMenuType} from 'antd/es/menu/hooks/useItems';
 // import { showPaymentsImportModal } from 'pages/payments/import';
-import { GateIcon } from 'icons/gate';
+import {GateIcon} from 'icons/gate';
 // import { showFileUploadModal } from 'components/file-upload/modal';
-import { showPaymentsImportModal } from 'pages/payments/import';
-import { showGatesImportModal } from 'pages/gates/import';
+import {showPaymentsImportModal} from 'pages/payments/import';
+import {showGatesImportModal} from 'pages/gates/import';
 
 
 export const NavigationItems: any = [
@@ -73,10 +73,16 @@ export const NavigationItems: any = [
 			},
 			{
 				key: '/import-payments',
-				icon: <CloudUploadOutlined />,
+				icon: <CloudUploadOutlined/>,
 				title: 'Загрузить файл с платежами',
 				onClick: showPaymentsImportModal,
 				label: 'Загрузить файл с платежами'
+			},
+			{
+				key: '/expenses',
+				icon: <ArrowDownOutlined/>,
+				title: 'Расходы',
+				label: <Link to='/expenses'>Расходы</Link>
 			},
 		]
 	},

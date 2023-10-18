@@ -160,6 +160,29 @@ export class PaymentReportControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   * Export outgoing payments by filter to excel
+   */
+  exportOutgoingGroupingPayments(
+      params: {
+        /** requestBody */
+        body?: OutgoingGropingPaymentsFilter;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/reports/payments/outgoing/grouping';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
   /**
    * Export incoming payments by filter to excel
    */
@@ -246,7 +269,7 @@ export class PaymentControllerService {
       let url = basePath + '/payments/outgoing';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-      configs.params = { pageNum: params['pageNum'], pageSize: params['pageSize'] };
+      configs.params = {pageNum: params['pageNum'], pageSize: params['pageSize']};
 
       let data = params.body;
 
@@ -255,6 +278,30 @@ export class PaymentControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   * Find outgoing payments with filter and grouping by counterparty
+   */
+  findOutgoingPaymentsGroupingByCounterparty(
+      params: {
+        /** requestBody */
+        body?: OutgoingGropingPaymentsFilter;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/payments/outgoing/grouping';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
   /**
    * Find incoming payments with filter
    */
@@ -817,7 +864,6 @@ export class ActuatorService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Actuator web endpoint 'health-path'
    */
@@ -1015,6 +1061,14 @@ export interface OutgoingPaymentsFilter {
   endDate?: Date;
 }
 
+export interface OutgoingGropingPaymentsFilter {
+  /**  */
+  startDate?: Date;
+
+  /**  */
+  endDate?: Date;
+}
+
 export interface IncomingPaymentsFilter {
   /**  */
   fromName?: string;
@@ -1121,6 +1175,111 @@ export interface PaymentVO {
 
   /**  */
   tag?: EnumPaymentVOTag;
+
+  /**  */
+  taxable?: boolean;
+
+  /**  */
+  deposit?: boolean;
+}
+
+export interface Counterparty {
+  /**  */
+  id?: number;
+
+  /**  */
+  uuid?: string;
+
+  /**  */
+  originalName?: string;
+
+  /**  */
+  name?: string;
+
+  /**  */
+  inn?: string;
+
+  /**  */
+  bank?: string;
+
+  /**  */
+  bik?: string;
+
+  /**  */
+  sign?: string;
+
+  /**  */
+  createDate?: Date;
+}
+
+export interface GroupOfPayment {
+  /**  */
+  counterparty?: Counterparty;
+
+  /**  */
+  payments?: OutgoingPayment[];
+
+  /**  */
+  total?: number;
+}
+
+export interface OutgoingPayment {
+  /**  */
+  id?: number;
+
+  /**  */
+  uuid?: string;
+
+  /**  */
+  date?: Date;
+
+  /**  */
+  fromAccount?: string;
+
+  /**  */
+  fromInn?: string;
+
+  /**  */
+  fromName?: string;
+
+  /**  */
+  toAccount?: string;
+
+  /**  */
+  toInn?: string;
+
+  /**  */
+  toName?: string;
+
+  /**  */
+  sum?: number;
+
+  /**  */
+  docNumber?: string;
+
+  /**  */
+  vo?: string;
+
+  /**  */
+  bik?: string;
+
+  /**  */
+  bankName?: string;
+
+  /**  */
+  purpose?: string;
+
+  /**  */
+  createDate?: Date;
+
+  /**  */
+  source?: string;
+
+  /**  */
+  pack?: string;
+
+  /**  */
+  flagged?: EnumOutgoingPaymentFlagged;
 
   /**  */
   taxable?: boolean;
@@ -1553,18 +1712,17 @@ export interface AccountResponse {
   /**  */
   description?: string;
 }
-
 export enum EnumRoomFilterType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
-
 export enum EnumRoomVOType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
+
 export enum EnumPaymentVOTag {
   'RED' = 'RED',
   'ORANGE' = 'ORANGE',
@@ -1576,6 +1734,19 @@ export enum EnumPaymentVOTag {
   'BLACK' = 'BLACK',
   'WHITE' = 'WHITE'
 }
+
+export enum EnumOutgoingPaymentFlagged {
+  'RED' = 'RED',
+  'ORANGE' = 'ORANGE',
+  'YELLOW' = 'YELLOW',
+  'GREEN' = 'GREEN',
+  'BLUE' = 'BLUE',
+  'PURPLE' = 'PURPLE',
+  'GRAY' = 'GRAY',
+  'BLACK' = 'BLACK',
+  'WHITE' = 'WHITE'
+}
+
 export enum EnumLogEntryFilterStatus {
   'OPENED' = 'OPENED',
   'AUTH_FAILED' = 'AUTH_FAILED',
@@ -1583,6 +1754,7 @@ export enum EnumLogEntryFilterStatus {
   'USER_ADDED' = 'USER_ADDED',
   'UNDEFINED' = 'UNDEFINED'
 }
+
 export enum EnumLogEntryFilterMethod {
   'CALL' = 'CALL',
   'APP' = 'APP',
