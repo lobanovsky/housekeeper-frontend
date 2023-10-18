@@ -37,8 +37,7 @@ export const ExpensesView = () => {
                 value={dates}
                 format='DD.MM.YYYY'
                 onChange={(newDates) => {
-                    {/*@ts-ignore*/
-                    }
+                    /*@ts-ignore*/
                     setDates(newDates || []);
                 }}/>
             <Button type='primary' style={{marginLeft: 20}} disabled={!dates.length} onClick={createReport}>
