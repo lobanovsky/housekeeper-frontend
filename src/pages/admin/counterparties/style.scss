@@ -1,0 +1,50 @@
+
+.counterparties {
+  .ant-table {
+    tr {
+      &:hover {
+        cursor: pointer;
+
+        td {
+          //background: #6694bd;
+        }
+      }
+    }
+  }
+}
+
+.ant-modal-confirm.ant-modal-confirm-info.counterparty-modal {
+  .ant-modal-body {
+    .anticon.anticon-info-circle {
+      display: none;
+    }
+
+    .ant-modal-confirm-title {
+      display: block;
+      flex: none;
+    }
+
+    .ant-modal-confirm-btns {
+      display: none;
+    }
+
+    .ant-modal-confirm-content {
+      margin-inline-start: 4px;
+
+      .field {
+
+        margin-bottom: 12px;
+
+      }
+
+      .buttons {
+        margin-top: 12px;
+        text-align: end;
+
+        .ant-btn:not(:last-child) {
+          margin-right: 12px;
+        }
+      }
+    }
+  }
+}

@@ -13,6 +13,7 @@ import Rooms from 'pages/rooms';
 import Gates from 'pages/gates';
 import UploadedFiles from 'pages/admin/uploaded-files';
 import {ExpensesView} from "./pages/expences";
+import {Counterparties} from "./pages/admin/counterparties";
 
 
 const {Header, Content} = Layout;
@@ -56,6 +57,10 @@ function App() {
                                 <Route
                                     path='/expenses'
                                     element={<ExpensesView/>}
+                                />
+                                <Route
+                                    path='/counterparties'
+                                    element={<Counterparties/>}
                                 />
 
                                 {/*<Route*/}

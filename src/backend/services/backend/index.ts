@@ -93,15 +93,81 @@ export class PagedResultDto<T = any> implements IPagedResult<T> {
 // customer definition
 // empty
 
+export class CounterpartyControllerService {
+  /**
+   *
+   */
+  update(
+      params: {
+        /**  */
+        counterpartyId: number;
+        /** requestBody */
+        body?: CounterpartyRequest;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/counterparties/{counterpartyId}';
+      url = url.replace('{counterpartyId}', params['counterpartyId'] + '');
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   *
+   */
+  findAll(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/counterparties';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   *
+   */
+  create(
+      params: {
+        /** requestBody */
+        body?: CounterpartyRequest;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/counterparties';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export class RoomControllerService {
   /**
    * Get all rooms with filter
    */
   makeRoomsReport(
-    params: {
-      /**  */
-      pageNum?: number;
-      /**  */
+      params: {
+        /**  */
+        pageNum?: number;
+        /**  */
       pageSize?: number;
       /** requestBody */
       body?: RoomFilter;
@@ -160,7 +226,6 @@ export class PaymentReportControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Export outgoing payments by filter to excel
    */
@@ -278,7 +343,6 @@ export class PaymentControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Find outgoing payments with filter and grouping by counterparty
    */
@@ -301,7 +365,6 @@ export class PaymentControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Find incoming payments with filter
    */
@@ -897,6 +960,49 @@ export class AccountControllerService {
   }
 }
 
+export interface CounterpartyRequest {
+  /**  */
+  originalName?: string;
+
+  /**  */
+  inn?: string;
+
+  /**  */
+  bank?: string;
+
+  /**  */
+  bik?: string;
+
+  /**  */
+  sign?: string;
+
+  /**  */
+  manualCreated?: boolean;
+}
+
+export interface CounterpartyResponse {
+  /**  */
+  id?: number;
+
+  /**  */
+  originalName?: string;
+
+  /**  */
+  inn?: string;
+
+  /**  */
+  bank?: string;
+
+  /**  */
+  bik?: string;
+
+  /**  */
+  sign?: string;
+
+  /**  */
+  createDate?: Date;
+}
+
 export interface RoomFilter {
   /**  */
   account?: string;
@@ -1207,6 +1313,9 @@ export interface Counterparty {
 
   /**  */
   sign?: string;
+
+  /**  */
+  manualCreated?: boolean;
 
   /**  */
   createDate?: Date;
@@ -1722,7 +1831,6 @@ export enum EnumRoomVOType {
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
-
 export enum EnumPaymentVOTag {
   'RED' = 'RED',
   'ORANGE' = 'ORANGE',
@@ -1734,7 +1842,6 @@ export enum EnumPaymentVOTag {
   'BLACK' = 'BLACK',
   'WHITE' = 'WHITE'
 }
-
 export enum EnumOutgoingPaymentFlagged {
   'RED' = 'RED',
   'ORANGE' = 'ORANGE',
@@ -1746,7 +1853,6 @@ export enum EnumOutgoingPaymentFlagged {
   'BLACK' = 'BLACK',
   'WHITE' = 'WHITE'
 }
-
 export enum EnumLogEntryFilterStatus {
   'OPENED' = 'OPENED',
   'AUTH_FAILED' = 'AUTH_FAILED',
@@ -1754,7 +1860,6 @@ export enum EnumLogEntryFilterStatus {
   'USER_ADDED' = 'USER_ADDED',
   'UNDEFINED' = 'UNDEFINED'
 }
-
 export enum EnumLogEntryFilterMethod {
   'CALL' = 'CALL',
   'APP' = 'APP',
@@ -1812,3 +1917,4 @@ export const RoomService = new RoomControllerService();
 export const RoomReportService = new RoomReportControllerService();
 export const GateService = new LogEntryControllerService();
 export const AccountService = new AccountControllerService();
+export const CounterpartyService = new CounterpartyControllerService();

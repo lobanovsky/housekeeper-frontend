@@ -93,13 +93,19 @@ export const NavigationItems: any = [
 		label: 'Администрирование',
 
 		children: [
-			{
-				key: '/uploaded-files',
-				icon: <GroupOutlined />,
-				title: 'Загруженные файлы',
-				label: <Link to='/uploaded-files'>Загруженные файлы</Link>,
-			}
-		]
+            {
+                key: '/uploaded-files',
+                icon: <GroupOutlined/>,
+                title: 'Загруженные файлы',
+                label: <Link to='/uploaded-files'>Загруженные файлы</Link>,
+            },
+            {
+                key: '/counterparties',
+                icon: <GroupOutlined/>,
+                title: 'Компании-поставщики',
+                label: <Link to='/counterparties'>Компании-поставщики</Link>,
+            }
+        ]
 	},
 ]
 

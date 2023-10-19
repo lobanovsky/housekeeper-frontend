@@ -41,6 +41,7 @@ export const RoomService = new RoomControllerService();
 export const RoomReportService = new RoomReportControllerService();
 export const GateService = new LogEntryControllerService();
 export const AccountService = new AccountControllerService();
+export const CounterpartyService = new CounterpartyControllerService();
 	`, (err) => {
 				if (err) {
 					console.error('Append error');
