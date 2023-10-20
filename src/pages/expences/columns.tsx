@@ -53,7 +53,7 @@ export const expensePaymentColumns = [
         render: accountNumberRenderer
     },
     {
-        dataIndex: 'incomingSum',
+        dataIndex: 'sum',
         title: 'Сумма',
         render: (sum: number) => summRenderer(sum)
     },
