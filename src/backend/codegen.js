@@ -9,13 +9,18 @@ module.exports = async (options) => {
 	const outFile = path.resolve(options.outputDir, 'index.ts');
 
 	try {
-		await codegen({
-			strictNullChecks: false,
-			modelMode: 'interface',
-			...options
-		});
+        await codegen({
+            strictNullChecks: false,
+            modelMode: 'interface',
+            ...options
+        });
 
-			await fs.appendFile(outFile, `
+        await replace({
+            files: outFile,
+            from: /\?: Date;/g,
+            to: ': string;'
+        });
+        await fs.appendFile(outFile, `
 			
 export interface TopResponse {
 	count: number,

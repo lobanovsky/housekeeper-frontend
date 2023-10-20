@@ -1,65 +1,138 @@
-import {useCallback, useState} from 'react';
-import {Button, DatePicker} from 'antd';
-import dayjs from "dayjs";
-import {useLoading} from "../../hooks/use-loading";
+import {useCallback, useEffect, useMemo, useState} from 'react';
+import {Button, Table} from 'antd';
+import dayjs, {Dayjs} from "dayjs";
+import {useLoading} from "hooks/use-loading";
 import {downloadFile} from "../../utils/utils";
-import {DownloadOutlined, LoadingOutlined} from "@ant-design/icons";
+import {DownloadOutlined, LoadingOutlined,} from "@ant-design/icons";
+import {GroupOfPayment, PaymentService} from "backend/services/backend";
+import {showError} from "../../utils/notifications";
+import {ExpensesChart} from "./chart";
+import {expenseColumns, expensePaymentColumns} from "./columns";
+import './style.scss';
+import {RangePickerWithQuickButtons} from "./range-picker";
+import Loading from "../../components/loading";
 
+
+interface CounterpartyData {
+    data: GroupOfPayment[],
+    total: number,
+    totalSum: number
+}
 
 const today = dayjs();
 const startOfMonth = dayjs().startOf('month');
 
 export const ExpensesView = () => {
-    const [dates, setDates] = useState([startOfMonth, today]);
+    const [dates, setDates] = useState<Dayjs[]>([startOfMonth, today]);
     const [loading, showLoading, hideLoading] = useLoading();
+    const [reportLoading, showReportLoading, hideReportLoading] = useLoading();
+
+    const [data, setData] = useState<CounterpartyData>({
+        data: [],
+        total: 0,
+        totalSum: 0
+    });
+
+    const datesRange = useMemo(() => ({
+        dateStart: dates.length ? dates[0].format('YYYY-MM-DD') : '',
+        dateEnd: dates.length ? dates[1].format('YYYY-MM-DD') : '',
+    }), [dates.map(date => date.format('YYYY-MM-DD')).join(',')]);
 
     const createReport = useCallback(() => {
+        showReportLoading();
+        downloadFile('/reports/payments/outgoing/grouping', {
+            startDate: datesRange.dateStart,
+            endDate: datesRange.dateEnd,
+        }, hideReportLoading);
+    }, [datesRange.dateStart, datesRange.dateEnd]);
+
+
+    const loadData = useCallback((dates: Dayjs[]) => {
         if (!dates.length) {
             return;
         }
-        showLoading();
 
-        downloadFile('/reports/payments/outgoing/grouping', {
-            // @ts-ignore
+        const requestParams = {
             startDate: dates[0].format('YYYY-MM-DD'),
-            // @ts-ignore
-            endDate: dates[1].format('YYYY-MM-DD')
-        }, () => {
-            hideLoading();
-        });
-    }, [JSON.stringify(dates)]);
+            endDate: dates[1].format('YYYY-MM-DD'),
+        }
+
+        console.log(`%c Load data for [${requestParams.startDate} - ${requestParams.endDate}]`, 'color: red');
+        showLoading();
+        PaymentService.findOutgoingPaymentsGroupingByCounterparty({body: requestParams})
+            .then((loadedData: GroupOfPayment[]) => {
+                hideLoading();
+                const totalSum = loadedData.reduce((accum, {total: categoryTotal = 0}) => accum + categoryTotal, 0);
+
+                setData({
+                    data: loadedData.map((item) => ({
+                        ...item,
+                        id: item.counterparty?.id
+                    })),
+                    total: loadedData.length,
+                    totalSum
+                });
+            })
+            .catch(e => {
+                hideLoading();
+                showError('Не удалось загрузить траты', e);
+            })
+    }, []);
+
+    const onChangeDates = useCallback((newValue: Dayjs[] = []) => {
+        setDates(newValue || []);
+        if (newValue.length) {
+            loadData(newValue);
+        }
+    }, [])
+
+    useEffect(() => {
+        loadData(dates);
+    }, []);
 
     return (
-        <div className='expences'>
-            <DatePicker.RangePicker
-                style={{width: 300}}
-                /*@ts-ignore*/
-                value={dates}
-                format='DD.MM.YYYY'
-                onChange={(newDates) => {
-                    /*@ts-ignore*/
-                    setDates(newDates || []);
-                }}/>
-            <Button type='primary' style={{marginLeft: 20}} disabled={!dates.length} onClick={createReport}>
-                {loading ? <LoadingOutlined/> : <DownloadOutlined/>}Скачать отчёт</Button>
-            {/*<Table*/}
-            {/*    rowKey='uuid'*/}
-            {/*    columns={getPaymentColumns(false)}*/}
-            {/*    loadDataFn={PaymentService.findIncomingPayments}*/}
-            {/*    filters={getPaymentFilters(false, accountOptions)}*/}
-            {/*    exportURL='reports/payments/incoming'*/}
-            {/*    rowSelection={{*/}
-            {/*        onChange: (selectedRowKeys: React.Key[], selectedRecords: PaymentVO[]) => {*/}
-            {/*            setSelectedRows(selectedRecords);*/}
-            {/*        }*/}
-            {/*    }}*/}
-            {/*    toolbar={<Button*/}
-            {/*        onClick={setTaxable}*/}
-            {/*        disabled={!selectedRows.length}*/}
-            {/*    >*/}
-            {/*        Пометить как налогооблагаемые*/}
-            {/*    </Button>}*/}
-            {/*/>*/}
+        <div className='expenses'>
+            {loading && <Loading/>}
+            <RangePickerWithQuickButtons value={dates} onChange={onChangeDates} datesRange={datesRange}/>
+
+            {/*<Button type='primary' style={{margin: '0 12px 0 20px'}}*/}
+            {/*        disabled={!datesRange.dateStart || !datesRange.dateEnd} onClick={loadData}>*/}
+            {/*    {loading ? <LoadingOutlined/> : <SearchOutlined/>}Показать расходы*/}
+            {/*</Button>*/}
+            <Button disabled={!datesRange.dateStart || !datesRange.dateEnd} onClick={createReport}
+                    style={{marginLeft: 20}}>
+                {reportLoading ? <LoadingOutlined/> : <DownloadOutlined/>}Скачать отчёт
+            </Button>
+            <ExpensesChart data={data.data} total={data.totalSum}/>
+            <Table
+                rowKey='id'
+                className='expenses-table'
+                loading={loading}
+                size='small'
+                columns={expenseColumns}
+                dataSource={data.data}
+                expandable={{
+                    expandedRowRender: (row) => (
+                        <Table
+                            rowKey='id'
+                            className='payments-table'
+                            size='small'
+                            columns={expensePaymentColumns}
+                            dataSource={row.payments}
+                            pagination={false}
+                        />
+                    )
+                }}
+                pagination={{
+                    size: 'small',
+                    hideOnSinglePage: false,
+                    position: ['topRight'],
+                    showSizeChanger: true,
+                    pageSizeOptions: [10, 20, 50, 100],
+                    locale: {items_per_page: '/ стр'},
+                    showTotal: (total, range) => `${range[0]}-${range[1]} из ${total}`,
+                }}
+            />
         </div>
     )
 }

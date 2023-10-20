@@ -15,9 +15,9 @@ export const counterpartyColumns = [
 		render: (bik: string = '') => <Typography.Text copyable={!!bik}>{bik}</Typography.Text>
 	},
 	{
-		dataIndex: 'originalName',
-		title: 'Компания',
-	}
+        dataIndex: 'name',
+        title: 'Компания',
+    }
 ].map(column => ({
 	...column,
 	className: column.dataIndex

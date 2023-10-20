@@ -1,0 +1,18 @@
+.expenses-chart {
+  margin: 20px 0 10px;
+
+  .header {
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+
+    .label {
+      font-size: 18px;
+      //line-height: 36px;
+    }
+
+    .ant-statistic {
+      //display: inline-block;
+    }
+  }
+}

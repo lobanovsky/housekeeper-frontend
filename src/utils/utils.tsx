@@ -1,8 +1,8 @@
-import { OptionProps } from 'rc-select/lib/Option';
-import dayjs, { Dayjs } from 'dayjs';
-import { saveAs } from 'file-saver';
+import {OptionProps} from 'rc-select/lib/Option';
+import dayjs, {Dayjs} from 'dayjs';
+import {saveAs} from 'file-saver';
 import axios from 'axios';
-import { showError } from 'utils/notifications';
+import {showError} from 'utils/notifications';
 
 const timezone = require('dayjs/plugin/timezone')
 var utc = require('dayjs/plugin/utc');
@@ -39,7 +39,7 @@ export const dateTimeRenderer = (date: Dayjs | string | number) => {
 	</>
 }
 
-export const summRenderer = (amount: number | string) => {
+export const summRenderer = (amount: number | string, options = {}) => {
 	if (typeof amount !== 'number') {
 		return '';
 	}
@@ -50,6 +50,7 @@ export const summRenderer = (amount: number | string) => {
 		style: 'decimal',
 		minimumFractionDigits: 2,
 		currency: 'RUB',
+		...options
 		// currencyDisplay: 'symbol'
 	});
 
@@ -95,4 +96,23 @@ export const downloadFile = (url: string, params: any, onFinish: (isSuccess: boo
 			showError('Не удалось скачать файл', e);
 			onFinish(false);
 		})
+}
+
+
+const hexCharacters = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "A", "B", "C", "D", "E", "F"]
+
+
+function getCharacter(index: number) {
+	return hexCharacters[index]
+}
+
+export function generateNewColor() {
+	let hexColorRep = "#"
+
+	for (let index = 0; index < 6; index++) {
+		const randomPosition = Math.floor(Math.random() * hexCharacters.length)
+		hexColorRep += getCharacter(randomPosition)
+	}
+
+	return hexColorRep
 }

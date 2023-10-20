@@ -17,13 +17,13 @@ const CounterpartyEditForm = ({counterparty, onFinish, onClose}: {
 
 
     const valuesChanged = useMemo(() => {
-        return counterparty.originalName !== values.originalName || counterparty.inn !== values.inn
-    }, [counterparty.originalName, counterparty.inn, values.originalName, values.inn]);
+        return counterparty.name !== values.name || counterparty.inn !== values.inn
+    }, [counterparty.name, counterparty.inn, values.name, values.inn]);
 
     const onChangeName = useCallback(({target: {value}}: React.ChangeEvent<HTMLInputElement>) => {
         setValues(prev => ({
             ...prev,
-            originalName: value
+            name: value
         }))
     }, []);
 
@@ -57,15 +57,15 @@ const CounterpartyEditForm = ({counterparty, onFinish, onClose}: {
                 hideLoading();
                 showError('Не удалось сохранить компанию-поставшика ресурсов', e);
             })
-    }, [counterparty.id, counterparty.inn, counterparty.originalName]);
+    }, [counterparty.id, counterparty.inn, counterparty.name]);
 
 
     return (
         <div className='cunterparty-form'>
             {/*{loading && <Loading />}*/}
-            <div className='field originalName'>
+            <div className='field name'>
                 <div className='field-label'>Наименование компании</div>
-                <Input value={values.originalName} onChange={onChangeName} placeholder='Наименование компании'
+                <Input value={values.name} onChange={onChangeName} placeholder='Наименование компании'
                        disabled={loading}/>
             </div>
             <div className='field inn'>
@@ -77,7 +77,7 @@ const CounterpartyEditForm = ({counterparty, onFinish, onClose}: {
             {/*    <Input value={values.bank} onChange={onChangeBank} placeholder='Банк' disabled={loading}/>*/}
             {/*</div>*/}
             <div className='buttons'>
-                <Button type='primary' disabled={!values.inn || !values.originalName || loading || !valuesChanged}
+                <Button type='primary' disabled={!values.inn || !values.name || loading || !valuesChanged}
                         onClick={saveChanges}>
                     {loading ? <LoadingOutlined/> : <SaveOutlined/>} Сохранить</Button>
                 <Button onClick={onClose}>Отмена</Button>
@@ -103,7 +103,7 @@ export const showCounterpartyModal = ({counterparty, onFinish}: {
         width: 600,
         closable: true,
         className: 'counterparty-modal',
-        title: counterparty.id ? counterparty.originalName : 'Новая компания',
+        title: counterparty.id ? counterparty.name : 'Новая компания',
         content: <CounterpartyEditForm counterparty={counterparty} onFinish={onFinish} onClose={closeModal}/>
     });
 }

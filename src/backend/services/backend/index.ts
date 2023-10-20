@@ -119,7 +119,6 @@ export class CounterpartyControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -134,7 +133,6 @@ export class CounterpartyControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -168,11 +166,11 @@ export class RoomControllerService {
         /**  */
         pageNum?: number;
         /**  */
-      pageSize?: number;
-      /** requestBody */
-      body?: RoomFilter;
-    } = {} as any,
-    options: IRequestOptions = {}
+        pageSize?: number;
+        /** requestBody */
+        body?: RoomFilter;
+      } = {} as any,
+      options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/rooms';
@@ -962,22 +960,10 @@ export class AccountControllerService {
 
 export interface CounterpartyRequest {
   /**  */
-  originalName?: string;
+  name?: string;
 
   /**  */
   inn?: string;
-
-  /**  */
-  bank?: string;
-
-  /**  */
-  bik?: string;
-
-  /**  */
-  sign?: string;
-
-  /**  */
-  manualCreated?: boolean;
 }
 
 export interface CounterpartyResponse {
@@ -985,7 +971,7 @@ export interface CounterpartyResponse {
   id?: number;
 
   /**  */
-  originalName?: string;
+  name?: string;
 
   /**  */
   inn?: string;
@@ -1000,7 +986,7 @@ export interface CounterpartyResponse {
   sign?: string;
 
   /**  */
-  createDate?: Date;
+  createDate: string;
 }
 
 export interface RoomFilter {
@@ -1037,7 +1023,7 @@ export interface OwnerVO {
   active?: boolean;
 
   /**  */
-  dateOfLeft?: Date;
+  dateOfLeft: string;
 }
 
 export interface PageRoomVO {
@@ -1161,18 +1147,18 @@ export interface OutgoingPaymentsFilter {
   taxable?: boolean;
 
   /**  */
-  startDate?: Date;
+  startDate: string;
 
   /**  */
-  endDate?: Date;
+  endDate: string;
 }
 
 export interface OutgoingGropingPaymentsFilter {
   /**  */
-  startDate?: Date;
+  startDate: string;
 
   /**  */
-  endDate?: Date;
+  endDate: string;
 }
 
 export interface IncomingPaymentsFilter {
@@ -1189,10 +1175,10 @@ export interface IncomingPaymentsFilter {
   taxable?: boolean;
 
   /**  */
-  startDate?: Date;
+  startDate: string;
 
   /**  */
-  endDate?: Date;
+  endDate: string;
 
   /**  */
   toAccounts?: string[];
@@ -1238,7 +1224,7 @@ export interface PaymentVO {
   uuid?: string;
 
   /**  */
-  date?: Date;
+  date: string;
 
   /**  */
   fromAccount?: string;
@@ -1297,9 +1283,6 @@ export interface Counterparty {
   uuid?: string;
 
   /**  */
-  originalName?: string;
-
-  /**  */
   name?: string;
 
   /**  */
@@ -1318,7 +1301,7 @@ export interface Counterparty {
   manualCreated?: boolean;
 
   /**  */
-  createDate?: Date;
+  createDate: string;
 }
 
 export interface GroupOfPayment {
@@ -1340,7 +1323,7 @@ export interface OutgoingPayment {
   uuid?: string;
 
   /**  */
-  date?: Date;
+  date: string;
 
   /**  */
   fromAccount?: string;
@@ -1379,7 +1362,7 @@ export interface OutgoingPayment {
   purpose?: string;
 
   /**  */
-  createDate?: Date;
+  createDate: string;
 
   /**  */
   source?: string;
@@ -1417,10 +1400,10 @@ export interface LogEntryFilter {
   method?: EnumLogEntryFilterMethod;
 
   /**  */
-  startDate?: Date;
+  startDate: string;
 
   /**  */
-  endDate?: Date;
+  endDate: string;
 }
 
 export interface LogEntryResponse {
@@ -1428,7 +1411,7 @@ export interface LogEntryResponse {
   id?: number;
 
   /**  */
-  dateTime?: Date;
+  dateTime: string;
 
   /**  */
   status?: string;
@@ -1520,7 +1503,7 @@ export interface FileVO {
   type?: FileType;
 
   /**  */
-  createDate?: Date;
+  createDate: string;
 }
 
 export interface PageFileVO {

@@ -1,0 +1,53 @@
+.expenses {
+  .ant-table-wrapper.expenses-table {
+    tr.ant-table-row {
+      th, td {
+        &.ant-table-row-expand-icon-cell {
+          //.anticon {
+          //  color: rgba(180, 180, 180, 0.8);
+          //
+          //  &:hover {
+          //    color: red;
+          //  }
+        }
+      }
+    }
+  }
+
+  .payments-table {
+    .ant-table.ant-table-small {
+      line-height: 16px;
+
+      tr.ant-table-row {
+        th, td {
+          padding: 2px 4px;
+
+          &.toName {
+            min-width: 160px;
+          }
+
+          &.date {
+            width: 130px;
+          }
+
+          &.toInn {
+            width: 120px;
+          }
+
+          &.toAccount {
+            width: 200px;
+          }
+
+          &.bankName {
+            min-width: 250px;
+          }
+
+          &.incomingSum {
+            min-width: 100px;
+          }
+        }
+      }
+    }
+  }
+}
+
