@@ -57,10 +57,16 @@ const paymentColumns = [
 		title: 'Назначение платежа'
 	},
 	{
-		dataIndex: 'taxable',
-		title: 'Налог',
-		render: (isTaxable: boolean) => <span className={isTaxable ? 'YES' : 'NO'}>{isTaxable ? 'Да': ''}</span>
-	}
+		dataIndex: 'account',
+		title: 'Лицевой счёт',
+		outgoing: false,
+		render: accountNumberRenderer
+	},
+	// {
+	// 	dataIndex: 'taxable',
+	// 	title: 'Налог',
+	// 	render: (isTaxable: boolean) => <span className={isTaxable ? 'YES' : 'NO'}>{isTaxable ? 'Да': ''}</span>
+	// }
 ].map(column => ({
 	...column,
 	className: column.dataIndex
