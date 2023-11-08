@@ -294,11 +294,11 @@ export class PaymentReportControllerService {
    * Getting taxable and tax-free payments for year (incoming payments)
    */
   findAnnualIncomingPayments(
-    params: {
+      params: {
       /**  */
       year: number;
     } = {} as any,
-    options: IRequestOptions = {}
+      options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/reports/incoming-payments/{year}';
@@ -307,6 +307,31 @@ export class PaymentReportControllerService {
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
       /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class RegistryControllerService {
+  /**
+   * Check or create new registry
+   */
+  getRegistry(
+      params: {
+        /** requestBody */
+        body?: RegistryFilter;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/registries';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
 
       axios(configs, resolve, reject);
     });
@@ -1184,6 +1209,11 @@ export interface IncomingPaymentsFilter {
   toAccounts?: string[];
 }
 
+export interface RegistryFilter {
+  /**  */
+  bankAccount?: string;
+}
+
 export interface PagePaymentVO {
   /**  */
   totalPages?: number;
@@ -1273,6 +1303,12 @@ export interface PaymentVO {
 
   /**  */
   deposit?: boolean;
+
+  /**  */
+  account?: string;
+
+  /**  */
+  updateAccountDateTime: string;
 }
 
 export interface Counterparty {

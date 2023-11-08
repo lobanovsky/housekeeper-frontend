@@ -7,6 +7,8 @@ import {Button, Select} from 'antd';
 import {showError} from "../../utils/notifications";
 
 
+const rowClassName = (record: PaymentVO) => !record.account ? 'empty-account' : '';
+
 const IncomingPayments = () => {
     const [selectedRows, setSelectedRows] = useState<PaymentVO[]>([])
     const [accounts, setAccounts] = useState([]);
@@ -41,6 +43,7 @@ const IncomingPayments = () => {
                 loadDataFn={PaymentService.findIncomingPayments}
                 filters={getPaymentFilters(false, accountOptions)}
                 exportURL='reports/payments/incoming'
+                rowClassName={rowClassName}
                 rowSelection={{
                     onChange: (selectedRowKeys: React.Key[], selectedRecords: PaymentVO[]) => {
                         setSelectedRows(selectedRecords);

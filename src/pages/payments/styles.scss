@@ -17,62 +17,72 @@
 	.ant-table {
 		border-collapse: collapse;
 
-		td {
-			&:first-child {
-				border-left: 1px solid rgb(240, 240, 240);
-			}
+		tr {
+			td {
+				&:first-child {
+					border-left: 1px solid rgb(240, 240, 240);
+				}
 
-			&:not(:last-child) {
-				border-right: 1px solid rgb(240, 240, 240);
-			}
+				&:not(:last-child) {
+					border-right: 1px solid rgb(240, 240, 240);
+				}
 
 
-			&.date,
-			&.fromInn,
-			&.toInn {
-				width: 150px;
-			}
+				&.date,
+				&.fromInn,
+				&.toInn {
+					width: 150px;
+				}
 
-			&.bankName {
-				min-width: 220px;
-				max-width: 300px;
-			}
+				&.bankName {
+					min-width: 220px;
+					max-width: 300px;
+				}
 
-			&.toAccount {
-				width: 220px;
-				min-width: 220px;
-			}
+				&.toAccount {
+					width: 220px;
+					min-width: 220px;
+				}
 
-			&.fromName,
-			&.toName {
-				min-width: 150px;
-				max-width: 360px;
-			}
+				&.fromName,
+				&.toName {
+					min-width: 150px;
+					max-width: 360px;
+				}
 
-			&.incomingSum {
-				min-width: 110px;
-				max-width: 150px;
-				text-align: end;
-			}
+				&.incomingSum {
+					min-width: 110px;
+					max-width: 150px;
+					text-align: end;
+				}
 
-			&.purpose {
-				max-width: 800px;
-				min-width: 300px;
-				//word-break: break-all;
-			}
+				&.purpose {
+					max-width: 800px;
+					min-width: 300px;
+					//word-break: break-all;
+				}
 
-			&.date {
-				.time {
-					color: #185dbd;
+				&.date {
+					.time {
+						color: #185dbd;
+					}
+				}
+
+				&.taxable {
+					.YES {
+						color: #c91c80;
+					}
 				}
 			}
 
-			&.taxable {
-				.YES {
-					color: #c91c80;
+			&.empty-account {
+				td {
+					background: rgba(243, 243, 243, 0.9);
 				}
 			}
 		}
+
+
 	}
 }
 
