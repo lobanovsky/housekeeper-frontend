@@ -1,96 +1,124 @@
 .payments {
-	.filter-form {
-		.filter-fields {
-			.filter-field {
-				&.startDate,
-				&.endDate {
-					width: 150px;
+  .filter-form {
+    .filter-fields {
+      .filter-field {
+        &.startDate,
+        &.endDate {
+          //width: 150px;
 
-					.ant-picker {
-						width: 100%;
-					}
-				}
-			}
-		}
-	}
+          .ant-picker {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
 
-	.ant-table {
-		border-collapse: collapse;
+  .ant-table {
+    border-collapse: collapse;
 
-		tr {
-			td {
-				&:first-child {
-					border-left: 1px solid rgb(240, 240, 240);
-				}
+    tr {
+      td {
+        &:first-child {
+          border-left: 1px solid rgb(240, 240, 240);
+        }
 
-				&:not(:last-child) {
-					border-right: 1px solid rgb(240, 240, 240);
-				}
-
-
-				&.date,
-				&.fromInn,
-				&.toInn {
-					width: 150px;
-				}
-
-				&.bankName {
-					min-width: 220px;
-					max-width: 300px;
-				}
-
-				&.toAccount {
-					width: 220px;
-					min-width: 220px;
-				}
-
-				&.fromName,
-				&.toName {
-					min-width: 150px;
-					max-width: 360px;
-				}
-
-				&.incomingSum {
-					min-width: 110px;
-					max-width: 150px;
-					text-align: end;
-				}
-
-				&.purpose {
-					max-width: 800px;
-					min-width: 300px;
-					//word-break: break-all;
-				}
-
-				&.date {
-					.time {
-						color: #185dbd;
-					}
-				}
-
-				&.taxable {
-					.YES {
-						color: #c91c80;
-					}
-				}
-			}
-
-			&.empty-account {
-				td {
-					background: rgba(255, 228, 225, 0.9);
-				}
-			}
-		}
+        &:not(:last-child) {
+          border-right: 1px solid rgb(240, 240, 240);
+        }
 
 
-	}
+        &.date,
+        &.fromInn,
+        &.toInn {
+          width: 150px;
+        }
+
+        &.bankName {
+          min-width: 220px;
+          max-width: 300px;
+        }
+
+        &.toAccount,
+        &.account {
+          width: 220px;
+          min-width: 220px;
+        }
+
+        &.fromName,
+        &.toName {
+          min-width: 150px;
+          max-width: 360px;
+          word-break: break-all;
+        }
+
+        &.incomingSum {
+          min-width: 110px;
+          max-width: 150px;
+          text-align: end;
+        }
+
+        &.purpose {
+          max-width: 800px;
+          min-width: 200px;
+          //word-break: break-all;
+        }
+
+        &.date {
+          .time {
+            color: #185dbd;
+          }
+        }
+
+        &.taxable {
+          .YES {
+            color: #c91c80;
+          }
+        }
+
+        &.account {
+          .account-container {
+            display: flex;
+            //gap: 4px;
+            .icon-container {
+              width: 18px;
+              //font-size: 13px;
+
+              .anticon-check-circle,
+              .anticon-check {
+                color: #0ab150;
+              }
+
+              .anticon-close,
+              .anticon-close-circle {
+                color: #d81c38;
+              }
+
+              .anticon-question-circle {
+                color: #a4a4a4;
+              }
+            }
+
+          }
+        }
+      }
+
+      &.empty-account {
+        td {
+          background: rgba(255, 228, 225, 0.9);
+        }
+      }
+    }
+
+
+  }
 }
 
 .ant-select-dropdown {
-	.account.special {
-		.account-number {
-			color: #3e1ef0;
-		}
+  .account.special {
+    .account-number {
+      color: #3e1ef0;
+    }
 
-	}
+  }
 }

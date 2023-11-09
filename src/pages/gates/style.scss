@@ -10,34 +10,36 @@
 	.filter-form {
 		.filter-fields {
 			.filter-field {
-				.ant-select {
-					width: 200px;
-				}
+              .ant-select,
+              .ant-picker {
+                width: 100%;
+              }
 
-				&.gateId {
-					.ant-select {
-						width: 150px;
-					}
-				}
+              //
+              //&.gateId {
+              //	.ant-select {
+              //		width: 150px;
+              //	}
+              //}
+              //
+              //&.method {
+              //	.ant-select {
+              //		width: 170px;
+              //	}
+              //}
+              //
+              //
+              //.ant-picker {
+              //	width: 130px;
+              //}
 
-				&.method {
-					.ant-select {
-						width: 170px;
-					}
-				}
-
-
-				.ant-picker {
-					width: 130px;
-				}
-
-				&.gateId {
-					.ant-select-selection-item {
-						font-size: 16px;
-						color: #eb2f96;
-					}
-				}
-			}
+              &.gateId {
+                .ant-select-selection-item {
+                  font-size: 16px;
+                  color: #eb2f96;
+                }
+              }
+            }
 		}
 	}
 }

@@ -295,9 +295,9 @@ export class PaymentReportControllerService {
    */
   findAnnualIncomingPayments(
       params: {
-      /**  */
-      year: number;
-    } = {} as any,
+        /**  */
+        year: number;
+      } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -1309,6 +1309,9 @@ export interface PaymentVO {
 
   /**  */
   updateAccountDateTime: string;
+
+  /**  */
+  type?: EnumPaymentVOType;
 }
 
 export interface Counterparty {
@@ -1861,6 +1864,13 @@ export enum EnumPaymentVOTag {
   'BLACK' = 'BLACK',
   'WHITE' = 'WHITE'
 }
+
+export enum EnumPaymentVOType {
+  'DETERMINATE_ACCOUNT' = 'DETERMINATE_ACCOUNT',
+  'NOT_DETERMINATE' = 'NOT_DETERMINATE',
+  'SKIP' = 'SKIP'
+}
+
 export enum EnumOutgoingPaymentFlagged {
   'RED' = 'RED',
   'ORANGE' = 'ORANGE',

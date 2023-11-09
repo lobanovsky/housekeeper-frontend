@@ -1,4 +1,4 @@
-import { FilterFieldType } from 'components/table/filter-form/types';
+import {FilterFieldType} from 'components/table/filter-form/types';
 
 
 export const gateLogFilters = [
@@ -10,27 +10,32 @@ export const gateLogFilters = [
 		idFieldName: 'id',
 		displayFieldName: 'name',
 		optionsURL: '/gates',
-		title: 'Шлагбаум'
+		title: 'Шлагбаум',
+		span: {md: 6, lg: 4, xl: 3, xxl: 3},
 	},
 	{
 		name: 'startDate',
 		title: 'Дата с',
-		type: 'date' as FilterFieldType
+		type: 'date' as FilterFieldType,
+		span: {md: 6, lg: 4, xl: 3, xxl: 2},
 	},
 	{
 		name: 'endDate',
 		title: 'Дата по',
-		type: 'date' as FilterFieldType
+		type: 'date' as FilterFieldType,
+		span: {md: 6, lg: 4, xl: 3, xxl: 2},
 	},
 	{
 		name: 'flatNumber',
 		title: 'Квартира',
-		placeholder: '№ квартиры'
+		placeholder: '№ квартиры',
+		span: {md: 6, lg: 4, xl: 2, xxl: 2},
 	},
 	{
 		name: 'phoneNumber',
 		title: 'Телефон',
-		placeholder: 'Номер телефона'
+		placeholder: 'Номер телефона',
+		span: {md: 6, lg: 4, xl: 3, xxl: 3},
 	},
 	{
 		name: 'status',
@@ -38,7 +43,8 @@ export const gateLogFilters = [
 		idFieldName: 'name',
 		displayFieldName: 'description',
 		optionsURL: '/log-entries/statuses',
-		title: 'Статус'
+		title: 'Статус',
+		span: {md: 6, lg: 4, xl: 4, xxl: 3},
 	},
 	{
 		name: 'method',
@@ -46,7 +52,8 @@ export const gateLogFilters = [
 		displayFieldName: 'description',
 		type: 'remote-select' as FilterFieldType,
 		optionsURL: '/log-entries/access-methods',
-		title: 'Способ открытия'
+		title: 'Способ открытия',
+		span: {md: 6, lg: 4, xl: 3, xxl: 3},
 	}
 ];
 
