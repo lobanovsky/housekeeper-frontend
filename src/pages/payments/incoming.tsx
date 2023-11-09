@@ -5,6 +5,8 @@ import {getPaymentFilters} from 'pages/payments/filters';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {Button, Select} from 'antd';
 import {showError} from "../../utils/notifications";
+import {downloadFile} from "../../utils/utils";
+import {DownloadOutlined} from "@ant-design/icons";
 
 
 const rowClassName = (record: PaymentVO) => !record.account ? 'empty-account' : '';
@@ -24,6 +26,11 @@ const IncomingPayments = () => {
     const setTaxable = useCallback(() => {
 
     }, [selectedRows.length]);
+
+    const downloadRegistry = useCallback(() => {
+        downloadFile('registries/special-account', {}, () => {
+        });
+    }, []);
 
     useEffect(() => {
         AccountService.findAllAccounts()
@@ -49,12 +56,19 @@ const IncomingPayments = () => {
                         setSelectedRows(selectedRecords);
                     }
                 }}
-                toolbar={<Button
-                    onClick={setTaxable}
-                    disabled={!selectedRows.length}
-                >
-                    Пометить как налогооблагаемые
-                </Button>}
+                toolbar={
+                    <>
+                        {/*<Button*/}
+                        {/*    onClick={setTaxable}*/}
+                        {/*    disabled={!selectedRows.length}*/}
+                        {/*>*/}
+                        {/*    Пометить как налогооблагаемые*/}
+                        {/*</Button>*/}
+                        <Button size='small' onClick={downloadRegistry}>
+                            <DownloadOutlined/>
+                            Скачать реестр
+                        </Button>
+                    </>}
             />
         </div>
     )
