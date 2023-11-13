@@ -82,35 +82,6 @@
         }
 
         &.account {
-          .payment-type {
-            &.NOT_DETERMINATE {
-              color: #d81c38;
-            }
-          }
-
-          .account-container {
-            display: flex;
-            //gap: 4px;
-            .icon-container {
-              width: 18px;
-              //font-size: 13px;
-
-              .anticon-check-circle,
-              .anticon-check {
-                color: #0ab150;
-              }
-
-              .anticon-close,
-              .anticon-close-circle {
-                color: #d81c38;
-              }
-
-              .anticon-question-circle {
-                color: #f9a514;
-              }
-            }
-
-          }
         }
       }
 
