@@ -1,6 +1,5 @@
 import {dateTimeRenderer, summRenderer} from 'utils/utils';
 import {ColumnsType, ColumnType} from "antd/es/table";
-import {CheckCircleFilled, CloseCircleFilled, QuestionCircleFilled} from '@ant-design/icons';
 import {EnumPaymentVOType, PaymentVO} from "../../backend/services/backend";
 
 export const accountNumberRenderer = (accountNumber: string = '') => {
@@ -65,21 +64,14 @@ export const getPaymentColumns = (isOutgoing: boolean = false): ColumnsType<Paym
     },
     {
         dataIndex: 'account',
-        title: 'Лицевой счёт',
+        title: 'Тип платежа',
         outgoing: false,
-        render: (account: string, {type, bankName = ''}: PaymentVO) => {
-            return <div className='account-container'>
-                <div className='icon-container'>
-                    {/*{bankName.includes('Бердск') && <QuestionCircleFilled />}*/}
-                    {/*{bankName.includes('Москва') && <CloseCircleFilled />}*/}
-                    {/*{bankName.includes('Новгород') && <CheckCircleFilled />}*/}
-                    {type === EnumPaymentVOType.SKIP && <QuestionCircleFilled/>}
-                    {type === EnumPaymentVOType.NOT_DETERMINATE && <CloseCircleFilled/>}
-                    {type === EnumPaymentVOType.DETERMINATE_ACCOUNT && <CheckCircleFilled/>}
-                </div>
-                {personalAccountRenderer(account)}
-            </div>
-        }
+        // @ts-ignore
+        render: (account: string, {type, typeName, bankName = ''}: PaymentVO) =>
+            <span className={`payment-type ${type}`}>
+                      {type === EnumPaymentVOType.DETERMINATE_ACCOUNT ? `Л/с ${personalAccountRenderer(account)}` :
+                          (type === EnumPaymentVOType.NOT_DETERMINATE ? 'не определён' : typeName)}
+                </span>
     },
     // {
     // 	dataIndex: 'taxable',

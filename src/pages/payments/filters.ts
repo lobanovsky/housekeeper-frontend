@@ -1,8 +1,12 @@
 import React from 'react';
 import {FilterFieldType, IFilterFieldConfig} from 'components/table/filter-form/types';
 
+interface PaymentDictionaries {
+    accountOptions?: React.ReactNode[],
+    paymentTypeOptions?: React.ReactNode[]
+}
 
-const paymentFilters = ({accountOptions = []}: { accountOptions?: React.ReactNode[] }): Array<IFilterFieldConfig & {
+const paymentFilters = ({accountOptions = [], paymentTypeOptions}: PaymentDictionaries): Array<IFilterFieldConfig & {
     outgoing?: boolean
 }> => [
     {
@@ -55,7 +59,15 @@ const paymentFilters = ({accountOptions = []}: { accountOptions?: React.ReactNod
         outgoing: false,
         span: {md: 12, lg: 12, xl: 8, xxl: 6},
     },
+    {
+        name: 'type',
+        title: 'Тип платежа',
+        type: 'select' as FilterFieldType,
+        options: paymentTypeOptions,
+        outgoing: false,
+        span: {md: 12, lg: 12, xl: 6, xxl: 4},
+    },
 ];
 
-export const getPaymentFilters = (isOutgoing: boolean = false, accountOptions: React.ReactNode[] = []): IFilterFieldConfig[] => paymentFilters({accountOptions}).filter(({outgoing}) => typeof outgoing !== 'boolean' || outgoing === isOutgoing);
+export const getPaymentFilters = (isOutgoing: boolean = false, options: PaymentDictionaries = {}): IFilterFieldConfig[] => paymentFilters(options).filter(({outgoing}) => typeof outgoing !== 'boolean' || outgoing === isOutgoing);
 

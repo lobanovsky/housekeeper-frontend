@@ -1,6 +1,6 @@
 import Table from 'components/table';
 import {accountNumberRenderer, getPaymentColumns} from 'pages/payments/columns';
-import {AccountService, PaymentService, PaymentVO} from 'backend/services/backend';
+import {AccountService, PaymentService, PaymentTypeResponse, PaymentVO} from 'backend/services/backend';
 import {getPaymentFilters} from 'pages/payments/filters';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {Button, Select} from 'antd';
@@ -14,6 +14,7 @@ const rowClassName = (record: PaymentVO) => !record.account ? 'empty-account' : 
 const IncomingPayments = () => {
     const [selectedRows, setSelectedRows] = useState<PaymentVO[]>([])
     const [accounts, setAccounts] = useState([]);
+    const [paymentTypes, setPaymentTypes] = useState<{ id: string, name: string }[]>([]);
 
     const accountOptions = useMemo(() => accounts.map(({account, description, special}) => <Select.Option
         id={account} value={account} key={account}>
@@ -23,9 +24,12 @@ const IncomingPayments = () => {
         </span>
     </Select.Option>), [accounts.length]);
 
-    const setTaxable = useCallback(() => {
+    const paymentTypeOptions = useMemo(() => paymentTypes.map(({id, name}) => <Select.Option
+        id={id} value={id} key={id}>{name}</Select.Option>), [accounts.length]);
 
-    }, [selectedRows.length]);
+    const incomingPaymentFilters = useMemo(() => getPaymentFilters(false, {accountOptions, paymentTypeOptions}), [
+        accountOptions.length, paymentTypeOptions.length
+    ]);
 
     const downloadRegistry = useCallback(() => {
         downloadFile('registries/special-account', {}, () => {
@@ -39,7 +43,20 @@ const IncomingPayments = () => {
             })
             .catch(e => {
                 showError('Не удалось загрузить список счетов', e);
+            });
+
+        PaymentService.findAllPaymentTypes()
+            .then((data: PaymentTypeResponse[] = []) => {
+                const types: { id: string, name: string }[] = data.map(({type = '', description = ''}) => ({
+                    id: type,
+                    name: description
+                }));
+
+                setPaymentTypes(types);
             })
+            .catch(e => {
+                showError('Не удалось загрузить список типов платежей', e);
+            });
     }, []);
 
     return (
@@ -48,7 +65,7 @@ const IncomingPayments = () => {
                 rowKey='uuid'
                 columns={getPaymentColumns(false)}
                 loadDataFn={PaymentService.findIncomingPayments}
-                filters={getPaymentFilters(false, accountOptions)}
+                filters={incomingPaymentFilters}
                 exportURL='reports/payments/incoming'
                 rowClassName={rowClassName}
                 rowSelection={{

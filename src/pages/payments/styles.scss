@@ -82,6 +82,12 @@
         }
 
         &.account {
+          .payment-type {
+            &.NOT_DETERMINATE {
+              color: #d81c38;
+            }
+          }
+
           .account-container {
             display: flex;
             //gap: 4px;

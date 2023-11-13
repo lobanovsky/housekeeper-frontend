@@ -315,21 +315,32 @@ export class PaymentReportControllerService {
 
 export class RegistryControllerService {
   /**
-   * Check or create new registry
+   * Check and create new registry for special account
    */
-  getRegistry(
-      params: {
-        /** requestBody */
-        body?: RegistryFilter;
-      } = {} as any,
-      options: IRequestOptions = {}
-  ): Promise<any> {
+  getRegistry(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/registries';
+      let url = basePath + '/registries/special-account';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
-      let data = params.body;
+      let data = null;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Check and create new registry for account
+   */
+  getRegistryForAccount(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/registries/account';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = null;
 
       configs.data = data;
 
@@ -419,11 +430,11 @@ export class PaymentControllerService {
    * Getting taxable and tax-free payments for year (incoming payments)
    */
   findAnnualIncomingPayments1(
-    params: {
-      /**  */
-      year: number;
-    } = {} as any,
-    options: IRequestOptions = {}
+      params: {
+        /**  */
+        year: number;
+      } = {} as any,
+      options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/payments/{year}/incoming';
@@ -436,6 +447,22 @@ export class PaymentControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   * Find all payment types
+   */
+  findAllPaymentTypes(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/payments/types';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+
   /**
    * Find all deposits made (outgoing payments)
    */
@@ -1207,11 +1234,9 @@ export interface IncomingPaymentsFilter {
 
   /**  */
   toAccounts?: string[];
-}
 
-export interface RegistryFilter {
   /**  */
-  bankAccount?: string;
+  type?: EnumIncomingPaymentsFilterType;
 }
 
 export interface PagePaymentVO {
@@ -1296,15 +1321,6 @@ export interface PaymentVO {
   purpose?: string;
 
   /**  */
-  tag?: EnumPaymentVOTag;
-
-  /**  */
-  taxable?: boolean;
-
-  /**  */
-  deposit?: boolean;
-
-  /**  */
   account?: string;
 
   /**  */
@@ -1312,6 +1328,9 @@ export interface PaymentVO {
 
   /**  */
   type?: EnumPaymentVOType;
+
+  /**  */
+  typeColor?: string;
 }
 
 export interface Counterparty {
@@ -1408,15 +1427,6 @@ export interface OutgoingPayment {
 
   /**  */
   pack?: string;
-
-  /**  */
-  flagged?: EnumOutgoingPaymentFlagged;
-
-  /**  */
-  taxable?: boolean;
-
-  /**  */
-  deposit?: boolean;
 }
 
 export interface LogEntryFilter {
@@ -1762,6 +1772,17 @@ export interface MonthPaymentVO {
   payments?: PaymentVO[];
 }
 
+export interface PaymentTypeResponse {
+  /**  */
+  type?: string;
+
+  /**  */
+  description?: string;
+
+  /**  */
+  color?: string;
+}
+
 export interface DepositResponse {
   /**  */
   contractNumber?: string;
@@ -1848,40 +1869,35 @@ export enum EnumRoomFilterType {
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
+
 export enum EnumRoomVOType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
-export enum EnumPaymentVOTag {
-  'RED' = 'RED',
-  'ORANGE' = 'ORANGE',
-  'YELLOW' = 'YELLOW',
-  'GREEN' = 'GREEN',
-  'BLUE' = 'BLUE',
-  'PURPLE' = 'PURPLE',
-  'GRAY' = 'GRAY',
-  'BLACK' = 'BLACK',
-  'WHITE' = 'WHITE'
+
+export enum EnumIncomingPaymentsFilterType {
+  'SBER_REGISTRY' = 'SBER_REGISTRY',
+  'VTB_REGISTRY' = 'VTB_REGISTRY',
+  'DEPOSIT_PERCENTAGES' = 'DEPOSIT_PERCENTAGES',
+  'DEPOSIT_REFUND' = 'DEPOSIT_REFUND',
+  'TAXABLE' = 'TAXABLE',
+  'DETERMINATE_ACCOUNT' = 'DETERMINATE_ACCOUNT',
+  'NOT_DETERMINATE' = 'NOT_DETERMINATE',
+  'UNKOWN' = 'UNKOWN'
 }
 
 export enum EnumPaymentVOType {
+  'SBER_REGISTRY' = 'SBER_REGISTRY',
+  'VTB_REGISTRY' = 'VTB_REGISTRY',
+  'DEPOSIT_PERCENTAGES' = 'DEPOSIT_PERCENTAGES',
+  'DEPOSIT_REFUND' = 'DEPOSIT_REFUND',
+  'TAXABLE' = 'TAXABLE',
   'DETERMINATE_ACCOUNT' = 'DETERMINATE_ACCOUNT',
   'NOT_DETERMINATE' = 'NOT_DETERMINATE',
-  'SKIP' = 'SKIP'
+  'UNKOWN' = 'UNKOWN'
 }
 
-export enum EnumOutgoingPaymentFlagged {
-  'RED' = 'RED',
-  'ORANGE' = 'ORANGE',
-  'YELLOW' = 'YELLOW',
-  'GREEN' = 'GREEN',
-  'BLUE' = 'BLUE',
-  'PURPLE' = 'PURPLE',
-  'GRAY' = 'GRAY',
-  'BLACK' = 'BLACK',
-  'WHITE' = 'WHITE'
-}
 export enum EnumLogEntryFilterStatus {
   'OPENED' = 'OPENED',
   'AUTH_FAILED' = 'AUTH_FAILED',
