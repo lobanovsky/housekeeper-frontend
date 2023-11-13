@@ -330,7 +330,6 @@ export class RegistryControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Check and create new registry for account
    */
@@ -447,7 +446,6 @@ export class PaymentControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Find all payment types
    */
@@ -462,7 +460,6 @@ export class PaymentControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Find all deposits made (outgoing payments)
    */
@@ -1331,6 +1328,9 @@ export interface PaymentVO {
 
   /**  */
   typeColor?: string;
+
+  /**  */
+  typeName?: string;
 }
 
 export interface Counterparty {
@@ -1869,13 +1869,11 @@ export enum EnumRoomFilterType {
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
-
 export enum EnumRoomVOType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
-
 export enum EnumIncomingPaymentsFilterType {
   'SBER_REGISTRY' = 'SBER_REGISTRY',
   'VTB_REGISTRY' = 'VTB_REGISTRY',
@@ -1886,7 +1884,6 @@ export enum EnumIncomingPaymentsFilterType {
   'NOT_DETERMINATE' = 'NOT_DETERMINATE',
   'UNKOWN' = 'UNKOWN'
 }
-
 export enum EnumPaymentVOType {
   'SBER_REGISTRY' = 'SBER_REGISTRY',
   'VTB_REGISTRY' = 'VTB_REGISTRY',
@@ -1897,7 +1894,6 @@ export enum EnumPaymentVOType {
   'NOT_DETERMINATE' = 'NOT_DETERMINATE',
   'UNKOWN' = 'UNKOWN'
 }
-
 export enum EnumLogEntryFilterStatus {
   'OPENED' = 'OPENED',
   'AUTH_FAILED' = 'AUTH_FAILED',
