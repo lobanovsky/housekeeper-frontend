@@ -32,9 +32,8 @@ export const ExpensesChart = ({data, total}: { data: GroupOfPayment[], total: nu
 
             <div style={{position: 'relative', height: 300}}>
                 <ResponsivePie
-                    theme={{
-                        fontSize: 12
-                    }}
+                    /*@ts-ignore*/
+                    theme={{fontSize: 12}}
                     data={chartData}
                     margin={{top: 30, right: 40, bottom: 30, left: 40}}
                     innerRadius={0.5}
