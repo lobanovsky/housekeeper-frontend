@@ -67,22 +67,17 @@ export const getPaymentColumns = (isOutgoing: boolean = false): ColumnsType<Paym
         dataIndex: 'account',
         title: 'Тип платежа',
         outgoing: false,
-        render: (account: string, {type, typeName, typeColor, bankName = ''}: PaymentVO) =>
-            type ? <span className={`payment-type ${type}`}>
-                {type === EnumPaymentVOType.NOT_DETERMINATE ?
-                    <CloseCircleFilled color={typeColor} style={{color: typeColor, marginRight: 4}}/> :
-                    <CheckCircleFilled color={typeColor} style={{color: typeColor, marginRight: 4}}/>}
-                {type === EnumPaymentVOType.DETERMINATE_ACCOUNT ? `Л/с ${personalAccountRenderer(account)}` :
-                    (type === EnumPaymentVOType.NOT_DETERMINATE ? 'не определён' : typeName)}
+        render: (account: string, {type, typeName, typeColor, bankName = ''}: PaymentVO) => {
+            const isUnknownSource = type === EnumPaymentVOType.UNKNOWN_ACCOUNT || type === EnumPaymentVOType.UNKNOWN;
+            const iconStyle = {color: typeColor, marginRight: 4};
+            return type ? <span className={`payment-type ${type}`}>
+                {isUnknownSource ? <CloseCircleFilled style={iconStyle}/> : <CheckCircleFilled style={iconStyle}/>}
+                {type === EnumPaymentVOType.ACCOUNT ? `Л/с ${personalAccountRenderer(account)}` :
+                    (isUnknownSource ? 'не определён' : typeName)}
                 </span> : ''
-    },
-    // {
-    // 	dataIndex: 'taxable',
-    // 	title: 'Налог',
-    // 	render: (isTaxable: boolean) => <span className={isTaxable ? 'YES' : 'NO'}>{isTaxable ? 'Да': ''}</span>
-    // }
-]
-    .filter(({outgoing}) => typeof outgoing !== 'boolean' || outgoing === isOutgoing)
+        }
+    }
+].filter(({outgoing}) => typeof outgoing !== 'boolean' || outgoing === isOutgoing)
     .map(({outgoing, ...column}) => ({
         ...(column as ColumnType<PaymentVO>),
         className: column.dataIndex

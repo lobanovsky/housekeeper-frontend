@@ -22,18 +22,8 @@
 	:global(.buttons) {
 		display: flex;
 		align-items: flex-start;
-		padding-top: 14px;
+		padding-top: 15px;
 		gap: 1em;
-		//width: 270px;
-		//border: 1px solid #3e1ef0;
-		//box-sizing: border-box;
-		//align-items: flex-start;
-		//margin-top: 10px;
-		//margin-left: 20px;
-
-		//:global(.ant-btn:not(:last-child)) {
-		//	margin-right: 10px;
-		//}
 
 		:global(.ant-dropdown-button) {
 			width: auto;
