@@ -1,14 +1,15 @@
-import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { Table as AntTable, TableProps } from 'antd';
+import React, {useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState} from 'react';
+import {Table as AntTable, TableProps} from 'antd';
 import debounce from 'lodash/debounce';
 
-import { FilterFieldsConfig } from 'components/table/filter-form/types';
-import { showError } from 'utils/notifications';
-import { EmptyFunction, IPagination } from 'utils/types';
-import FilterForm, { FilterFormValues } from './filter-form';
+import {FilterFieldsConfig} from 'components/table/filter-form/types';
+import {showError} from 'utils/notifications';
+import {EmptyFunction, IPagination} from 'utils/types';
+import FilterForm, {FilterFormValues} from './filter-form';
 import styles from './styles.module.scss';
-import { downloadFile } from 'utils/utils';
-import { Dayjs } from 'dayjs';
+import {downloadFile} from 'utils/utils';
+import {Dayjs} from 'dayjs';
+import {SERVER_DATE_FORMAT} from "../../utils/constants";
 
 export interface TableRequestParams<T> extends IPagination {
 	body: T
@@ -89,7 +90,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 				// @ts-ignore
 				if (filterValue && filterValue.isValid()) {
 					// @ts-ignore
-					convertedFilters[filterName] = filterValue.format('YYYY-MM-DD')
+					convertedFilters[filterName] = filterValue.format(SERVER_DATE_FORMAT)
 				}
 			} else {
 				// @ts-ignore

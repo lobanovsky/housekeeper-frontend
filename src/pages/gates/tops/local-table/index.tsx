@@ -1,11 +1,12 @@
-import React, { useCallback, useImperativeHandle, useState } from 'react';
-import { Table } from 'antd';
-import { useLoading } from 'hooks/use-loading';
-import { Dayjs } from 'dayjs';
-import { ColumnsType } from 'antd/es/table';
-import { getRandomId } from 'utils/utils';
-import { showError } from 'utils/notifications';
-import { TopFilter, TopResponse } from 'backend/services/backend';
+import React, {useCallback, useImperativeHandle, useState} from 'react';
+import {Table} from 'antd';
+import {useLoading} from 'hooks/use-loading';
+import {Dayjs} from 'dayjs';
+import {ColumnsType} from 'antd/es/table';
+import {getRandomId} from 'utils/utils';
+import {showError} from 'utils/notifications';
+import {TopFilter, TopResponse} from 'backend/services/backend';
+import {SERVER_DATE_FORMAT} from "../../../../utils/constants";
 
 // import { topByUserColumns } from 'pages/gates/tops/columns';
 
@@ -34,11 +35,11 @@ const LocalDataTable = React.forwardRef(({ columns, loadDataFn }: LocalTableProp
 		showLoading();
 		const requestFilters: TopFilter = { ...selectedFilters };
 		if (startDate) {
-			requestFilters.startDate = startDate.format('YYYY-MM-DD')
+			requestFilters.startDate = startDate.format(SERVER_DATE_FORMAT)
 		}
 
 		if (endDate) {
-			requestFilters.endDate = endDate.format('YYYY-MM-DD')
+			requestFilters.endDate = endDate.format(SERVER_DATE_FORMAT)
 		}
 
 		loadDataFn(requestFilters)

@@ -2,7 +2,7 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 import {Button, Table} from 'antd';
 import dayjs, {Dayjs} from "dayjs";
 import {useLoading} from "hooks/use-loading";
-import {downloadFile} from "../../utils/utils";
+import {convertDateRange, downloadFile} from "../../utils/utils";
 import {DownloadOutlined, LoadingOutlined,} from "@ant-design/icons";
 import {GroupOfPayment, PaymentService} from "backend/services/backend";
 import {showError} from "../../utils/notifications";
@@ -11,6 +11,7 @@ import {expenseColumns, expensePaymentColumns} from "./columns";
 import './style.scss';
 import {RangePickerWithQuickButtons} from "./range-picker";
 import Loading from "../../components/loading";
+import {SERVER_DATE_FORMAT} from "../../utils/constants";
 
 
 interface CounterpartyData {
@@ -33,10 +34,8 @@ export const ExpensesView = () => {
         totalSum: 0
     });
 
-    const datesRange = useMemo(() => ({
-        dateStart: dates.length ? dates[0].format('YYYY-MM-DD') : '',
-        dateEnd: dates.length ? dates[1].format('YYYY-MM-DD') : '',
-    }), [dates.map(date => date.format('YYYY-MM-DD')).join(',')]);
+    const datesRange = useMemo(() => convertDateRange(dates),
+        [dates.map(date => date ? date.format(SERVER_DATE_FORMAT) : '').join(',')]);
 
     const createReport = useCallback(() => {
         showReportLoading();
@@ -52,9 +51,11 @@ export const ExpensesView = () => {
             return;
         }
 
+        const {dateStart, dateEnd} = convertDateRange(dates);
+
         const requestParams = {
-            startDate: dates[0].format('YYYY-MM-DD'),
-            endDate: dates[1].format('YYYY-MM-DD'),
+            startDate: dateStart,
+            endDate: dateEnd
         }
 
         console.log(`%c Load data for [${requestParams.startDate} - ${requestParams.endDate}]`, 'color: red');

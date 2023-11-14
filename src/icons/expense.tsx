@@ -10,7 +10,8 @@ const blackStroke = {
     strokeMiterlimit: 10
 }
 
-const ExpenseSvg = () => <svg enableBackground="new 0 0 32 32" id="Stock_cut" version="1.1" viewBox="0 0 32 32">
+const ExpenseSvg = () => <svg enableBackground="new 0 0 32 32" id="Stock_cut" version="1.1" viewBox="0 0 32 32"
+                              width='1em' height='1em'>
     <g>
         <path d="M23,12V3   c0-1.105-0.895-2-2-2H3C1.895,1,1,1.895,1,3v22c0,1.105,0.895,2,2,2h9" fill="none"
               stroke="currentColor" strokeLinejoin="round" strokeMiterlimit="10" strokeWidth="2"/>

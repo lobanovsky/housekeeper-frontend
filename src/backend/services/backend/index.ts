@@ -99,10 +99,10 @@ export class CounterpartyControllerService {
    */
   update(
       params: {
-        /**  */
-        counterpartyId: number;
-        /** requestBody */
-        body?: CounterpartyRequest;
+          /**  */
+          counterpartyId: number;
+          /** requestBody */
+          body?: CounterpartyRequest;
       } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
@@ -138,8 +138,8 @@ export class CounterpartyControllerService {
    */
   create(
       params: {
-        /** requestBody */
-        body?: CounterpartyRequest;
+          /** requestBody */
+          body?: CounterpartyRequest;
       } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
@@ -163,12 +163,12 @@ export class RoomControllerService {
    */
   makeRoomsReport(
       params: {
-        /**  */
-        pageNum?: number;
-        /**  */
-        pageSize?: number;
-        /** requestBody */
-        body?: RoomFilter;
+          /**  */
+          pageNum?: number;
+          /**  */
+          pageSize?: number;
+          /** requestBody */
+          body?: RoomFilter;
       } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
@@ -207,8 +207,8 @@ export class PaymentReportControllerService {
    */
   exportOutgoingPayments(
       params: {
-        /** requestBody */
-        body?: OutgoingPaymentsFilter;
+          /** requestBody */
+          body?: OutgoingPaymentsFilter;
       } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
@@ -229,8 +229,8 @@ export class PaymentReportControllerService {
    */
   exportOutgoingGroupingPayments(
       params: {
-        /** requestBody */
-        body?: OutgoingGropingPaymentsFilter;
+          /** requestBody */
+          body?: OutgoingGropingPaymentsFilter;
       } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
@@ -251,8 +251,8 @@ export class PaymentReportControllerService {
    */
   exportIncomingPayments(
       params: {
-        /** requestBody */
-        body?: IncomingPaymentsFilter;
+          /** requestBody */
+          body?: IncomingPaymentsFilter;
       } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
@@ -295,8 +295,8 @@ export class PaymentReportControllerService {
    */
   findAnnualIncomingPayments(
       params: {
-        /**  */
-        year: number;
+          /**  */
+          year: number;
       } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
@@ -367,7 +367,7 @@ export class PaymentControllerService {
       let url = basePath + '/payments/outgoing';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-      configs.params = {pageNum: params['pageNum'], pageSize: params['pageSize']};
+        configs.params = {pageNum: params['pageNum'], pageSize: params['pageSize']};
 
       let data = params.body;
 
@@ -381,8 +381,8 @@ export class PaymentControllerService {
    */
   findOutgoingPaymentsGroupingByCounterparty(
       params: {
-        /** requestBody */
-        body?: OutgoingGropingPaymentsFilter;
+          /** requestBody */
+          body?: OutgoingGropingPaymentsFilter;
       } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
@@ -430,8 +430,8 @@ export class PaymentControllerService {
    */
   findAnnualIncomingPayments1(
       params: {
-        /**  */
-        year: number;
+          /**  */
+          year: number;
       } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
@@ -482,12 +482,12 @@ export class LogEntryControllerService {
    */
   findAllLogEntries(
       params: {
-        /**  */
-        pageNum?: number;
-        /**  */
-        pageSize?: number;
-        /** requestBody */
-        body?: LogEntryFilter;
+          /**  */
+          pageNum?: number;
+          /**  */
+          pageSize?: number;
+          /** requestBody */
+          body?: LogEntryFilter;
       } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
@@ -523,12 +523,12 @@ export class LogEntryControllerService {
    */
   getTopByPhoneNumber(
       params: {
-        /**  */
-        gateId?: number;
-        /**  */
-        startDate?: string;
-        /**  */
-        endDate?: string;
+          /**  */
+          gateId?: number;
+          /**  */
+          startDate?: string;
+          /**  */
+          endDate?: string;
       } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
@@ -548,12 +548,12 @@ export class LogEntryControllerService {
    */
   getTopByFlatNumber(
       params: {
-        /**  */
-        gateId?: number;
-        /**  */
-        startDate?: string;
-        /**  */
-        endDate?: string;
+          /**  */
+          gateId?: number;
+          /**  */
+          startDate?: string;
+          /**  */
+          endDate?: string;
       } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
@@ -590,12 +590,12 @@ export class FileControllerService {
    */
   getAllFiles(
       params: {
-        /**  */
-        pageNum?: number;
-        /**  */
-        pageSize?: number;
-        /** requestBody */
-        body?: FileFilter;
+          /**  */
+          pageNum?: number;
+          /**  */
+          pageSize?: number;
+          /** requestBody */
+          body?: FileFilter;
       } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
@@ -631,8 +631,8 @@ export class FileControllerService {
    */
   remove(
       params: {
-        /**  */
-        fileIds: any | null[];
+          /**  */
+          fileIds: any | null[];
       } = {} as any,
       options: IRequestOptions = {}
   ): Promise<any> {
@@ -1935,17 +1935,17 @@ export enum EnumMonthPaymentVOMonth {
 
 
 export interface TopResponse {
-  count: number,
-  id: number,
-  flatNumber?: string,
-  phoneNumber?: string,
-  userName: string
+    count: number,
+    id: number,
+    flatNumber?: string,
+    phoneNumber?: string,
+    userName: string
 };
 
 export interface TopFilter {
-  gateId?: number;
-  startDate?: string;
-  endDate?: string;
+    gateId?: number;
+    startDate?: string;
+    endDate?: string;
 }
 
 
