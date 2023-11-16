@@ -1,7 +1,25 @@
 .range-picker-with-quick-buttons {
-  display: inline-block;
-
+  //display: inline-block;
+  //text-align: center;
   .ant-radio-group {
     margin-left: 5px;
+  }
+
+  .month-changer,
+  .year-changer {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    gap: 1em;
+    margin-top: 10px;
+
+    .unit-name {
+      width: 80px;
+      text-align: center;
+    }
+  }
+
+  .month-changer {
+    margin-top: 24px;
   }
 }

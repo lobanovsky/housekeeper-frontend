@@ -1,10 +1,9 @@
-require('dayjs/locale/ru');
+import './dayjs-config';
 import React from 'react';
 // @ts-ignore
 import ReactDOM from 'react-dom/client';
-import { ConfigProvider } from 'antd';
+import {ConfigProvider} from 'antd';
 import ruRU from 'antd/lib/locale/ru_RU';
-import dayjs from 'dayjs';
 
 
 import reportWebVitals from './reportWebVitals';
@@ -12,8 +11,6 @@ import './backend/axios';
 import App from './App';
 import './index.css';
 
-
-dayjs.locale('ru')
 
 // @ts-ignore
 const root = ReactDOM.createRoot(document.getElementById('root'));

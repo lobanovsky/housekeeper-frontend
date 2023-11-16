@@ -1,4 +1,12 @@
 .expenses {
+  position: relative;
+
+  .report-btn {
+    position: absolute;
+    left: 540px;
+    top: 0;
+  }
+
   .ant-table-wrapper.expenses-table {
     tr.ant-table-row {
       th, td {

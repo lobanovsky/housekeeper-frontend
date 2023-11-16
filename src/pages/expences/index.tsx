@@ -1,18 +1,16 @@
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {Button, Table} from 'antd';
-import dayjs, {Dayjs} from "dayjs";
 import {useLoading} from "hooks/use-loading";
 import {convertDateRange, downloadFile} from "../../utils/utils";
-import {DownloadOutlined, LoadingOutlined,} from "@ant-design/icons";
+import {DownloadOutlined, LoadingOutlined} from "@ant-design/icons";
 import {GroupOfPayment, PaymentService} from "backend/services/backend";
 import {showError} from "../../utils/notifications";
 import {ExpensesChart} from "./chart";
 import {expenseColumns, expensePaymentColumns} from "./columns";
 import './style.scss';
-import {RangePickerWithQuickButtons} from "./range-picker";
+import {RangePickerWithQuickButtons, SelectedDatesShort} from "./range-picker";
 import Loading from "../../components/loading";
-import {SERVER_DATE_FORMAT} from "../../utils/constants";
-
+import {startOfCurrentMonth, today} from "./range-picker/utils";
 
 interface CounterpartyData {
     data: GroupOfPayment[],
@@ -20,11 +18,13 @@ interface CounterpartyData {
     totalSum: number
 }
 
-const today = dayjs();
-const startOfMonth = dayjs().startOf('month');
 
 export const ExpensesView = () => {
-    const [dates, setDates] = useState<Dayjs[]>([startOfMonth, today]);
+    const [dates, setDates] = useState<SelectedDatesShort>({
+        ...convertDateRange([startOfCurrentMonth, today]),
+        dateFromMoment: startOfCurrentMonth,
+        dateToMoment: today,
+    });
     const [loading, showLoading, hideLoading] = useLoading();
     const [reportLoading, showReportLoading, hideReportLoading] = useLoading();
 
@@ -34,28 +34,26 @@ export const ExpensesView = () => {
         totalSum: 0
     });
 
-    const datesRange = useMemo(() => convertDateRange(dates),
-        [dates.map(date => date ? date.format(SERVER_DATE_FORMAT) : '').join(',')]);
 
     const createReport = useCallback(() => {
         showReportLoading();
         downloadFile('/reports/payments/outgoing/grouping', {
-            startDate: datesRange.dateStart,
-            endDate: datesRange.dateEnd,
+            startDate: dates.dateStart,
+            endDate: dates.dateEnd,
         }, hideReportLoading);
-    }, [datesRange.dateStart, datesRange.dateEnd]);
+    }, [dates.dateStart, dates.dateEnd]);
 
 
-    const loadData = useCallback((dates: Dayjs[]) => {
-        if (!dates.length) {
+    const loadData = useCallback((dates: SelectedDatesShort) => {
+        if (!dates.dateToMoment || !dates.dateFromMoment) {
             return;
         }
 
-        const {dateStart, dateEnd} = convertDateRange(dates);
+        // const {dateStart, dateEnd} = convertDateRange(dates);
 
         const requestParams = {
-            startDate: dateStart,
-            endDate: dateEnd
+            startDate: dates.dateStart,
+            endDate: dates.dateEnd
         }
 
         console.log(`%c Load data for [${requestParams.startDate} - ${requestParams.endDate}]`, 'color: red');
@@ -80,12 +78,12 @@ export const ExpensesView = () => {
             })
     }, []);
 
-    const onChangeDates = useCallback((newValue: Dayjs[] = []) => {
-        setDates(newValue || []);
-        if (newValue.length) {
+    const onChangeDates = useCallback((newValue: SelectedDatesShort) => {
+        setDates(newValue);
+        if (newValue.dateFromMoment && newValue.dateToMoment) {
             loadData(newValue);
         }
-    }, [])
+    }, []);
 
     useEffect(() => {
         loadData(dates);
@@ -94,13 +92,14 @@ export const ExpensesView = () => {
     return (
         <div className='expenses'>
             {loading && <Loading/>}
-            <RangePickerWithQuickButtons value={dates} onChange={onChangeDates} datesRange={datesRange}/>
+            <RangePickerWithQuickButtons onChange={onChangeDates}/>
 
             {/*<Button type='primary' style={{margin: '0 12px 0 20px'}}*/}
             {/*        disabled={!datesRange.dateStart || !datesRange.dateEnd} onClick={loadData}>*/}
             {/*    {loading ? <LoadingOutlined/> : <SearchOutlined/>}Показать расходы*/}
             {/*</Button>*/}
-            <Button disabled={!datesRange.dateStart || !datesRange.dateEnd} onClick={createReport}
+            <Button className='report-btn'
+                    disabled={!dates.dateStart || !dates.dateEnd} onClick={createReport}
                     style={{marginLeft: 20}}>
                 {reportLoading ? <LoadingOutlined/> : <DownloadOutlined/>}Скачать отчёт
             </Button>

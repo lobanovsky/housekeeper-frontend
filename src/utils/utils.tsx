@@ -4,11 +4,7 @@ import {saveAs} from 'file-saver';
 import axios from 'axios';
 import {showError} from 'utils/notifications';
 import {SERVER_DATE_FORMAT} from "./constants";
-
-const timezone = require('dayjs/plugin/timezone')
-var utc = require('dayjs/plugin/utc');
-dayjs.extend(utc)
-dayjs.extend(timezone);
+import {SelectedDatesShort} from "../pages/expences/range-picker";
 
 export const getRandomId = () =>
     dayjs().unix() + Math.round(Math.random() * 10000) + Math.round(Math.random() * 100);
@@ -118,10 +114,18 @@ export function generateNewColor() {
     return hexColorRep
 }
 
-export const convertDateRange = (range: Array<string | Dayjs | null> = [], format = SERVER_DATE_FORMAT): {
-    dateStart: string,
-    dateEnd: string
-} => ({
-    dateStart: range.length > 0 && range[0] ? dateRenderer(range[0], format) : '',
-    dateEnd: range.length > 1 && range[1] ? dateRenderer(range[1], format) : ''
-});
+export const convertDateRange = (range: Array<string | Dayjs | null> = [], format = SERVER_DATE_FORMAT): SelectedDatesShort => {
+    const dateFromMoment = range.length > 0 && range[0] ? (typeof range[0] === 'string' ? dayjs(range[0]) : range[0]) : null;
+    const dateToMoment = range.length > 1 && range[1] ? (typeof range[1] === 'string' ? dayjs(range[1]) : range[1]) : null;
+
+    return ({
+        dateFromMoment,
+        dateToMoment,
+        dateStart: dateFromMoment ? dateRenderer(dateFromMoment, format) : '',
+        dateEnd: dateToMoment ? dateRenderer(dateToMoment, format) : ''
+    });
+}
+
+// @ts-ignore
+export const MonthNames = dayjs.months();
+console.log(MonthNames);
