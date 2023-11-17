@@ -12,7 +12,7 @@ import {
 } from "./utils";
 import './style.scss';
 import {DoubleLeftOutlined, DoubleRightOutlined, LeftOutlined, RightOutlined} from "@ant-design/icons";
-import {convertDateRange, MonthNames} from "../../../utils/utils";
+import {convertDateRange, MonthNames, ShortMonthNames} from "../../../utils/utils";
 import {SERVER_DATE_FORMAT} from "../../../utils/constants";
 
 export interface SelectedDatesShort {
@@ -24,8 +24,10 @@ export interface SelectedDatesShort {
 
 export interface SelectedDateRange extends SelectedDatesShort {
     selectedMonth: number,
+    selectedMonthName: string,
     selectedPeriod: QUICK_PERIODS | null,
-    selectedYear: number
+    selectedYear: number,
+    selectedYearName: string,
 }
 
 const today = dayjs();
@@ -60,26 +62,28 @@ export const RangePickerWithQuickButtons = ({onChange: onChangeDates}: {
             const strings = convertDateRange(dates);
             const selectedPeriod = getSelectedQuickPeriod(dates);
             let selectedMonth = -1;
+            let selectedMonthName = ' - ';
             if (dates.length > 1 && dates[0] && dates[1]) {
                 const fromMonth = dates[0].get('month');
                 const toMonth = dates[1].get('month');
-                if (fromMonth === toMonth) {
-                    selectedMonth = fromMonth;
-                }
+                selectedMonthName = fromMonth === toMonth ? MonthNames[fromMonth] : `${ShortMonthNames[fromMonth]} - ${ShortMonthNames[toMonth]}`
+                selectedMonth = toMonth;
             }
 
             let selectedYear = -1;
+            let selectedYearName = ' - '
             if (dates.length > 1 && dates[0] && dates[1]) {
                 const fromYear = dates[0].get('year');
                 const toYear = dates[1].get('year');
-                if (fromYear === toYear) {
-                    selectedYear = fromYear;
-                }
+                selectedYearName = fromYear === toYear ? String(toYear) : `${fromYear} - ${toYear}`;
+                selectedYear = toYear;
             }
             return ({
                 ...strings,
                 selectedMonth,
+                selectedMonthName,
                 selectedYear,
+                selectedYearName,
                 selectedPeriod,
                 dateFromMoment: dates.length > 0 && dates[0] ? dates[0] : null,
                 dateToMoment: dates.length > 1 && dates[1] ? dates[1] : null,
@@ -135,7 +139,7 @@ export const RangePickerWithQuickButtons = ({onChange: onChangeDates}: {
                     }
                 }}><LeftOutlined/></Button>
                 <div
-                    className='unit-name'>{datesRange.selectedMonth >= 0 ? MonthNames[datesRange.selectedMonth] : ' - '}</div>
+                    className='unit-name'>{datesRange.selectedMonthName}</div>
 
                 <Button disabled={datesRange.selectedMonth >= currentMonth && datesRange.selectedYear === currentYear}
                         onClick={() => {
@@ -158,7 +162,7 @@ export const RangePickerWithQuickButtons = ({onChange: onChangeDates}: {
                         onChange([prevYearStart, prevYearEnd]);
                     }
                 }}><DoubleLeftOutlined/></Button>
-                <div className='unit-name'>{datesRange.selectedYear >= 0 ? datesRange.selectedYear : ' - '}</div>
+                <div className='unit-name'>{datesRange.selectedYearName}</div>
                 <Button disabled={datesRange.selectedYear >= currentYear}
                         onClick={() => {
                             if (datesRange.dateToMoment) {

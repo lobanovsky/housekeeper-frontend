@@ -1,9 +1,9 @@
 import {useCallback, useEffect, useState} from 'react';
-import {Button, Table} from 'antd';
+import {Button, Card, Radio, Table, Typography} from 'antd';
 import {useLoading} from "hooks/use-loading";
 import {convertDateRange, downloadFile} from "../../utils/utils";
 import {DownloadOutlined, LoadingOutlined} from "@ant-design/icons";
-import {GroupOfPayment, PaymentService} from "backend/services/backend";
+import {EnumOutgoingGropingPaymentsFilterGroupBy, GroupOfPayment, PaymentService} from "backend/services/backend";
 import {showError} from "../../utils/notifications";
 import {ExpensesChart} from "./chart";
 import {expenseColumns, expensePaymentColumns} from "./columns";
@@ -25,6 +25,8 @@ export const ExpensesView = () => {
         dateFromMoment: startOfCurrentMonth,
         dateToMoment: today,
     });
+
+    const [groupBy, setGroupBy] = useState<EnumOutgoingGropingPaymentsFilterGroupBy>(EnumOutgoingGropingPaymentsFilterGroupBy.CATEGORY);
     const [loading, showLoading, hideLoading] = useLoading();
     const [reportLoading, showReportLoading, hideReportLoading] = useLoading();
 
@@ -40,11 +42,12 @@ export const ExpensesView = () => {
         downloadFile('/reports/payments/outgoing/grouping', {
             startDate: dates.dateStart,
             endDate: dates.dateEnd,
+            groupBy
         }, hideReportLoading);
-    }, [dates.dateStart, dates.dateEnd]);
+    }, [dates.dateStart, dates.dateEnd, groupBy]);
 
 
-    const loadData = useCallback((dates: SelectedDatesShort) => {
+    const loadData = useCallback(() => {
         if (!dates.dateToMoment || !dates.dateFromMoment) {
             return;
         }
@@ -53,7 +56,8 @@ export const ExpensesView = () => {
 
         const requestParams = {
             startDate: dates.dateStart,
-            endDate: dates.dateEnd
+            endDate: dates.dateEnd,
+            groupBy
         }
 
         console.log(`%c Load data for [${requestParams.startDate} - ${requestParams.endDate}]`, 'color: red');
@@ -66,7 +70,7 @@ export const ExpensesView = () => {
                 setData({
                     data: loadedData.map((item) => ({
                         ...item,
-                        id: item.counterparty?.id
+                        id: item.name
                     })),
                     total: loadedData.length,
                     totalSum
@@ -76,33 +80,38 @@ export const ExpensesView = () => {
                 hideLoading();
                 showError('Не удалось загрузить траты', e);
             })
-    }, []);
+    }, [groupBy, dates.dateToMoment, dates.dateFromMoment, dates.dateStart, dates.dateEnd]);
 
     const onChangeDates = useCallback((newValue: SelectedDatesShort) => {
         setDates(newValue);
-        if (newValue.dateFromMoment && newValue.dateToMoment) {
-            loadData(newValue);
-        }
+        // if (newValue.dateFromMoment && newValue.dateToMoment) {
+        //     loadData(newValue);
+        // }
     }, []);
 
     useEffect(() => {
-        loadData(dates);
-    }, []);
+        loadData();
+    }, [groupBy, dates.dateStart, dates.dateEnd, loadData]);
 
     return (
         <div className='expenses'>
             {loading && <Loading/>}
-            <RangePickerWithQuickButtons onChange={onChangeDates}/>
-
-            {/*<Button type='primary' style={{margin: '0 12px 0 20px'}}*/}
-            {/*        disabled={!datesRange.dateStart || !datesRange.dateEnd} onClick={loadData}>*/}
-            {/*    {loading ? <LoadingOutlined/> : <SearchOutlined/>}Показать расходы*/}
-            {/*</Button>*/}
-            <Button className='report-btn'
-                    disabled={!dates.dateStart || !dates.dateEnd} onClick={createReport}
-                    style={{marginLeft: 20}}>
-                {reportLoading ? <LoadingOutlined/> : <DownloadOutlined/>}Скачать отчёт
-            </Button>
+            <Card>
+                <Typography.Text strong>Группировка:</Typography.Text>
+                <Radio.Group style={{marginBottom: 12, marginLeft: 6}} value={groupBy}
+                             onChange={({target: {value}}) => {
+                                 setGroupBy(value);
+                             }}>
+                    <Radio value={EnumOutgoingGropingPaymentsFilterGroupBy.CATEGORY}>По категориям</Radio>
+                    <Radio value={EnumOutgoingGropingPaymentsFilterGroupBy.COUNTERPARTY}>По поставщикам</Radio>
+                </Radio.Group>
+                <RangePickerWithQuickButtons onChange={onChangeDates}/>
+                <Button className='report-btn'
+                        disabled={!dates.dateStart || !dates.dateEnd} onClick={createReport}
+                        style={{marginLeft: 20}}>
+                    {reportLoading ? <LoadingOutlined/> : <DownloadOutlined/>}Скачать отчёт
+                </Button>
+            </Card>
             <ExpensesChart data={data.data} total={data.totalSum}/>
             <Table
                 rowKey='id'

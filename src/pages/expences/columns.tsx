@@ -1,5 +1,4 @@
 import {dateTimeRenderer, summRenderer} from 'utils/utils';
-import {Counterparty} from "../../backend/services/backend";
 import {accountNumberRenderer} from "../payments/columns";
 
 
@@ -10,9 +9,9 @@ export const expenseColumns = [
         render: (sum: number) => summRenderer(sum)
     },
     {
-        dataIndex: 'counterparty',
+        dataIndex: 'name',
         title: 'Компания',
-        render: (company: Counterparty) => company.name
+        // render: (company: Counterparty) => company.name
     },
 ].map(column => ({
     ...column,

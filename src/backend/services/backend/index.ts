@@ -317,11 +317,18 @@ export class RegistryControllerService {
   /**
    * Check and create new registry for special account
    */
-  getRegistry(options: IRequestOptions = {}): Promise<any> {
+  getSpecialRegistry(
+      params: {
+        /**  */
+        useInactiveAccount?: boolean;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/registries/special-account';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      configs.params = {useInactiveAccount: params['useInactiveAccount']};
 
       let data = null;
 
@@ -330,14 +337,22 @@ export class RegistryControllerService {
       axios(configs, resolve, reject);
     });
   }
+
   /**
    * Check and create new registry for account
    */
-  getRegistryForAccount(options: IRequestOptions = {}): Promise<any> {
+  getRegistry(
+      params: {
+        /**  */
+        useInactiveAccount?: boolean;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/registries/account';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      configs.params = {useInactiveAccount: params['useInactiveAccount']};
 
       let data = null;
 
@@ -460,6 +475,22 @@ export class PaymentControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   * Find all payments grouped by {groupBy}
+   */
+  findAllGroupingPaymentBy(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/payments/group-by';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+
   /**
    * Find all deposits made (outgoing payments)
    */
@@ -1112,10 +1143,10 @@ export interface PageRoomVO {
 
 export interface PageableObject {
   /**  */
-  unpaged?: boolean;
+  paged?: boolean;
 
   /**  */
-  paged?: boolean;
+  unpaged?: boolean;
 
   /**  */
   pageNumber?: number;
@@ -1208,6 +1239,9 @@ export interface OutgoingGropingPaymentsFilter {
 
   /**  */
   endDate: string;
+
+  /**  */
+  groupBy?: EnumOutgoingGropingPaymentsFilterGroupBy;
 }
 
 export interface IncomingPaymentsFilter {
@@ -1333,38 +1367,9 @@ export interface PaymentVO {
   typeName?: string;
 }
 
-export interface Counterparty {
-  /**  */
-  id?: number;
-
-  /**  */
-  uuid?: string;
-
-  /**  */
-  name?: string;
-
-  /**  */
-  inn?: string;
-
-  /**  */
-  bank?: string;
-
-  /**  */
-  bik?: string;
-
-  /**  */
-  sign?: string;
-
-  /**  */
-  manualCreated?: boolean;
-
-  /**  */
-  createDate: string;
-}
-
 export interface GroupOfPayment {
   /**  */
-  counterparty?: Counterparty;
+  name?: string;
 
   /**  */
   payments?: OutgoingPayment[];
@@ -1783,6 +1788,14 @@ export interface PaymentTypeResponse {
   color?: string;
 }
 
+export interface GroupPaymentByResponse {
+  /**  */
+  type?: string;
+
+  /**  */
+  description?: string;
+}
+
 export interface DepositResponse {
   /**  */
   contractNumber?: string;
@@ -1869,11 +1882,18 @@ export enum EnumRoomFilterType {
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
+
 export enum EnumRoomVOType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
+
+export enum EnumOutgoingGropingPaymentsFilterGroupBy {
+  'COUNTERPARTY' = 'COUNTERPARTY',
+  'CATEGORY' = 'CATEGORY'
+}
+
 export enum EnumIncomingPaymentsFilterType {
   'SBER_REGISTRY' = 'SBER_REGISTRY',
   'VTB_REGISTRY' = 'VTB_REGISTRY',

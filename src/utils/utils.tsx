@@ -44,14 +44,15 @@ export const summRenderer = (amount: number | string, options = {}) => {
 
 
     const formatter = new Intl.NumberFormat('ru-RU', {
-        style: 'decimal',
+        style: 'currency',
         minimumFractionDigits: 2,
         currency: 'RUB',
-        ...options
-        // currencyDisplay: 'symbol'
+        ...options,
+        currencyDisplay: 'symbol'
     });
 
     let formattedString = formatter.format(amountNumber);
+    console.log(formattedString);
     return formattedString
 };
 
@@ -128,4 +129,5 @@ export const convertDateRange = (range: Array<string | Dayjs | null> = [], forma
 
 // @ts-ignore
 export const MonthNames = dayjs.months();
+export const ShortMonthNames: string[] = ['янв', 'фев', 'март', 'апр', 'май', 'июнь', 'июль', 'авг', 'сент', 'окт', 'нояб', 'дек']
 console.log(MonthNames);

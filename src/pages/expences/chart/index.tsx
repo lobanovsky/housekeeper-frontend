@@ -15,18 +15,21 @@ const formatSum = (sum: number) => summRenderer(Math.ceil(sum), {
 
 
 export const ExpensesChart = ({data, total}: { data: GroupOfPayment[], total: number }) => {
-    const chartData = useMemo(() => data.map(({counterparty, total = 0}: GroupOfPayment) => ({
+    const chartData = useMemo(() => data.map(({name, total = 0}: GroupOfPayment) => ({
         value: total,
-        id: counterparty?.name,
-        label: counterparty?.name,
+        id: name,
+        label: name,
         color: generateNewColor()
     })), [data.length]);
 
     return (
         <div className='expenses-chart'>
             <div className='header'>
-                <span className='label'>Потрачено: &nbsp;</span>
-                <Statistic value={total} formatter={(value) => summRenderer(value)}/>
+                {/*<span className='label'>Потрачено: &nbsp;</span>*/}
+                <Statistic
+                    value={total}
+                    formatter={(value) => summRenderer(value)}
+                />
                 {/*<span className='sum'>{summRenderer(total)}</span>*/}
             </div>
 

@@ -1,11 +1,18 @@
 .expenses {
   position: relative;
 
-  .report-btn {
-    position: absolute;
-    left: 540px;
-    top: 0;
+  .ant-card {
+    .ant-card-body {
+      padding: 12px 16px;
+    }
+
+    .report-btn {
+      position: absolute;
+      left: 540px;
+      top: 44px;
+    }
   }
+
 
   .ant-table-wrapper.expenses-table {
     tr.ant-table-row {
