@@ -1,5 +1,4 @@
 import {dateTimeRenderer, summRenderer} from 'utils/utils';
-import {accountNumberRenderer} from "../payments/columns";
 
 
 export const expenseColumns = [
@@ -34,23 +33,23 @@ export const expensePaymentColumns = [
     //     title: 'Отправитель',
     //     outgoing: false
     // },
-    {
-        dataIndex: 'toInn',
-        title: 'ИНН получателя'
-    },
     // {
-    //     dataIndex: 'toName',
-    //     title: 'Получатель'
+    //     dataIndex: 'toInn',
+    //     title: 'ИНН получателя'
     // },
     {
-        dataIndex: 'bankName',
-        title: 'Банк'
+        dataIndex: 'toName',
+        title: 'Получатель'
     },
-    {
-        dataIndex: 'toAccount',
-        title: 'Счёт поступления',
-        render: accountNumberRenderer
-    },
+    // {
+    //     dataIndex: 'bankName',
+    //     title: 'Банк'
+    // },
+    // {
+    //     dataIndex: 'toAccount',
+    //     title: 'Счёт поступления',
+    //     render: accountNumberRenderer
+    // },
     {
         dataIndex: 'sum',
         title: 'Сумма',
