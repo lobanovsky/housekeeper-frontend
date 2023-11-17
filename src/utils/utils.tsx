@@ -52,7 +52,6 @@ export const summRenderer = (amount: number | string, options = {}) => {
     });
 
     let formattedString = formatter.format(amountNumber);
-    console.log(formattedString);
     return formattedString
 };
 
@@ -130,4 +129,3 @@ export const convertDateRange = (range: Array<string | Dayjs | null> = [], forma
 // @ts-ignore
 export const MonthNames = dayjs.months();
 export const ShortMonthNames: string[] = ['янв', 'фев', 'март', 'апр', 'май', 'июнь', 'июль', 'авг', 'сент', 'окт', 'нояб', 'дек']
-console.log(MonthNames);

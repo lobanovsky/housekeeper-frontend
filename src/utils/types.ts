@@ -1,4 +1,4 @@
-import { AxiosError, AxiosResponse } from 'axios';
+import {AxiosError, AxiosResponse} from 'axios';
 
 export type Modify<T, R> = Omit<T, keyof R> & R;
 
@@ -29,6 +29,7 @@ export interface DictionaryItem {
 }
 
 export type ActionFinishCallback = (isSuccess: boolean) => void;
+export type ActionCallbackWithData<T> = (isSuccess: boolean, data?: T | null) => void;
 
 export type ActionCallback = () => void;
 

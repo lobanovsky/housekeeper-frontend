@@ -1,22 +1,16 @@
 import {useCallback, useEffect, useState} from 'react';
-import {Button, Card, Radio, Table, Typography} from 'antd';
+import {Card, Radio, Table, Typography} from 'antd';
 import {useLoading} from "hooks/use-loading";
 import {convertDateRange, downloadFile} from "../../utils/utils";
-import {DownloadOutlined, LoadingOutlined} from "@ant-design/icons";
-import {EnumOutgoingGropingPaymentsFilterGroupBy, GroupOfPayment, PaymentService} from "backend/services/backend";
-import {showError} from "../../utils/notifications";
+import {EnumOutgoingGropingPaymentsFilterGroupBy} from "backend/services/backend";
 import {ExpensesChart} from "./chart";
 import {expenseColumns, expensePaymentColumns} from "./columns";
 import './style.scss';
 import {RangePickerWithQuickButtons, SelectedDatesShort} from "./range-picker";
 import Loading from "../../components/loading";
 import {startOfCurrentMonth, today} from "./range-picker/utils";
-
-interface CounterpartyData {
-    data: GroupOfPayment[],
-    total: number,
-    totalSum: number
-}
+import {loadExpensesByDates} from "./services";
+import {CounterpartyData} from "./types";
 
 
 export const ExpensesView = () => {
@@ -51,42 +45,21 @@ export const ExpensesView = () => {
         if (!dates.dateToMoment || !dates.dateFromMoment) {
             return;
         }
-
-        // const {dateStart, dateEnd} = convertDateRange(dates);
-
-        const requestParams = {
+        showLoading();
+        loadExpensesByDates({
             startDate: dates.dateStart,
             endDate: dates.dateEnd,
             groupBy
-        }
-
-        console.log(`%c Load data for [${requestParams.startDate} - ${requestParams.endDate}]`, 'color: red');
-        showLoading();
-        PaymentService.findOutgoingPaymentsGroupingByCounterparty({body: requestParams})
-            .then((loadedData: GroupOfPayment[]) => {
-                hideLoading();
-                const totalSum = loadedData.reduce((accum, {total: categoryTotal = 0}) => accum + categoryTotal, 0);
-
-                setData({
-                    data: loadedData.map((item) => ({
-                        ...item,
-                        id: item.name
-                    })),
-                    total: loadedData.length,
-                    totalSum
-                });
-            })
-            .catch(e => {
-                hideLoading();
-                showError('Не удалось загрузить траты', e);
-            })
+        }, (isSuccess, loadedData) => {
+            hideLoading();
+            if (isSuccess) {
+                setData(loadedData || {data: [], total: 0, totalSum: 0});
+            }
+        })
     }, [groupBy, dates.dateToMoment, dates.dateFromMoment, dates.dateStart, dates.dateEnd]);
 
     const onChangeDates = useCallback((newValue: SelectedDatesShort) => {
         setDates(newValue);
-        // if (newValue.dateFromMoment && newValue.dateToMoment) {
-        //     loadData(newValue);
-        // }
     }, []);
 
     useEffect(() => {
@@ -105,12 +78,8 @@ export const ExpensesView = () => {
                     <Radio value={EnumOutgoingGropingPaymentsFilterGroupBy.CATEGORY}>По категориям</Radio>
                     <Radio value={EnumOutgoingGropingPaymentsFilterGroupBy.COUNTERPARTY}>По поставщикам</Radio>
                 </Radio.Group>
-                <RangePickerWithQuickButtons onChange={onChangeDates}/>
-                <Button className='report-btn'
-                        disabled={!dates.dateStart || !dates.dateEnd} onClick={createReport}
-                        style={{marginLeft: 20}}>
-                    {reportLoading ? <LoadingOutlined/> : <DownloadOutlined/>}Скачать отчёт
-                </Button>
+                <RangePickerWithQuickButtons onChange={onChangeDates} downloadReport={createReport}/>
+
             </Card>
             <ExpensesChart data={data.data} total={data.totalSum}/>
             <Table
