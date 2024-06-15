@@ -81,18 +81,30 @@
           }
         }
 
-        &.account {
+        &.toAccount {
+          > div {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            white-space: nowrap;
+          }
+
+
+          .ant-btn.edit-btn {
+            border: none;
+            width: 18px;
+            height: 18px;
+            padding: 2px;
+            //margin-left: 0.5em;
+
+            .anticon {
+              vertical-align: 0;
+            }
+          }
         }
       }
 
-      &.empty-account {
-        td {
-          //background: rgba(255, 228, 225, 0.9);
-        }
-      }
     }
-
-
   }
 }
 
@@ -101,6 +113,5 @@
     .account-number {
       color: #3e1ef0;
     }
-
   }
 }

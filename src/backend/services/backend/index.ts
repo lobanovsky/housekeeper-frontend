@@ -337,7 +337,6 @@ export class RegistryControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Check and create new registry for account
    */
@@ -440,6 +439,32 @@ export class PaymentControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   * Set the manual account for the payment
+   */
+  setManualAccountForPayment(
+      params: {
+        /**  */
+        id: number;
+        /** requestBody */
+        body?: ManualAccountRequest;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/payments/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('patch', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
   /**
    * Getting taxable and tax-free payments for year (incoming payments)
    */
@@ -475,7 +500,6 @@ export class PaymentControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Find all payments grouped by {groupBy}
    */
@@ -490,7 +514,6 @@ export class PaymentControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Find all deposits made (outgoing payments)
    */
@@ -902,6 +925,20 @@ export class RoomReportControllerService {
 
 export class DecisionReportControllerService {
   /**
+   * Export all decisions
+   */
+  makeDecisionReport(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/reports/decisions';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
    * Make decisions template
    */
   makeDecisionTemplate(options: IRequestOptions = {}): Promise<any> {
@@ -916,25 +953,11 @@ export class DecisionReportControllerService {
     });
   }
   /**
-   * Export all decisions
-   */
-  makeDecisionReport(options: IRequestOptions = {}): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/reports/decisions/decisions';
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
    * Print selected decisions
    */
   printSelectedDecisionsReport(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/reports/decisions/decisions/selected-to-print';
+      let url = basePath + '/reports/decisions/selected-to-print';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -948,7 +971,7 @@ export class DecisionReportControllerService {
    */
   makeNotVotedDecisionsReport(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/reports/decisions/decisions/not-voted';
+      let url = basePath + '/reports/decisions/not-voted';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -1149,10 +1172,10 @@ export interface PageableObject {
   unpaged?: boolean;
 
   /**  */
-  pageNumber?: number;
+  pageSize?: number;
 
   /**  */
-  pageSize?: number;
+  pageNumber?: number;
 
   /**  */
   offset?: number;
@@ -1306,6 +1329,9 @@ export interface PagePaymentVO {
 }
 
 export interface PaymentVO {
+  /**  */
+  id?: number;
+
   /**  */
   uuid?: string;
 
@@ -1726,6 +1752,76 @@ export interface MailingResponse {
   sentEmail?: number;
 }
 
+export interface ManualAccountRequest {
+  /**  */
+  account?: string;
+}
+
+export interface IncomingPayment {
+  /**  */
+  id?: number;
+
+  /**  */
+  uuid?: string;
+
+  /**  */
+  date: string;
+
+  /**  */
+  fromAccount?: string;
+
+  /**  */
+  fromInn?: string;
+
+  /**  */
+  fromName?: string;
+
+  /**  */
+  toAccount?: string;
+
+  /**  */
+  toInn?: string;
+
+  /**  */
+  toName?: string;
+
+  /**  */
+  sum?: number;
+
+  /**  */
+  docNumber?: string;
+
+  /**  */
+  vo?: string;
+
+  /**  */
+  bik?: string;
+
+  /**  */
+  bankName?: string;
+
+  /**  */
+  purpose?: string;
+
+  /**  */
+  createDate: string;
+
+  /**  */
+  source?: string;
+
+  /**  */
+  pack?: string;
+
+  /**  */
+  account?: string;
+
+  /**  */
+  updateAccountDateTime: string;
+
+  /**  */
+  type?: EnumIncomingPaymentType;
+}
+
 export interface RoomTypeResponse {
   /**  */
   name?: string;
@@ -1882,18 +1978,15 @@ export enum EnumRoomFilterType {
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
-
 export enum EnumRoomVOType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
-
 export enum EnumOutgoingGropingPaymentsFilterGroupBy {
   'COUNTERPARTY' = 'COUNTERPARTY',
   'CATEGORY' = 'CATEGORY'
 }
-
 export enum EnumIncomingPaymentsFilterType {
   'SBER_REGISTRY' = 'SBER_REGISTRY',
   'VTB_REGISTRY' = 'VTB_REGISTRY',
@@ -1902,6 +1995,8 @@ export enum EnumIncomingPaymentsFilterType {
   'TAXABLE' = 'TAXABLE',
   'ACCOUNT' = 'ACCOUNT',
   'UNKNOWN_ACCOUNT' = 'UNKNOWN_ACCOUNT',
+  'SUBSIDY' = 'SUBSIDY',
+  'SUBSIDY_FOR_CAPITAL_REPAIR' = 'SUBSIDY_FOR_CAPITAL_REPAIR',
   'UNKNOWN' = 'UNKNOWN'
 }
 export enum EnumPaymentVOType {
@@ -1912,6 +2007,8 @@ export enum EnumPaymentVOType {
   'TAXABLE' = 'TAXABLE',
   'ACCOUNT' = 'ACCOUNT',
   'UNKNOWN_ACCOUNT' = 'UNKNOWN_ACCOUNT',
+  'SUBSIDY' = 'SUBSIDY',
+  'SUBSIDY_FOR_CAPITAL_REPAIR' = 'SUBSIDY_FOR_CAPITAL_REPAIR',
   'UNKNOWN' = 'UNKNOWN'
 }
 export enum EnumLogEntryFilterStatus {
@@ -1937,6 +2034,19 @@ export enum EnumFileFilterFileType {
   'DECISIONS' = 'DECISIONS',
   'DECISION_ANSWERS' = 'DECISION_ANSWERS',
   'COUNTER_WATER_VALUES' = 'COUNTER_WATER_VALUES'
+}
+
+export enum EnumIncomingPaymentType {
+  'SBER_REGISTRY' = 'SBER_REGISTRY',
+  'VTB_REGISTRY' = 'VTB_REGISTRY',
+  'DEPOSIT_PERCENTAGES' = 'DEPOSIT_PERCENTAGES',
+  'DEPOSIT_REFUND' = 'DEPOSIT_REFUND',
+  'TAXABLE' = 'TAXABLE',
+  'ACCOUNT' = 'ACCOUNT',
+  'UNKNOWN_ACCOUNT' = 'UNKNOWN_ACCOUNT',
+  'SUBSIDY' = 'SUBSIDY',
+  'SUBSIDY_FOR_CAPITAL_REPAIR' = 'SUBSIDY_FOR_CAPITAL_REPAIR',
+  'UNKNOWN' = 'UNKNOWN'
 }
 export enum EnumMonthPaymentVOMonth {
   'JANUARY' = 'JANUARY',

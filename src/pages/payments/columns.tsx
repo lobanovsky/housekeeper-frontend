@@ -1,7 +1,10 @@
 import {dateTimeRenderer, summRenderer} from 'utils/utils';
 import {ColumnsType, ColumnType} from "antd/es/table";
-import {CheckCircleFilled, CloseCircleFilled} from '@ant-design/icons';
+import {CheckCircleFilled, CloseCircleFilled, EditOutlined} from '@ant-design/icons';
 import {EnumPaymentVOType, PaymentVO} from "../../backend/services/backend";
+import {Button} from "antd";
+import {showPaymentEditModal} from "./edit-modal";
+
 
 export const accountNumberRenderer = (accountNumber: string = '') => {
     const groups = [];
@@ -18,7 +21,11 @@ export const accountNumberRenderer = (accountNumber: string = '') => {
 const personalAccountRenderer = (accountNumber: string = '') => accountNumber.length ?
     `${accountNumber.substring(0, 4)} ${accountNumber.substring(4, 50)}` : ''
 
-export const getPaymentColumns = (isOutgoing: boolean = false): ColumnsType<PaymentVO> => [
+interface PaymentColumnType<T> extends ColumnType<T> {
+    outgoing?: boolean;
+}
+
+const commonPaymentColumns = ({reloadTable}: { reloadTable?: () => void }): PaymentColumnType<PaymentVO>[] => [
     {
         dataIndex: 'date',
         title: 'Дата',
@@ -52,7 +59,18 @@ export const getPaymentColumns = (isOutgoing: boolean = false): ColumnsType<Paym
         dataIndex: 'toAccount',
         title: 'Счёт поступления',
         outgoing: false,
-        render: accountNumberRenderer
+        render: (toAccount = '', record) =>
+            <div>
+                {toAccount ? accountNumberRenderer(toAccount) : ' - '}
+                <Button
+                    size='small'
+                    className='edit-btn'
+                    onClick={() => {
+                        showPaymentEditModal({payment: record, onSuccess: reloadTable});
+                    }}>
+                    <EditOutlined/>
+                </Button>
+            </div>
     },
     {
         dataIndex: 'incomingSum',
@@ -67,18 +85,27 @@ export const getPaymentColumns = (isOutgoing: boolean = false): ColumnsType<Paym
         dataIndex: 'account',
         title: 'Тип платежа',
         outgoing: false,
-        render: (account: string, {type, typeName, typeColor, bankName = ''}: PaymentVO) => {
+        render: (account: string, payment: PaymentVO) => {
+            const {type, typeName, typeColor, bankName = ''} = payment;
             const isUnknownSource = type === EnumPaymentVOType.UNKNOWN_ACCOUNT || type === EnumPaymentVOType.UNKNOWN;
             const iconStyle = {color: typeColor, marginRight: 4};
-            return type ? <span className={`payment-type ${type}`}>
+            return type ? <div className={`payment-type ${type}`}>
                 {isUnknownSource ? <CloseCircleFilled style={iconStyle}/> : <CheckCircleFilled style={iconStyle}/>}
                 {type === EnumPaymentVOType.ACCOUNT ? `Л/с ${personalAccountRenderer(account)}` :
                     (isUnknownSource ? 'не определён' : typeName)}
-                </span> : ''
+            </div> : ''
         }
     }
-].filter(({outgoing}) => typeof outgoing !== 'boolean' || outgoing === isOutgoing)
-    .map(({outgoing, ...column}) => ({
+];
+
+export const getPaymentColumns = ({isOutgoing, reloadTable}: {
+    isOutgoing: boolean,
+    reloadTable?: () => void
+}): ColumnsType<PaymentVO> => {
+    const commonColumns = commonPaymentColumns({reloadTable});
+    const result = commonColumns.filter(({outgoing}) => typeof outgoing !== 'boolean' || outgoing === isOutgoing);
+    return result.map(({outgoing, ...column}) => ({
         ...(column as ColumnType<PaymentVO>),
-        className: column.dataIndex
+        className: column.dataIndex as string
     }));
+}

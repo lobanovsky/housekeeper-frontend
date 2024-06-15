@@ -18,6 +18,8 @@
 
 .ant-modal.ant-modal-confirm.ant-modal-confirm-info.modal-no-btns {
   .ant-modal-content {
+    padding: 8px 12px;
+    padding-bottom: 12px;
     .ant-modal-body {
       .ant-modal-confirm-body {
         .anticon.anticon-info-circle {
@@ -29,11 +31,22 @@
         }
 
         .ant-modal-confirm-content {
-          margin-inline-start: 12px;
-          min-height: 120px;
+          margin-inline-start: 4px;
+          min-height: 90px;
+          max-width: 100%;
 
-          //.reason_form {
-          //}
+          .buttons {
+            margin-top: 1.5em;
+            text-align: end;
+
+            .ant-btn {
+              text-align: center;
+
+              &:not(:last-child) {
+                margin-right: 1em;
+              }
+            }
+          }
         }
       }
 
