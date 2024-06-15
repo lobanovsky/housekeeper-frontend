@@ -10,7 +10,7 @@ import {
     SettingOutlined
 } from '@ant-design/icons';
 import {Link} from 'react-router-dom';
-import {MenuItemType, SubMenuType} from 'antd/es/menu/hooks/useItems';
+import {MenuItemType, SubMenuType} from 'antd/es/menu/interface';
 import {GateIcon} from 'icons/gate';
 import {showPaymentsImportModal} from 'pages/payments/import';
 import {showGatesImportModal} from 'pages/gates/import';
