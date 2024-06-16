@@ -14,7 +14,7 @@ const rowClassName = (record: PaymentVO) => !record.account ? 'empty-account' : 
 
 const IncomingPayments = () => {
     const tableRef = React.useRef(null);
-    const [selectedRows, setSelectedRows] = useState<PaymentVO[]>([])
+    // const [selectedRows, setSelectedRows] = useState<PaymentVO[]>([])
     const [accounts, setAccounts] = useState([]);
     const [paymentTypes, setPaymentTypes] = useState<{ id: string, name: string }[]>([]);
 
@@ -82,11 +82,11 @@ const IncomingPayments = () => {
                 filters={incomingPaymentFilters}
                 exportURL='reports/payments/incoming'
                 rowClassName={rowClassName}
-                rowSelection={{
-                    onChange: (selectedRowKeys: React.Key[], selectedRecords: PaymentVO[]) => {
-                        setSelectedRows(selectedRecords);
-                    }
-                }}
+                // rowSelection={{
+                //     onChange: (selectedRowKeys: React.Key[], selectedRecords: PaymentVO[]) => {
+                //         setSelectedRows(selectedRecords);
+                //     }
+                // }}
                 toolbar={<>
                     <Button size='small' onClick={downloadRegistry}>
                         <DownloadOutlined/>
