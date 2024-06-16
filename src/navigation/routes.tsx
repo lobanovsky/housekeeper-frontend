@@ -10,7 +10,6 @@ import {
     SettingOutlined
 } from '@ant-design/icons';
 import {Link} from 'react-router-dom';
-import {MenuItemType, SubMenuType} from "antd/lib/menu/hooks/useItems";
 import {GateIcon} from 'icons/gate';
 import {showPaymentsImportModal} from 'pages/payments/import';
 import {showGatesImportModal} from 'pages/gates/import';
@@ -110,10 +109,10 @@ export const NavigationItems: any = [
 ]
 
 
-export const getNavigationItemByPathname = (pathname: string, item: MenuItemType | SubMenuType = {
+export const getNavigationItemByPathname = (pathname: string, item = {
     key: '',
     children: []
-}): MenuItemType | SubMenuType | null => {
+}): any => {
     let result = null;
 
     if (pathname == item.key) {
