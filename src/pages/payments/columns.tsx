@@ -91,7 +91,7 @@ const commonPaymentColumns = ({reloadTable}: { reloadTable?: () => void }): Paym
             const iconStyle = {color: typeColor, marginRight: 4};
             return type ? <div className={`payment-type ${type}`}>
                 {isUnknownSource ? <CloseCircleFilled style={iconStyle}/> : <CheckCircleFilled style={iconStyle}/>}
-                {type === EnumPaymentVOType.ACCOUNT ? `Л/с ${personalAccountRenderer(account)}` :
+                {type === EnumPaymentVOType.ACCOUNT || type === EnumPaymentVOType.MANUAL_ACCOUNT  ? `Л/с ${personalAccountRenderer(account)}` :
                     (isUnknownSource ? 'не определён' : typeName)}
             </div> : ''
         }
