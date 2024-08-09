@@ -21,6 +21,8 @@ export const FlatInfo = ({flat}: { flat: RoomVO }) => {
         AccessService.findByRoom({roomId: flat.id || 0, active: true})
             .then((resp: AccessInfoVO[]) => {
                 const ownerRoom = resp.length ? (resp[0].rooms || []).find(({id}) => id === flat.id) : null;
+                console.log(resp[0].rooms);
+                console.log(ownerRoom);
                 const ownerFio = ownerRoom?.ownerName || '';
                 setFlatInfo({
                     ownerName: ownerFio,
@@ -47,6 +49,7 @@ export const FlatInfo = ({flat}: { flat: RoomVO }) => {
     </div>}>
         <div className='flat-info'>
             {loading && <Loading/>}
+            <div className='owner-name'>{flatInfo?.ownerName || ''}</div>
             <div className={`accesses ${!flatInfo?.accesses?.length ? 'empty' : ''}`}>
                 {flatInfo?.accesses?.length ? flatInfo?.accesses.map(
                     ({
@@ -54,8 +57,9 @@ export const FlatInfo = ({flat}: { flat: RoomVO }) => {
                      }: AccessInfoVO, index) => <div
                         key={id}
                         className='access-info'>
+
                         <div className='phone'>{index + 1}. <span style={{fontWeight: 600}}>{phoneNumber}</span></div>
-                        <div className={`accesses ${!areas.length ? 'empty' : ''}`}>
+                        <div className={`areas ${!areas.length ? 'empty' : ''}`}>
                             {areas.length ? <>
                                 <span style={{fontWeight: 500}}>Доступы: </span>
                                 {areas.map(({name}) => name).join(', ')}
