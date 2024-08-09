@@ -6,7 +6,6 @@ import {
     DashboardOutlined,
     DollarOutlined,
     GroupOutlined,
-    HomeOutlined,
     SettingOutlined
 } from '@ant-design/icons';
 import {Link} from 'react-router-dom';
@@ -14,12 +13,14 @@ import {GateIcon} from 'icons/gate';
 import {showPaymentsImportModal} from 'pages/payments/import';
 import {showGatesImportModal} from 'pages/gates/import';
 import {ExpenseIcon} from "../icons/expense";
+import {BuildingIcon} from "../icons/building";
+import {ApartmentPlanIcon} from "../icons/apartment_plan";
 
 
 export const NavigationItems: any = [
     {
         key: '/rooms',
-        icon: <HomeOutlined/>,
+        icon: <ApartmentPlanIcon/>,
         title: 'Помещения',
         label: <Link to='/rooms'>Помещения</Link>
     },
@@ -28,6 +29,12 @@ export const NavigationItems: any = [
         icon: <DashboardOutlined/>,
         title: 'Счётчики',
         label: <Link to='/counters'>Счётчики</Link>
+    },
+    {
+        key: '/buildings',
+        icon: <BuildingIcon/>,
+        title: 'Дома',
+        label: <Link to='/buildings'>Дома</Link>
     },
     {
 

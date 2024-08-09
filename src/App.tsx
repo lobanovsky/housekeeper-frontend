@@ -8,13 +8,14 @@ import Counters from 'pages/counters';
 import IncomingPayments from 'pages/payments/incoming';
 import OutgoingPayments from 'pages/payments/outgoing';
 
-import './App.scss';
+
 import Rooms from 'pages/rooms';
 import Gates from 'pages/gates';
 import UploadedFiles from 'pages/admin/uploaded-files';
 import {ExpensesView} from "./pages/expences";
 import {Counterparties} from "./pages/admin/counterparties";
-
+import {Buildings} from "./pages/buildings";
+import './App.scss';
 
 const {Header, Content} = Layout;
 
@@ -33,6 +34,10 @@ function App() {
                                 <Route
                                     path='/rooms'
                                     element={<Rooms/>}
+                                />
+                                <Route
+                                    path='/buildings'
+                                    element={<Buildings/>}
                                 />
                                 <Route
                                     path='/counters'

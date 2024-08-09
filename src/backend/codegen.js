@@ -47,6 +47,8 @@ export const RoomReportService = new RoomReportControllerService();
 export const GateService = new LogEntryControllerService();
 export const AccountService = new AccountControllerService();
 export const CounterpartyService = new CounterpartyControllerService();
+export const BuildingService = new BuildingControllerService();
+export const AccessService = new AccessControllerService();
 	`, (err) => {
 				if (err) {
 					console.error('Append error');

@@ -93,6 +93,65 @@ export class PagedResultDto<T = any> implements IPagedResult<T> {
 // customer definition
 // empty
 
+export class RepairControllerService {
+  /**
+   *
+   */
+  updateUuid(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/repairs/update-uuid';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   *
+   */
+  removeDuplicates(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/repairs/remove-duplicates';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   *
+   */
+  getSumOfPayments(
+      params: {
+        /** requestBody */
+        body?: RangeRequest;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/repairs/sum-of-payments';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export class CounterpartyControllerService {
   /**
    *
@@ -337,6 +396,47 @@ export class RegistryControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   * Check and create new registry for manual account
+   */
+  getManualRegistry(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/registries/manual-account';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Check and create new registry for manual account
+   */
+  getCustomRegistry(
+      params: {
+        /**  */
+        sum?: string;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/registries/custom-account';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      configs.params = {sum: params['sum']};
+
+      let data = null;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
   /**
    * Check and create new registry for account
    */
@@ -439,7 +539,6 @@ export class PaymentControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Set the manual account for the payment
    */
@@ -906,6 +1005,81 @@ export class DecisionControllerService {
   }
 }
 
+export class AccessControllerService {
+  /**
+   * Create the area access by the phone number (Were? -> Area, Who? -> Room)
+   */
+  createAccess(
+      params: {
+        /** requestBody */
+        body?: AccessRequest;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/access/areas';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Get the access by the room id
+   */
+  findByRoom(
+      params: {
+        /**  */
+        roomId: number;
+        /**  */
+        active?: boolean;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/access/rooms/{room-id}';
+      url = url.replace('{room-id}', params['roomId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = {active: params['active']};
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Get the access by the phone number
+   */
+  findByPhone(
+      params: {
+        /**  */
+        phoneNumber: string;
+        /**  */
+        active?: boolean;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/access/phones/{phone-number}';
+      url = url.replace('{phone-number}', params['phoneNumber'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = {active: params['active']};
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export class RoomReportControllerService {
   /**
    * Print rooms
@@ -989,6 +1163,40 @@ export class GateControllerService {
   getAllGates(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/gates';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class BuildingControllerService {
+  /**
+   *
+   */
+  findAll1(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/buildings';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class AreaControllerService {
+  /**
+   *
+   */
+  findAll2(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/areas';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -1103,7 +1311,7 @@ export interface RoomFilter {
   number?: string;
 
   /**  */
-  building?: string;
+  building?: number;
 
   /**  */
   street?: string;
@@ -1172,10 +1380,10 @@ export interface PageableObject {
   unpaged?: boolean;
 
   /**  */
-  pageSize?: number;
+  pageNumber?: number;
 
   /**  */
-  pageNumber?: number;
+  pageSize?: number;
 
   /**  */
   offset?: number;
@@ -1192,7 +1400,7 @@ export interface RoomVO {
   street?: string;
 
   /**  */
-  building?: string;
+  building?: number;
 
   /**  */
   cadastreNumber?: string;
@@ -1217,6 +1425,9 @@ export interface RoomVO {
 
   /**  */
   type?: EnumRoomVOType;
+
+  /**  */
+  typeDescription?: string;
 
   /**  */
   owners?: OwnerVO[];
@@ -1291,6 +1502,17 @@ export interface IncomingPaymentsFilter {
 
   /**  */
   type?: EnumIncomingPaymentsFilterType;
+}
+
+export interface RangeRequest {
+  /**  */
+  startDate: string;
+
+  /**  */
+  endDate: string;
+
+  /**  */
+  toAccounts?: string[];
 }
 
 export interface PagePaymentVO {
@@ -1458,6 +1680,9 @@ export interface OutgoingPayment {
 
   /**  */
   pack?: string;
+
+  /**  */
+  comment?: string;
 }
 
 export interface LogEntryFilter {
@@ -1752,6 +1977,28 @@ export interface MailingResponse {
   sentEmail?: number;
 }
 
+export interface AccessRequest {
+  /**  */
+  phoneNumbers?: string[];
+
+  /**  */
+  areas?: number[];
+
+  /**  */
+  rooms?: Room[];
+
+  /**  */
+  tenant?: boolean;
+}
+
+export interface Room {
+  /**  */
+  buildingId?: number;
+
+  /**  */
+  roomIds?: number[];
+}
+
 export interface ManualAccountRequest {
   /**  */
   account?: string;
@@ -1820,6 +2067,9 @@ export interface IncomingPayment {
 
   /**  */
   type?: EnumIncomingPaymentType;
+
+  /**  */
+  comment?: string;
 }
 
 export interface RoomTypeResponse {
@@ -1952,6 +2202,46 @@ export interface FileTypeResponse {
   description?: string;
 }
 
+export interface Building {
+  /**  */
+  id?: number;
+
+  /**  */
+  createDate: string;
+
+  /**  */
+  active?: boolean;
+
+  /**  */
+  name?: string;
+
+  /**  */
+  numberOfApartments?: number;
+
+  /**  */
+  type?: EnumBuildingType;
+}
+
+export interface Area {
+  /**  */
+  id?: number;
+
+  /**  */
+  createDate: string;
+
+  /**  */
+  active?: boolean;
+
+  /**  */
+  name?: string;
+
+  /**  */
+  description?: string;
+
+  /**  */
+  type?: EnumAreaType;
+}
+
 export interface Link {
   /**  */
   href?: string;
@@ -1972,6 +2262,31 @@ export interface AccountResponse {
 
   /**  */
   description?: string;
+}
+
+export interface AccessInfoVO {
+  /**  */
+  id?: number;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  areas?: AreaVO[];
+
+  /**  */
+  rooms?: RoomVO[];
+}
+
+export interface AreaVO {
+  /**  */
+  id?: number;
+
+  /**  */
+  name?: string;
+
+  /**  */
+  type?: string;
 }
 export enum EnumRoomFilterType {
   'FLAT' = 'FLAT',
@@ -1997,7 +2312,9 @@ export enum EnumIncomingPaymentsFilterType {
   'UNKNOWN_ACCOUNT' = 'UNKNOWN_ACCOUNT',
   'SUBSIDY' = 'SUBSIDY',
   'SUBSIDY_FOR_CAPITAL_REPAIR' = 'SUBSIDY_FOR_CAPITAL_REPAIR',
-  'UNKNOWN' = 'UNKNOWN'
+  'UNKNOWN' = 'UNKNOWN',
+  'MANUAL_ACCOUNT' = 'MANUAL_ACCOUNT',
+  'RECOGNIZED' = 'RECOGNIZED'
 }
 export enum EnumPaymentVOType {
   'SBER_REGISTRY' = 'SBER_REGISTRY',
@@ -2010,7 +2327,8 @@ export enum EnumPaymentVOType {
   'SUBSIDY' = 'SUBSIDY',
   'SUBSIDY_FOR_CAPITAL_REPAIR' = 'SUBSIDY_FOR_CAPITAL_REPAIR',
   'UNKNOWN' = 'UNKNOWN',
-  'MANUAL_ACCOUNT' = 'MANUAL_ACCOUNT'
+  'MANUAL_ACCOUNT' = 'MANUAL_ACCOUNT',
+  'RECOGNIZED' = 'RECOGNIZED'
 }
 export enum EnumLogEntryFilterStatus {
   'OPENED' = 'OPENED',
@@ -2036,7 +2354,6 @@ export enum EnumFileFilterFileType {
   'DECISION_ANSWERS' = 'DECISION_ANSWERS',
   'COUNTER_WATER_VALUES' = 'COUNTER_WATER_VALUES'
 }
-
 export enum EnumIncomingPaymentType {
   'SBER_REGISTRY' = 'SBER_REGISTRY',
   'VTB_REGISTRY' = 'VTB_REGISTRY',
@@ -2047,7 +2364,9 @@ export enum EnumIncomingPaymentType {
   'UNKNOWN_ACCOUNT' = 'UNKNOWN_ACCOUNT',
   'SUBSIDY' = 'SUBSIDY',
   'SUBSIDY_FOR_CAPITAL_REPAIR' = 'SUBSIDY_FOR_CAPITAL_REPAIR',
-  'UNKNOWN' = 'UNKNOWN'
+  'UNKNOWN' = 'UNKNOWN',
+  'MANUAL_ACCOUNT' = 'MANUAL_ACCOUNT',
+  'RECOGNIZED' = 'RECOGNIZED'
 }
 export enum EnumMonthPaymentVOMonth {
   'JANUARY' = 'JANUARY',
@@ -2062,6 +2381,16 @@ export enum EnumMonthPaymentVOMonth {
   'OCTOBER' = 'OCTOBER',
   'NOVEMBER' = 'NOVEMBER',
   'DECEMBER' = 'DECEMBER'
+}
+
+export enum EnumBuildingType {
+  'APARTMENT_BUILDING' = 'APARTMENT_BUILDING',
+  'UNDERGROUND_PARKING' = 'UNDERGROUND_PARKING'
+}
+
+export enum EnumAreaType {
+  'YARD_AREA' = 'YARD_AREA',
+  'UNDERGROUND_PARKING_AREA' = 'UNDERGROUND_PARKING_AREA'
 }
 
 
@@ -2090,3 +2419,5 @@ export const RoomReportService = new RoomReportControllerService();
 export const GateService = new LogEntryControllerService();
 export const AccountService = new AccountControllerService();
 export const CounterpartyService = new CounterpartyControllerService();
+export const BuildingService = new BuildingControllerService();
+export const AccessService = new AccessControllerService();

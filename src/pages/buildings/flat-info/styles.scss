@@ -1,0 +1,28 @@
+.flat-info {
+  .flat-title {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1em;
+
+    .address {
+      font-weight: normal;
+      color: gray;
+      flex: 1 0 auto;
+      text-align: end;
+    }
+  }
+
+  .accesses {
+    &.empty {
+      padding: 8px 16px;
+      color: rgba(20, 20, 20, 0.85);
+    }
+
+    .access-info {
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
+    }
+  }
+}
+
