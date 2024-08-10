@@ -110,7 +110,6 @@ export class RepairControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -127,7 +126,6 @@ export class RepairControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -250,6 +248,28 @@ export class RoomControllerService {
   getRoomTypes(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/rooms/types';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Get all rooms by building id
+   */
+  getBuildingStructure(
+      params: {
+        /**  */
+        buildingId: number;
+      } = {} as any,
+      options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/rooms/building-structure/{buildingId}';
+      url = url.replace('{buildingId}', params['buildingId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -396,7 +416,6 @@ export class RegistryControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Check and create new registry for manual account
    */
@@ -413,7 +432,6 @@ export class RegistryControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Check and create new registry for manual account
    */
@@ -1028,7 +1046,6 @@ export class AccessControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Get the access by the room id
    */
@@ -1053,7 +1070,6 @@ export class AccessControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Get the access by the phone number
    */
@@ -2080,6 +2096,14 @@ export interface RoomTypeResponse {
   description?: string;
 }
 
+export interface FloorResponse {
+  /**  */
+  floor?: number;
+
+  /**  */
+  rooms?: RoomVO[];
+}
+
 export interface AnnualPaymentVO {
   /**  */
   year?: number;
@@ -2217,6 +2241,9 @@ export interface Building {
 
   /**  */
   numberOfApartments?: number;
+
+  /**  */
+  numberOfApartmentsPerFloor?: number;
 
   /**  */
   type?: EnumBuildingType;
@@ -2382,12 +2409,10 @@ export enum EnumMonthPaymentVOMonth {
   'NOVEMBER' = 'NOVEMBER',
   'DECEMBER' = 'DECEMBER'
 }
-
 export enum EnumBuildingType {
   'APARTMENT_BUILDING' = 'APARTMENT_BUILDING',
   'UNDERGROUND_PARKING' = 'UNDERGROUND_PARKING'
 }
-
 export enum EnumAreaType {
   'YARD_AREA' = 'YARD_AREA',
   'UNDERGROUND_PARKING_AREA' = 'UNDERGROUND_PARKING_AREA'

@@ -1,64 +1,108 @@
 .building-plan {
-  display: inline-flex;
-  gap: 1em;
-  align-items: flex-start;
+  padding-left: 28px;
 
-  .plan {
-    border: 1px solid rgba(203, 203, 203, 0.6);
-    max-width: 400px;
+  .header {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 1em;
 
-    .floor {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 2px;
-      padding: 4px;
-
-      position: relative;
-
-      &:not(:last-child) {
-        border-bottom: 1px solid rgba(203, 203, 203, 0.6);
-      }
-
-      .floor-number {
-        position: absolute;
-        left: -32px;
-        font-size: 14px;
-        color: rgb(9, 115, 125);
-        //color: #0958d9;
-      }
-
-      .flat {
-        //padding: 2px;
-        height: 22px;
-        line-height: 22px;
-        width: 36px;
-        font-size: 13px;
-        font-weight: 500;
-        text-align: center;
-        background: rgba(222, 222, 222, 0.3);
-        transition: all .2s ease-in-out;
-
-        &:hover {
-          cursor: pointer;
-          transform: scale(1.2);
-          background: rgba(216, 232, 251, 0.89);
-        }
-
-        &:active {
-          cursor: pointer;
-          transform: scale(1.2);
-          background: rgba(201, 216, 233, 0.89);
-        }
-
-        &.selected {
-          background: rgba(216, 232, 251, 0.89);
-          transform: scale(1.2);
-        }
-      }
+    .anticon {
+      font-size: 20px;
     }
 
-
+    h4 {
+      margin: 0;
+    }
   }
+
+  .plan-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 2em;
+
+    .plan {
+      display: inline-block;
+      //margin-left: 12px;
+      border: 1px solid rgba(203, 203, 203, 0.6);
+      //max-width: 500px;
+      //display: flex;
+      //gap: 1em;
+      //align-items: flex-start;
+
+      .floor {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2px;
+        padding: 4px;
+
+        position: relative;
+
+        &:not(:last-child) {
+          border-bottom: 1px solid rgba(203, 203, 203, 0.6);
+        }
+
+
+        .flat,
+        .floor-number {
+          //padding: 2px;
+          height: 22px;
+          line-height: 22px;
+          width: 36px;
+          font-size: 13px;
+          font-weight: 500;
+          text-align: center;
+          background: rgba(222, 222, 222, 0.3);
+          transition: all .2s ease-in-out;
+
+          &.OFFICE {
+            background: rgba(235, 152, 247, 0.3);
+          }
+
+          &:hover {
+            cursor: pointer;
+            transform: scale(1.2);
+            background: rgba(216, 232, 251, 0.89);
+          }
+
+          &:active {
+            cursor: pointer;
+            transform: scale(1.2);
+            background: rgba(201, 216, 233, 0.89);
+          }
+
+          &.selected {
+            background: rgba(216, 232, 251, 0.89);
+            transform: scale(1.2);
+          }
+        }
+
+        .floor-number {
+          position: absolute;
+          left: -32px;
+          height: 30px;
+          padding: 4px;
+          font-size: 13px;
+          color: rgb(16, 143, 155);
+          background: transparent;
+          transition: none;
+
+          //border-bottom: 1px solid rgba(203, 203, 203, 0.6);
+          &:hover,
+          &:active {
+            background: transparent;
+            cursor: default;
+            transform: none;
+          }
+
+        }
+      }
+
+
+    }
+  }
+
+
 }

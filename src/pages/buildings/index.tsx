@@ -35,8 +35,8 @@ export const Buildings = () => {
 
     return (
         <div className='buildings'>
-            <Row gutter={16}>
-                <Col span={8}>
+            <Row gutter={32}>
+                <Col span={6}>
                     <List
                         bordered={false}
                         dataSource={buildings}
@@ -55,7 +55,7 @@ export const Buildings = () => {
                         </>
                         }/>
                 </Col>
-                <Col span={16}>
+                <Col span={18}>
                     {!!selectedBuilding?.id && <BuildingScheme building={selectedBuilding}/>}
                 </Col>
             </Row>

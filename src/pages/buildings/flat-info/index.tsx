@@ -1,4 +1,4 @@
-import {AccessInfoVO, AccessService, RoomVO} from "backend/services/backend";
+import {AccessInfoVO, AccessService, EnumRoomVOType, RoomVO} from "backend/services/backend";
 import {Card} from "antd";
 import {useCallback, useEffect, useState} from "react";
 import {useLoading} from "hooks/use-loading";
@@ -21,8 +21,6 @@ export const FlatInfo = ({flat}: { flat: RoomVO }) => {
         AccessService.findByRoom({roomId: flat.id || 0, active: true})
             .then((resp: AccessInfoVO[]) => {
                 const ownerRoom = resp.length ? (resp[0].rooms || []).find(({id}) => id === flat.id) : null;
-                console.log(resp[0].rooms);
-                console.log(ownerRoom);
                 const ownerFio = ownerRoom?.ownerName || '';
                 setFlatInfo({
                     ownerName: ownerFio,
@@ -42,14 +40,20 @@ export const FlatInfo = ({flat}: { flat: RoomVO }) => {
     }, [flat.id]);
 
     return <Card size="small" title={<div className='flat-title'>
-        <div style={{fontWeight: 600}}>Кв. {flat.number}</div>
+        <div style={{fontWeight: 600}}>
+            {flat.type === EnumRoomVOType.GARAGE && 'М/м '}
+            {flat.type === EnumRoomVOType.FLAT && 'Кв.'}
+            {flat.type === EnumRoomVOType.OFFICE && 'Офис '}
+            {flat.number}
+        </div>
         <div className='address'>
             {`${flat.street}, д. ${flat.building}`}
         </div>
     </div>}>
         <div className='flat-info'>
             {loading && <Loading/>}
-            <div className='owner-name'>{flatInfo?.ownerName || ''}</div>
+            {!!flatInfo?.ownerName && <div className='owner-name'>{flatInfo?.ownerName || ''}</div>}
+
             <div className={`accesses ${!flatInfo?.accesses?.length ? 'empty' : ''}`}>
                 {flatInfo?.accesses?.length ? flatInfo?.accesses.map(
                     ({

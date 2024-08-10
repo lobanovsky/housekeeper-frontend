@@ -1,10 +1,8 @@
 .buildings {
   .ant-list {
-    width: 400px;
 
     .building {
       padding: 2px 4px;
-
       .ant-btn-link {
         &:not(:disabled) {
           color: rgba(0, 0, 0, 0.88);
@@ -18,10 +16,6 @@
           }
         }
       }
-
-      //display: flex;
-      //align-items: center;
-      //gap: 1em;
     }
   }
 }

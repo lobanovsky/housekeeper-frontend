@@ -13,11 +13,12 @@
   }
 
   .owner-name {
+    margin-bottom: 1em;
     color: #0958d9;
   }
 
   .accesses {
-    margin-top: 1em;
+
     .access-info {
       &:not(:last-child) {
         margin-bottom: 8px;
