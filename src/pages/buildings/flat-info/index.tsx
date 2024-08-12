@@ -21,7 +21,11 @@ export const FlatInfo = ({flat}: { flat: RoomVO }) => {
         AccessService.findByRoom({roomId: flat.id || 0, active: true})
             .then((resp: AccessInfoVO[]) => {
                 const ownerRoom = resp.length ? (resp[0].rooms || []).find(({id}) => id === flat.id) : null;
-                const ownerFio = ownerRoom?.ownerName || '';
+                let ownerFio = ownerRoom?.ownerName || '';
+                if (ownerFio.includes(',')) {
+                    ownerFio = ownerFio.split(',').join(', ');
+                }
+
                 setFlatInfo({
                     ownerName: ownerFio,
                     accesses: resp

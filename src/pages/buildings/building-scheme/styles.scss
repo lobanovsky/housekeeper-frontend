@@ -1,5 +1,8 @@
+$border: 1px solid rgba(203, 203, 203, 0.6);
+
+
 .building-plan {
-  padding-left: 28px;
+  min-height: 300px;
 
   .header {
     margin-bottom: 12px;
@@ -23,86 +26,120 @@
 
     .plan {
       display: inline-block;
-      //margin-left: 12px;
-      border: 1px solid rgba(203, 203, 203, 0.6);
-      //max-width: 500px;
-      //display: flex;
-      //gap: 1em;
-      //align-items: flex-start;
 
       .floor {
         display: flex;
-        gap: 6px;
         align-items: center;
-        justify-content: center;
-        margin-bottom: 2px;
-        padding: 4px;
 
         position: relative;
 
         &:not(:last-child) {
-          border-bottom: 1px solid rgba(203, 203, 203, 0.6);
-        }
-
-
-        .flat,
-        .floor-number {
-          //padding: 2px;
-          height: 22px;
-          line-height: 22px;
-          width: 36px;
-          font-size: 13px;
-          font-weight: 500;
-          text-align: center;
-          background: rgba(222, 222, 222, 0.3);
-          transition: all .2s ease-in-out;
-
-          &.OFFICE {
-            background: rgba(235, 152, 247, 0.3);
-          }
-
-          &:hover {
-            cursor: pointer;
-            transform: scale(1.2);
-            background: rgba(216, 232, 251, 0.89);
-          }
-
-          &:active {
-            cursor: pointer;
-            transform: scale(1.2);
-            background: rgba(201, 216, 233, 0.89);
-          }
-
-          &.selected {
-            background: rgba(216, 232, 251, 0.89);
-            transform: scale(1.2);
-          }
         }
 
         .floor-number {
-          position: absolute;
-          left: -32px;
-          height: 30px;
           padding: 4px;
+          display: inline-block;
           font-size: 13px;
-          color: rgb(16, 143, 155);
-          background: transparent;
-          transition: none;
+          text-align: center;
+          width: 32px;
+          line-height: 22px;
+          min-height: 31px;
+          color: rgb(52, 32, 173);
 
-          //border-bottom: 1px solid rgba(203, 203, 203, 0.6);
-          &:hover,
-          &:active {
-            background: transparent;
-            cursor: default;
-            transform: none;
+          &:not(:last-child) {
+            //border-bottom: $border;
           }
-
         }
+
+        .rooms {
+          border: $border;
+          border-bottom: none;
+          border-top: none;
+
+          .rooms-of-floor {
+            .flat-container {
+              padding: 4px;
+              display: inline-block;
+              border-bottom: $border;
+
+              .flat {
+                height: 22px;
+                line-height: 22px;
+                width: 36px;
+                font-size: 13px;
+                font-weight: 500;
+                text-align: center;
+                background: rgba(222, 222, 222, 0.3);
+                transition: all .2s ease-in-out;
+
+
+                &.OFFICE {
+                  background: rgba(235, 152, 247, 0.3);
+                }
+
+                &:hover {
+                  cursor: pointer;
+                  transform: scale(1.2);
+                  background: rgba(216, 232, 251, 0.89);
+                }
+
+                &:active {
+                  cursor: pointer;
+                  transform: scale(1.2);
+                  background: rgba(201, 216, 233, 0.89);
+                }
+
+                &.selected {
+                  background: rgba(216, 232, 251, 0.89);
+                  transform: scale(1.2);
+                }
+
+                &:not(:last-child) {
+                  margin-right: 4px;
+                }
+              }
+            }
+
+
+          }
+        }
+
+
+        &:first-child {
+          .rooms {
+            border-top: $border;
+          }
+        }
+
       }
-
-
     }
   }
 
+  .flat-info {
+    max-width: 400px;
+  }
 
+  &.UNDERGROUND_PARKING {
+    .plan-container {
+      .plan {
+        .floor {
+          .floor-number {
+            font-size: 22px;
+          }
+
+          &:not(:last-child) {
+            .rooms {
+              .rooms-of-floor:last-child {
+                border-bottom: 1px solid rgba(153, 153, 153, 0.6);
+              }
+            }
+          }
+        }
+
+
+      }
+
+    }
+
+  }
 }
