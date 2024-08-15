@@ -1,0 +1,95 @@
+import Loading from "components/loading";
+import {Building, EnumBuildingType, FloorResponse, RoomService, RoomVO} from "backend/services/backend";
+import {useCallback, useEffect, useState} from "react";
+import {FloorColors, FloorNumberProps} from "../colors";
+import {showError} from "utils/notifications";
+import {useLoading} from "hooks/use-loading";
+import {MaxRoomsOnFloor} from "../../constants";
+import './styles.scss';
+
+export interface FloorsWithNumbers extends Omit<FloorResponse, 'rooms'>, FloorNumberProps {
+    rooms: RoomVO[][]
+}
+
+export const BuildingPlan = ({building, selectedRoomIds = [], onSelectRoom}: {
+    building: Building,
+    selectedRoomIds?: number[],
+    onSelectRoom?: (room: RoomVO) => void
+}) => {
+    const [loading, showLoading, hideLoading] = useLoading();
+    const [floors, setFloors] = useState<FloorsWithNumbers[]>([]);
+
+    const getBuildingPlan = useCallback(() => {
+        showLoading();
+        const isParking = building.type === EnumBuildingType.UNDERGROUND_PARKING;
+        RoomService.getBuildingStructure({buildingId: building.id || 0})
+            .then((floors: FloorResponse[]) => {
+                hideLoading();
+                // для паркинга делим по 10 мест на этаже. тк там слишком длинно
+                const floorsWithMaxRooms: FloorsWithNumbers[] = [];
+                floors.forEach(({floor = 0, rooms = []}, index) => {
+                    const roomsArr: RoomVO[][] = [];
+                    const colorSettings: FloorNumberProps = isParking ? {...FloorColors[index]} : {
+                        background: '',
+                        label: ''
+                    };
+
+                    for (let i = 0; i <= rooms.length; i += MaxRoomsOnFloor) {
+                        const tenRooms = rooms.slice(i, i + MaxRoomsOnFloor);
+                        roomsArr.push(tenRooms);
+                    }
+
+                    floorsWithMaxRooms[index] = {
+                        floor,
+                        rooms: roomsArr.reverse(),
+                        ...colorSettings
+                    }
+                });
+
+                setFloors(floorsWithMaxRooms.reverse());
+            })
+            .catch(e => {
+                showError('Не удалось загрузить инфо о здании', e);
+                hideLoading();
+            })
+    }, [building.id, building.type]);
+
+    useEffect(() => {
+        getBuildingPlan();
+    }, [building.id]);
+
+    // @ts-ignore
+    return loading ? <Loading/> : <div className={`building-plan ${building.type}`}>
+        {floors.map(({floor = 0, rooms = [], background, label}, floorIndex = 0) =>
+            <div className={`floor`} key={floor}>
+                <div className={`floor-number`}>
+                                <span className='floor-label' style={label ? {color: label} : {}}>
+                                    {floor}
+                                </span>
+                </div>
+                <div className='rooms'
+                    /*@ts-ignore*/
+                     style={background ? {background} : {}}>
+                    {rooms.map((maxRooms, index) =>
+                        <div className='rooms-of-floor' key={maxRooms.map(({number}) => number).join('.')}>
+                            {maxRooms.map(flat => (
+                                <div className='flat-container' key={flat.number}>
+                                    <div role='button'
+                                         key={flat.number}
+                                         className={`flat ${String(flat.type)} ${flat.id && selectedRoomIds.includes(flat.id) ? 'selected' : ''}`}
+                                        /*@ts-ignore*/
+                                         onClick={onSelectRoom ? () => {
+                                             onSelectRoom(flat);
+                                         } : null}>
+                                        {flat.number}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+        )}
+    </div>
+
+}

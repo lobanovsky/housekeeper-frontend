@@ -3,10 +3,12 @@ $border: 1px solid rgba(203, 203, 203, 0.6);
 
 .building-plan {
   min-height: 300px;
+  //border: 1px solid red;
 
   .header {
     margin-bottom: 12px;
     display: flex;
+    padding-left: 12px;
     align-items: center;
     gap: 1em;
 
@@ -24,122 +26,14 @@ $border: 1px solid rgba(203, 203, 203, 0.6);
     align-items: flex-start;
     gap: 2em;
 
-    .plan {
-      display: inline-block;
-
-      .floor {
-        display: flex;
-        align-items: center;
-
-        position: relative;
-
-        &:not(:last-child) {
-        }
-
-        .floor-number {
-          padding: 4px;
-          display: inline-block;
-          font-size: 13px;
-          text-align: center;
-          width: 32px;
-          line-height: 22px;
-          min-height: 31px;
-          color: rgb(52, 32, 173);
-
-          &:not(:last-child) {
-            //border-bottom: $border;
-          }
-        }
-
-        .rooms {
-          border: $border;
-          border-bottom: none;
-          border-top: none;
-
-          .rooms-of-floor {
-            .flat-container {
-              padding: 4px;
-              display: inline-block;
-              border-bottom: $border;
-
-              .flat {
-                height: 22px;
-                line-height: 22px;
-                width: 36px;
-                font-size: 13px;
-                font-weight: 500;
-                text-align: center;
-                background: rgba(222, 222, 222, 0.3);
-                transition: all .2s ease-in-out;
-
-
-                &.OFFICE {
-                  background: rgba(235, 152, 247, 0.3);
-                }
-
-                &:hover {
-                  cursor: pointer;
-                  transform: scale(1.2);
-                  background: rgba(216, 232, 251, 0.89);
-                }
-
-                &:active {
-                  cursor: pointer;
-                  transform: scale(1.2);
-                  background: rgba(201, 216, 233, 0.89);
-                }
-
-                &.selected {
-                  background: rgba(216, 232, 251, 0.89);
-                  transform: scale(1.2);
-                }
-
-                &:not(:last-child) {
-                  margin-right: 4px;
-                }
-              }
-            }
-
-
-          }
-        }
-
-
-        &:first-child {
-          .rooms {
-            border-top: $border;
-          }
-        }
-
-      }
+    .flat-info {
+      max-width: 400px;
     }
-  }
-
-  .flat-info {
-    max-width: 400px;
   }
 
   &.UNDERGROUND_PARKING {
-    .plan-container {
-      .plan {
-        .floor {
-          .floor-number {
-            font-size: 22px;
-          }
-
-          &:not(:last-child) {
-            .rooms {
-              .rooms-of-floor:last-child {
-                border-bottom: 1px solid rgba(153, 153, 153, 0.6);
-              }
-            }
-          }
-        }
-
-
-      }
-
+    .header {
+      //padding-left: 18px;
     }
-
   }
 }

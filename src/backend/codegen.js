@@ -49,6 +49,7 @@ export const AccountService = new AccountControllerService();
 export const CounterpartyService = new CounterpartyControllerService();
 export const BuildingService = new BuildingControllerService();
 export const AccessService = new AccessControllerService();
+export const AreaService = new AreaControllerService();
 	`, (err) => {
 				if (err) {
 					console.error('Append error');
