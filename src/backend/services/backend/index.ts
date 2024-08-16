@@ -5,7 +5,7 @@
 /** Generate by swagger-axios-codegen */
 /* eslint-disable */
 // @ts-nocheck
-import {AxiosInstance, AxiosRequestConfig} from 'axios';
+import { AxiosInstance, AxiosRequestConfig } from "axios";
 
 export interface IRequestOptions extends AxiosRequestConfig {
   /** only in axios interceptor config*/
@@ -130,11 +130,11 @@ export class RepairControllerService {
    *
    */
   getSumOfPayments(
-      params: {
-        /** requestBody */
-        body?: RangeRequest;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /** requestBody */
+      body?: RangeRequest;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/repairs/sum-of-payments';
@@ -155,13 +155,13 @@ export class CounterpartyControllerService {
    *
    */
   update(
-      params: {
-        /**  */
-        counterpartyId: number;
-        /** requestBody */
-        body?: CounterpartyRequest;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      counterpartyId: number;
+      /** requestBody */
+      body?: CounterpartyRequest;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/counterparties/{counterpartyId}';
@@ -194,11 +194,11 @@ export class CounterpartyControllerService {
    *
    */
   create(
-      params: {
-        /** requestBody */
-        body?: CounterpartyRequest;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /** requestBody */
+      body?: CounterpartyRequest;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/counterparties';
@@ -219,15 +219,15 @@ export class RoomControllerService {
    * Get all rooms with filter
    */
   makeRoomsReport(
-      params: {
-        /**  */
-        pageNum?: number;
-        /**  */
-        pageSize?: number;
-        /** requestBody */
-        body?: RoomFilter;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      pageNum?: number;
+      /**  */
+      pageSize?: number;
+      /** requestBody */
+      body?: RoomFilter;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/rooms';
@@ -260,11 +260,11 @@ export class RoomControllerService {
    * Get all rooms by building id
    */
   getBuildingStructure(
-      params: {
-        /**  */
-        buildingId: number;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      buildingId: number;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/rooms/building-structure/{buildingId}';
@@ -284,11 +284,11 @@ export class PaymentReportControllerService {
    * Export outgoing payments by filter to excel
    */
   exportOutgoingPayments(
-      params: {
-        /** requestBody */
-        body?: OutgoingPaymentsFilter;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /** requestBody */
+      body?: OutgoingPaymentsFilter;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/reports/payments/outgoing';
@@ -306,11 +306,11 @@ export class PaymentReportControllerService {
    * Export outgoing payments by filter to excel
    */
   exportOutgoingGroupingPayments(
-      params: {
-        /** requestBody */
-        body?: OutgoingGropingPaymentsFilter;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /** requestBody */
+      body?: OutgoingGropingPaymentsFilter;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/reports/payments/outgoing/grouping';
@@ -328,11 +328,11 @@ export class PaymentReportControllerService {
    * Export incoming payments by filter to excel
    */
   exportIncomingPayments(
-      params: {
-        /** requestBody */
-        body?: IncomingPaymentsFilter;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /** requestBody */
+      body?: IncomingPaymentsFilter;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/reports/payments/incoming';
@@ -372,11 +372,11 @@ export class PaymentReportControllerService {
    * Getting taxable and tax-free payments for year (incoming payments)
    */
   findAnnualIncomingPayments(
-      params: {
-        /**  */
-        year: number;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      year: number;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/reports/incoming-payments/{year}';
@@ -396,17 +396,17 @@ export class RegistryControllerService {
    * Check and create new registry for special account
    */
   getSpecialRegistry(
-      params: {
-        /**  */
-        useInactiveAccount?: boolean;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      useInactiveAccount?: boolean;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/registries/special-account';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-      configs.params = {useInactiveAccount: params['useInactiveAccount']};
+      configs.params = { useInactiveAccount: params["useInactiveAccount"] };
 
       let data = null;
 
@@ -435,17 +435,17 @@ export class RegistryControllerService {
    * Check and create new registry for manual account
    */
   getCustomRegistry(
-      params: {
-        /**  */
-        sum?: string;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      sum?: string;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/registries/custom-account';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-      configs.params = {sum: params['sum']};
+      configs.params = { sum: params["sum"] };
 
       let data = null;
 
@@ -458,17 +458,17 @@ export class RegistryControllerService {
    * Check and create new registry for account
    */
   getRegistry(
-      params: {
-        /**  */
-        useInactiveAccount?: boolean;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      useInactiveAccount?: boolean;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/registries/account';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-      configs.params = {useInactiveAccount: params['useInactiveAccount']};
+      configs.params = { useInactiveAccount: params["useInactiveAccount"] };
 
       let data = null;
 
@@ -498,7 +498,7 @@ export class PaymentControllerService {
       let url = basePath + '/payments/outgoing';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-      configs.params = {pageNum: params['pageNum'], pageSize: params['pageSize']};
+      configs.params = { pageNum: params["pageNum"], pageSize: params["pageSize"] };
 
       let data = params.body;
 
@@ -511,11 +511,11 @@ export class PaymentControllerService {
    * Find outgoing payments with filter and grouping by counterparty
    */
   findOutgoingPaymentsGroupingByCounterparty(
-      params: {
-        /** requestBody */
-        body?: OutgoingGropingPaymentsFilter;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /** requestBody */
+      body?: OutgoingGropingPaymentsFilter;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/payments/outgoing/grouping';
@@ -560,13 +560,13 @@ export class PaymentControllerService {
    * Set the manual account for the payment
    */
   setManualAccountForPayment(
-      params: {
-        /**  */
-        id: number;
-        /** requestBody */
-        body?: ManualAccountRequest;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      id: number;
+      /** requestBody */
+      body?: ManualAccountRequest;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/payments/{id}';
@@ -585,11 +585,11 @@ export class PaymentControllerService {
    * Getting taxable and tax-free payments for year (incoming payments)
    */
   findAnnualIncomingPayments1(
-      params: {
-        /**  */
-        year: number;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      year: number;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/payments/{year}/incoming';
@@ -651,15 +651,15 @@ export class LogEntryControllerService {
    * Get all log entries
    */
   findAllLogEntries(
-      params: {
-        /**  */
-        pageNum?: number;
-        /**  */
-        pageSize?: number;
-        /** requestBody */
-        body?: LogEntryFilter;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      pageNum?: number;
+      /**  */
+      pageSize?: number;
+      /** requestBody */
+      body?: LogEntryFilter;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/log-entries';
@@ -692,15 +692,15 @@ export class LogEntryControllerService {
    * Get top by phone number
    */
   getTopByPhoneNumber(
-      params: {
-        /**  */
-        gateId?: number;
-        /**  */
-        startDate?: string;
-        /**  */
-        endDate?: string;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      gateId?: number;
+      /**  */
+      startDate?: string;
+      /**  */
+      endDate?: string;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/log-entries/phone-number/top';
@@ -717,15 +717,15 @@ export class LogEntryControllerService {
    * Get top by flat number
    */
   getTopByFlatNumber(
-      params: {
-        /**  */
-        gateId?: number;
-        /**  */
-        startDate?: string;
-        /**  */
-        endDate?: string;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      gateId?: number;
+      /**  */
+      startDate?: string;
+      /**  */
+      endDate?: string;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/log-entries/flat-number/top';
@@ -759,15 +759,15 @@ export class FileControllerService {
    *
    */
   getAllFiles(
-      params: {
-        /**  */
-        pageNum?: number;
-        /**  */
-        pageSize?: number;
-        /** requestBody */
-        body?: FileFilter;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      pageNum?: number;
+      /**  */
+      pageSize?: number;
+      /** requestBody */
+      body?: FileFilter;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/files';
@@ -800,11 +800,11 @@ export class FileControllerService {
    * Remove data (payments, log-entries etc.) by the file ids
    */
   remove(
-      params: {
-        /**  */
-        fileIds: any | null[];
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      fileIds: any | null[];
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/files/{fileIds}';
@@ -1027,11 +1027,11 @@ export class AccessControllerService {
    * Create the area access by the phone number (Were? -> Area, Who? -> Room)
    */
   createAccess(
-      params: {
-        /** requestBody */
-        body?: AccessRequest;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /** requestBody */
+      body?: AccessRequest;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/access/areas';
@@ -1049,20 +1049,20 @@ export class AccessControllerService {
    * Get the access by the room id
    */
   findByRoom(
-      params: {
-        /**  */
-        roomId: number;
-        /**  */
-        active?: boolean;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      roomId: number;
+      /**  */
+      active?: boolean;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/access/rooms/{room-id}';
       url = url.replace('{room-id}', params['roomId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = {active: params['active']};
+      configs.params = { active: params["active"] };
 
       /** 适配ios13，get请求不允许带body */
 
@@ -1073,20 +1073,20 @@ export class AccessControllerService {
    * Get the access by the phone number
    */
   findByPhone(
-      params: {
-        /**  */
-        phoneNumber: string;
-        /**  */
-        active?: boolean;
-      } = {} as any,
-      options: IRequestOptions = {}
+    params: {
+      /**  */
+      phoneNumber: string;
+      /**  */
+      active?: boolean;
+    } = {} as any,
+    options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/access/phones/{phone-number}';
       url = url.replace('{phone-number}', params['phoneNumber'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = {active: params['active']};
+      configs.params = { active: params["active"] };
 
       /** 适配ios13，get请求不允许带body */
 
@@ -1517,6 +1517,9 @@ export interface IncomingPaymentsFilter {
 
   /**  */
   type?: EnumIncomingPaymentsFilterType;
+
+  /**  */
+  sum?: number;
 }
 
 export interface RangeRequest {

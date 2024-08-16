@@ -32,6 +32,11 @@
         &.fromInn,
         &.toInn {
           width: 150px;
+
+
+          .ant-typography {
+            white-space: nowrap;
+          }
         }
 
         &.bankName {
@@ -60,7 +65,10 @@
         &.incomingSum {
           min-width: 110px;
           max-width: 150px;
-          text-align: end;
+
+          .ant-typography {
+            white-space: nowrap;
+          }
         }
 
         &.purpose {

@@ -1,0 +1,77 @@
+.app-table {
+  position: relative;
+  background-color: white;
+
+  .table-toolbar {
+    padding: 0 8px;
+  }
+
+  .ant-table-wrapper {
+    margin-top: 12px;
+
+    .ant-table-thead {
+      th {
+        line-height: 18px;
+      }
+    }
+
+    .ant-table-pagination.ant-pagination {
+      margin: 0 4px 16px 0;
+    }
+
+
+    .ant-table.ant-table-small {
+      line-height: 16px;
+
+      .ant-table-tbody {
+        > tr {
+          > td {
+            padding: 4px 6px;
+            line-height: 16px;
+            //text-align: start;
+
+            > .ant-typography {
+              line-height: 16px;
+            }
+
+            .ant-typography-copy {
+              display: inline-block;
+              //margin-left: 10px;
+              visibility: hidden;
+            }
+
+            &:hover {
+              .ant-typography-copy {
+                visibility: visible;
+                //color: rgba(10, 10, 10, .0 .7);
+
+                &:hover {
+                  color: #6694bd;
+                }
+
+                &:active {
+                  color: #2763a1;
+                }
+              }
+            }
+          }
+        }
+
+
+      }
+    }
+  }
+
+  .pagination_reload_btn {
+    position: absolute;
+    top: 0;
+    left: 170px;
+    //padding: 4px 8px;
+  }
+
+  &.empty.with-loading {
+    .table {
+      padding-top: 48px;
+    }
+  }
+}

@@ -1,5 +1,5 @@
-import React from 'react';
-import {FilterFieldType, IFilterFieldConfig} from 'components/table/filter-form/types';
+import React from "react";
+import { FilterFieldType, IFilterFieldConfig } from "components/table/filter-form/types";
 
 interface PaymentDictionaries {
     accountOptions?: React.ReactNode[],
@@ -67,6 +67,12 @@ const paymentFilters = ({accountOptions = [], paymentTypeOptions}: PaymentDictio
         outgoing: false,
         span: {md: 12, lg: 12, xl: 6, xxl: 4},
     },
+    {
+        name: "incomingSum",
+        title: "Сумма",
+        outgoing: false,
+        span: { md: 6, lg: 4, xl: 3, xxl: 2 }
+    }
 ];
 
 export const getPaymentFilters = (isOutgoing: boolean = false, options: PaymentDictionaries = {}): IFilterFieldConfig[] => paymentFilters(options).filter(({outgoing}) => typeof outgoing !== 'boolean' || outgoing === isOutgoing);

@@ -1,13 +1,13 @@
-import Table from 'components/table';
-import {accountNumberRenderer, getPaymentColumns} from 'pages/payments/columns';
-import {AccountService, PaymentService, PaymentTypeResponse, PaymentVO} from 'backend/services/backend';
-import {getPaymentFilters} from 'pages/payments/filters';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {Button, Select} from 'antd';
-import {showError} from "../../utils/notifications";
-import {downloadFile} from "../../utils/utils";
-import {DownloadOutlined} from "@ant-design/icons";
-import {IS_DEBUG} from "../../utils/constants";
+import Table from "components/table";
+import { accountNumberRenderer, getPaymentColumns } from "pages/payments/columns";
+import { AccountService, PaymentService, PaymentTypeResponse, PaymentVO } from "backend/services/backend";
+import { getPaymentFilters } from "pages/payments/filters";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Button, Select } from "antd";
+import { showError } from "../../utils/notifications";
+import { downloadFile } from "../../utils/utils";
+import { DownloadOutlined } from "@ant-design/icons";
+import { IS_DEBUG } from "../../utils/constants";
 
 
 const rowClassName = (record: PaymentVO) => !record.account ? 'empty-account' : '';
@@ -37,7 +37,7 @@ const IncomingPayments = () => {
     }), [reloadIncomingPayments]);
 
     const paymentTypeOptions = useMemo(() => paymentTypes.map(({id, name}) => <Select.Option
-        id={id} value={id} key={id}>{name}</Select.Option>), [accounts.length]);
+      id={id} value={id} key={id}>{name}</Select.Option>), [paymentTypes.length]);
 
     const incomingPaymentFilters = useMemo(() => getPaymentFilters(false, {accountOptions, paymentTypeOptions}), [
         accountOptions.length, paymentTypeOptions.length
@@ -82,11 +82,6 @@ const IncomingPayments = () => {
                 filters={incomingPaymentFilters}
                 exportURL='reports/payments/incoming'
                 rowClassName={rowClassName}
-                // rowSelection={{
-                //     onChange: (selectedRowKeys: React.Key[], selectedRecords: PaymentVO[]) => {
-                //         setSelectedRows(selectedRecords);
-                //     }
-                // }}
                 toolbar={<>
                     <Button size='small' onClick={downloadRegistry}>
                         <DownloadOutlined/>

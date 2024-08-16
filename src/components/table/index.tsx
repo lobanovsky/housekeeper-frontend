@@ -1,15 +1,15 @@
-import React, {useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState} from 'react';
-import {Table as AntTable, TableProps} from 'antd';
-import debounce from 'lodash/debounce';
+import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import { Table as AntTable, TableProps } from "antd";
+import debounce from "lodash/debounce";
 
-import {FilterFieldsConfig} from 'components/table/filter-form/types';
-import {showError} from 'utils/notifications';
-import {EmptyFunction, IPagination} from 'utils/types';
-import FilterForm, {FilterFormValues} from './filter-form';
-import styles from './styles.module.scss';
-import {downloadFile} from 'utils/utils';
-import {Dayjs} from 'dayjs';
-import {SERVER_DATE_FORMAT} from "../../utils/constants";
+import { FilterFieldsConfig } from "components/table/filter-form/types";
+import { showError } from "utils/notifications";
+import { EmptyFunction, IPagination } from "utils/types";
+import FilterForm, { FilterFormValues } from "./filter-form";
+import { downloadFile } from "utils/utils";
+import { Dayjs } from "dayjs";
+import { SERVER_DATE_FORMAT } from "../../utils/constants";
+import "./styles.scss";
 
 export interface TableRequestParams<T> extends IPagination {
 	body: T
@@ -43,13 +43,15 @@ interface ITableProps extends TableProps<any> {
 	loadDataFn: (requestParams: any) => Promise<{ content: any[], totalElements: number }>
 }
 
+export const SUMM_REGEX = /^(\d{1,15})([.,]\d{1,2})?$/;
+
 const Table = React.forwardRef((props: ITableProps, ref) => {
 	const {
 		loadDataFn,
 		columns,
 		toolbar = '',
 		className,
-		defaultPagination = { pageNum: 1, pageSize: 10 },
+		defaultPagination = { pageNum: 1, pageSize: 100 },
 		defaultFilterValues = {},
 		requestParamsConverter,
 		responseDataConverter = null,
@@ -86,11 +88,19 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 		const convertedFilters = {};
 		Object.entries(selectedFilterValues).forEach(([filterName, filterValue]) => {
 			const isDate = filterName.endsWith('Date');
+			const isSum = filterName.endsWith("Sum");
+
 			if (isDate) {
 				// @ts-ignore
 				if (filterValue && filterValue.isValid()) {
 					// @ts-ignore
 					convertedFilters[filterName] = filterValue.format(SERVER_DATE_FORMAT)
+				}
+			} else if (isSum) {
+				const amountStr = String(filterValue).replace(/\s+/g, "").replace(/,/g, ".");
+				if (SUMM_REGEX.test(amountStr)) {
+					// @ts-ignore
+					convertedFilters[filterName] = parseFloat(amountStr);
 				}
 			} else {
 				// @ts-ignore
@@ -202,7 +212,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 	}, [JSON.stringify(selectedFilters), pagination.pageSize, pagination.pageNum]);
 
 	return (
-		<div className={`${styles.table_container} app-table ${className} ${loading ? 'with-loading' : ''} ${!total ? 'empty' : ''}`}>
+		<div className={`app-table ${className} ${loading ? "with-loading" : ""} ${!total ? "empty" : ""}`}>
 			{filters.length > 0 && <FilterForm
 				defaultFilterValues={defaultFilterValues}
 				ref={filterFormRef}
@@ -217,18 +227,19 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 			{!!toolbar && <div className='table-toolbar'>{toolbar}</div>}
 			<AntTable
 				bordered={false}
-				className={`${styles.table}  ${!data.length ? 'empty-table' : ''}`}
+				className={!data.length ? "empty-table" : ""}
 				rowKey='id'
-				size='middle'
+				size="small"
 				locale={{ emptyText: 'Нет данных', }}
 				loading={loading}
 				columns={columns}
 				dataSource={data}
 				pagination={{
 					total,
-					size: 'default',
+					size: "small",
 					hideOnSinglePage: false,
 					position: ['topRight'],
+					pageSize: pagination.pageSize,
 					showSizeChanger: true,
 					current: pagination.pageNum,
 					pageSizeOptions: [10, 20, 50, 100],
@@ -245,11 +256,6 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 				}}
 				{...tableProps}
 			/>
-			{/*<Button*/}
-			{/*	className={styles.pagination_reload_btn}*/}
-			{/*	disabled={loading}*/}
-			{/*	onClick={reloadTable}*/}
-			{/*><ReloadOutlined /> Обновить</Button>*/}
 		</div>
 
 	)
