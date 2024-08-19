@@ -96,6 +96,8 @@
         &.toAccount {
           a.ant-typography {
             color: inherit;
+            text-decoration: underline dashed rgb(220, 220, 220);
+            text-underline-offset: 3px;
 
             &:hover {
               color: #6694bd;
