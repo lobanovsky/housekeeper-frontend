@@ -1,13 +1,13 @@
-import {useMemo} from "react";
-import {GroupOfPayment} from "../../../backend/services/backend";
-import {generateNewColor, summRenderer} from "../../../utils/utils";
-import {ArcElement, Chart as ChartJS, Legend, Tooltip} from "chart.js";
-import ChartDataLabels from "chartjs-plugin-datalabels";
-import {ResponsivePie} from '@nivo/pie'
-import {Statistic} from "antd";
-import './style.scss';
+import { useMemo } from "react";
+import { Statistic } from "antd";
+import { ResponsivePie } from "@nivo/pie";
 
-ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
+import { GroupOfPayment } from "backend/services/backend";
+import { summRenderer } from "utils/renderers";
+import { generateNewColor } from "utils/utils";
+
+import "./style.scss";
+
 
 const formatSum = (sum: number) => summRenderer(Math.ceil(sum), {
     minimumFractionDigits: 0

@@ -1,5 +1,5 @@
 import Table from "components/table";
-import { accountNumberRenderer, getPaymentColumns } from "pages/payments/columns";
+import { getPaymentColumns } from "pages/payments/columns";
 import { AccountService, PaymentService, PaymentTypeResponse, PaymentVO } from "backend/services/backend";
 import { getPaymentFilters } from "pages/payments/filters";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -7,6 +7,7 @@ import { Button, Select } from "antd";
 import { showError } from "../../utils/notifications";
 import { downloadFile } from "../../utils/utils";
 import { DownloadOutlined } from "@ant-design/icons";
+import { accountNumberRenderer } from "../../utils/renderers";
 
 
 const rowClassName = (record: PaymentVO) => !record.account ? 'empty-account' : '';
@@ -15,7 +16,7 @@ const IncomingPayments = () => {
     const tableRef = React.useRef(null);
     // const [selectedRows, setSelectedRows] = useState<PaymentVO[]>([])
     const [accounts, setAccounts] = useState([]);
-    const [paymentTypes, setPaymentTypes] = useState<{ id: string, name: string }[]>([]);
+    const [paymentTypes, setPaymentTypes] = useState<{ id: string, name: string, color?: string }[]>([]);
 
     const reloadIncomingPayments = useCallback(() => {
         // @ts-ignore
@@ -35,8 +36,9 @@ const IncomingPayments = () => {
         reloadTable: reloadIncomingPayments
     }), [reloadIncomingPayments]);
 
-    const paymentTypeOptions = useMemo(() => paymentTypes.map(({id, name}) => <Select.Option
-      id={id} value={id} key={id}>{name}</Select.Option>), [paymentTypes.length]);
+    const paymentTypeOptions = useMemo(() => paymentTypes.map(({ id, name, color }) => <Select.Option
+      id={id} value={id} key={id} color={color}><span
+      style={{ color: color || "inherit" }}>{name}</span></Select.Option>), [paymentTypes.length]);
 
     const incomingPaymentFilters = useMemo(() => {
         return getPaymentFilters(false, { accountOptions, paymentTypeOptions });
@@ -60,9 +62,14 @@ const IncomingPayments = () => {
 
         PaymentService.findAllPaymentTypes()
             .then((data: PaymentTypeResponse[] = []) => {
-                const types: { id: string, name: string }[] = data.map(({type = '', description = ''}) => ({
+                const types: { id: string, name: string, color: string }[] = data.map(({
+                                                                                           type = "",
+                                                                                           description = "",
+                                                                                           color = " "
+                                                                                       }) => ({
                     id: type,
-                    name: description
+                    name: description,
+                    color
                 }));
 
                 setPaymentTypes(types);

@@ -1,6 +1,5 @@
-import { dateTimeRenderer } from 'utils/utils';
-import { Typography } from 'antd';
-
+import { Typography } from "antd";
+import { dateTimeRenderer } from "utils/renderers";
 
 export const gateLogColumns = [
 	{

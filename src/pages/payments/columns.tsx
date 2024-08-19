@@ -1,31 +1,20 @@
-import { dateTimeRenderer, summRenderer } from "utils/utils";
-import { ColumnsType, ColumnType } from "antd/es/table";
-import { CheckCircleFilled, CloseCircleFilled, EditOutlined } from "@ant-design/icons";
-import { EnumPaymentVOType, PaymentVO } from "../../backend/services/backend";
 import { Button, Typography } from "antd";
+import { ColumnsType, ColumnType } from "antd/es/table";
+import { EditOutlined } from "@ant-design/icons";
+import { EnumPaymentVOType, PaymentVO } from "backend/services/backend";
+import {
+  accountNumberRendererShort,
+  copyableRenderer,
+  dateTimeRenderer,
+  personalAccountRenderer,
+  summRenderer
+} from "utils/renderers";
 import { showPaymentEditModal } from "./edit-modal";
 
 interface PaymentColumnType<T> extends ColumnType<T> {
   outgoing?: boolean;
 }
 
-const copyableRenderer = (v: string | number = "") => !!v ?
-  <Typography.Text copyable>{String(v)}</Typography.Text> : "";
-
-export const accountNumberRenderer = (accountNumber: string = "") => {
-  const groups = [];
-
-  let startIndex = 0;
-
-  for (startIndex = 0; startIndex <= accountNumber.length; startIndex += 4) {
-    groups.push(accountNumber.substring(startIndex, startIndex + 4));
-  }
-
-  return groups.length ? groups.join(" ") : accountNumber;
-};
-
-const personalAccountRenderer = (accountNumber: string = "") => accountNumber.length ?
-  `${accountNumber.substring(0, 4)} ${accountNumber.substring(4, 50)}` : "";
 
 
 const commonPaymentColumns = ({ reloadTable }: { reloadTable?: () => void }): PaymentColumnType<PaymentVO>[] => [
@@ -69,7 +58,7 @@ const commonPaymentColumns = ({ reloadTable }: { reloadTable?: () => void }): Pa
     outgoing: false,
     render: (toAccount = "") =>
       toAccount ? <Typography.Text copyable={{ text: toAccount }}>
-        {accountNumberRenderer(toAccount)}
+        {accountNumberRendererShort(toAccount)}
       </Typography.Text> : ""
   },
   {
@@ -89,11 +78,11 @@ const commonPaymentColumns = ({ reloadTable }: { reloadTable?: () => void }): Pa
       const { type, typeName, typeColor, bankName = "" } = payment;
       const isUnknownSource = type === EnumPaymentVOType.UNKNOWN_ACCOUNT || type === EnumPaymentVOType.UNKNOWN;
       const iconStyle = { color: typeColor, marginRight: 4 };
-      const paymentType = type ? <>
-        {isUnknownSource ? <CloseCircleFilled style={iconStyle} /> : <CheckCircleFilled style={iconStyle} />}
-        {type === EnumPaymentVOType.ACCOUNT || type === EnumPaymentVOType.MANUAL_ACCOUNT ? `Л/с ${personalAccountRenderer(account)}` :
-          (isUnknownSource ? "не определён" : typeName)}
-      </> : "";
+      const paymentType = type ?
+        <span style={{ color: typeColor }}>
+                  {type === EnumPaymentVOType.ACCOUNT || type === EnumPaymentVOType.MANUAL_ACCOUNT ? `Л/с ${personalAccountRenderer(account)}` :
+                    (isUnknownSource ? "не определён" : typeName)}
+        </span> : "";
 
       return <div className={`payment-type ${type}`}>
         {paymentType}

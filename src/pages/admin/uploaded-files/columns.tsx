@@ -1,11 +1,12 @@
-import { ColumnsType } from 'antd/es/table';
-import { FileService, FileType, FileVO } from 'backend/services/backend';
-import { Button, Popconfirm } from 'antd';
-import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons';
-import { ActionCallback, EmptyFunction } from 'utils/types';
-import { dateTimeRenderer } from 'utils/utils';
-import { useLoading } from 'hooks/use-loading';
-import { showError } from 'utils/notifications';
+import { ColumnsType } from "antd/es/table";
+
+import { Button, Popconfirm } from "antd";
+import { DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
+import { FileService, FileType, FileVO } from "backend/services/backend";
+import { ActionCallback, EmptyFunction } from "utils/types";
+import { dateTimeRenderer } from "utils/renderers";
+import { useLoading } from "hooks/use-loading";
+import { showError } from "utils/notifications";
 
 const DeleteFileButton = ({ fileId, fileName, onSuccess }: {
 	fileId: number,

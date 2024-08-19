@@ -1,4 +1,4 @@
-import {dateTimeRenderer, summRenderer} from 'utils/utils';
+import { dateTimeRenderer, summRenderer } from "utils/renderers";
 
 
 export const expenseColumns = [

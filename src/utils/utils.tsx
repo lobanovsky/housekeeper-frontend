@@ -5,6 +5,7 @@ import axios from "axios";
 import { showError } from "utils/notifications";
 import { SERVER_DATE_FORMAT } from "./constants";
 import { SelectedDatesShort } from "../pages/expences/range-picker";
+import { dateRenderer } from "./renderers";
 
 export const getRandomId = () =>
     dayjs().unix() + Math.round(Math.random() * 10000) + Math.round(Math.random() * 100);
@@ -18,43 +19,9 @@ export const filterOption = (input: string, option: OptionProps | undefined) => 
     return false;
 }
 
-export const dateRenderer = (date: Dayjs | string | number | Date, format: string = 'DD.MM.YYYY') => {
-    //@ts-ignore
-    let dateMoment: Dayjs = typeof date === 'number' ? dayjs.unix(date) : dayjs(date);
-
-    //@ts-ignore
-    return dateMoment && dateMoment.isValid() ? dateMoment.format(format) : '';
-}
 
 export const convertDateForServer = (date?: Dayjs | string | number | Date) => date ? dateRenderer(date, SERVER_DATE_FORMAT) : '';
 
-export const dateTimeRenderer = (date: Dayjs | string | number) => {
-    return dateRenderer(date, "HH:mm DD.MM.YYYY");
-    // return <>
-    //     <span className='date'>{dateRenderer(date, 'DD.MM.YYYY')}</span>
-    //     &nbsp;
-    //     <span className='time'>{dateRenderer(date, 'HH:mm')}</span>
-    // </>
-}
-
-export const summRenderer = (amount: number | string, options = {}) => {
-    if (typeof amount !== 'number') {
-        return '';
-    }
-    let amountNumber = amount;
-
-
-    const formatter = new Intl.NumberFormat('ru-RU', {
-        style: 'currency',
-        minimumFractionDigits: 2,
-        currency: 'RUB',
-        ...options,
-        currencyDisplay: 'symbol'
-    });
-
-    let formattedString = formatter.format(amountNumber);
-    return formattedString
-};
 
 export const parseUTF8FileName = (fileNameStr: string) => {
     let result = 'file.txt';

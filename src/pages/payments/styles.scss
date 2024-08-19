@@ -1,3 +1,10 @@
+$green: #03aa85;
+$blue: #2a08ff;
+$red: #ea1c01;
+$yellow: #ffbb00;
+$orange: #ff7c00;
+
+
 .payments {
   .filter-form {
     .filter-fields {
@@ -51,8 +58,9 @@
         }
 
         &.toAccount {
-          width: 220px;
-          min-width: 220px;
+          white-space: nowrap;
+          //width: 220px;
+          //min-width: 220px;
         }
 
         &.account {
@@ -101,6 +109,38 @@
                 margin-left: 0.5em;
               }
             }
+
+            //&.ACCOUNT {
+            //  > span {
+            //    color: $green !important;
+            //  }
+            //
+            //}
+            //
+            //&.VTB_REGISTRY {
+            //  > span {
+            //    color: $blue !important;
+            //  }
+            //}
+            //
+            //&.DEPOSIT_PERCENTAGES {
+            //  > span {
+            //    color: $yellow !important;
+            //  }
+            //
+            //}
+            //
+            //&.TAXABLE {
+            //  > span {
+            //    color: $orange !important;
+            //  }
+            //}
+            //
+            //&.UNKNOWN_ACCOUNT {
+            //  > span {
+            //    color: $red !important;
+            //  }
+            //}
           }
         }
 
