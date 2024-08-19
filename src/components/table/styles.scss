@@ -40,8 +40,12 @@
             line-height: 16px;
             //text-align: start;
 
-            > .ant-typography {
+            > span.ant-typography {
               line-height: 16px;
+
+              > div.ant-typography-copy {
+                font-size: 13px;
+              }
             }
 
             .ant-typography-copy {

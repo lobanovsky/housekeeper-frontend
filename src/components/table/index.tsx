@@ -10,6 +10,7 @@ import { downloadFile } from "utils/utils";
 import { Dayjs } from "dayjs";
 import { SERVER_DATE_FORMAT } from "../../utils/constants";
 import "./styles.scss";
+import { SUMM_REGEX, TablePaginationConfig } from "./constants";
 
 export interface TableRequestParams<T> extends IPagination {
   body: T;
@@ -43,13 +44,12 @@ interface ITableProps extends TableProps<any> {
   loadDataFn: (requestParams: any) => Promise<{ content: any[], totalElements: number }>
 }
 
-export const SUMM_REGEX = /^(\d{1,15})([.,]\d{1,2})?$/;
 
-const TotalRenderer = (total: number, range: [number, number]) => `${range[0]}-${range[1]} из ${total}`;
 
 const Table = React.forwardRef((props: ITableProps, ref) => {
   const {
     loadDataFn,
+    pagination: paginationConfig = true,
     columns,
     toolbar = "",
     className,
@@ -227,19 +227,13 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
       />}
       <div className="pagination-container">
         {!!toolbar && <div className="table-toolbar">{toolbar}</div>}
-        <Pagination {...{
+        {!!paginationConfig && <Pagination {...{
+          ...TablePaginationConfig,
           total,
-          size: "small",
-          hideOnSinglePage: false,
-          position: ["topRight"],
           pageSize: pagination.pageSize,
-          showSizeChanger: true,
           current: pagination.pageNum,
-          pageSizeOptions: [10, 20, 50, 100],
-          locale: { items_per_page: "/ стр" },
-          showTotal: TotalRenderer,
           onChange: onPaginationChange
-        }} />
+        }} />}
       </div>
       <AntTable
         bordered={false}
@@ -251,6 +245,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
         columns={columns}
         dataSource={data}
         {...tableProps}
+        pagination={false}
       />
     </div>
 

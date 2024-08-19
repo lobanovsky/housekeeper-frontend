@@ -46,7 +46,7 @@
         &.bankName,
         &.fromName,
         &.toName {
-          min-width: 246px;
+          min-width: 280px;
           max-width: 360px;
         }
 
@@ -56,9 +56,10 @@
         }
 
         &.account {
-          width: 160px;
-          min-width: 160px;
-          max-width: 180px;
+          //width: 160px;
+          min-width: 120px;
+          //max-width: 180px;
+          white-space: nowrap;
         }
 
         &.fromName,
@@ -72,6 +73,34 @@
 
           .ant-typography {
             white-space: nowrap;
+          }
+        }
+
+        &.account {
+
+
+          .payment-type {
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.3em;
+
+            .ant-btn.edit-btn {
+              border: none;
+              //margin-left: 1em;
+              width: 14px;
+              height: 14px;
+              padding: 0;
+              //margin-left: 0.5em;
+
+              .anticon {
+                vertical-align: 0;
+              }
+
+              &:not(:first-child) {
+                margin-left: 0.5em;
+              }
+            }
           }
         }
 
@@ -110,6 +139,8 @@
           }
 
         }
+
+
       }
 
     }

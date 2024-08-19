@@ -1,14 +1,17 @@
-import {Layout, Menu} from 'antd';
-import {useLocation} from 'react-router-dom';
-import {NavigationItems} from 'navigation/routes';
-import './style.scss';
-import {useCallback, useState} from "react";
+import { Layout, Menu } from "antd";
+import { useLocation } from "react-router-dom";
+import { NavigationItems } from "navigation/routes";
+import "./style.scss";
+import { useCallback, useState } from "react";
 
-const PathnameRegex = /^\/[a-zA-Z\d]+$/;
+const PathnameRegex = /^\/[a-zA-Z-\d]+$/;
 
 export const Sider = () => {
     const location = useLocation();
-    const [isCollapsed, setCollapsed] = useState(PathnameRegex.test(location.pathname))
+    const [isCollapsed, setCollapsed] = useState(() => {
+        const hasRoute = PathnameRegex.test(location.pathname);
+        return hasRoute;
+    });
 
 
     const closeSidebar = useCallback(() => {

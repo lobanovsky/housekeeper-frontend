@@ -7,7 +7,6 @@ import { Button, Select } from "antd";
 import { showError } from "../../utils/notifications";
 import { downloadFile } from "../../utils/utils";
 import { DownloadOutlined } from "@ant-design/icons";
-import { IS_DEBUG } from "../../utils/constants";
 
 
 const rowClassName = (record: PaymentVO) => !record.account ? 'empty-account' : '';
@@ -39,7 +38,9 @@ const IncomingPayments = () => {
     const paymentTypeOptions = useMemo(() => paymentTypes.map(({id, name}) => <Select.Option
       id={id} value={id} key={id}>{name}</Select.Option>), [paymentTypes.length]);
 
-    const incomingPaymentFilters = useMemo(() => getPaymentFilters(false, {accountOptions, paymentTypeOptions}), [
+    const incomingPaymentFilters = useMemo(() => {
+        return getPaymentFilters(false, { accountOptions, paymentTypeOptions });
+    }, [
         accountOptions.length, paymentTypeOptions.length
     ]);
 
@@ -76,7 +77,7 @@ const IncomingPayments = () => {
             <Table
                 ref={tableRef}
                 rowKey='uuid'
-                scroll={IS_DEBUG ? {x: 1300} : undefined}
+                scroll={{ x: 1 }}
                 columns={tableColumns}
                 loadDataFn={PaymentService.findIncomingPayments}
                 filters={incomingPaymentFilters}

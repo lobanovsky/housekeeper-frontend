@@ -1,14 +1,14 @@
-import React, {useCallback, useImperativeHandle, useState} from 'react';
-import {CloseCircleOutlined, DownloadOutlined, DownOutlined, SearchOutlined} from '@ant-design/icons';
-import {Button, Col, DatePicker, Dropdown, Input, Row, Select} from 'antd';
+import React, { useCallback, useImperativeHandle, useState } from "react";
+import { CloseCircleOutlined, DownloadOutlined, DownOutlined, SearchOutlined } from "@ant-design/icons";
+import { Button, Col, DatePicker, Dropdown, Input, Row, Select } from "antd";
 
-import {filterOption} from 'utils/utils';
-import {BreakpointsSpan, FilterFieldsConfig, IFilterFieldConfig} from './types';
-import styles from './styles.module.scss';
-import {useLoading} from 'hooks/use-loading';
-import {ActionFinishCallback} from 'utils/types';
-import RemoteSelect from 'components/remote-select';
-import {Dayjs} from 'dayjs';
+import { filterOption } from "utils/utils";
+import { BreakpointsSpan, FilterFieldsConfig, IFilterFieldConfig } from "./types";
+import styles from "./styles.module.scss";
+import { useLoading } from "hooks/use-loading";
+import { ActionFinishCallback } from "utils/types";
+import RemoteSelect from "components/remote-select";
+import { Dayjs } from "dayjs";
 
 
 export type FilterValue = string | string[] | number | number[] | boolean | Dayjs | [Dayjs, Dayjs];
@@ -101,7 +101,6 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
             input = <Select
                 // @ts-ignore
                 mode={mode}
-                showArrow
                 allowClear
                 {...fieldProps}
                 popupMatchSelectWidth={false}

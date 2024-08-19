@@ -77,5 +77,8 @@ const paymentFilters = ({accountOptions = [], paymentTypeOptions}: PaymentDictio
     }
 ];
 
-export const getPaymentFilters = (isOutgoing: boolean = false, options: PaymentDictionaries = {}): IFilterFieldConfig[] => paymentFilters(options).filter(({outgoing}) => typeof outgoing !== 'boolean' || outgoing === isOutgoing);
+export const getPaymentFilters = (isOutgoing: boolean = false, options: PaymentDictionaries = {}): IFilterFieldConfig[] => paymentFilters(options).filter(({ outgoing }) => typeof outgoing !== "boolean" || outgoing === isOutgoing).map(({
+                                                                                                                                                                                                                                               outgoing,
+                                                                                                                                                                                                                                               ...fieldProps
+                                                                                                                                                                                                                                           }) => fieldProps);
 

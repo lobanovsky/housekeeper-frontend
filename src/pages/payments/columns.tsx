@@ -1,8 +1,8 @@
 import { dateTimeRenderer, summRenderer } from "utils/utils";
 import { ColumnsType, ColumnType } from "antd/es/table";
-import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons";
+import { CheckCircleFilled, CloseCircleFilled, EditOutlined } from "@ant-design/icons";
 import { EnumPaymentVOType, PaymentVO } from "../../backend/services/backend";
-import { Typography } from "antd";
+import { Button, Typography } from "antd";
 import { showPaymentEditModal } from "./edit-modal";
 
 interface PaymentColumnType<T> extends ColumnType<T> {
@@ -36,7 +36,7 @@ const commonPaymentColumns = ({ reloadTable }: { reloadTable?: () => void }): Pa
   },
   {
     dataIndex: "fromInn",
-    title: "ИНН отправителя",
+    title: "ИНН отправ.",
     outgoing: false,
     render: copyableRenderer
   },
@@ -48,7 +48,7 @@ const commonPaymentColumns = ({ reloadTable }: { reloadTable?: () => void }): Pa
   },
   {
     dataIndex: "toInn",
-    title: "ИНН получателя",
+    title: "ИНН получат.",
     outgoing: true,
     render: copyableRenderer
   },
@@ -67,12 +67,10 @@ const commonPaymentColumns = ({ reloadTable }: { reloadTable?: () => void }): Pa
     dataIndex: "toAccount",
     title: "Счёт поступления",
     outgoing: false,
-    render: (toAccount = "", record) =>
-      <Typography.Link copyable={toAccount ? { text: toAccount } : false} onClick={() => {
-        showPaymentEditModal({ payment: record, onSuccess: reloadTable });
-      }}>
-        {!!toAccount ? accountNumberRenderer(toAccount) : "не указан"}
-      </Typography.Link>
+    render: (toAccount = "") =>
+      toAccount ? <Typography.Text copyable={{ text: toAccount }}>
+        {accountNumberRenderer(toAccount)}
+      </Typography.Text> : ""
   },
   {
     dataIndex: "incomingSum",
@@ -91,11 +89,23 @@ const commonPaymentColumns = ({ reloadTable }: { reloadTable?: () => void }): Pa
       const { type, typeName, typeColor, bankName = "" } = payment;
       const isUnknownSource = type === EnumPaymentVOType.UNKNOWN_ACCOUNT || type === EnumPaymentVOType.UNKNOWN;
       const iconStyle = { color: typeColor, marginRight: 4 };
-      return type ? <div className={`payment-type ${type}`}>
+      const paymentType = type ? <>
         {isUnknownSource ? <CloseCircleFilled style={iconStyle} /> : <CheckCircleFilled style={iconStyle} />}
         {type === EnumPaymentVOType.ACCOUNT || type === EnumPaymentVOType.MANUAL_ACCOUNT ? `Л/с ${personalAccountRenderer(account)}` :
           (isUnknownSource ? "не определён" : typeName)}
-      </div> : "";
+      </> : "";
+
+      return <div className={`payment-type ${type}`}>
+        {paymentType}
+        <Button
+          size="small"
+          className="edit-btn"
+          onClick={() => {
+            showPaymentEditModal({ payment, onSuccess: reloadTable });
+          }}>
+          <EditOutlined />
+        </Button>
+      </div>;
     }
   }
 ];
