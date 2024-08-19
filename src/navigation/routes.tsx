@@ -7,14 +7,14 @@ import {
     DollarOutlined,
     GroupOutlined,
     SettingOutlined
-} from '@ant-design/icons';
-import {Link} from 'react-router-dom';
-import {GateIcon} from 'icons/gate';
-import {showPaymentsImportModal} from 'pages/payments/import';
-import {showGatesImportModal} from 'pages/gates/import';
-import {ExpenseIcon} from "../icons/expense";
-import {BuildingIcon} from "../icons/building";
-import {ApartmentPlanIcon} from "../icons/apartment_plan";
+} from "@ant-design/icons";
+import { Link } from "react-router-dom";
+import { GateIcon } from "icons/gate";
+import { showPaymentsImportModal } from "pages/payments/import";
+import { showGatesImportModal } from "pages/gates/import";
+import { ExpenseIcon } from "../icons/expense";
+import { BuildingIcon } from "../icons/building";
+import { ApartmentPlanIcon } from "../icons/apartment_plan";
 
 
 export const NavigationItems: any = [
@@ -100,6 +100,12 @@ export const NavigationItems: any = [
 
         children: [
             {
+              key: "/roles",
+              icon: <BankOutlined />,
+              title: "Выдача доступов",
+              label: <Link to="/roles">Выдача доступов</Link>
+            },
+          {
                 key: '/uploaded-files',
                 icon: <GroupOutlined/>,
                 title: 'Загруженные файлы',

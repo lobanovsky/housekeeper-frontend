@@ -1,21 +1,21 @@
-// @ts-ignore
-import {BrowserRouter, Link, Route, Routes} from 'react-router-dom';
-import {Layout} from 'antd';
-import {HouseIcon} from 'icons/house';
-import PageHeader from 'layout/page-header';
-import {Sider} from 'layout/sider';
-import Counters from 'pages/counters';
-import IncomingPayments from 'pages/payments/incoming';
-import OutgoingPayments from 'pages/payments/outgoing';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Layout } from "antd";
+import { HouseIcon } from "icons/house";
+import PageHeader from "layout/page-header";
+import { Sider } from "layout/sider";
+import Counters from "pages/counters";
+import IncomingPayments from "pages/payments/incoming";
+import OutgoingPayments from "pages/payments/outgoing";
 
 
-import Rooms from 'pages/rooms';
-import Gates from 'pages/gates';
-import UploadedFiles from 'pages/admin/uploaded-files';
-import {ExpensesView} from "./pages/expences";
-import {Counterparties} from "./pages/admin/counterparties";
-import {Buildings} from "./pages/buildings";
-import './App.scss';
+import Rooms from "pages/rooms";
+import Gates from "pages/gates";
+import UploadedFiles from "pages/admin/uploaded-files";
+import { ExpensesView } from "./pages/expences";
+import { Counterparties } from "./pages/admin/counterparties";
+import { Buildings } from "./pages/buildings";
+import "./App.scss";
+import { RolesView } from "./pages/admin/roles";
 
 const {Header, Content} = Layout;
 
@@ -67,7 +67,10 @@ function App() {
                                     path='/counterparties'
                                     element={<Counterparties/>}
                                 />
-
+                              <Route
+                                path="/roles"
+                                element={<RolesView />}
+                              />
                                 {/*<Route*/}
                                 {/*	path='*'*/}
                                 {/*	element={<Navigate*/}

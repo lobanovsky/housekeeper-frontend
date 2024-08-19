@@ -1,0 +1,7 @@
+.phones-selector {
+  .ant-input-affix-wrapper {
+    &:not(:first-child) {
+      margin-top: 1em;
+    }
+  }
+}

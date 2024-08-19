@@ -1,4 +1,4 @@
-import {AxiosError, AxiosResponse} from 'axios';
+import { AxiosError, AxiosResponse } from "axios";
 
 export type Modify<T, R> = Omit<T, keyof R> & R;
 
@@ -11,9 +11,14 @@ export interface ServerError extends Error, AxiosError, AxiosResponse {
 	error?: string;
 }
 
-export interface ICredentials {
-	login: string;
-	password: string;
+export interface DictionaryItem {
+  id: string | number;
+  name: string;
+}
+
+export interface CheckboxItem {
+  value: string | number;
+  label: string;
 }
 
 export type LoadParams = Record<string, string | number | boolean>;

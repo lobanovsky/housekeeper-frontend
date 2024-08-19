@@ -1,0 +1,143 @@
+import { useCallback, useMemo, useState } from "react";
+import { Button, Card, Checkbox } from "antd";
+import { CheckOutlined } from "@ant-design/icons";
+
+import {
+  AccessRequest,
+  AccessService,
+  AreaService,
+  AreaVO,
+  Building,
+  BuildingService,
+  Room
+} from "backend/services/backend";
+import Loading from "components/loading";
+import { useLoading } from "hooks/use-loading";
+import useRemoteData from "hooks/use-remote-data";
+import { showError, showMessage } from "utils/notifications";
+import { CheckboxItem } from "utils/types";
+import { getRandomId } from "utils/utils";
+import { PhoneRegex, PhonesChangeHandlerArg, PhonesSelector } from "./components/phones-selector";
+import { RoomSelector } from "./components/room-selector";
+import { SelectedRoomsMap } from "./types";
+import "./style.scss";
+
+export const RolesView = () => {
+  const [loading, showLoading, hideLoading] = useLoading();
+  const [buildings, isLoadingBuildings] = useRemoteData<Building>({
+    loader: BuildingService.findAll1,
+    errorMsg: "Не удалось загрузить список зданий"
+  });
+  const [areas, isLoadingAreas] = useRemoteData<AreaVO, CheckboxItem>({
+    loader: AreaService.findAll2,
+    dataConverter: (response) => response.map(({ id = 0, name = "" }) => ({ value: id, label: name })),
+    errorMsg: "Не удалось загрузить список типов доступов"
+  });
+
+  const [selectedRooms, setSelectedRooms] = useState<SelectedRoomsMap>({});
+  const [selectedAreas, setSelectedAreas] = useState<number[]>([]);
+  const [phones, setPhones] = useState<PhonesChangeHandlerArg>({ phones: [], changeId: "", isValid: false });
+
+  const roomsChangeId = useMemo(() => getRandomId(), [
+    Object.entries(selectedRooms).map(([buildingId, roomIds]) => (
+      `${buildingId}-${roomIds.join(",")}`))
+  ]);
+
+
+  const saveData = useCallback(() => {
+    showLoading();
+    const roomsToSave: Room[] = Object.entries(selectedRooms).map(([buildingId, roomIds]) => ({
+      buildingId: parseInt(buildingId, 10),
+      roomIds
+    }));
+
+    const phonesToSave = phones.phones.filter((phone) => PhoneRegex.test(phone)).map(phone => phone.replace(/\s+/g, ""));
+
+
+    const result: AccessRequest = {
+      phoneNumbers: phonesToSave,
+      areas: selectedAreas,
+      rooms: roomsToSave
+    };
+
+    AccessService.createAccess({ body: result })
+      .then(resp => {
+        showMessage("Доступы добавлены");
+        hideLoading();
+        setSelectedRooms({});
+        setSelectedAreas([]);
+        //todo телефоны очистить
+      })
+      .catch(e => {
+        showError("Не удалось выдать доступ", e);
+        hideLoading();
+      });
+
+  }, [selectedAreas.length, phones.changeId, roomsChangeId]);
+
+  const onChangePhones = useCallback(({ phones: changedPhones, isValid, changeId }: PhonesChangeHandlerArg) => {
+    setPhones({
+      phones: changedPhones,
+      changeId,
+      isValid
+    });
+  }, []);
+
+  const onChangeRoom = useCallback((roomId: number, buildingId: number) => {
+    const buildingIdStr = String(buildingId);
+
+    setSelectedRooms(prevMap => {
+      const newMap = { ...prevMap };
+      if (!newMap[buildingIdStr]) {
+        newMap[buildingIdStr] = [];
+      }
+
+
+      const newRooms = [...newMap[buildingIdStr]];
+      const roomIndex = newRooms.indexOf(roomId);
+      if (roomIndex > -1) {
+        newRooms.splice(roomIndex, 1);
+      } else {
+        newRooms.push(roomId);
+      }
+      newMap[buildingIdStr] = newRooms;
+      return newMap;
+    });
+  }, []);
+
+  return <div className="admin-roles">
+    {loading && <Loading />}
+    <div className="roles-content">
+      {/*<Button onClick={saveData}>Сохранить</Button>*/}
+      <div className="areas">
+        <Checkbox.Group
+          options={areas}
+          onChange={(checkedAreas) => {
+            setSelectedAreas(checkedAreas as number[]);
+          }}
+
+        />
+        <Button disabled={!Object.values(selectedRooms).length || !phones.isValid && !selectedAreas.length}
+                onClick={saveData} style={{ marginLeft: "2em" }}><CheckOutlined />Выдать доступ</Button>
+      </div>
+      <div className="phones-and-buildings">
+        <Card size="small" className="phones" title="Список телефонов">
+
+          <PhonesSelector onChangePhones={onChangePhones} />
+        </Card>
+        <Card size="small" className="buildings" title="Объекты доступа">
+          {/*<div className='buildings-container'>*/}
+
+          <RoomSelector buildings={buildings} selectedRooms={selectedRooms} onSelectRoom={onChangeRoom} />
+          {/*<div className="selected-rooms">*/}
+          {/*  <div className='subheader'>*/}
+          {/*    Выбранные объекты*/}
+          {/*  </div>*/}
+          {/*  {selectedRoomsState.displayRooms.length ? selectedRoomsState.displayRooms.map((roomStr: string) => <div key={roomStr}>{roomStr}</div>) : 'не выбраны'}*/}
+          {/*</div>*/}
+          {/*</div>*/}
+        </Card>
+      </div>
+    </div>
+  </div>;
+};
