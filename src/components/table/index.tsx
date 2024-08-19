@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
-import { Table as AntTable, TableProps } from "antd";
+import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { Pagination, Table as AntTable, TableProps } from "antd";
 import debounce from "lodash/debounce";
 
 import { FilterFieldsConfig } from "components/table/filter-form/types";
@@ -12,253 +12,249 @@ import { SERVER_DATE_FORMAT } from "../../utils/constants";
 import "./styles.scss";
 
 export interface TableRequestParams<T> extends IPagination {
-	body: T
+  body: T;
 }
 
 export interface TablePublicMethods {
-	reloadTable: EmptyFunction,
-	resetTable: EmptyFunction,
-	getFilters: () => FilterFormValues,
-	loadData: (params: { filters: FilterFormValues, pagination: IPagination }) => void;
+  reloadTable: EmptyFunction,
+  resetTable: EmptyFunction,
+  getFilters: () => FilterFormValues,
+  loadData: (params: { filters: FilterFormValues, pagination: IPagination }) => void;
 }
 
 interface ITableProps extends TableProps<any> {
-	// columns: any[],
-	// className?: string;
-	toolbar?: React.ReactNode;
-	filters?: FilterFieldsConfig;
-	isValidForm?: (filters: any) => boolean,
-	defaultPagination?: IPagination;
-	defaultFilterValues?: Record<string, string | string[] | number | number[] | Dayjs>,
-	additionalRequestParams?: any,
-	loadDataOnInit?: boolean;
-	onChangePagination?: (pagination: IPagination) => void,
-	// onSelectionChange?: (selectedIds: Array<number | string>)=> void;
-	onRow?: (record: any) => React.HTMLAttributes<any> | React.TdHTMLAttributes<any>,
-	exportURL?: string,
-	extraControls?: React.ReactNode[],
-	rowKey?: string;
-	requestParamsConverter?: (filters: any) => any,
-	responseDataConverter?: (response: any) => any,
-	loadDataFn: (requestParams: any) => Promise<{ content: any[], totalElements: number }>
+  // columns: any[],
+  // className?: string;
+  toolbar?: React.ReactNode;
+  filters?: FilterFieldsConfig;
+  isValidForm?: (filters: any) => boolean,
+  defaultPagination?: IPagination;
+  defaultFilterValues?: Record<string, string | string[] | number | number[] | Dayjs>,
+  additionalRequestParams?: any,
+  loadDataOnInit?: boolean;
+  onChangePagination?: (pagination: IPagination) => void,
+  // onSelectionChange?: (selectedIds: Array<number | string>)=> void;
+  onRow?: (record: any) => React.HTMLAttributes<any> | React.TdHTMLAttributes<any>,
+  exportURL?: string,
+  extraControls?: React.ReactNode[],
+  rowKey?: string;
+  requestParamsConverter?: (filters: any) => any,
+  responseDataConverter?: (response: any) => any,
+  loadDataFn: (requestParams: any) => Promise<{ content: any[], totalElements: number }>
 }
 
 export const SUMM_REGEX = /^(\d{1,15})([.,]\d{1,2})?$/;
 
+const TotalRenderer = (total: number, range: [number, number]) => `${range[0]}-${range[1]} из ${total}`;
+
 const Table = React.forwardRef((props: ITableProps, ref) => {
-	const {
-		loadDataFn,
-		columns,
-		toolbar = '',
-		className,
-		defaultPagination = { pageNum: 1, pageSize: 100 },
-		defaultFilterValues = {},
-		requestParamsConverter,
-		responseDataConverter = null,
-		filters = [],
-		onChangePagination = null,
-		extraControls = [],
-		exportURL = '',
-		isValidForm = () => true,
-		...tableProps
-	} = props;
+  const {
+    loadDataFn,
+    columns,
+    toolbar = "",
+    className,
+    defaultPagination = { pageNum: 1, pageSize: 100 },
+    defaultFilterValues = {},
+    requestParamsConverter,
+    responseDataConverter = null,
+    filters = [],
+    onChangePagination = null,
+    extraControls = [],
+    exportURL = "",
+    isValidForm = () => true,
+    ...tableProps
+  } = props;
 
-	// const { user } = useContext(AuthContext);
-	const [data, setData] = useState<any[]>([]);
-	const [total, setTotal] = useState<number>(0);
-	const [selectedRows, setSelectedRows] = useState<any[]>([]);
-	const [pagination, setPagination] = useState<IPagination>(defaultPagination);
-	const [loading, setLoading] = useState<boolean>(false);
-	const [selectedFilters, setSelectedFilters] = useState<any>(() => ({
-		...defaultFilterValues
-	}));
+  // const { user } = useContext(AuthContext);
+  const [data, setData] = useState<any[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
+  const [pagination, setPagination] = useState<IPagination>(defaultPagination);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [selectedFilters, setSelectedFilters] = useState<any>(() => ({
+    ...defaultFilterValues
+  }));
 
-	const filterFormRef = useRef(null);
+  const filterFormRef = useRef(null);
 
-	const onChangeFilters = useCallback((filters: any) => {
-		setSelectedFilters(filters);
+  const onChangeFilters = useCallback((filters: any) => {
+    setSelectedFilters(filters);
 
-		setPagination(prev => ({
-			pageNum: 1,
-			pageSize: prev.pageSize
-		}))
-	}, []);
+    setPagination(prev => ({
+      pageNum: 1,
+      pageSize: prev.pageSize
+    }));
+  }, []);
 
-	const getProcessedFilters = useCallback((selectedFilterValues: any) => {
-		const convertedFilters = {};
-		Object.entries(selectedFilterValues).forEach(([filterName, filterValue]) => {
-			const isDate = filterName.endsWith('Date');
-			const isSum = filterName.endsWith("Sum");
+  const getProcessedFilters = useCallback((selectedFilterValues: any) => {
+    const convertedFilters = {};
+    Object.entries(selectedFilterValues).forEach(([filterName, filterValue]) => {
+      const isDate = filterName.endsWith("Date");
+      const isSum = filterName.toLowerCase().endsWith("sum");
 
-			if (isDate) {
-				// @ts-ignore
-				if (filterValue && filterValue.isValid()) {
-					// @ts-ignore
-					convertedFilters[filterName] = filterValue.format(SERVER_DATE_FORMAT)
-				}
-			} else if (isSum) {
-				const amountStr = String(filterValue).replace(/\s+/g, "").replace(/,/g, ".");
-				if (SUMM_REGEX.test(amountStr)) {
-					// @ts-ignore
-					convertedFilters[filterName] = parseFloat(amountStr);
-				}
-			} else {
-				// @ts-ignore
-				convertedFilters[filterName] = filterValue;
-			}
+      if (isDate) {
+        // @ts-ignore
+        if (filterValue && filterValue.isValid()) {
+          // @ts-ignore
+          convertedFilters[filterName] = filterValue.format(SERVER_DATE_FORMAT);
+        }
+      } else if (isSum) {
+        const amountStr = String(filterValue).replace(/\s+/g, "").replace(/,/g, ".");
+        if (SUMM_REGEX.test(amountStr)) {
+          // @ts-ignore
+          convertedFilters[filterName] = parseFloat(amountStr);
+        }
+      } else {
+        // @ts-ignore
+        convertedFilters[filterName] = filterValue;
+      }
 
-		})
+    });
 
-		return convertedFilters;
-	}, []);
+    return convertedFilters;
+  }, []);
+
+  const onPaginationChange = useCallback((page: number, pageSize: number) => {
+    setPagination({ pageNum: page, pageSize });
+    if (onChangePagination) {
+      onChangePagination({ pageNum: page, pageSize });
+    }
+  }, []);
+
+  const exportToFile = useCallback((onFinish: (isSuccess: boolean) => void) => {
+    const convertedFilters = getProcessedFilters(selectedFilters);
+    downloadFile(exportURL, convertedFilters, onFinish);
+  }, [JSON.stringify(selectedFilters)]);
+
+  const loadData = useCallback((params: { filters: FilterFormValues, pagination: IPagination }) => {
+    const { filters, pagination: { pageNum = 0, pageSize = 10 } = {} } = params;
+    const convertedFilters = getProcessedFilters(filters);
 
 
-	const exportToFile = useCallback((onFinish: (isSuccess: boolean) => void) => {
-		const convertedFilters = getProcessedFilters(selectedFilters);
-		downloadFile(exportURL, convertedFilters, onFinish);
-	}, [JSON.stringify(selectedFilters)]);
+    setLoading(true);
+    let requestParams: any & IPagination = {
+      pageNum: pageNum - 1,
+      pageSize,
+      body: convertedFilters
+    };
 
-	const loadData = useCallback((params: { filters: FilterFormValues, pagination: IPagination }) => {
-		const { filters, pagination: { pageNum = 0, pageSize = 10 } = {} } = params;
-		const convertedFilters = getProcessedFilters(filters);
+    if (requestParamsConverter) {
+      requestParams = requestParamsConverter(requestParams);
+    }
+    loadDataFn(requestParams)
+      .then((responseData: any) => {
+        if (responseDataConverter) {
+          const { data, total } = responseDataConverter(responseData);
+          setData(data);
+          setTotal(total);
+        } else {
+          setData(responseData.content || []);
+          setTotal(responseData.totalElements || 0);
+        }
 
+        setLoading(false);
+      })
+      .catch(e => {
+        showError("Не удалось загрузить данные для таблицы", e);
+        setLoading(false);
+      });
+  }, [loadDataFn, requestParamsConverter, responseDataConverter]);
 
-		setLoading(true);
-		let requestParams: any & IPagination = {
-			pageNum: pageNum - 1,
-			pageSize,
-			body: convertedFilters
-		}
+  const delayedSearch = useCallback(
+    debounce((params) => loadData(params), 600),
+    []
+  );
 
-		if (requestParamsConverter) {
-			requestParams = requestParamsConverter(requestParams);
-		}
-		loadDataFn(requestParams)
-			.then((responseData: any) => {
-				if (responseDataConverter) {
-					const { data, total } = responseDataConverter(responseData);
-					setData(data);
-					setTotal(total);
-				} else {
-					setData(responseData.content || []);
-					setTotal(responseData.totalElements || 0);
-				}
+  const reloadTable = () => {
+    loadData({ filters: selectedFilters, pagination });
+  };
 
-				setLoading(false);
-			})
-			.catch(e => {
-				showError('Не удалось загрузить данные для таблицы', e);
-				setLoading(false);
-			});
-	}, [loadDataFn, requestParamsConverter, responseDataConverter]);
+  const resetTable = (fireSearch: boolean = false) => {
+    // @ts-ignore
+    if (filterFormRef.current && filterFormRef.current.clearValues) {
+      // @ts-ignore
+      filterFormRef.current.clearValues();
+    }
 
-	const delayedSearch = useCallback(
-		debounce((params) => loadData(params), 600),
-		[]
-	);
+    setPagination({
+      pageNum: 1, pageSize: 10
+    });
 
-	const reloadTable = () => {
-		loadData({ filters: selectedFilters, pagination });
-	}
+    if (fireSearch) {
+      delayedSearch({
+        filters: {}, pagination: {
+          pageNum: 1, pageSize: 10
+        }
+      });
+    }
+  };
 
-	const resetTable = (fireSearch: boolean = false) => {
-		// @ts-ignore
-		if (filterFormRef.current && filterFormRef.current.clearValues) {
-			// @ts-ignore
-			filterFormRef.current.clearValues();
-		}
+  const getFilters = () => {
+    // @ts-ignore
+    if (filterFormRef.current && filterFormRef.current.getSelectedFilters) {
+      // @ts-ignore
+      return filterFormRef.current.getSelectedFilters();
+    } else {
+      return {};
+    }
+  };
 
-		setPagination({
-			pageNum: 1, pageSize: 10
-		});
+  useImperativeHandle(ref, (): TablePublicMethods => ({
+    reloadTable,
+    resetTable,
+    getFilters,
+    loadData
+  }), [reloadTable, resetTable, getFilters]);
 
-		if (fireSearch) {
-			delayedSearch({
-				filters: {}, pagination: {
-					pageNum: 1, pageSize: 10
-				}
-			});
-		}
-	}
+  useEffect(() => {
+    if (isValidForm(selectedFilters)) {
+      delayedSearch({ filters: selectedFilters, pagination });
+    }
 
-	const getFilters = () => {
-		// @ts-ignore
-		if (filterFormRef.current && filterFormRef.current.getSelectedFilters) {
-			// @ts-ignore
-			return filterFormRef.current.getSelectedFilters();
-		} else {
-			return {};
-		}
-	}
+  }, [JSON.stringify(selectedFilters), pagination.pageSize, pagination.pageNum]);
 
-	const selectedRowKeys = useMemo(() => selectedRows.map(({ id }) => id), [selectedRows.length]);
-	const filtersChangeId = (filters || []).reduce((accum, fieldConfig) => `${accum}, ${fieldConfig.name}-${(fieldConfig.options || []).length}`, '');
+  return (
+    <div className={`app-table ${className} ${loading ? "with-loading" : ""} ${!total ? "empty" : ""}`}>
+      {filters.length > 0 && <FilterForm
+        defaultFilterValues={defaultFilterValues}
+        ref={filterFormRef}
+        exportToFile={exportURL ? exportToFile : null}
+        filters={filters}
+        isValidForm={isValidForm}
+        onChangeFilters={onChangeFilters}
+        onSearchBtnClick={reloadTable}
+        extraControls={extraControls}
+      />}
+      <div className="pagination-container">
+        {!!toolbar && <div className="table-toolbar">{toolbar}</div>}
+        <Pagination {...{
+          total,
+          size: "small",
+          hideOnSinglePage: false,
+          position: ["topRight"],
+          pageSize: pagination.pageSize,
+          showSizeChanger: true,
+          current: pagination.pageNum,
+          pageSizeOptions: [10, 20, 50, 100],
+          locale: { items_per_page: "/ стр" },
+          showTotal: TotalRenderer,
+          onChange: onPaginationChange
+        }} />
+      </div>
+      <AntTable
+        bordered={false}
+        className={!data.length ? "empty-table" : ""}
+        rowKey="id"
+        size="small"
+        locale={{ emptyText: "Нет данных" }}
+        loading={loading}
+        columns={columns}
+        dataSource={data}
+        {...tableProps}
+      />
+    </div>
 
-	// const filterForm = useMemo(() => filters.length ? ,
-	// 	[filtersChangeId, JSON.stringify(selectedFilters)]);
-
-	useImperativeHandle(ref, (): TablePublicMethods => ({
-		reloadTable,
-		resetTable,
-		getFilters,
-		loadData
-	}), [reloadTable, resetTable, getFilters]);
-
-	useEffect(() => {
-		if (isValidForm(selectedFilters)) {
-			delayedSearch({ filters: selectedFilters, pagination });
-		}
-
-	}, [JSON.stringify(selectedFilters), pagination.pageSize, pagination.pageNum]);
-
-	return (
-		<div className={`app-table ${className} ${loading ? "with-loading" : ""} ${!total ? "empty" : ""}`}>
-			{filters.length > 0 && <FilterForm
-				defaultFilterValues={defaultFilterValues}
-				ref={filterFormRef}
-				exportToFile={exportURL ? exportToFile : null}
-				filters={filters}
-				isValidForm={isValidForm}
-				onChangeFilters={onChangeFilters}
-				onSearchBtnClick={reloadTable}
-				extraControls={extraControls}
-			/>}
-			{/* @ts-ignore*/}
-			{!!toolbar && <div className='table-toolbar'>{toolbar}</div>}
-			<AntTable
-				bordered={false}
-				className={!data.length ? "empty-table" : ""}
-				rowKey='id'
-				size="small"
-				locale={{ emptyText: 'Нет данных', }}
-				loading={loading}
-				columns={columns}
-				dataSource={data}
-				pagination={{
-					total,
-					size: "small",
-					hideOnSinglePage: false,
-					position: ['topRight'],
-					pageSize: pagination.pageSize,
-					showSizeChanger: true,
-					current: pagination.pageNum,
-					pageSizeOptions: [10, 20, 50, 100],
-					locale: {
-						items_per_page: '/ стр'
-					},
-					showTotal: (total, range) => `${range[0]}-${range[1]} из ${total}`,
-					onChange: (page, pageSize) => {
-						setPagination({ pageNum: page, pageSize });
-						if (onChangePagination) {
-							onChangePagination({ pageNum: page, pageSize });
-						}
-					}
-				}}
-				{...tableProps}
-			/>
-		</div>
-
-	)
+  );
 });
 
 

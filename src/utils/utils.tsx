@@ -1,10 +1,10 @@
-import {OptionProps} from 'rc-select/lib/Option';
-import dayjs, {Dayjs} from 'dayjs';
-import {saveAs} from 'file-saver';
-import axios from 'axios';
-import {showError} from 'utils/notifications';
-import {SERVER_DATE_FORMAT} from "./constants";
-import {SelectedDatesShort} from "../pages/expences/range-picker";
+import { OptionProps } from "rc-select/lib/Option";
+import dayjs, { Dayjs } from "dayjs";
+import { saveAs } from "file-saver";
+import axios from "axios";
+import { showError } from "utils/notifications";
+import { SERVER_DATE_FORMAT } from "./constants";
+import { SelectedDatesShort } from "../pages/expences/range-picker";
 
 export const getRandomId = () =>
     dayjs().unix() + Math.round(Math.random() * 10000) + Math.round(Math.random() * 100);
@@ -29,11 +29,12 @@ export const dateRenderer = (date: Dayjs | string | number | Date, format: strin
 export const convertDateForServer = (date?: Dayjs | string | number | Date) => date ? dateRenderer(date, SERVER_DATE_FORMAT) : '';
 
 export const dateTimeRenderer = (date: Dayjs | string | number) => {
-    return <>
-        <span className='date'>{dateRenderer(date, 'DD.MM.YYYY')}</span>
-        &nbsp;
-        <span className='time'>{dateRenderer(date, 'HH:mm')}</span>
-    </>
+    return dateRenderer(date, "HH:mm DD.MM.YYYY");
+    // return <>
+    //     <span className='date'>{dateRenderer(date, 'DD.MM.YYYY')}</span>
+    //     &nbsp;
+    //     <span className='time'>{dateRenderer(date, 'HH:mm')}</span>
+    // </>
 }
 
 export const summRenderer = (amount: number | string, options = {}) => {

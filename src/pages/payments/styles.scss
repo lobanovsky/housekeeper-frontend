@@ -28,20 +28,26 @@
         }
 
 
-        &.date,
+        &.date {
+          width: 150px;
+          white-space: nowrap;
+
+        }
+
         &.fromInn,
         &.toInn {
-          width: 150px;
-
+          width: 130px;
 
           .ant-typography {
             white-space: nowrap;
           }
         }
 
-        &.bankName {
-          min-width: 220px;
-          max-width: 300px;
+        &.bankName,
+        &.fromName,
+        &.toName {
+          min-width: 246px;
+          max-width: 360px;
         }
 
         &.toAccount {
@@ -57,8 +63,6 @@
 
         &.fromName,
         &.toName {
-          min-width: 220px;
-          max-width: 360px;
           word-break: break-all;
         }
 
@@ -90,25 +94,19 @@
         }
 
         &.toAccount {
-          > div {
-            display: flex;
-            align-items: center;
-            gap: 0.5em;
-            white-space: nowrap;
-          }
+          a.ant-typography {
+            color: inherit;
 
-
-          .ant-btn.edit-btn {
-            border: none;
-            width: 18px;
-            height: 18px;
-            padding: 2px;
-            //margin-left: 0.5em;
-
-            .anticon {
-              vertical-align: 0;
+            &:hover {
+              color: #6694bd;
             }
+
+            &:active {
+              color: #2763a1;
+            }
+
           }
+
         }
       }
 

@@ -1,9 +1,19 @@
 .app-table {
+  padding: 2px 4px;
   position: relative;
   background-color: white;
 
-  .table-toolbar {
-    padding: 0 8px;
+
+  .pagination-container {
+    //background: #c0d9f5;
+    padding: 4px 2px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .table-toolbar {
+      flex: 1 0 auto;
+    }
   }
 
   .ant-table-wrapper {

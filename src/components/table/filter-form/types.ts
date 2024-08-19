@@ -1,5 +1,5 @@
-import React from 'react';
-import {ColSize} from "antd/es/grid/col";
+import React from "react";
+import { ColSize } from "antd/es/grid/col";
 
 export type FilterFieldType = 'input' | 'date-range' | 'date' | 'select' | 'remote-select';
 
@@ -23,6 +23,7 @@ export interface IFilterFieldConfig {
     placeholder?: string,
     title: string;
     required?: boolean;
+    maxTagCount?: number;
     mode?: string;
     span?: number | BreakpointsSpan,
     type?: FilterFieldType

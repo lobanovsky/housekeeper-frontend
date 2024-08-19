@@ -1,15 +1,16 @@
 import { dateTimeRenderer, summRenderer } from "utils/utils";
 import { ColumnsType, ColumnType } from "antd/es/table";
-import { CheckCircleFilled, CloseCircleFilled, EditOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons";
 import { EnumPaymentVOType, PaymentVO } from "../../backend/services/backend";
-import { Button, Typography } from "antd";
+import { Typography } from "antd";
 import { showPaymentEditModal } from "./edit-modal";
 
 interface PaymentColumnType<T> extends ColumnType<T> {
   outgoing?: boolean;
 }
 
-const copyableRenderer = (v: string | number) => <Typography.Text copyable>{String(v)}</Typography.Text>;
+const copyableRenderer = (v: string | number = "") => !!v ?
+  <Typography.Text copyable>{String(v)}</Typography.Text> : "";
 
 export const accountNumberRenderer = (accountNumber: string = "") => {
   const groups = [];
@@ -67,19 +68,11 @@ const commonPaymentColumns = ({ reloadTable }: { reloadTable?: () => void }): Pa
     title: "Счёт поступления",
     outgoing: false,
     render: (toAccount = "", record) =>
-      <div>
-        {toAccount ? <Typography.Text copyable={{ text: toAccount }}>
-          {accountNumberRenderer(toAccount)}
-        </Typography.Text> : " - "}
-        <Button
-          size="small"
-          className="edit-btn"
-          onClick={() => {
-            showPaymentEditModal({ payment: record, onSuccess: reloadTable });
-          }}>
-          <EditOutlined />
-        </Button>
-      </div>
+      <Typography.Link copyable={toAccount ? { text: toAccount } : false} onClick={() => {
+        showPaymentEditModal({ payment: record, onSuccess: reloadTable });
+      }}>
+        {!!toAccount ? accountNumberRenderer(toAccount) : "не указан"}
+      </Typography.Link>
   },
   {
     dataIndex: "incomingSum",

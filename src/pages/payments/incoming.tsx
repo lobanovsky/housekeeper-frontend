@@ -83,7 +83,7 @@ const IncomingPayments = () => {
                 exportURL='reports/payments/incoming'
                 rowClassName={rowClassName}
                 toolbar={<>
-                    <Button size='small' onClick={downloadRegistry}>
+                    <Button size="small" type="dashed" onClick={downloadRegistry}>
                         <DownloadOutlined/>
                         Скачать реестр
                     </Button>
