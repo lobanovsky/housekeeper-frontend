@@ -1,3 +1,4 @@
+@import 'colors.scss';
 
 .App {
   height: 100vh;
@@ -21,6 +22,7 @@
   .ant-modal-content {
     padding: 8px 12px;
     padding-bottom: 12px;
+
     .ant-modal-body {
       .ant-modal-confirm-body {
         .anticon.anticon-info-circle {
@@ -58,3 +60,23 @@
 
   }
 }
+
+.ant-notification {
+  .ant-notification-notice {
+    padding: 12px 16px;
+
+    .ant-divider {
+      margin: 6px 0 12px 0;
+    }
+
+    a.ant-notification-notice-close {
+      top: 12px;
+      inset-inline-end: 12px;
+    }
+
+    div.error {
+      color: $red;
+    }
+  }
+}
+

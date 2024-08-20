@@ -3,5 +3,19 @@
     &:not(:first-child) {
       margin-top: 1em;
     }
+
+    &.invalid {
+      border-color: red;
+
+      &:focus,
+      &:active {
+        box-shadow: 0 0 0 2px rgba(255, 5, 34, 0.1);
+      }
+    }
+  }
+
+  .ant-btn-link {
+    margin-top: 0.5em;
+    padding: 0;
   }
 }

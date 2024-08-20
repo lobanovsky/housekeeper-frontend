@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import React, { useCallback, useImperativeHandle, useState } from "react";
 import { Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
@@ -26,9 +26,9 @@ export type PhonesChangeHandlerArg = { phones: string[], isValid: boolean, chang
 
 const getPhonesChangeId = (phones: PhoneItem[]) => phones.map(({ phone, id }) => `${id}-${phone}`).join(",");
 
-export const PhonesSelector = ({ onChangePhones }: {
+export const PhonesSelector = React.forwardRef(({ onChangePhones }: {
   onChangePhones: (param: PhonesChangeHandlerArg) => void
-}) => {
+}, ref) => {
   const [phones, setPhones] = useState<{ phones: PhoneItem[], changeId: string }>({
     phones: [EmptyPhone()],
     changeId: ""
@@ -54,6 +54,7 @@ export const PhonesSelector = ({ onChangePhones }: {
     const newPhones = phones.phones.map(item => ({ ...item }));
     const phoneIndex = newPhones.findIndex(({ id }) => id === value.id);
     newPhones[phoneIndex].phone = value.phone;
+    newPhones[phoneIndex].isValid = PhoneRegex.test(value.phone);
     const newChangeId = getPhonesChangeId(newPhones);
 
     const isPhonesValid = newPhones.every(({ phone }) => PhoneRegex.test(phone));
@@ -65,11 +66,25 @@ export const PhonesSelector = ({ onChangePhones }: {
     onChangePhones({ phones: phonesArr, isValid: isPhonesValid, changeId: newChangeId });
   }, [phones.changeId]);
 
+  const resetPhones = useCallback(() => {
+    setPhones({
+      phones: [],
+      changeId: ""
+    });
+
+    onChangePhones({ phones: [], isValid: false, changeId: "" });
+  }, []);
+
+  useImperativeHandle(ref, () => ({
+    reset: resetPhones
+  }), [resetPhones]);
+
   return (
     <div className="phones-selector">
       {phones.phones.map(({ phone, id, isValid }) =>
           <MaskedInput
             key={id}
+            className={!isValid ? "invalid" : ""}
             allowClear
             mask={"+7 (000) 000-00-00"}
             value={phone} onChange={({ target: { value } }) => {
@@ -79,18 +94,9 @@ export const PhonesSelector = ({ onChangePhones }: {
             });
           }}
           />
-        //
-        //   <Input
-        //   value={phone} onChange={({ target: { value } }) => {
-        //   onChangePhone({
-        //     id,
-        //     phone: value
-        //   });
-        // }}
-        // />
       )
       }
       <Button size="small" type="link" onClick={addPhone}><PlusOutlined />добавить телефон</Button>
     </div>
   );
-};
+});

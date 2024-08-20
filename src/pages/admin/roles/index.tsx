@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useState } from "react";
-import { Button, Card, Checkbox } from "antd";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { Button, Card, Checkbox, Divider } from "antd";
 import { CheckOutlined } from "@ant-design/icons";
 
 import {
@@ -23,6 +23,8 @@ import { SelectedRoomsMap } from "./types";
 import "./style.scss";
 
 export const RolesView = () => {
+  const phonesRef = useRef(null);
+
   const [loading, showLoading, hideLoading] = useLoading();
   const [buildings, isLoadingBuildings] = useRemoteData<Building>({
     loader: BuildingService.findAll1,
@@ -61,19 +63,30 @@ export const RolesView = () => {
     };
 
     AccessService.createAccess({ body: result })
-      .then(resp => {
-        showMessage("Доступы добавлены");
+      .then((successMessages: string[]) => {
+        showMessage(<div>
+          {successMessages.map((msg, index) => <div key={msg}
+                                                    className={msg.toLowerCase().includes("ошибка") ? "error" : ""}>
+            {msg}
+            {index < successMessages.length - 1 && <Divider />}
+
+          </div>)}
+        </div>, {
+          message: "",
+          duration: 2000
+        });
         hideLoading();
         setSelectedRooms({});
         setSelectedAreas([]);
-        //todo телефоны очистить
+        // @ts-ignore
+        phonesRef.current?.reset();
       })
       .catch(e => {
         showError("Не удалось выдать доступ", e);
         hideLoading();
       });
 
-  }, [selectedAreas.length, phones.changeId, roomsChangeId]);
+  }, [selectedAreas.length, phones.changeId, roomsChangeId, phonesRef.current]);
 
   const onChangePhones = useCallback(({ phones: changedPhones, isValid, changeId }: PhonesChangeHandlerArg) => {
     setPhones({
@@ -105,6 +118,7 @@ export const RolesView = () => {
     });
   }, []);
 
+  // @ts-ignore
   return <div className="admin-roles">
     {loading && <Loading />}
     <div className="roles-content">
@@ -112,30 +126,21 @@ export const RolesView = () => {
       <div className="areas">
         <Checkbox.Group
           options={areas}
+          value={selectedAreas}
           onChange={(checkedAreas) => {
             setSelectedAreas(checkedAreas as number[]);
           }}
-
         />
         <Button disabled={!Object.values(selectedRooms).length || !phones.isValid && !selectedAreas.length}
                 onClick={saveData} style={{ marginLeft: "2em" }}><CheckOutlined />Выдать доступ</Button>
       </div>
       <div className="phones-and-buildings">
         <Card size="small" className="phones" title="Список телефонов">
-
-          <PhonesSelector onChangePhones={onChangePhones} />
+          <PhonesSelector ref={phonesRef} onChangePhones={onChangePhones} />
         </Card>
         <Card size="small" className="buildings" title="Объекты доступа">
-          {/*<div className='buildings-container'>*/}
-
+          {/*@ts-ignore*/}
           <RoomSelector buildings={buildings} selectedRooms={selectedRooms} onSelectRoom={onChangeRoom} />
-          {/*<div className="selected-rooms">*/}
-          {/*  <div className='subheader'>*/}
-          {/*    Выбранные объекты*/}
-          {/*  </div>*/}
-          {/*  {selectedRoomsState.displayRooms.length ? selectedRoomsState.displayRooms.map((roomStr: string) => <div key={roomStr}>{roomStr}</div>) : 'не выбраны'}*/}
-          {/*</div>*/}
-          {/*</div>*/}
         </Card>
       </div>
     </div>

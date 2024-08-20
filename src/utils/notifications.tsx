@@ -1,10 +1,15 @@
-import { notification } from 'antd';
-import { ServerError } from 'utils/types';
+import { notification } from "antd";
+import { ServerError } from "utils/types";
+import { ReactNode } from "react";
+import { ArgsProps } from "antd/es/notification/interface";
 
-export const showMessage = (text: string) => {
+// @ts-ignore
+export const showMessage = (text: string | ReactNode, props?: ArgsProps = {}) => {
 	notification.success({
+		// @ts-ignore
 		message: '',
-		description: text
+		description: text,
+		...props
 	});
 }
 
