@@ -45,6 +45,11 @@ export const RolesView = () => {
       `${buildingId}-${roomIds.join(",")}`))
   ]);
 
+  const isValidForm = useMemo(() => {
+    const isValidRooms = Object.values(selectedRooms).some(roomsArr => !!roomsArr.length);
+    return isValidRooms && selectedAreas.length && phones.phones.length && phones.isValid;
+  }, [roomsChangeId, selectedAreas.length, phones.phones.length, phones.isValid]);
+
 
   const saveData = useCallback(() => {
     showLoading();
@@ -131,8 +136,12 @@ export const RolesView = () => {
             setSelectedAreas(checkedAreas as number[]);
           }}
         />
-        <Button disabled={!Object.values(selectedRooms).length || !phones.isValid && !selectedAreas.length}
-                onClick={saveData} style={{ marginLeft: "2em" }}><CheckOutlined />Выдать доступ</Button>
+        <Button
+          disabled={!isValidForm}
+          onClick={saveData}
+          style={{ marginLeft: "2em" }}>
+          <CheckOutlined />Выдать доступ
+        </Button>
       </div>
       <div className="phones-and-buildings">
         <Card size="small" className="phones" title="Список телефонов">
