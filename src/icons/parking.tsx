@@ -1,5 +1,5 @@
-import Icon from '@ant-design/icons';
-import {Property} from 'csstype';
+import Icon from "@ant-design/icons";
+import { Property } from "csstype";
 
 const blackStroke = {
     fill: 'none',
@@ -23,7 +23,7 @@ const ParkingSvg = () => <svg id="Layer_1" style={{enableBackground: 'new 0 0 24
 </svg>
 
 export const ParkingIcon = (props: any) =>
-    <Icon component={ParkingSvg} {...props} />
+  <Icon className="parking-icon" component={ParkingSvg} {...props} />
 ;
 
 

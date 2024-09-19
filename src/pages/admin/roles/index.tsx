@@ -62,6 +62,7 @@ export const RolesView = () => {
 
 
     const result: AccessRequest = {
+      // @ts-ignore
       phoneNumbers: phonesToSave,
       areas: selectedAreas,
       rooms: roomsToSave

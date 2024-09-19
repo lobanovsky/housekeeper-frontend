@@ -20,7 +20,33 @@ module.exports = async (options) => {
             from: /\?: Date;/g,
             to: ': string;'
         });
+
+
+		await replace({
+			files: outFile,
+			from: /export interface AccessInfoVO/g,
+			to: "export interface AccessInfoVOOld"
+		});
+
+
+
         await fs.appendFile(outFile, `
+        export interface AccessInfoVO {
+  /**  */
+  id?: number;
+
+  /**  */
+  phoneNumber?: string;
+  
+    /**  */
+  phoneLabel?: string;
+
+  /**  */
+  areas?: AreaVO[];
+
+  /**  */
+  rooms?: RoomVO[];
+}
 			
 export interface TopResponse {
 	count: number,

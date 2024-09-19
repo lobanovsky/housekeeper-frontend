@@ -148,6 +148,23 @@ export class RepairControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   *
+   */
+  initAccessInfo(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/repairs/init-access-info";
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options);
+
+      let data = null;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
 }
 
 export class CounterpartyControllerService {
@@ -1389,16 +1406,16 @@ export interface PageRoomVO {
 
 export interface PageableObject {
   /**  */
-  paged?: boolean;
-
-  /**  */
-  unpaged?: boolean;
-
-  /**  */
   pageNumber?: number;
 
   /**  */
   pageSize?: number;
+
+  /**  */
+  paged?: boolean;
+
+  /**  */
+  unpaged?: boolean;
 
   /**  */
   offset?: number;
@@ -1453,10 +1470,10 @@ export interface RoomVO {
 
 export interface SortObject {
   /**  */
-  unsorted?: boolean;
+  sorted?: boolean;
 
   /**  */
-  sorted?: boolean;
+  unsorted?: boolean;
 
   /**  */
   empty?: boolean;
@@ -1997,16 +2014,29 @@ export interface MailingResponse {
 
 export interface AccessRequest {
   /**  */
-  phoneNumbers?: string[];
+  areas?: number[];
 
   /**  */
-  areas?: number[];
+  person?: Person;
+}
+
+export interface Person {
+  /**  */
+  phones?: Phone[];
 
   /**  */
   rooms?: Room[];
 
   /**  */
   tenant?: boolean;
+}
+
+export interface Phone {
+  /**  */
+  number?: string;
+
+  /**  */
+  label?: string;
 }
 
 export interface Room {
@@ -2293,12 +2323,15 @@ export interface AccountResponse {
   description?: string;
 }
 
-export interface AccessInfoVO {
+export interface AccessInfoVOOld {
   /**  */
   id?: number;
 
   /**  */
   phoneNumber?: string;
+
+  /**  */
+  phoneLabel?: string;
 
   /**  */
   areas?: AreaVO[];
@@ -2420,6 +2453,22 @@ export enum EnumAreaType {
   'UNDERGROUND_PARKING_AREA' = 'UNDERGROUND_PARKING_AREA'
 }
 
+export interface AccessInfoVO {
+  /**  */
+  id?: number;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  phoneLabel?: string;
+
+  /**  */
+  areas?: AreaVO[];
+
+  /**  */
+  rooms?: RoomVO[];
+}
 
 export interface TopResponse {
   count: number,
