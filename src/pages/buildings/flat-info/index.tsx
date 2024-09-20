@@ -42,7 +42,8 @@ export const FlatInfo = ({ flat }: { flat: RoomVO }) => {
   });
 
 
-  return <Card size="small" loading={isLoadingFlatInfo} title={<div className="flat-title card-title">
+  return <Card size="small" className="flat-info-card" loading={isLoadingFlatInfo}
+               title={<div className="flat-title card-title">
     <div style={{ fontWeight: 600 }}>
       {flat.type === EnumRoomVOType.GARAGE && "М/м "}
       {flat.type === EnumRoomVOType.FLAT && "Кв."}

@@ -1,3 +1,5 @@
+@import 'colors.scss';
+
 .flat-accesses {
   padding-top: 2em;
 
@@ -23,20 +25,23 @@
       }
 
       .phone-number {
-        //margin-right: 1.5em;
-        width: 140px;
+        position: relative;
+        width: 148px;
+
+        //.rent-icon {
+        //  position: absolute;
+        //  right: 0;
+        //  top:0;
+        //  color: red;
+        //}
       }
 
       .access-icons {
         //text-align: end;
-        width: 40px;
+        width: 80px;
 
         .anticon {
           font-size: 14px;
-
-          //&:first-child {
-          //  margin-left: 1em;
-          //}
 
           &:not(:last-child) {
             margin-right: 6px;
@@ -52,6 +57,10 @@
           &.parking-icon {
             color: rgb(119, 106, 195);
             //color: rgb(116, 113, 132);
+          }
+
+          &.rent-icon {
+            color: $orange;
           }
 
 

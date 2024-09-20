@@ -1,7 +1,4 @@
-.flat-info {
-  min-width: 420px;
-  max-width: 700px;
-
+.flat-info-card {
   .card-title.flat-title {
     display: flex;
     justify-content: flex-end;
@@ -14,5 +11,13 @@
       text-align: end;
     }
   }
+
+  .flat-info {
+    min-width: 420px;
+    max-width: 700px;
+
+
+  }
 }
+
 

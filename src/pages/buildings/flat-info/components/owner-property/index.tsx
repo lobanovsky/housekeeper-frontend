@@ -15,10 +15,10 @@ export const FlatOwnerInfo = ({ owner: { fullName = "", ownerRooms = [] } = Empt
     <div className="flat-owner-info">
       <span style={{ fontWeight: 500 }}>Собственник:</span> <span className="owner-name">{fullName}</span>
       <div className="owner-property">
-        {ownerRooms.map(({ type, number }: RoomVO, index) => <div className={`property-item ${type}`}>
-          {type === EnumRoomVOType.GARAGE && "Мм. "}
-          {type === EnumRoomVOType.FLAT && "Кв. "}
-          {type === EnumRoomVOType.OFFICE && "Оф. "}
+        {ownerRooms.map(({ type, number }: RoomVO, index) => <div key={number} className={`property-item ${type}`}>
+          {type === EnumRoomVOType.GARAGE && "мм. "}
+          {type === EnumRoomVOType.FLAT && "кв. "}
+          {type === EnumRoomVOType.OFFICE && "оф. "}
           {number}
         </div>)}
       </div>
