@@ -14,26 +14,24 @@ export const FlatAccesses = ({ keys = [] }: { keys: KeyVO[] }) => {
 
         return <div className="access-item">
           <div className="phone-container">
-            <span style={{ color: "gray" }}>{index + 1}.&nbsp;</span>
+            <div className="phone-index">{index + 1}.</div>
 
             {phoneCmp}
-            {areas.map(({ type }) => {
-              if (type === EnumAreaType.YARD_AREA) {
-                return <PlaygroundIcon />;
-              }
+            <div className="access-icons">
+              {areas.map(({ type }) => {
+                if (type === EnumAreaType.YARD_AREA) {
+                  return <PlaygroundIcon />;
+                }
 
-              if (type === EnumAreaType.UNDERGROUND_PARKING_AREA) {
-                return <ParkingIcon />;
-              }
+                if (type === EnumAreaType.UNDERGROUND_PARKING_AREA) {
+                  return <ParkingIcon />;
+                }
 
-              return "";
-            })}
-            {/*{!!phoneLabel && <div className="phone-label">{phoneLabel}</div>}*/}
+                return "";
+              })}
+            </div>
           </div>
           {!!phoneLabel && <div className="phone-label">{phoneLabel}</div>}
-          {/*<div className={`access-areas ${!areas.length ? "empty" : ""}`}>*/}
-          {/*  */}
-          {/*</div>*/}
         </div>;
       })}
     </div>

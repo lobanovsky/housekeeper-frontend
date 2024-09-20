@@ -7,10 +7,39 @@ import { FlatOwnerInfo } from "./components/owner-property";
 import { FlatAccesses } from "./components/accesses";
 import "./styles.scss";
 
+const sortByFlatType = ({ type: type1, number: number1 = "" }: RoomVO, {
+  type: type2,
+  number: number2 = ""
+}: RoomVO) => {
+  if (type1 === type2) {
+    return parseInt(number1) - parseInt(number2);
+  }
+
+  if (type1 === EnumRoomVOType.FLAT && type2 !== EnumRoomVOType.FLAT) {
+    return -1;
+  }
+
+  if (type1 !== EnumRoomVOType.FLAT && type2 === EnumRoomVOType.FLAT) {
+    return 1;
+  }
+
+  return type1 === EnumRoomVOType.GARAGE && type2 === EnumRoomVOType.OFFICE ? -1 : 1;
+
+};
+
 export const FlatInfo = ({ flat }: { flat: RoomVO }) => {
   const flatLoader = useCallback(() => AccessService.findByRoom({ roomId: flat.id || 0, active: true }), [flat.id]);
 
-  const [flatInfo, isLoadingFlatInfo] = useRemoteData<AccessInfoVO>(flatLoader);
+  const [flatInfo, isLoadingFlatInfo] = useRemoteData<AccessInfoVO>(flatLoader, {
+    dataConverter: (info): AccessInfoVO => ({
+      ...info,
+      // @ts-ignore
+      owner: {
+        ...info.owner,
+        ownerRooms: (info.owner?.ownerRooms || []).sort(sortByFlatType)
+      }
+    })
+  });
 
 
   return <Card size="small" loading={isLoadingFlatInfo} title={<div className="flat-title card-title">

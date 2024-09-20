@@ -1,53 +1,70 @@
 .flat-accesses {
-  padding-top: 1.5em;
+  padding-top: 2em;
 
   .access-item {
     &:first-child {
-      margin-top: 1em;
+      margin-top: 1.5em;
     }
 
     &:not(:last-child) {
-      margin-bottom: 1em;
+      padding-bottom: 6px;
+      margin-bottom: 1.5em;
+      border-bottom: 1px dashed rgba(230, 230, 230, 0.9);
     }
 
 
     .phone-container {
-      position: relative;
+      display: flex;
+      align-items: center;
+
+      .phone-index {
+        width: 24px;
+        //text-align: end;
+      }
 
       .phone-number {
-        margin-right: 1.5em;
+        //margin-right: 1.5em;
+        width: 140px;
+      }
+
+      .access-icons {
+        //text-align: end;
+        width: 40px;
+
+        .anticon {
+          font-size: 14px;
+
+          //&:first-child {
+          //  margin-left: 1em;
+          //}
+
+          &:not(:last-child) {
+            margin-right: 6px;
+          }
+
+          &.icon-playground {
+            //color: rgb(21, 138, 111);;
+            //color: rgb(45, 194, 105);
+            color: rgb(88, 158, 116);
+            font-size: 16px;
+          }
+
+          &.parking-icon {
+            color: rgb(119, 106, 195);
+            //color: rgb(116, 113, 132);
+          }
+
+
+        }
       }
 
 
-      .anticon {
-        font-size: 14px;
 
-        //&:first-child {
-        //  margin-left: 1em;
-        //}
-
-        &:not(:last-child) {
-          margin-right: 6px;
-        }
-
-        &.icon-playground {
-          //color: rgb(21, 138, 111);;
-          //color: rgb(45, 194, 105);
-          color: rgb(88, 158, 116);
-          font-size: 16px;
-        }
-
-        &.parking-icon {
-          color: rgb(116, 102, 199);
-          //color: rgb(116, 113, 132);
-        }
-
-
-      }
     }
 
     .phone-label {
-      padding-left: 1em;
+      padding-top: 2px;
+      padding-left: 26px;
       font-size: 13px;
       color: rgba(60, 60, 60, 0.8);
       line-height: 12px;
