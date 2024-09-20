@@ -8,20 +8,18 @@ const PathnameRegex = /^\/[a-zA-Z-\d]+$/;
 
 export const Sider = () => {
     const location = useLocation();
-    const [isCollapsed, setCollapsed] = useState(() => {
-        const hasRoute = PathnameRegex.test(location.pathname);
-        return hasRoute;
-    });
-
+    const [isCollapsed, setCollapsed] = useState(true);
 
     const closeSidebar = useCallback(() => {
         setCollapsed(true);
     }, []);
 
+    console.log(location.pathname);
+
     return <Layout.Sider collapsible width={320} collapsed={isCollapsed} onCollapse={setCollapsed}>
         <Menu
             theme='dark'
-            defaultSelectedKeys={[location.pathname]}
+            defaultSelectedKeys={[location.pathname === "/" ? "/buildings" : location.pathname]}
             mode='inline'
             items={NavigationItems}
             onClick={closeSidebar}

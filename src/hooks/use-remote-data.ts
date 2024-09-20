@@ -27,7 +27,6 @@ function useRemoteData<T, OutputT = T>(loader: (options?: IRequestOptions) => Pr
     loader()
       .then((responseData: T) => {
         hideLoading();
-
         const result = dataConverter ? dataConverter(responseData) : responseData;
 
         setData(result as OutputT);

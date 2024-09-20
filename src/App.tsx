@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "antd";
 import { HouseIcon } from "icons/house";
 import PageHeader from "layout/page-header";
@@ -71,13 +71,13 @@ function App() {
                                 path="/roles"
                                 element={<RolesView />}
                               />
-                                {/*<Route*/}
-                                {/*	path='*'*/}
-                                {/*	element={<Navigate*/}
-                                {/*		replace*/}
-                                {/*		to='/requests'*/}
-                                {/*	/>}*/}
-                                {/*/>*/}
+                                <Route
+                                  path="*"
+                                  element={<Navigate
+                                    replace
+                                    to="/buildings"
+                                  />}
+                                />
                             </Routes>
                         </Content>
                     </Layout>

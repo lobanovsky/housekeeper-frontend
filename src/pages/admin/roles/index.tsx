@@ -18,7 +18,7 @@ export const RolesView = () => {
   const phonesRef = useRef(null);
 
   const [loading, showLoading, hideLoading] = useLoading();
-  const [buildings, isLoadingBuildings] = useRemoteData<Building[]>(BuildingService.findAll1, {
+  const [buildings = [], isLoadingBuildings] = useRemoteData<Building[]>(BuildingService.findAll1, {
     errorMsg: "Не удалось загрузить список зданий"
   });
   const [areas, isLoadingAreas] = useRemoteData<AreaVO[], CheckboxItem[]>(AreaService.findAll2, {
@@ -122,7 +122,7 @@ export const RolesView = () => {
       <div className="areas">
         <Checkbox.Group
           /*@ts-ignore*/
-          options={areas}
+          options={areas || []}
           value={selectedAreas}
           onChange={(checkedAreas) => {
             setSelectedAreas(checkedAreas as number[]);
@@ -141,7 +141,7 @@ export const RolesView = () => {
         </Card>
         <Card size="small" className="buildings" title="Объекты доступа">
           {/*@ts-ignore*/}
-          <RoomSelector buildings={buildings} selectedRooms={selectedRooms} onSelectRoom={onChangeRoom} />
+          <RoomSelector buildings={buildings || []} selectedRooms={selectedRooms} onSelectRoom={onChangeRoom} />
         </Card>
       </div>
     </div>
