@@ -28,6 +28,10 @@
         position: relative;
         width: 148px;
 
+        &.tenant {
+          color: #c86405;
+        }
+
         //.rent-icon {
         //  position: absolute;
         //  right: 0;

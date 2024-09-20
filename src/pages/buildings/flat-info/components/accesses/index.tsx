@@ -2,7 +2,6 @@ import { EnumAreaType, KeyVO } from "backend/services/backend";
 import { ParkingIcon } from "icons/parking";
 import "./styles.scss";
 import { PlaygroundIcon } from "../../../../../icons/playground";
-import { RentIcon } from "../../../../../icons/rent";
 
 
 export const FlatAccesses = ({ keys = [] }: { keys: KeyVO[] }) => {
@@ -14,12 +13,10 @@ export const FlatAccesses = ({ keys = [] }: { keys: KeyVO[] }) => {
         return <div className="access-item">
           <div className="phone-container">
             <div className="phone-index">{index + 1}.</div>
-            <div className="phone-number">
+            <div className={`phone-number ${tenant ? "tenant" : ""}`}>
               {phoneNumber}
-
             </div>
             <div className="access-icons">
-              {!!tenant && <RentIcon className="rent-icon" />}
               {areas.map(({ type }) => {
                 if (type === EnumAreaType.YARD_AREA) {
                   return <PlaygroundIcon />;
