@@ -2,15 +2,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { Button, Card, Checkbox, Divider } from "antd";
 import { CheckOutlined } from "@ant-design/icons";
 
-import {
-  AccessRequest,
-  AccessService,
-  AreaService,
-  AreaVO,
-  Building,
-  BuildingService,
-  Room
-} from "backend/services/backend";
+import { AccessRequest, AccessService, AreaService, AreaVO, Building, BuildingService } from "backend/services/backend";
 import Loading from "components/loading";
 import { useLoading } from "hooks/use-loading";
 import useRemoteData from "hooks/use-remote-data";
@@ -26,12 +18,10 @@ export const RolesView = () => {
   const phonesRef = useRef(null);
 
   const [loading, showLoading, hideLoading] = useLoading();
-  const [buildings, isLoadingBuildings] = useRemoteData<Building>({
-    loader: BuildingService.findAll1,
+  const [buildings, isLoadingBuildings] = useRemoteData<Building[]>(BuildingService.findAll1, {
     errorMsg: "Не удалось загрузить список зданий"
   });
-  const [areas, isLoadingAreas] = useRemoteData<AreaVO, CheckboxItem>({
-    loader: AreaService.findAll2,
+  const [areas, isLoadingAreas] = useRemoteData<AreaVO[], CheckboxItem[]>(AreaService.findAll2, {
     dataConverter: (response) => response.map(({ id = 0, name = "" }) => ({ value: id, label: name })),
     errorMsg: "Не удалось загрузить список типов доступов"
   });
@@ -53,7 +43,7 @@ export const RolesView = () => {
 
   const saveData = useCallback(() => {
     showLoading();
-    const roomsToSave: Room[] = Object.entries(selectedRooms).map(([buildingId, roomIds]) => ({
+    const roomsToSave: any = Object.entries(selectedRooms).map(([buildingId, roomIds]) => ({
       buildingId: parseInt(buildingId, 10),
       roomIds
     }));
@@ -131,6 +121,7 @@ export const RolesView = () => {
       {/*<Button onClick={saveData}>Сохранить</Button>*/}
       <div className="areas">
         <Checkbox.Group
+          /*@ts-ignore*/
           options={areas}
           value={selectedAreas}
           onChange={(checkedAreas) => {

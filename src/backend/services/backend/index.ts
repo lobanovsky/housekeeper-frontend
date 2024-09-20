@@ -148,7 +148,6 @@ export class RepairControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -1352,7 +1351,7 @@ export interface RoomFilter {
   ownerName?: string;
 }
 
-export interface OwnerVO {
+export interface OwnerVO_Old {
   /**  */
   fullName?: string;
 
@@ -1406,16 +1405,16 @@ export interface PageRoomVO {
 
 export interface PageableObject {
   /**  */
-  pageNumber?: number;
-
-  /**  */
-  pageSize?: number;
-
-  /**  */
   paged?: boolean;
 
   /**  */
   unpaged?: boolean;
+
+  /**  */
+  pageNumber?: number;
+
+  /**  */
+  pageSize?: number;
 
   /**  */
   offset?: number;
@@ -1470,10 +1469,10 @@ export interface RoomVO {
 
 export interface SortObject {
   /**  */
-  sorted?: boolean;
+  unsorted?: boolean;
 
   /**  */
-  unsorted?: boolean;
+  sorted?: boolean;
 
   /**  */
   empty?: boolean;
@@ -2022,10 +2021,10 @@ export interface AccessRequest {
 
 export interface Person {
   /**  */
-  phones?: Phone[];
+  ownerId?: number;
 
   /**  */
-  rooms?: Room[];
+  phones?: Phone[];
 
   /**  */
   tenant?: boolean;
@@ -2039,12 +2038,12 @@ export interface Phone {
   label?: string;
 }
 
-export interface Room {
+export interface AccessResponse {
   /**  */
-  buildingId?: number;
+  phoneNumber?: string;
 
   /**  */
-  roomIds?: number[];
+  success?: boolean;
 }
 
 export interface ManualAccountRequest {
@@ -2323,21 +2322,12 @@ export interface AccountResponse {
   description?: string;
 }
 
-export interface AccessInfoVOOld {
+export interface AccessInfoVO {
   /**  */
-  id?: number;
+  owner?: OwnerVO;
 
   /**  */
-  phoneNumber?: string;
-
-  /**  */
-  phoneLabel?: string;
-
-  /**  */
-  areas?: AreaVO[];
-
-  /**  */
-  rooms?: RoomVO[];
+  keys?: KeyVO[];
 }
 
 export interface AreaVO {
@@ -2349,6 +2339,23 @@ export interface AreaVO {
 
   /**  */
   type?: string;
+}
+
+export interface KeyVO {
+  /**  */
+  id?: number;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  phoneLabel?: string;
+
+  /**  */
+  tenant?: boolean;
+
+  /**  */
+  areas?: AreaVO[];
 }
 export enum EnumRoomFilterType {
   'FLAT' = 'FLAT',
@@ -2453,22 +2460,6 @@ export enum EnumAreaType {
   'UNDERGROUND_PARKING_AREA' = 'UNDERGROUND_PARKING_AREA'
 }
 
-export interface AccessInfoVO {
-  /**  */
-  id?: number;
-
-  /**  */
-  phoneNumber?: string;
-
-  /**  */
-  phoneLabel?: string;
-
-  /**  */
-  areas?: AreaVO[];
-
-  /**  */
-  rooms?: RoomVO[];
-}
 
 export interface TopResponse {
   count: number,
@@ -2482,6 +2473,10 @@ export interface TopFilter {
   gateId?: number;
   startDate?: string;
   endDate?: string;
+}
+
+export interface OwnerVO extends OwnerVO_Old {
+  ownerRooms?: RoomVO[];
 }
 
 

@@ -1,5 +1,8 @@
 .flat-info {
-  .flat-title {
+  min-width: 420px;
+  max-width: 700px;
+
+  .card-title.flat-title {
     display: flex;
     justify-content: flex-end;
     gap: 1em;
@@ -11,66 +14,5 @@
       text-align: end;
     }
   }
-
-  .owner-name {
-    margin-bottom: 1em;
-    line-height: 16px;
-    color: #0958d9;
-  }
-
-  .accesses,
-  .rooms {
-    line-height: 18px;
-  }
-
-  .accesses {
-    .access-info {
-      &:not(:last-child) {
-        margin-bottom: 8px;
-      }
-    }
-
-    &.empty {
-      padding: 8px 16px;
-      color: rgba(20, 20, 20, 0.85);
-    }
-
-    .phone {
-      position: relative;
-
-      .phone-label {
-        font-size: 13px;
-        color: rgba(60, 60, 60, 0.8);
-        line-height: 12px;
-        position: absolute;
-        white-space: nowrap;
-        top: 0;
-        left: 156px
-      }
-    }
-
-    .areas {
-      margin: 6px 0;
-
-      .anticon {
-        &:not(:last-child) {
-          margin-right: 6px;
-        }
-
-        &.anticon-home {
-          color: rgb(59, 36, 195);
-        }
-
-        &.parking-icon {
-          color: rgb(21, 138, 111);
-        }
-
-
-      }
-
-    }
-  }
-
-
 }
 

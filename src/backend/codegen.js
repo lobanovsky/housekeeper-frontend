@@ -1,52 +1,34 @@
 // @ts-ignore
-const { codegen } = require('swagger-axios-codegen');
-const path = require('path');
-const fs = require('fs');
+const { codegen } = require("swagger-axios-codegen");
+const path = require("path");
+const fs = require("fs");
 
-const replace = require('replace-in-file');
+const replace = require("replace-in-file");
 
 module.exports = async (options) => {
-	const outFile = path.resolve(options.outputDir, 'index.ts');
+  const outFile = path.resolve(options.outputDir, "index.ts");
 
-	try {
-        await codegen({
-            strictNullChecks: false,
-            modelMode: 'interface',
-            ...options
-        });
+  try {
+    await codegen({
+      strictNullChecks: false,
+      modelMode: "interface",
+      ...options
+    });
 
-        await replace({
-            files: outFile,
-            from: /\?: Date;/g,
-            to: ': string;'
-        });
+    await replace({
+      files: outFile,
+      from: /\?: Date;/g,
+      to: ": string;"
+    });
 
-
-		await replace({
-			files: outFile,
-			from: /export interface AccessInfoVO/g,
-			to: "export interface AccessInfoVOOld"
-		});
-
+    await replace({
+      files: outFile,
+      from: /export interface OwnerVO/g,
+      to: "export interface OwnerVO_Old"
+    });
 
 
-        await fs.appendFile(outFile, `
-        export interface AccessInfoVO {
-  /**  */
-  id?: number;
-
-  /**  */
-  phoneNumber?: string;
-  
-    /**  */
-  phoneLabel?: string;
-
-  /**  */
-  areas?: AreaVO[];
-
-  /**  */
-  rooms?: RoomVO[];
-}
+    await fs.appendFile(outFile, `
 			
 export interface TopResponse {
 	count: number,
@@ -60,6 +42,10 @@ export interface TopFilter {
 	gateId?: number;
 	startDate?: string;
 	endDate?: string;
+}
+
+export interface OwnerVO extends OwnerVO_Old {
+	ownerRooms?: RoomVO[]
 }
 
 
@@ -77,15 +63,15 @@ export const BuildingService = new BuildingControllerService();
 export const AccessService = new AccessControllerService();
 export const AreaService = new AreaControllerService();
 	`, (err) => {
-				if (err) {
-					console.error('Append error');
-				} else {
-					console.log('Append success');
-				}
-			});
-	} catch (e) {
-		console.log('%cCodegen error!!!', 'color: red');
-		console.log(e);
-	}
+      if (err) {
+        console.error("Append error");
+      } else {
+        console.log("Append success");
+      }
+    });
+  } catch (e) {
+    console.log("%cCodegen error!!!", "color: red");
+    console.log(e);
+  }
 
 };

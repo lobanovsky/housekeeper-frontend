@@ -1,0 +1,63 @@
+.flat-accesses {
+  padding-top: 1.5em;
+
+  .access-item {
+    &:first-child {
+      margin-top: 1em;
+    }
+
+    &:not(:last-child) {
+      margin-bottom: 1em;
+    }
+
+
+    .phone-container {
+      position: relative;
+
+      .phone-number {
+        margin-right: 1.5em;
+      }
+
+
+      .anticon {
+        font-size: 14px;
+
+        //&:first-child {
+        //  margin-left: 1em;
+        //}
+
+        &:not(:last-child) {
+          margin-right: 6px;
+        }
+
+        &.icon-playground {
+          //color: rgb(21, 138, 111);;
+          //color: rgb(45, 194, 105);
+          color: rgb(88, 158, 116);
+          font-size: 16px;
+        }
+
+        &.parking-icon {
+          color: rgb(116, 102, 199);
+          //color: rgb(116, 113, 132);
+        }
+
+
+      }
+    }
+
+    .phone-label {
+      padding-left: 1em;
+      font-size: 13px;
+      color: rgba(60, 60, 60, 0.8);
+      line-height: 12px;
+    }
+
+    .access-areas {
+      margin: 2px 0;
+
+
+    }
+  }
+}
+

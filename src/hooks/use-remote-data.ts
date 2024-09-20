@@ -4,31 +4,43 @@ import { showError } from "../utils/notifications";
 import { ServerError } from "../utils/types";
 import { IRequestOptions } from "../backend/services/backend";
 
-function useRemoteData<T, OutputT = T>({ loader, errorMsg = "Не удалось загрузить данные", dataConverter }: {
-  loader: (options?: IRequestOptions) => Promise<T[]>,
+export interface RemoteDataParams<T, OutputT> {
   errorMsg?: string,
-  dataConverter?: (data: T[]) => OutputT[]
-}): [OutputT[], boolean, () => void] {
+  dataConverter?: (data: T) => OutputT,
+  loadOnInit?: boolean
+}
+
+function useRemoteData<T, OutputT = T>(loader: (options?: IRequestOptions) => Promise<T>, {
+  errorMsg = "Не удалось загрузить данные",
+  dataConverter = undefined,
+  loadOnInit = true
+}: RemoteDataParams<T, OutputT> = {
+  errorMsg: "Не удалось загрузить данные",
+  dataConverter: undefined,
+  loadOnInit: true
+}): [OutputT | null, boolean, () => void] {
   const [loading, showLoading, hideLoading] = useLoading();
-  const [data, setData] = useState<OutputT[]>([]);
+  const [data, setData] = useState<OutputT | null>(null);
 
   const loadData = useCallback(() => {
     showLoading();
-
-    // @ts-ignore
     loader()
-      .then((responseData: T[]) => {
+      .then((responseData: T) => {
         hideLoading();
+
         const result = dataConverter ? dataConverter(responseData) : responseData;
-        setData(result as OutputT[]);
+
+        setData(result as OutputT);
       })
       .catch((e: ServerError) => {
         showError(errorMsg, e);
         hideLoading();
       });
-  }, []);
+  }, [loader]);
 
-  useEffect(loadData, []);
+  useEffect(() => {
+    loadData();
+  }, [loader]);
 
   return [data, loading, loadData];
 }
