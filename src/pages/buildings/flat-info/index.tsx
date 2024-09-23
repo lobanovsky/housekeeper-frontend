@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Card } from "antd";
+import { Card, Typography } from "antd";
 
 import { AccessInfoVO, AccessService, EnumRoomVOType, RoomVO } from "backend/services/backend";
 import useRemoteData from "hooks/use-remote-data";
@@ -44,14 +44,14 @@ export const FlatInfo = ({ flat }: { flat: RoomVO }) => {
 
   return <Card size="small" className="flat-info-card" loading={isLoadingFlatInfo}
                title={<div className="flat-title card-title">
-    <div style={{ fontWeight: 600 }}>
-      {flat.type === EnumRoomVOType.GARAGE && "М/м "}
-      {flat.type === EnumRoomVOType.FLAT && "Кв."}
-      {flat.type === EnumRoomVOType.OFFICE && "Офис "}
-      {flat.number}
-    </div>
-    <div className="address">{`${flat.street}, д. ${flat.building}`}</div>
-  </div>}>
+                 <Typography.Title level={5}>
+                   {flat.type === EnumRoomVOType.GARAGE && "М/м "}
+                   {flat.type === EnumRoomVOType.FLAT && "Кв."}
+                   {flat.type === EnumRoomVOType.OFFICE && "Офис "}
+                   {flat.number}
+                 </Typography.Title>
+                 <div className="address">{`${flat.street}, д. ${flat.building}`}</div>
+               </div>}>
     <div className="flat-info">
       <FlatOwnerInfo owner={flatInfo?.owner} />
       <FlatAccesses keys={flatInfo?.keys || []} />

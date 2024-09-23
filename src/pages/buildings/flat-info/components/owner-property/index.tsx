@@ -1,5 +1,6 @@
 import { EnumRoomVOType, OwnerVO, RoomVO } from "backend/services/backend";
 import "./styles.scss";
+import { OwnerIcon } from "../../../../../icons/owner";
 
 export const EmptyOwner: OwnerVO = {
   fullName: "",
@@ -13,7 +14,9 @@ export const FlatOwnerInfo = ({ owner: { fullName = "", ownerRooms = [] } = Empt
 }) => {
   return (
     <div className="flat-owner-info">
-      <span style={{ fontWeight: 500 }}>Собственник:</span> <span className="owner-name">{fullName}</span>
+      <div className="owner-name-container">
+        <OwnerIcon className="owner-icon" /> <span className="owner-name">{fullName}</span>
+      </div>
       <div className="owner-property">
         {ownerRooms.map(({ type, number }: RoomVO, index) => <div key={number} className={`property-item ${type}`}>
           {type === EnumRoomVOType.GARAGE && "мм. "}

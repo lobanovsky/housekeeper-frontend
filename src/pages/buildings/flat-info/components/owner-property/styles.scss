@@ -1,8 +1,25 @@
 .flat-owner-info {
-  .owner-name {
-    margin-bottom: 0.5em;
-    line-height: 16px;
-    color: #0958d9;
+  .owner-name-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+
+    .owner-icon {
+      font-size: 26px;
+      color: #2d71e0;
+    }
+
+    .owner-name {
+      font-size: 15px;
+      margin-bottom: 0.5em;
+      line-height: 16px;
+      //color: #0958d9;
+    }
   }
+
+  .owner-property {
+    margin-top: 4px;
+  }
+
 }
 

@@ -4,6 +4,10 @@
     justify-content: flex-end;
     gap: 1em;
 
+    > h5 {
+      margin: 0;
+    }
+
     .address {
       font-weight: normal;
       color: gray;

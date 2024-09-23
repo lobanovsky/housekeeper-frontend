@@ -8,10 +8,11 @@ import { CarFrontIcon } from "../../../../../icons/car_front";
 export const FlatAccesses = ({ keys = [] }: { keys: KeyVO[] }) => {
   return (
     <div className="flat-accesses">
-      <span style={{ marginTop: "0.5em", marginBottom: "1em", color: "rgb(40,14,194)" }}>Доступы:</span>
+      <span
+        style={{ marginTop: "0.5em", marginBottom: "1em", color: "rgb(119, 0, 194)", fontSize: "15px" }}>Доступы:</span>
       {!keys.length && <span className="emtpy-placeholder">не указаны</span>}
-      {keys.map(({ id, phoneLabel, phoneNumber, tenant, areas = [], cars = [] }: KeyVO, index) => {
-        return <div className="access-item">
+      {keys.map(({ id, phoneLabel, phoneNumber, tenant, areas = [], cars = [] }: KeyVO, index) => (
+        <div className="access-item" key={id}>
           <div className="phone-container">
             {/*<div className="phone-index">{index + 1}.</div>*/}
             <div className={`phone-number ${tenant ? "tenant" : ""}`}>
@@ -38,10 +39,10 @@ export const FlatAccesses = ({ keys = [] }: { keys: KeyVO[] }) => {
               <span className="car-description">{description}</span>
             </div>)}
           </div>
-          {!!phoneLabel && <div className="phone-label">{phoneLabel}</div>}
+          {(!!phoneLabel || tenant) && <div className="phone-label">{phoneLabel || "аренда"}</div>}
 
-        </div>;
-      })}
+        </div>
+      ))}
     </div>
   );
 };
