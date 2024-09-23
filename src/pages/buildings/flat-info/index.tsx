@@ -30,7 +30,7 @@ const sortByFlatType = ({ type: type1, number: number1 = "" }: RoomVO, {
 export const FlatInfo = ({ flat }: { flat: RoomVO }) => {
   const flatLoader = useCallback(() => AccessService.findByRoom({ roomId: flat.id || 0, active: true }), [flat.id]);
 
-  const [flatInfo, isLoadingFlatInfo] = useRemoteData<AccessInfoVO>(flatLoader, {
+  const [flatInfo, isLoadingFlatInfo, loadFlatInfo] = useRemoteData<AccessInfoVO>(flatLoader, {
     dataConverter: (info): AccessInfoVO => ({
       ...info,
       // @ts-ignore
@@ -54,7 +54,7 @@ export const FlatInfo = ({ flat }: { flat: RoomVO }) => {
                </div>}>
     <div className="flat-info">
       <FlatOwnerInfo owner={flatInfo?.owner} />
-      <FlatAccesses keys={flatInfo?.keys || []} />
+      <FlatAccesses keys={flatInfo?.keys || []} loadFlatInfo={loadFlatInfo} />
     </div>
   </Card>;
 };

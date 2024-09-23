@@ -230,6 +230,156 @@ export class CounterpartyControllerService {
   }
 }
 
+export class AccessControllerService {
+  /**
+   * Edit the area access by the phone number
+   */
+  updateAccess(
+    params: {
+      /**  */
+      accessId: number;
+      /** requestBody */
+      body?: AccessUpdateRequest;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/access/{access-id}";
+      url = url.replace("{access-id}", params["accessId"] + "");
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Remove the area access by the phone number
+   */
+  deleteAccess(
+    params: {
+      /**  */
+      accessId: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/access/{access-id}";
+      url = url.replace("{access-id}", params["accessId"] + "");
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options);
+
+      let data = null;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Create the area access by the phone number (Were? -> Area, Who? -> Room)
+   */
+  createAccess(
+    params: {
+      /** requestBody */
+      body?: AccessCreateRequest;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/access";
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Get the access by the room id
+   */
+  findByRoom(
+    params: {
+      /**  */
+      roomId: number;
+      /**  */
+      active?: boolean;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/access/rooms/{room-id}";
+      url = url.replace("{room-id}", params["roomId"] + "");
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
+      configs.params = { active: params["active"] };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Get the access by the phone number
+   */
+  findByPhone(
+    params: {
+      /**  */
+      phoneNumber: string;
+      /**  */
+      active?: boolean;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/access/phones/{phone-number}";
+      url = url.replace("{phone-number}", params["phoneNumber"] + "");
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
+      configs.params = { active: params["active"] };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   * Get the access by the car number
+   */
+  findByCarNumber(
+    params: {
+      /**  */
+      carNumber: string;
+      /**  */
+      active?: boolean;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/access/cars/{car-number}";
+      url = url.replace("{car-number}", params["carNumber"] + "");
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
+      configs.params = { active: params["active"] };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export class RoomControllerService {
   /**
    * Get all rooms with filter
@@ -1038,104 +1188,6 @@ export class DecisionControllerService {
   }
 }
 
-export class AccessControllerService {
-  /**
-   * Create the area access by the phone number (Were? -> Area, Who? -> Room)
-   */
-  createAccess(
-    params: {
-      /** requestBody */
-      body?: AccessRequest;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/access/areas';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Get the access by the room id
-   */
-  findByRoom(
-    params: {
-      /**  */
-      roomId: number;
-      /**  */
-      active?: boolean;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/access/rooms/{room-id}';
-      url = url.replace('{room-id}', params['roomId'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { active: params["active"] };
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Get the access by the phone number
-   */
-  findByPhone(
-    params: {
-      /**  */
-      phoneNumber: string;
-      /**  */
-      active?: boolean;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/access/phones/{phone-number}';
-      url = url.replace('{phone-number}', params['phoneNumber'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { active: params["active"] };
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject);
-    });
-  }
-
-  /**
-   * Get the access by the car number
-   */
-  findByCarNumber(
-    params: {
-      /**  */
-      carNumber: string;
-      /**  */
-      active?: boolean;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/access/cars/{car-number}";
-      url = url.replace("{car-number}", params["carNumber"] + "");
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
-      configs.params = { active: params["active"] };
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject);
-    });
-  }
-}
-
 export class RoomReportControllerService {
   /**
    * Print rooms
@@ -1356,6 +1408,134 @@ export interface CounterpartyResponse {
   createDate: string;
 }
 
+export interface AccessUpdateRequest {
+  /**  */
+  label?: string;
+
+  /**  */
+  tenant?: boolean;
+
+  /**  */
+  areas?: number[];
+}
+
+export interface AccessInfoVO {
+  /**  */
+  owner?: OwnerVO;
+
+  /**  */
+  keys?: KeyVO[];
+}
+
+export interface AreaVO {
+  /**  */
+  id?: number;
+
+  /**  */
+  name?: string;
+
+  /**  */
+  type?: string;
+}
+
+export interface CarVO {
+  /**  */
+  id?: number;
+
+  /**  */
+  number?: string;
+
+  /**  */
+  description?: string;
+}
+
+export interface KeyVO {
+  /**  */
+  id?: number;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  phoneLabel?: string;
+
+  /**  */
+  tenant?: boolean;
+
+  /**  */
+  areas?: AreaVO[];
+
+  /**  */
+  cars?: CarVO[];
+}
+
+export interface OwnerVO_Old {
+  /**  */
+  id?: number;
+
+  /**  */
+  fullName?: string;
+
+  /**  */
+  emails?: string[];
+
+  /**  */
+  phones?: string[];
+
+  /**  */
+  active?: boolean;
+
+  /**  */
+  dateOfLeft: string;
+
+  /**  */
+  ownerRooms?: RoomVO[];
+}
+
+export interface RoomVO {
+  /**  */
+  id?: number;
+
+  /**  */
+  street?: string;
+
+  /**  */
+  building?: number;
+
+  /**  */
+  cadastreNumber?: string;
+
+  /**  */
+  account?: string;
+
+  /**  */
+  ownerName?: string;
+
+  /**  */
+  number?: string;
+
+  /**  */
+  certificate?: string;
+
+  /**  */
+  square?: number;
+
+  /**  */
+  percentage?: number;
+
+  /**  */
+  type?: EnumRoomVOType;
+
+  /**  */
+  typeDescription?: string;
+
+  /**  */
+  owners?: OwnerVO[];
+
+  /**  */
+  tenants?: OwnerVO[];
+}
+
 export interface RoomFilter {
   /**  */
   account?: string;
@@ -1376,29 +1556,12 @@ export interface RoomFilter {
   ownerName?: string;
 }
 
-export interface OwnerVO_Old {
-  /**  */
-  fullName?: string;
-
-  /**  */
-  emails?: string[];
-
-  /**  */
-  phones?: string[];
-
-  /**  */
-  active?: boolean;
-
-  /**  */
-  dateOfLeft: string;
-}
-
 export interface PageRoomVO {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -1446,50 +1609,6 @@ export interface PageableObject {
 
   /**  */
   sort?: SortObject;
-}
-
-export interface RoomVO {
-  /**  */
-  id?: number;
-
-  /**  */
-  street?: string;
-
-  /**  */
-  building?: number;
-
-  /**  */
-  cadastreNumber?: string;
-
-  /**  */
-  account?: string;
-
-  /**  */
-  ownerName?: string;
-
-  /**  */
-  number?: string;
-
-  /**  */
-  certificate?: string;
-
-  /**  */
-  square?: number;
-
-  /**  */
-  percentage?: number;
-
-  /**  */
-  type?: EnumRoomVOType;
-
-  /**  */
-  typeDescription?: string;
-
-  /**  */
-  owners?: OwnerVO[];
-
-  /**  */
-  tenants?: OwnerVO[];
 }
 
 export interface SortObject {
@@ -1576,10 +1695,10 @@ export interface RangeRequest {
 
 export interface PagePaymentVO {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -1801,10 +1920,10 @@ export interface LogEntryResponse {
 
 export interface PageLogEntryResponse {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -1872,10 +1991,10 @@ export interface FileVO {
 
 export interface PageFileVO {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2036,34 +2155,34 @@ export interface MailingResponse {
   sentEmail?: number;
 }
 
-export interface AccessRequest {
+export interface AccessCreateRequest {
   /**  */
   areas?: number[];
 
   /**  */
-  person?: Person;
+  accessPerson?: AccessPerson;
 }
 
-export interface Person {
+export interface AccessPerson {
   /**  */
   ownerId?: number;
 
   /**  */
-  phones?: Phone[];
-
-  /**  */
-  tenant?: boolean;
+  accessPhones?: AccessPhone[];
 }
 
-export interface Phone {
+export interface AccessPhone {
   /**  */
   number?: string;
 
   /**  */
   label?: string;
+
+  /**  */
+  tenant?: boolean;
 }
 
-export interface AccessResponse {
+export interface AccessCreateResponse {
   /**  */
   id?: number;
 
@@ -2072,6 +2191,9 @@ export interface AccessResponse {
 
   /**  */
   success?: boolean;
+
+  /**  */
+  reason?: string;
 }
 
 export interface ManualAccountRequest {
@@ -2350,61 +2472,13 @@ export interface AccountResponse {
   description?: string;
 }
 
-export interface AccessInfoVO {
-  /**  */
-  owner?: OwnerVO;
-
-  /**  */
-  keys?: KeyVO[];
-}
-
-export interface AreaVO {
-  /**  */
-  id?: number;
-
-  /**  */
-  name?: string;
-
-  /**  */
-  type?: string;
-}
-
-export interface CarVO {
-  /**  */
-  id?: number;
-
-  /**  */
-  number?: string;
-
-  /**  */
-  description?: string;
-}
-
-export interface KeyVO {
-  /**  */
-  id?: number;
-
-  /**  */
-  phoneNumber?: string;
-
-  /**  */
-  phoneLabel?: string;
-
-  /**  */
-  tenant?: boolean;
-
-  /**  */
-  areas?: AreaVO[];
-
-  /**  */
-  cars?: CarVO[];
-}
-export enum EnumRoomFilterType {
+export enum EnumRoomVOType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
-export enum EnumRoomVOType {
+
+export enum EnumRoomFilterType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'

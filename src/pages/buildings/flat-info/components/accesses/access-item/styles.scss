@@ -1,0 +1,137 @@
+@import 'colors.scss';
+
+.access-item {
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+
+  &:first-child {
+    margin-top: 1.5em;
+  }
+
+  &:not(:last-child) {
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    border-bottom: 1px dashed rgba(230, 230, 230, 0.9);
+  }
+
+  .access-info {
+    flex: 1 0 auto;
+
+    .phone-container {
+      display: flex;
+      align-items: center;
+
+      .phone-index {
+        width: 24px;
+        //text-align: end;
+      }
+
+      .phone-number {
+        font-size: 15px;
+        font-weight: 500;
+        position: relative;
+        width: 158px;
+
+        &.tenant {
+          color: #c86405;
+          font-weight: normal;
+        }
+
+        //.rent-icon {
+        //  position: absolute;
+        //  right: 0;
+        //  top:0;
+        //  color: red;
+        //}
+      }
+
+      .access-icons {
+        //text-align: end;
+        width: 80px;
+
+        .anticon {
+          font-size: 15px;
+
+          &:not(:last-child) {
+            margin-right: 6px;
+          }
+
+          &.icon-playground {
+            //color: rgb(21, 138, 111);;
+            //color: rgb(45, 194, 105);
+            color: rgb(88, 158, 116);
+            font-size: 17px;
+          }
+
+          &.parking-icon {
+            color: rgb(119, 106, 195);
+            //color: rgb(116, 113, 132);
+          }
+
+          &.rent-icon {
+            color: $orange;
+          }
+
+
+        }
+      }
+
+
+    }
+
+    .phone-label {
+      padding-top: 2px;
+      color: gray;
+      line-height: 16px;
+
+      &.has-label {
+        color: rgba(60, 60, 60, 0.8);
+      }
+    }
+
+    .access-areas {
+      margin: 2px 0;
+
+    }
+
+    .cars {
+      margin: 2px 0;
+
+      .car {
+        display: flex;
+        align-items: center;
+
+        .car-number {
+          margin-left: 12px;
+        }
+
+        .car-description {
+          color: gray;
+          margin-left: 8px;
+          font-style: italic;
+        }
+      }
+    }
+  }
+
+  .access-actions {
+    width: 60px;
+    text-align: end;
+
+    .ant-btn {
+      @include rowActionButtonStyle();
+      padding: 0 2px;
+
+      &:not(:last-child) {
+        margin-right: 0.5em;
+      }
+
+      //&:not(:focus),
+    }
+  }
+
+
+}
+

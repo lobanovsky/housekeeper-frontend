@@ -2,7 +2,14 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { Button, Card, Checkbox, Divider } from "antd";
 import { CheckOutlined } from "@ant-design/icons";
 
-import { AccessRequest, AccessService, AreaService, AreaVO, Building, BuildingService } from "backend/services/backend";
+import {
+  AccessCreateRequest,
+  AccessService,
+  AreaService,
+  AreaVO,
+  Building,
+  BuildingService
+} from "backend/services/backend";
 import Loading from "components/loading";
 import { useLoading } from "hooks/use-loading";
 import useRemoteData from "hooks/use-remote-data";
@@ -51,7 +58,7 @@ export const RolesView = () => {
     const phonesToSave = phones.phones.filter((phone) => PhoneRegex.test(phone)).map(phone => phone.replace(/\s+/g, ""));
 
 
-    const result: AccessRequest = {
+    const result: AccessCreateRequest = {
       // @ts-ignore
       phoneNumbers: phonesToSave,
       areas: selectedAreas,

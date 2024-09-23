@@ -3,3 +3,26 @@ $blue: #2a08ff;
 $red: #ea1c01;
 $yellow: #ffbb00;
 $orange: #ff7c00;
+$antd-blue: #0371d7;
+$antd-blue-hover: #69b1ff;
+$antd-blue-active: #0958d9;
+
+$action-icon-table-color: #969696;
+
+@mixin rowActionButtonStyle($color:$action-icon-table-color) {
+  .anticon {
+    vertical-align: 0;
+  }
+
+  &:not(:disabled) {
+    color: $color;
+
+    &:hover {
+      color: $antd-blue-hover;
+    }
+
+    &:active {
+      color: $antd-blue-active;
+    }
+  }
+}
