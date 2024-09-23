@@ -1109,6 +1109,31 @@ export class AccessControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   * Get the access by the car number
+   */
+  findByCarNumber(
+    params: {
+      /**  */
+      carNumber: string;
+      /**  */
+      active?: boolean;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/access/cars/{car-number}";
+      url = url.replace("{car-number}", params["carNumber"] + "");
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
+      configs.params = { active: params["active"] };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
 }
 
 export class RoomReportControllerService {
@@ -1370,10 +1395,10 @@ export interface OwnerVO_Old {
 
 export interface PageRoomVO {
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -1551,10 +1576,10 @@ export interface RangeRequest {
 
 export interface PagePaymentVO {
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -1776,10 +1801,10 @@ export interface LogEntryResponse {
 
 export interface PageLogEntryResponse {
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -1847,10 +1872,10 @@ export interface FileVO {
 
 export interface PageFileVO {
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2039,6 +2064,9 @@ export interface Phone {
 }
 
 export interface AccessResponse {
+  /**  */
+  id?: number;
+
   /**  */
   phoneNumber?: string;
 
@@ -2341,6 +2369,17 @@ export interface AreaVO {
   type?: string;
 }
 
+export interface CarVO {
+  /**  */
+  id?: number;
+
+  /**  */
+  number?: string;
+
+  /**  */
+  description?: string;
+}
+
 export interface KeyVO {
   /**  */
   id?: number;
@@ -2356,6 +2395,9 @@ export interface KeyVO {
 
   /**  */
   areas?: AreaVO[];
+
+  /**  */
+  cars?: CarVO[];
 }
 export enum EnumRoomFilterType {
   'FLAT' = 'FLAT',

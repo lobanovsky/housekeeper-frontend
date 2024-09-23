@@ -1,21 +1,36 @@
-import {useCallback, useEffect, useState} from 'react';
-import {Button, Col, Divider, List, Row} from 'antd';
-import {Building, BuildingService, EnumBuildingType} from 'backend/services/backend';
+import { useCallback, useEffect, useState } from "react";
+import { Button, Col, Divider, List, Row } from "antd";
+import { Building, BuildingService, EnumBuildingType } from "backend/services/backend";
 
-import {showError} from 'utils/notifications';
-import './styles.scss';
-import {useLoading} from "../../hooks/use-loading";
-import {HomeOutlined} from "@ant-design/icons";
-import {ParkingIcon} from "../../icons/parking";
-import {BuildingScheme} from "./building-scheme";
+import { showError } from "utils/notifications";
+import "./styles.scss";
+import { useLoading } from "../../hooks/use-loading";
+import { HomeOutlined } from "@ant-design/icons";
+import { ParkingIcon } from "../../icons/parking";
+import { BuildingScheme } from "./building-scheme";
 
 
 export const Buildings = () => {
     const [loading, showLoading, hideLoading] = useLoading();
     const [buildings, setBuildings] = useState<Building[]>([]);
     const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
+  //   const [searchStr, setSearchStr] = useState<string>('');
+  //   const [foundedInfo, setFoundedInfo] = useState<AccessInfoVO | undefined>(undefined);
+  //
+  //   //todo сделать хук по поиску
+  // // по формату строки определять, что это - номер телефона или номер машины или квартира
+  //
+  //   const searchFlat = useCallback((searchStr: string) => {
+  //
+  //   }, []);
+  //
+  // const delayedSearch = useCallback(
+  //   debounce((params) => loadData(params), 600),
+  //   []
+  // );
 
-    const loadBuildings = useCallback(() => {
+
+  const loadBuildings = useCallback(() => {
         showLoading();
         BuildingService.findAll1()
             .then((responseData: Building[]) => {

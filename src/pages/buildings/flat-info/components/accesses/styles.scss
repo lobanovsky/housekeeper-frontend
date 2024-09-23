@@ -4,6 +4,7 @@
   padding-top: 2em;
 
   .access-item {
+    padding: 2px 4px;
     &:first-child {
       margin-top: 1.5em;
     }
@@ -25,8 +26,10 @@
       }
 
       .phone-number {
+        font-size: 15px;
+        font-weight: 500;
         position: relative;
-        width: 148px;
+        width: 158px;
 
         &.tenant {
           color: #c86405;
@@ -77,16 +80,34 @@
 
     .phone-label {
       padding-top: 2px;
-      padding-left: 26px;
-      font-size: 13px;
+      //padding-left: 26px;
+      //font-size: 13px;
       color: rgba(60, 60, 60, 0.8);
-      line-height: 12px;
+      line-height: 16px;
     }
 
     .access-areas {
       margin: 2px 0;
 
+    }
 
+    .cars {
+      margin: 2px 0;
+
+      .car {
+        display: flex;
+        align-items: center;
+
+        .car-number {
+          margin-left: 12px;
+        }
+
+        .car-description {
+          color: gray;
+          margin-left: 8px;
+          font-style: italic;
+        }
+      }
     }
   }
 }
