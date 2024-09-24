@@ -256,7 +256,6 @@ export class AccessControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Remove the area access by the phone number
    */
@@ -280,7 +279,6 @@ export class AccessControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Create the area access by the phone number (Were? -> Area, Who? -> Room)
    */
@@ -303,7 +301,6 @@ export class AccessControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Get the access by the room id
    */
@@ -328,7 +325,6 @@ export class AccessControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Get the access by the phone number
    */
@@ -353,7 +349,6 @@ export class AccessControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Get the access by the car number
    */
@@ -1408,6 +1403,14 @@ export interface CounterpartyResponse {
   createDate: string;
 }
 
+export interface AccessCar {
+  /**  */
+  plateNumber?: string;
+
+  /**  */
+  description?: string;
+}
+
 export interface AccessUpdateRequest {
   /**  */
   label?: string;
@@ -1417,6 +1420,9 @@ export interface AccessUpdateRequest {
 
   /**  */
   areas?: number[];
+
+  /**  */
+  cars?: AccessCar[];
 }
 
 export interface AccessInfoVO {
@@ -1558,10 +1564,10 @@ export interface RoomFilter {
 
 export interface PageRoomVO {
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -1695,10 +1701,10 @@ export interface RangeRequest {
 
 export interface PagePaymentVO {
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -1920,10 +1926,10 @@ export interface LogEntryResponse {
 
 export interface PageLogEntryResponse {
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -1991,10 +1997,10 @@ export interface FileVO {
 
 export interface PageFileVO {
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2160,7 +2166,7 @@ export interface AccessCreateRequest {
   areas?: number[];
 
   /**  */
-  accessPerson?: AccessPerson;
+  person?: AccessPerson;
 }
 
 export interface AccessPerson {
@@ -2168,7 +2174,7 @@ export interface AccessPerson {
   ownerId?: number;
 
   /**  */
-  accessPhones?: AccessPhone[];
+  phones?: AccessPhone[];
 }
 
 export interface AccessPhone {
@@ -2180,6 +2186,9 @@ export interface AccessPhone {
 
   /**  */
   tenant?: boolean;
+
+  /**  */
+  cars?: AccessCar[];
 }
 
 export interface AccessCreateResponse {
@@ -2471,13 +2480,11 @@ export interface AccountResponse {
   /**  */
   description?: string;
 }
-
 export enum EnumRoomVOType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
-
 export enum EnumRoomFilterType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',

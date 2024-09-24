@@ -1,11 +1,13 @@
-import { notification } from "antd";
+// import { notification } from "antd";
 import { ServerError } from "utils/types";
 import { ReactNode } from "react";
 import { ArgsProps } from "antd/es/notification/interface";
 
+import { notificationsProvider } from "../global/NotificationsProvider";
+
 // @ts-ignore
 export const showMessage = (text: string | ReactNode, props?: ArgsProps = {}) => {
-	notification.success({
+	notificationsProvider.success({
 		// @ts-ignore
 		message: '',
 		description: text,
@@ -38,7 +40,7 @@ export const showError = (text: string, serverError?: ServerError ) => {
 		messageText = <span>{messageText}.<br /><br />{errorMessage}</span>
 	}
 
-	notification.error({
+	notificationsProvider.error({
 		message: '',
 		description: messageText
 	});

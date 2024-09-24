@@ -1,7 +1,10 @@
 @import 'colors.scss';
 
 .App {
-  height: 100vh;
+  .ant-app {
+    height: 100vh;
+  }
+
 
   .ant-layout {
     height: 100%;
@@ -18,10 +21,16 @@
   }
 }
 
-.ant-modal.ant-modal-confirm.ant-modal-confirm-info.modal-no-btns {
+.ant-modal.ant-modal-confirm.ant-modal-confirm-info.modal-no-btns,
+.ant-modal.ant-modal-confirm.ant-modal-confirm-info.app-static-modal {
   .ant-modal-content {
     padding: 8px 12px;
     padding-bottom: 12px;
+
+    .ant-modal-close {
+      top: 4px;
+      right: 4px;
+    }
 
     .ant-modal-body {
       .ant-modal-confirm-body {
@@ -38,7 +47,8 @@
           min-height: 90px;
           max-width: 100%;
 
-          .buttons {
+          .buttons,
+          .footer {
             margin-top: 1.5em;
             text-align: end;
 

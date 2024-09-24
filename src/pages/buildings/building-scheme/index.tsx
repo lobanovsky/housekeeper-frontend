@@ -1,19 +1,19 @@
-import {useEffect, useState} from "react";
-import {Typography} from "antd";
-import {HomeOutlined} from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { Typography } from "antd";
+import { HomeOutlined } from "@ant-design/icons";
 
-import {useLoading} from "hooks/use-loading";
-import {Building, EnumBuildingType, RoomVO} from "backend/services/backend";
+import { useLoading } from "hooks/use-loading";
+import { AreaVO, Building, EnumBuildingType, RoomVO } from "backend/services/backend";
 import Loading from "components/loading";
-import './styles.scss';
-import {FlatInfo} from "../flat-info";
+import "./styles.scss";
+import { FlatInfo } from "../flat-info";
 
 
-import {ParkingIcon} from "icons/parking";
-import {BuildingPlan} from "./plan";
+import { ParkingIcon } from "icons/parking";
+import { BuildingPlan } from "./plan";
 
 
-export const BuildingScheme = ({building}: { building: Building }) => {
+export const BuildingScheme = ({ building, areas }: { areas: AreaVO[], building: Building }) => {
     const [loading, showLoading, hideLoading] = useLoading();
     const [selectedFlat, setSelectedFlat] = useState<RoomVO | null>(null);
 
@@ -34,7 +34,7 @@ export const BuildingScheme = ({building}: { building: Building }) => {
                 <BuildingPlan building={building} onSelectRoom={setSelectedFlat}
                               selectedRoomIds={selectedFlat?.id ? [selectedFlat.id] : []}/>
                 {selectedFlat?.id && <div className='flat-info'>
-                    <FlatInfo flat={selectedFlat}/>
+                    <FlatInfo areas={areas} flat={selectedFlat} />
                 </div>
                 }
             </div>}

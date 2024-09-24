@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { Card, Typography } from "antd";
 
-import { AccessInfoVO, AccessService, EnumRoomVOType, RoomVO } from "backend/services/backend";
+import { AccessInfoVO, AccessService, AreaVO, EnumRoomVOType, RoomVO } from "backend/services/backend";
 import useRemoteData from "hooks/use-remote-data";
 import { FlatOwnerInfo } from "./components/owner-property";
 import { FlatAccesses } from "./components/accesses";
@@ -27,7 +27,8 @@ const sortByFlatType = ({ type: type1, number: number1 = "" }: RoomVO, {
 
 };
 
-export const FlatInfo = ({ flat }: { flat: RoomVO }) => {
+//todo унести арии в контекст или ещё куда
+export const FlatInfo = ({ flat, areas }: { areas: AreaVO[], flat: RoomVO }) => {
   const flatLoader = useCallback(() => AccessService.findByRoom({ roomId: flat.id || 0, active: true }), [flat.id]);
 
   const [flatInfo, isLoadingFlatInfo, loadFlatInfo] = useRemoteData<AccessInfoVO>(flatLoader, {
@@ -54,7 +55,8 @@ export const FlatInfo = ({ flat }: { flat: RoomVO }) => {
                </div>}>
     <div className="flat-info">
       <FlatOwnerInfo owner={flatInfo?.owner} />
-      <FlatAccesses keys={flatInfo?.keys || []} loadFlatInfo={loadFlatInfo} />
+      <FlatAccesses areas={areas} ownerId={flatInfo?.owner?.id || 0} keys={flatInfo?.keys || []}
+                    loadFlatInfo={loadFlatInfo} />
     </div>
   </Card>;
 };

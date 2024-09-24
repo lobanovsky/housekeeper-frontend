@@ -1,4 +1,4 @@
-import { EnumAreaType, KeyVO } from "backend/services/backend";
+import { AreaVO, EnumAreaType, KeyVO } from "backend/services/backend";
 import { ParkingIcon } from "icons/parking";
 import { PlaygroundIcon } from "icons/playground";
 import { CarFrontIcon } from "icons/car_front";
@@ -6,15 +6,22 @@ import "./styles.scss";
 import { DeleteOutlined, EditOutlined, LoadingOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { useAccessItemCRUD } from "./hooks";
+import { showAddAccessItemModal } from "./add-modal";
 
 export const AccessItem = ({
-                             accessInfo: { id, phoneLabel = "", phoneNumber, tenant, areas = [], cars = [] },
+                             ownerId = 0,
+                             areas = [],
+                             accessInfo,
                              reloadInfo
                            }: {
+  areas: AreaVO[],
   accessInfo: KeyVO,
+  ownerId: number;
   reloadInfo: () => void
 }) => {
+  const { id = 0, phoneLabel = "", phoneNumber, tenant, areas: infoAreas = [], cars = [] } = accessInfo;
   const { isDeleting, deleteAccessItem } = useAccessItemCRUD({ accessId: id || 0, onFinish: reloadInfo });
+
 
   return (
     <div className="access-item" key={id}>
@@ -25,7 +32,7 @@ export const AccessItem = ({
             {phoneNumber}
           </div>
           <div className="access-icons">
-            {areas.map(({ type }) => {
+            {infoAreas.map(({ type }) => {
               if (type === EnumAreaType.YARD_AREA) {
                 return <PlaygroundIcon key="playground" />;
               }
@@ -49,6 +56,7 @@ export const AccessItem = ({
       </div>
       <div className="access-actions">
         <Button type="link" size="small" onClick={() => {
+          showAddAccessItemModal({ reloadInfo: reloadInfo, accessInfo, ownerId, areas });
         }}><EditOutlined /></Button>
         <Button type="link" size="small" onClick={deleteAccessItem}>
           {isDeleting ? <LoadingOutlined /> : <DeleteOutlined />}

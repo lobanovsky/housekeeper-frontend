@@ -1,0 +1,13 @@
+@import 'colors.scss';
+
+.access-add-form {
+  h5 {
+    margin-top: 18px;
+    margin-bottom: 6px;
+
+    &:first-child {
+      margin-top: 4px;
+    }
+  }
+}
+

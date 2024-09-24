@@ -1,0 +1,29 @@
+@import 'colors.scss';
+
+.phone-item {
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+
+  .ant-input-affix-wrapper {
+    width: 190px;
+  }
+
+
+  &:not(:first-child) {
+    margin-top: 0.5em;
+  }
+
+  &.is-edit {
+    .phone-number {
+      width: 220px;
+
+      > .ant-typography {
+        font-weight: 500;
+      }
+
+    }
+  }
+}
+
