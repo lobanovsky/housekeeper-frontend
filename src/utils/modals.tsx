@@ -1,11 +1,10 @@
 import React from "react";
-import { ModalFuncProps } from "antd/es/modal/Modal";
 import { modal, ModalInstanceType } from "../global/NotificationsProvider";
 import { EmptyFunction } from "./types";
+import { ModalProps } from "antd";
 
 
-export interface InfoModalProps extends ModalFuncProps {
-  width?: number;
+export interface InfoModalProps extends ModalProps {
   getContent: (props: { closeModal: EmptyFunction }) => React.ReactNode;
 }
 
