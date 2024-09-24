@@ -5,6 +5,7 @@ import { EmptyFunction } from "./types";
 
 
 export interface InfoModalProps extends ModalFuncProps {
+  width?: number;
   getContent: (props: { closeModal: EmptyFunction }) => React.ReactNode;
 }
 
