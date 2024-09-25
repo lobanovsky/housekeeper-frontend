@@ -11,13 +11,14 @@
   }
 
 
-  &:not(:first-child) {
-    margin-top: 0.5em;
+  &:not(:last-child) {
+    margin-bottom: 0.5em;
   }
 
   &.is-edit {
     .phone-number {
-      width: 220px;
+      width: 150px;
+      min-width: 150px;
 
       > .ant-typography {
         font-weight: 500;

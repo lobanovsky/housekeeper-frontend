@@ -14,8 +14,6 @@ export const Sider = () => {
         setCollapsed(true);
     }, []);
 
-    console.log(location.pathname);
-
     return <Layout.Sider collapsible width={320} collapsed={isCollapsed} onCollapse={setCollapsed}>
         <Menu
             theme='dark'

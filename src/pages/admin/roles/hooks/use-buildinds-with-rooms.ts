@@ -72,8 +72,6 @@ function useBuildingsWithRooms(): [BuildingWithRooms[], RoomInfoMap, boolean, ()
             });
 
             setData(buildingsWithRooms);
-            console.log("%c Rooms info map", "color: red");
-            console.log(roomInfoMap);
             setRoomsMap(roomInfoMap);
             hideLoading();
           })

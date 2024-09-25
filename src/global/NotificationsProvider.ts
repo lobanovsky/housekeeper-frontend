@@ -12,7 +12,6 @@ let notificationsProvider: NotificationInstance;
 let modal: Omit<ModalStaticFunctions, "warn">;
 
 export default () => {
-  console.log("%c Init notifications provider", "color: blue");
   const staticFunction = App.useApp();
   message = staticFunction.message;
   modal = staticFunction.modal;

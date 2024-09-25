@@ -1,28 +1,23 @@
-import { AreaVO, EnumAreaType, KeyVO } from "backend/services/backend";
+import { useContext } from "react";
+import { DeleteOutlined, EditOutlined, LoadingOutlined } from "@ant-design/icons";
+import { Button, Popconfirm } from "antd";
+import { EnumAreaType, KeyVO } from "backend/services/backend";
 import { ParkingIcon } from "icons/parking";
 import { PlaygroundIcon } from "icons/playground";
 import { CarFrontIcon } from "icons/car_front";
-import "./styles.scss";
-import { DeleteOutlined, EditOutlined, LoadingOutlined } from "@ant-design/icons";
-import { Button } from "antd";
 import { useAccessItemCRUD } from "./hooks";
 import { showAddAccessItemModal } from "./add-modal";
+import { AccessContext } from "../../../context/AccessContext";
+import "./styles.scss";
 
-export const AccessItem = ({
-                             ownerId = 0,
-                             areas = [],
-                             accessInfo,
-                             reloadInfo
-                           }: {
-  areas: AreaVO[],
-  accessInfo: KeyVO,
-  ownerId: number;
-  reloadInfo: () => void
-}) => {
+
+export const AccessItem = ({ accessInfo }: { accessInfo: KeyVO }) => {
+
+  const contextValue = useContext(AccessContext);
+  const { ownerId, areas, flatNumber, reloadFlatInfo } = contextValue;
+
   const { id = 0, phoneLabel = "", phoneNumber, tenant, areas: infoAreas = [], cars = [] } = accessInfo;
-  const { isDeleting, deleteAccessItem } = useAccessItemCRUD({ accessId: id || 0, onFinish: reloadInfo });
-
-
+  const { isDeleting, deleteAccessItem } = useAccessItemCRUD({ accessId: id || 0, onFinish: reloadFlatInfo });
   return (
     <div className="access-item" key={id}>
       <div className="access-info">
@@ -56,11 +51,13 @@ export const AccessItem = ({
       </div>
       <div className="access-actions">
         <Button type="link" size="small" onClick={() => {
-          showAddAccessItemModal({ reloadInfo: reloadInfo, accessInfo, ownerId, areas });
+          showAddAccessItemModal({ reloadInfo: reloadFlatInfo, accessInfo, ownerId, areas, flatNumber });
         }}><EditOutlined /></Button>
-        <Button type="link" size="small" onClick={deleteAccessItem}>
-          {isDeleting ? <LoadingOutlined /> : <DeleteOutlined />}
-        </Button>
+        <Popconfirm title="Удалить доступ?" onConfirm={deleteAccessItem}>
+          <Button type="link" size="small">
+            {isDeleting ? <LoadingOutlined /> : <DeleteOutlined />}
+          </Button>
+        </Popconfirm>
       </div>
 
     </div>

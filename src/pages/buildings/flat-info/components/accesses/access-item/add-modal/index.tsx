@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Button, Checkbox, Typography } from "antd";
+import { Button, Checkbox } from "antd";
 import { CloseOutlined, SaveOutlined } from "@ant-design/icons";
 import {
   AccessCreateRequest,
@@ -27,6 +27,7 @@ export const PhoneRegexes = [/^\+7(\s)?\(\d{3}\)(\s)?\d{3}-\d{2}-\d{2}$/, /^\+7\
 interface AccessFormProps {
   accessInfo?: KeyVO,
   areas: AreaVO[],
+  flatNumber: string;
   reloadInfo: EmptyFunction,
   ownerId: number
 }
@@ -130,10 +131,10 @@ const AddAccessForm = ({ reloadInfo, closeModal, ownerId, areas: allAreas, acces
   return (
     <div className="access-add-form">
       {loading && <Loading />}
-      <Typography.Title level={5}>Куда</Typography.Title>
+      <div className="sub-header areas">Куда</div>
       {/* @ts-ignore*/}
       <Checkbox.Group value={selectedAreaIds} onChange={onChangeAreas} options={areaOptions} />
-      <Typography.Title level={5}>Кому</Typography.Title>
+      <div className="sub-header phones">Кому</div>
       {accesses.map((item, index) => (
         <PhoneItem
           key={item.id}
@@ -143,7 +144,7 @@ const AddAccessForm = ({ reloadInfo, closeModal, ownerId, areas: allAreas, acces
         />
       ))}
       {!isEdit &&
-        <Button type="link" size="small" style={{ padding: 0, marginLeft: 6, marginTop: 6 }} onClick={addEmptyRow}>добавить
+        <Button type="link" className="add-btn" size="small" onClick={addEmptyRow}>добавить
           телефон</Button>}
       <div className="footer">
         <Button type="primary" onClick={saveAccess} disabled={loading || !accessesState.isValid}><SaveOutlined />Сохранить</Button>
@@ -158,7 +159,7 @@ export const showAddAccessItemModal = (props: AccessFormProps) => {
   showModal({
     width: 800,
     className: "phone-add-modal",
-    title: Object.keys(props.accessInfo || {}).length ? `Доступ для ${props.accessInfo?.phoneNumber}` : "Новый доступ",
+    title: `Доступы для кв. ${props.flatNumber}`,
     closable: true,
     getContent: ({ closeModal }) => <AddAccessForm {...props} closeModal={closeModal} />
   });

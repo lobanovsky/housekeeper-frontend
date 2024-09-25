@@ -34,7 +34,7 @@ export const PhoneItem = ({
   return (
     <div className={`phone-item ${isEdit ? "is-edit" : ""}`}>
       <div className="phone-number">
-        {isEdit ? <Typography.Text copyable>{access.phoneNumber}</Typography.Text> : <MaskedInput
+        {isEdit ? <Typography.Text>{access.phoneNumber}</Typography.Text> : <MaskedInput
           disabled={isEdit}
           key={access.id}
           size="small"
