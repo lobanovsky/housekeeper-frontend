@@ -17,13 +17,13 @@ $border: 1px solid rgba(203, 203, 203, 0.6);
     }
 
     .floor-number {
-      padding: 4px;
+      padding: 2px;
       display: inline-block;
       font-size: 13px;
       text-align: center;
       width: 32px;
-      line-height: 22px;
-      min-height: 31px;
+      line-height: 18px;
+      min-height: 22px;
       color: rgb(52, 32, 173);
 
       &:not(:last-child) {
@@ -38,17 +38,18 @@ $border: 1px solid rgba(203, 203, 203, 0.6);
 
       .rooms-of-floor {
         white-space: nowrap;
+
         .flat-container {
-          padding: 4px;
+          padding: 3px;
           display: inline-block;
           border-bottom: $border;
 
           .flat {
-            height: 22px;
-            line-height: 22px;
-            width: 36px;
+            height: 18px;
+            line-height: 18px;
+            width: 30px;
             font-size: 13px;
-            font-weight: 500;
+            //font-weight: 500;
             text-align: center;
             background: rgba(222, 222, 222, 0.3);
             transition: all .2s ease-in-out;
