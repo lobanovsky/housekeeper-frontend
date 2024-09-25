@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { Skeleton } from "antd";
-import { AreaVO, Building, BuildingService, RoomVO } from "backend/services/backend";
+import { Building, BuildingService, RoomVO } from "backend/services/backend";
 import "./styles.scss";
 import { BuildingPlan } from "./plan";
 import useRemoteData from "../../../hooks/use-remote-data";
 import { Outlet, useNavigate, useParams } from "react-router";
 
 
-export const BuildingScheme = ({ areas }: { areas: AreaVO[] }) => {
+export const BuildingScheme = () => {
   let { buildingId: buildingIdStr = "", roomId: roomIdStr = "" } = useParams();
   const navigate = useNavigate();
   const buildingLoader = useCallback(() => {

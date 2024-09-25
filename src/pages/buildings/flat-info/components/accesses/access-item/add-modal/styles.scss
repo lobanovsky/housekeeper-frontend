@@ -19,6 +19,26 @@
     }
   }
 
+  .ant-checkbox-group {
+    .ant-checkbox-wrapper {
+      span.icon {
+        margin-left: 4px;
+
+        .anticon.icon-playground {
+          font-size: 16px;
+          color: rgb(88, 158, 116);
+        }
+
+        .anticon.parking-icon {
+          color: rgb(119, 106, 195);
+          //color: rgb(116, 113, 132);
+        }
+      }
+    }
+  }
+
+
+
   .ant-btn-link.add-btn {
     @include linkButtonStyle();
     margin: 0 6px;

@@ -16,11 +16,11 @@ import { ExpensesView } from "./pages/expences";
 import { Counterparties } from "./pages/admin/counterparties";
 import { Buildings } from "./pages/buildings";
 import "./App.scss";
-import { RolesView } from "./pages/admin/roles";
 import useRemoteData from "./hooks/use-remote-data";
 import { AreaService, AreaVO } from "./backend/services/backend";
 import { BuildingScheme } from "./pages/buildings/building-scheme";
 import { FlatInfo } from "./pages/buildings/flat-info";
+import { DictionariesContext } from "./context/AppContext";
 
 const { Header, Content } = Layout;
 
@@ -32,83 +32,80 @@ function App() {
 
   return (
     <div className="App">
-      <AppContext>
-        <NotificationsProvider />
-        <BrowserRouter>
-          <Layout>
-            <Header style={{ paddingInline: 25 }}><HouseIcon style={{ marginRight: 5, fontSize: "26px" }} />HouseKeeper</Header>
+      <DictionariesContext.Provider value={{ areas: areas || [] }}>
+        <AppContext>
+          <NotificationsProvider />
+          <BrowserRouter>
             <Layout>
-              <Sider />
-              <Content>
-                <PageHeader />
-                <Routes>
-                  <Route
-                    path="/rooms"
-                    element={<Rooms />}
-                  />
-                  <Route path="/buildings" element={<Buildings />}>
+              <Header style={{ paddingInline: 25 }}><HouseIcon style={{ marginRight: 5, fontSize: "26px" }} />HouseKeeper</Header>
+              <Layout>
+                <Sider />
+                <Content>
+                  <PageHeader />
+                  <Routes>
                     <Route
-                      path=":buildingId"
-                      /*@ts-ignore*/
-                      element={<BuildingScheme />}
-                    >
+                      path="/rooms"
+                      element={<Rooms />}
+                    />
+                    <Route path="/buildings" element={<Buildings />}>
                       <Route
-                        path="rooms/:roomId"
+                        path=":buildingId"
                         /*@ts-ignore*/
-                        element={<FlatInfo />}
-                      />
+                        element={<BuildingScheme />}
+                      >
+                        <Route
+                          path="rooms/:roomId"
+                          /*@ts-ignore*/
+                          element={<FlatInfo />}
+                        />
+                      </Route>
                     </Route>
-                  </Route>
-                  <Route
-                    path="/buildings"
-                    element={<Buildings />}
-                  />
-                  <Route
-                    path="/counters"
-                    element={<Counters />}
-                  />
-                  <Route
-                    path="/gates"
-                    element={<Gates />}
-                  />
-                  <Route
-                    path="/payments-incoming"
-                    element={<IncomingPayments />}
-                  />
-                  <Route
-                    path="/payments-outgoing"
-                    element={<OutgoingPayments />}
-                  />
-                  <Route
-                    path="/uploaded-files"
-                    element={<UploadedFiles />}
-                  />
-                  <Route
-                    path="/expenses"
-                    element={<ExpensesView />}
-                  />
-                  <Route
-                    path="/counterparties"
-                    element={<Counterparties />}
-                  />
-                  <Route
-                    path="/roles"
-                    element={<RolesView />}
-                  />
-                  <Route
-                    path="*"
-                    element={<Navigate
-                      replace
-                      to="/buildings"
-                    />}
-                  />
-                </Routes>
-              </Content>
+                    <Route
+                      path="/buildings"
+                      element={<Buildings />}
+                    />
+                    <Route
+                      path="/counters"
+                      element={<Counters />}
+                    />
+                    <Route
+                      path="/gates"
+                      element={<Gates />}
+                    />
+                    <Route
+                      path="/payments-incoming"
+                      element={<IncomingPayments />}
+                    />
+                    <Route
+                      path="/payments-outgoing"
+                      element={<OutgoingPayments />}
+                    />
+                    <Route
+                      path="/uploaded-files"
+                      element={<UploadedFiles />}
+                    />
+                    <Route
+                      path="/expenses"
+                      element={<ExpensesView />}
+                    />
+                    <Route
+                      path="/counterparties"
+                      element={<Counterparties />}
+                    />
+                    <Route
+                      path="*"
+                      element={<Navigate
+                        replace
+                        to="/buildings"
+                      />}
+                    />
+                  </Routes>
+                </Content>
+              </Layout>
             </Layout>
-          </Layout>
-        </BrowserRouter>
-      </AppContext>
-
+          </BrowserRouter>
+        </AppContext>
+      </DictionariesContext.Provider>
     </div>
   );
 }

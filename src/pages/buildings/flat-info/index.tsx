@@ -1,17 +1,18 @@
 import { useCallback, useEffect } from "react";
+import { useParams } from "react-router";
 import { Card, Typography } from "antd";
 
-import { AccessInfoVO, AccessService, AreaVO, EnumRoomVOType, RoomService, RoomVO } from "backend/services/backend";
+import { AccessInfoVO, AccessService, EnumRoomVOType, RoomService, RoomVO } from "backend/services/backend";
 import useRemoteData from "hooks/use-remote-data";
 import { FlatOwnerInfo } from "./components/owner-property";
 import { FlatAccesses } from "./components/accesses";
 import { AccessContext } from "./context/AccessContext";
 import { sortPropertyByFlatType } from "./utils";
 import "./styles.scss";
-import { useParams } from "react-router";
+
 
 //todo унести арии в контекст или ещё куда
-export const FlatInfo = ({ areas }: { areas: AreaVO[] }) => {
+export const FlatInfo = () => {
   const { roomId: selectedRoomStr = "" } = useParams();
   const roomLoader = useCallback(() => RoomService.getRoomById({ id: parseInt(selectedRoomStr, 10) || 0 }), [selectedRoomStr]);
   const accessesLoader = useCallback(() => AccessService.findByRoom({
@@ -42,7 +43,7 @@ export const FlatInfo = ({ areas }: { areas: AreaVO[] }) => {
 
   return <AccessContext.Provider value={{
     ownerId: flatInfo?.owner?.id || 0,
-    areas, flatNumber: flatParams?.number || "",
+    flatNumber: flatParams?.number || "",
     reloadFlatInfo: loadFlatInfo
   }}>
     <Card size="small" className="flat-info-card" loading={isLoadingFlatInfo || isLoadingFlatParams}

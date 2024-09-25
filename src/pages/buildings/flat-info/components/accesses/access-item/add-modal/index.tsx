@@ -49,7 +49,8 @@ const AddAccessForm = ({ reloadInfo, closeModal, ownerId, areas: allAreas, acces
     value: id,
     label: <span>
           {AreaNames[type as EnumAreaType]?.title || type}
-      {AreaNames[type as EnumAreaType]?.icon || ""}
+      {AreaNames[type as EnumAreaType]?.icon ?
+        <span className={`icon ${type}`}>{AreaNames[type as EnumAreaType]?.icon}</span> : ""}
         </span>
   })), [allAreas.length]);
 

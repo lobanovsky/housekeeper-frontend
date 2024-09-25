@@ -7,12 +7,15 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Button, Typography } from "antd";
 import { useContext } from "react";
 import { AccessContext } from "../../context/AccessContext";
+import { DictionariesContext } from "../../../../../context/AppContext";
 
 export const FlatAccesses = ({ keys = [] }: {
   keys: KeyVO[],
 }) => {
   const contextValue = useContext(AccessContext);
-  const { ownerId, areas, flatNumber, reloadFlatInfo } = contextValue;
+  const { areas } = useContext(DictionariesContext);
+  console.log(areas);
+  const { ownerId, flatNumber, reloadFlatInfo } = contextValue;
   return (
     <div className="flat-accesses">
       <div className="access-header">
