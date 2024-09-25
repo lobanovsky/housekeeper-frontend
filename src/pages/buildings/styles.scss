@@ -1,7 +1,18 @@
 .buildings {
+  min-height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2px 4px;
+
+  > h4 {
+    margin: 0;
+    margin-left: 8px;
+    margin-bottom: 0.5em;
+  }
+
   .ant-list {
     .building {
       padding: 2px 4px;
+
       .ant-btn-link {
         &:not(:disabled) {
           color: rgba(0, 0, 0, 0.88);

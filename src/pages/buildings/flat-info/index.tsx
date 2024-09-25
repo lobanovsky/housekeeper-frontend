@@ -1,63 +1,60 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { Card, Typography } from "antd";
 
-import { AccessInfoVO, AccessService, AreaVO, EnumRoomVOType, RoomVO } from "backend/services/backend";
+import { AccessInfoVO, AccessService, AreaVO, EnumRoomVOType, RoomService, RoomVO } from "backend/services/backend";
 import useRemoteData from "hooks/use-remote-data";
 import { FlatOwnerInfo } from "./components/owner-property";
 import { FlatAccesses } from "./components/accesses";
-import "./styles.scss";
 import { AccessContext } from "./context/AccessContext";
-
-const sortByFlatType = ({ type: type1, number: number1 = "" }: RoomVO, {
-  type: type2,
-  number: number2 = ""
-}: RoomVO) => {
-  if (type1 === type2) {
-    return parseInt(number1) - parseInt(number2);
-  }
-
-  if (type1 === EnumRoomVOType.FLAT && type2 !== EnumRoomVOType.FLAT) {
-    return -1;
-  }
-
-  if (type1 !== EnumRoomVOType.FLAT && type2 === EnumRoomVOType.FLAT) {
-    return 1;
-  }
-
-  return type1 === EnumRoomVOType.GARAGE && type2 === EnumRoomVOType.OFFICE ? -1 : 1;
-
-};
+import { sortPropertyByFlatType } from "./utils";
+import "./styles.scss";
+import { useParams } from "react-router";
 
 //todo унести арии в контекст или ещё куда
-export const FlatInfo = ({ flat, areas }: { areas: AreaVO[], flat: RoomVO }) => {
-  const flatLoader = useCallback(() => AccessService.findByRoom({ roomId: flat.id || 0, active: true }), [flat.id]);
+export const FlatInfo = ({ areas }: { areas: AreaVO[] }) => {
+  const { roomId: selectedRoomStr = "" } = useParams();
+  const roomLoader = useCallback(() => RoomService.getRoomById({ id: parseInt(selectedRoomStr, 10) || 0 }), [selectedRoomStr]);
+  const accessesLoader = useCallback(() => AccessService.findByRoom({
+    roomId: parseInt(selectedRoomStr, 10) || 0,
+    active: true
+  }), [selectedRoomStr]);
 
-  const [flatInfo, isLoadingFlatInfo, loadFlatInfo] = useRemoteData<AccessInfoVO>(flatLoader, {
+  const [flatParams, isLoadingFlatParams, loadFlatParams] = useRemoteData<RoomVO, RoomVO>(roomLoader);
+
+  const [flatInfo, isLoadingFlatInfo, loadFlatInfo] = useRemoteData<AccessInfoVO>(accessesLoader, {
     dataConverter: (info): AccessInfoVO => ({
       ...info,
       // @ts-ignore
       owner: {
         ...info.owner,
-        ownerRooms: (info.owner?.ownerRooms || []).sort(sortByFlatType)
+        ownerRooms: (info.owner?.ownerRooms || []).sort(sortPropertyByFlatType)
       }
     })
   });
 
+  useEffect(() => {
+    const roomId = parseInt(selectedRoomStr, 10);
+    if (roomId) {
+      loadFlatParams();
+      loadFlatInfo();
+    }
+  }, [selectedRoomStr]);
 
   return <AccessContext.Provider value={{
     ownerId: flatInfo?.owner?.id || 0,
-    areas, flatNumber: flat.number || "",
+    areas, flatNumber: flatParams?.number || "",
     reloadFlatInfo: loadFlatInfo
   }}>
-    <Card size="small" className="flat-info-card" loading={isLoadingFlatInfo}
+    <Card size="small" className="flat-info-card" loading={isLoadingFlatInfo || isLoadingFlatParams}
           title={<div className="flat-title card-title">
             <Typography.Title level={5}>
-              {flat.type === EnumRoomVOType.GARAGE && "М/м "}
-              {flat.type === EnumRoomVOType.FLAT && "Кв."}
-              {flat.type === EnumRoomVOType.OFFICE && "Офис "}
-              {flat.number}
+              {flatParams?.type === EnumRoomVOType.GARAGE && "М/м "}
+              {flatParams?.type === EnumRoomVOType.FLAT && "Кв."}
+              {flatParams?.type === EnumRoomVOType.OFFICE && "Офис "}
+              {flatParams?.number}
             </Typography.Title>
-            <div className="address">{`${flat.street}, д. ${flat.building}`}</div>
+            <div
+              className="address">{flatParams?.street && flatParams?.building ? `${flatParams?.street}, д. ${flatParams?.building}` : ""}</div>
           </div>}>
       <div className="flat-info">
         <FlatOwnerInfo owner={flatInfo?.owner} />

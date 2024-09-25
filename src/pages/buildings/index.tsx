@@ -1,81 +1,39 @@
-import { useCallback, useEffect, useState } from "react";
-import { Button, Col, Divider, List, Row, Skeleton } from "antd";
-import { AreaService, AreaVO, Building, BuildingService, EnumBuildingType } from "backend/services/backend";
-
-import { showError } from "utils/notifications";
-import "./styles.scss";
-import { useLoading } from "../../hooks/use-loading";
-import { HomeOutlined } from "@ant-design/icons";
-import { ParkingIcon } from "../../icons/parking";
-import { BuildingScheme } from "./building-scheme";
+import { Outlet, useNavigate, useParams } from "react-router";
+import { Col, Menu, Row, Skeleton, Typography } from "antd";
+import { Building, BuildingService, EnumBuildingType } from "backend/services/backend";
 import useRemoteData from "../../hooks/use-remote-data";
+import "./styles.scss";
+import { BuildingIcons, IS_DEBUG } from "../../utils/constants";
 
 
 export const Buildings = () => {
-  const [areas, isLoadingAreas] = useRemoteData<AreaVO[]>(AreaService.findAll2, {
-    errorMsg: "Не удалось загрузить список типов доступов"
-  });
-  const [loading, showLoading, hideLoading] = useLoading();
-  const [buildings, setBuildings] = useState<Building[]>([]);
-  const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
-  //   const [searchStr, setSearchStr] = useState<string>('');
-  //   const [foundedInfo, setFoundedInfo] = useState<AccessInfoVO | undefined>(undefined);
-  //
-  //   //todo сделать хук по поиску
-  // // по формату строки определять, что это - номер телефона или номер машины или квартира
-  //
-  //   const searchFlat = useCallback((searchStr: string) => {
-  //
-  //   }, []);
-  //
-  // const delayedSearch = useCallback(
-  //   debounce((params) => loadData(params), 600),
-  //   []
-  // );
+  const navigate = useNavigate();
+  const { buildingId: selectedBuildingId = "" } = useParams();
 
-
-  const loadBuildings = useCallback(() => {
-    showLoading();
-    BuildingService.findAll1()
-      .then((responseData: Building[]) => {
-        setBuildings(responseData);
-        hideLoading();
-      })
-      .catch(e => {
-        showError("Не удалось загрузить список домов", e);
-        hideLoading();
-      });
-
-  }, []);
-
-  useEffect(() => {
-    loadBuildings();
-  }, []);
+  const [buildings, isLoading] = useRemoteData<Building[]>(BuildingService.findAll1);
 
   return (
     <div className="buildings">
-      {loading ? <Skeleton /> : <Row gutter={32}>
+      <Typography.Title level={4}>Дома</Typography.Title>
+      {isLoading ? <Skeleton active={true} /> : <Row gutter={32}>
         <Col span={6}>
-          <List
-            bordered={false}
-            dataSource={buildings}
-            renderItem={(building) => <>
-              <div className="building">
-                <Button type="link" className="building-link" onClick={() => {
-                  setSelectedBuilding(building);
-                }}>
-                  {building.type === EnumBuildingType.APARTMENT_BUILDING && <HomeOutlined />}
-                  {building.type === EnumBuildingType.UNDERGROUND_PARKING && <ParkingIcon />}
-                  {building.name}
-                </Button>
-
-              </div>
-              <Divider style={{ margin: "4px 0" }} />
-            </>
-            } />
+          <Menu
+            defaultSelectedKeys={parseInt(selectedBuildingId, 10) ? [selectedBuildingId] : []}
+            onClick={({ key = "" }) => {
+              if (key) {
+                navigate(`/buildings/${key}`);
+              }
+            }}
+            items={
+              (buildings || []).map((building) => ({
+                key: building.id || 0,
+                label: `${building.name}${IS_DEBUG ? ` (id=${building.id})` : ""}`,
+                icon: BuildingIcons[building.type as EnumBuildingType] || ""
+              }))}
+          />
         </Col>
         <Col span={18}>
-          {!!selectedBuilding?.id && <BuildingScheme areas={areas || []} building={selectedBuilding} />}
+          <Outlet />
         </Col>
       </Row>
       }

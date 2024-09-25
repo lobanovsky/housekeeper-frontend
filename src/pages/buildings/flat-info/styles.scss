@@ -1,4 +1,11 @@
-.flat-info-card {
+$cardWidth: 460px;
+
+.flat-info-card.ant-card {
+  width: $cardWidth;
+  min-width: $cardWidth;
+
+  max-width: 700px;
+
   .card-title.flat-title {
     display: flex;
     justify-content: flex-end;
@@ -16,12 +23,6 @@
     }
   }
 
-  .flat-info {
-    min-width: 420px;
-    max-width: 700px;
-
-
-  }
 }
 
 

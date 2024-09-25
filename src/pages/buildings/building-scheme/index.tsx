@@ -1,44 +1,49 @@
-import { useEffect, useState } from "react";
-import { Typography } from "antd";
-import { HomeOutlined } from "@ant-design/icons";
-
-import { useLoading } from "hooks/use-loading";
-import { AreaVO, Building, EnumBuildingType, RoomVO } from "backend/services/backend";
-import Loading from "components/loading";
+import { useCallback, useEffect, useMemo } from "react";
+import { Skeleton } from "antd";
+import { AreaVO, Building, BuildingService, RoomVO } from "backend/services/backend";
 import "./styles.scss";
-import { FlatInfo } from "../flat-info";
-
-
-import { ParkingIcon } from "icons/parking";
 import { BuildingPlan } from "./plan";
+import useRemoteData from "../../../hooks/use-remote-data";
+import { Outlet, useNavigate, useParams } from "react-router";
 
 
-export const BuildingScheme = ({ building, areas }: { areas: AreaVO[], building: Building }) => {
-    const [loading, showLoading, hideLoading] = useLoading();
-    const [selectedFlat, setSelectedFlat] = useState<RoomVO | null>(null);
+export const BuildingScheme = ({ areas }: { areas: AreaVO[] }) => {
+  let { buildingId: buildingIdStr = "", roomId: roomIdStr = "" } = useParams();
+  const navigate = useNavigate();
+  const buildingLoader = useCallback(() => {
+    console.log(`%c Load building [${buildingIdStr}]`, "color: red");
+    return BuildingService.findById({ id: parseInt(buildingIdStr, 10) });
+  }, [buildingIdStr]);
 
-    useEffect(() => {
-        setSelectedFlat(null);
-    }, [building.id]);
+  const [building, isLoadingBuilding, loadBuilding] = useRemoteData<Building, Building>(buildingLoader);
 
-    // @ts-ignore
-    return (
-        <div className={`building-plan ${building.type}`}>
-            <div className='header'>
-                {building.type === EnumBuildingType.APARTMENT_BUILDING && <HomeOutlined/>}
-                {building.type === EnumBuildingType.UNDERGROUND_PARKING && <ParkingIcon/>}
-                <Typography.Title level={4}>
-                    {building.name}</Typography.Title>
-            </div>
-            {loading ? <Loading/> : <div className='plan-container'>
-                <BuildingPlan building={building} onSelectRoom={setSelectedFlat}
-                              selectedRoomIds={selectedFlat?.id ? [selectedFlat.id] : []}/>
-                {selectedFlat?.id && <div className='flat-info'>
-                    <FlatInfo areas={areas} flat={selectedFlat} />
-                </div>
-                }
-            </div>}
+  const selectedRoomIds = useMemo(() => {
+    const roomId = parseInt(roomIdStr, 10);
+    return roomId ? [roomId] : [];
+  }, [roomIdStr]);
 
-        </div>
-    )
-}
+  useEffect(() => {
+    loadBuilding();
+  }, [buildingIdStr]);
+
+  const onRoomClick = useCallback((room: RoomVO) => {
+    navigate(`/buildings/${building?.id}/rooms/${room.id}`);
+  }, [building?.id]);
+
+  // @ts-ignore
+  return (
+    <div className={`building-plan ${building?.type} ${isLoadingBuilding ? "loading" : ""}`}>
+      {isLoadingBuilding && <Skeleton active />}
+      {!isLoadingBuilding && !!building?.id && <div className="plan-container">
+        <BuildingPlan
+          /* @ts-ignore */
+          building={building}
+          onSelectRoom={onRoomClick}
+          selectedRoomIds={selectedRoomIds}
+        />
+        <Outlet />
+        {/*{selectedFlat?.id && <div className="flat-info"><FlatInfo areas={areas} flat={selectedFlat} /></div>}*/}
+      </div>}
+    </div>
+  );
+};

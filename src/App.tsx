@@ -19,6 +19,8 @@ import "./App.scss";
 import { RolesView } from "./pages/admin/roles";
 import useRemoteData from "./hooks/use-remote-data";
 import { AreaService, AreaVO } from "./backend/services/backend";
+import { BuildingScheme } from "./pages/buildings/building-scheme";
+import { FlatInfo } from "./pages/buildings/flat-info";
 
 const { Header, Content } = Layout;
 
@@ -44,6 +46,19 @@ function App() {
                     path="/rooms"
                     element={<Rooms />}
                   />
+                  <Route path="/buildings" element={<Buildings />}>
+                    <Route
+                      path=":buildingId"
+                      /*@ts-ignore*/
+                      element={<BuildingScheme />}
+                    >
+                      <Route
+                        path="rooms/:roomId"
+                        /*@ts-ignore*/
+                        element={<FlatInfo />}
+                      />
+                    </Route>
+                  </Route>
                   <Route
                     path="/buildings"
                     element={<Buildings />}

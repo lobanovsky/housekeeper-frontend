@@ -1,4 +1,3 @@
-import Loading from "components/loading";
 import { Building, EnumBuildingType, FloorResponse, RoomService, RoomVO } from "backend/services/backend";
 import { useCallback, useEffect, useState } from "react";
 import { FloorColors, FloorNumberProps } from "../colors";
@@ -6,6 +5,7 @@ import { showError } from "utils/notifications";
 import { useLoading } from "hooks/use-loading";
 import { MaxRoomsOnFloor } from "../../constants";
 import "./styles.scss";
+import { Skeleton } from "antd";
 
 export interface FloorsWithNumbers extends Omit<FloorResponse, "rooms">, FloorNumberProps {
   rooms: RoomVO[][];
@@ -21,8 +21,8 @@ export const BuildingPlan = ({ building, selectedRoomIds = [], onSelectRoom }: {
 
   const getBuildingPlan = useCallback(() => {
     showLoading();
-    const isParking = building.type === EnumBuildingType.UNDERGROUND_PARKING;
-    RoomService.getBuildingStructure({ buildingId: building.id || 0 })
+    const isParking = building?.type === EnumBuildingType.UNDERGROUND_PARKING;
+    RoomService.getBuildingStructure({ buildingId: building?.id || 0 })
       .then((floors: FloorResponse[]) => {
         hideLoading();
         // для паркинга делим по 10 мест на этаже. тк там слишком длинно
@@ -52,14 +52,14 @@ export const BuildingPlan = ({ building, selectedRoomIds = [], onSelectRoom }: {
         showError("Не удалось загрузить инфо о здании", e);
         hideLoading();
       });
-  }, [building.id, building.type]);
+  }, [building?.id, building?.type]);
 
   useEffect(() => {
     getBuildingPlan();
-  }, [building.id]);
+  }, [building?.id]);
 
   // @ts-ignore
-  return loading ? <Loading /> : <div className={`building-plan ${building.type}`}>
+  return loading ? <Skeleton active /> : <div className={`building-plan ${building?.type}`}>
     {floors.map(({ floor = 0, rooms = [], background, label }, floorIndex = 0) =>
       <div className={`floor`} key={floor}>
         <div className={`floor-number`}>

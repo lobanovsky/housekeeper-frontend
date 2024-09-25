@@ -403,6 +403,28 @@ export class RoomControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   * Get room by id
+   */
+  getRoomById(
+    params: {
+      /**  */
+      id: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/rooms/{id}";
+      url = url.replace("{id}", params["id"] + "");
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
   /**
    * Get all types of room
    */
@@ -1285,6 +1307,28 @@ export class BuildingControllerService {
       let url = basePath + '/buildings';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   *
+   */
+  findById(
+    params: {
+      /**  */
+      id: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/buildings/{id}";
+      url = url.replace("{id}", params["id"] + "");
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
 
       /** 适配ios13，get请求不允许带body */
 

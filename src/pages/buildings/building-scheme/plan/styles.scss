@@ -3,6 +3,10 @@ $border: 1px solid rgba(203, 203, 203, 0.6);
 .building-plan {
   display: inline-block;
 
+  &.loading {
+    width: 100%;
+  }
+
   .floor {
     display: flex;
     align-items: center;
@@ -33,6 +37,7 @@ $border: 1px solid rgba(203, 203, 203, 0.6);
       border-top: none;
 
       .rooms-of-floor {
+        white-space: nowrap;
         .flat-container {
           padding: 4px;
           display: inline-block;
