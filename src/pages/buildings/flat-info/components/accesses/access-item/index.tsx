@@ -14,7 +14,6 @@ import { DictionariesContext } from "../../../../../../context/AppContext";
 
 export const AccessItem = ({ accessInfo }: { accessInfo: KeyVO }) => {
   const { areas } = useContext(DictionariesContext);
-  console.log(areas);
   const contextValue = useContext(AccessContext);
   const { ownerId, flatNumber, reloadFlatInfo } = contextValue;
 

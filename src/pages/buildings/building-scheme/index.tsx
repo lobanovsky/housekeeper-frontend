@@ -11,7 +11,6 @@ export const BuildingScheme = () => {
   let { buildingId: buildingIdStr = "", roomId: roomIdStr = "" } = useParams();
   const navigate = useNavigate();
   const buildingLoader = useCallback(() => {
-    console.log(`%c Load building [${buildingIdStr}]`, "color: red");
     return BuildingService.findById({ id: parseInt(buildingIdStr, 10) });
   }, [buildingIdStr]);
 

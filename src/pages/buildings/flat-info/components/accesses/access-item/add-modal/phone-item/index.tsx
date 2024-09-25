@@ -9,15 +9,17 @@ export interface PhoneItemValues extends KeyVO {
   isValid?: boolean;
 }
 
+interface PhoneItemProps {
+  access: PhoneItemValues,
+  isEdit?: boolean,
+  onChangeAccess: (accessId: number, fieldName: keyof PhoneItemValues, value: string | boolean) => void
+}
+
 export const PhoneItem = ({
                             isEdit = false,
                             access = { cars: [], tenant: false, phoneNumber: "", phoneLabel: "" },
                             onChangeAccess
-                          }: {
-  access: PhoneItemValues,
-  isEdit?: boolean,
-  onChangeAccess: (accessId: number, fieldName: keyof PhoneItemValues, value: string | boolean) => void
-}) => {
+                          }: PhoneItemProps) => {
 
   const onChangePhoneNumber = useCallback(({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
     onChangeAccess(access.id || 0, "phoneNumber", value);
@@ -47,7 +49,7 @@ export const PhoneItem = ({
 
       </div>
       <Checkbox checked={access.tenant} onChange={onChangeTenant}>Арендатор</Checkbox>
-      <Input size="small" value={access.phoneLabel} placeholder="Доп. инфо" onChange={onChangeLabel} />
+      <Input size="small" value={access.phoneLabel} placeholder="Кто это?" onChange={onChangeLabel} />
       {/*todo cars*/}
     </div>
   );

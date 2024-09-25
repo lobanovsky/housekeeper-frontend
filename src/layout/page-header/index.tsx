@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
-import { Typography } from 'antd';
-import { useLocation } from 'react-router-dom';
-import { getNavigationItemByPathname, NavigationItems } from 'navigation/routes';
+import { useMemo } from "react";
+import { Typography } from "antd";
+import { useLocation } from "react-router-dom";
+import { getNavigationItemByPathname, NavigationItems } from "navigation/routes";
 
 
 const PageHeader = () => {
@@ -21,7 +21,7 @@ const PageHeader = () => {
 
 	return <Typography.Title
 		level={3}
-		style={{ marginTop: 0 }}
+    style={{ marginTop: 0, marginBottom: 6 }}
 	>{pageTitle}</Typography.Title>
 }
 

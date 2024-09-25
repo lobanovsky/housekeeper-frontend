@@ -14,7 +14,6 @@ export const FlatAccesses = ({ keys = [] }: {
 }) => {
   const contextValue = useContext(AccessContext);
   const { areas } = useContext(DictionariesContext);
-  console.log(areas);
   const { ownerId, flatNumber, reloadFlatInfo } = contextValue;
   return (
     <div className="flat-accesses">

@@ -127,8 +127,7 @@ export const getNavigationItemByPathname = (pathname: string, item = {
     children: []
 }): any => {
     let result = null;
-
-    if (pathname == item.key) {
+    if (item.key && (item.key === pathname || pathname.startsWith(`${item.key}/`))) {
         result = item;
         // @ts-ignore
     } else if ((item.children || []).length) {

@@ -1,12 +1,30 @@
 .buildings {
   min-height: 100%;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 2px 4px;
+  padding: 10px;
 
   > h4 {
     margin: 0;
     margin-left: 8px;
     margin-bottom: 0.5em;
+  }
+
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 4px;
+    margin-bottom: 0.5em;
+
+    .ant-input-affix-wrapper {
+      &.phone-number {
+        flex: 0 1 auto;
+      }
+
+      &.car-number {
+        width: 150px;
+        min-width: 150px;
+      }
+    }
   }
 
   .ant-list {
