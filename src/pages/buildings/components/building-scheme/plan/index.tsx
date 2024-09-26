@@ -1,11 +1,14 @@
-import { Building, EnumBuildingType, FloorResponse, RoomService, RoomVO } from "backend/services/backend";
 import { useCallback, useEffect, useState } from "react";
+import { Skeleton } from "antd";
+
+import { Building, EnumBuildingType, FloorResponse, RoomService, RoomVO } from "backend/services/backend";
+import { useLoading } from "hooks/use-loading";
 import { FloorColors, FloorNumberProps } from "../colors";
 import { showError } from "utils/notifications";
-import { useLoading } from "hooks/use-loading";
-import { MaxRoomsOnFloor } from "../../constants";
+import { ServerError } from "utils/types";
+import { MaxRoomsOnFloor } from "../../../constants";
 import "./styles.scss";
-import { Skeleton } from "antd";
+
 
 export interface FloorsWithNumbers extends Omit<FloorResponse, "rooms">, FloorNumberProps {
   rooms: RoomVO[][];
@@ -48,7 +51,7 @@ export const BuildingPlan = ({ building, selectedRoomIds = [], onSelectRoom }: {
 
         setFloors(floorsWithMaxRooms.reverse());
       })
-      .catch(e => {
+      .catch((e: ServerError) => {
         showError("Не удалось загрузить инфо о здании", e);
         hideLoading();
       });

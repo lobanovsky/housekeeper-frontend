@@ -1,6 +1,7 @@
 import { EnumRoomVOType, OwnerVO, RoomVO } from "backend/services/backend";
+import { OwnerIcon } from "icons/owner";
 import "./styles.scss";
-import { OwnerIcon } from "../../../../../icons/owner";
+
 
 export const EmptyOwner: OwnerVO = {
   fullName: "",

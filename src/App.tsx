@@ -7,20 +7,18 @@ import { Sider } from "layout/sider";
 import Counters from "pages/counters";
 import IncomingPayments from "pages/payments/incoming";
 import OutgoingPayments from "pages/payments/outgoing";
-
-
 import Rooms from "pages/rooms";
 import Gates from "pages/gates";
 import UploadedFiles from "pages/admin/uploaded-files";
 import { ExpensesView } from "./pages/expences";
 import { Counterparties } from "./pages/admin/counterparties";
 import { Buildings } from "./pages/buildings";
-import "./App.scss";
 import useRemoteData from "./hooks/use-remote-data";
 import { AreaService, AreaVO } from "./backend/services/backend";
-import { BuildingScheme } from "./pages/buildings/building-scheme";
-import { FlatInfo } from "./pages/buildings/flat-info";
+import { BuildingScheme } from "./pages/buildings/components/building-scheme";
+import { FlatInfo } from "./pages/buildings/components/flat-info";
 import { DictionariesContext } from "./context/AppContext";
+import "./App.scss";
 
 const { Header, Content } = Layout;
 

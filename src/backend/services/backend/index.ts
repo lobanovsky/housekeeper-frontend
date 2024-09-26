@@ -164,6 +164,28 @@ export class RepairControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   *
+   */
+  blockExpiredPhoneNumbers(
+    params: {
+      /**  */
+      months: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/repairs/block-expired-phone-numbers";
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
+      configs.params = { months: params["months"] };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
 }
 
 export class CounterpartyControllerService {
@@ -349,6 +371,28 @@ export class AccessControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   * Export the access to .csv by the area id
+   */
+  exportAccess(
+    params: {
+      /**  */
+      areaId: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/access/export/{area-id}";
+      url = url.replace("{area-id}", params["areaId"] + "");
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
   /**
    * Get the access by the car number
    */
@@ -403,7 +447,6 @@ export class RoomControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Get room by id
    */
@@ -1313,7 +1356,6 @@ export class BuildingControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -1608,10 +1650,10 @@ export interface RoomFilter {
 
 export interface PageRoomVO {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -1745,10 +1787,10 @@ export interface RangeRequest {
 
 export interface PagePaymentVO {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -1970,10 +2012,10 @@ export interface LogEntryResponse {
 
 export interface PageLogEntryResponse {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2041,10 +2083,10 @@ export interface FileVO {
 
 export interface PageFileVO {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2336,6 +2378,29 @@ export interface FloorResponse {
 
   /**  */
   rooms?: RoomVO[];
+}
+
+export interface Blocked {
+  /**  */
+  accessId?: number;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  flatNumber?: string;
+
+  /**  */
+  userName?: string;
+
+  /**  */
+  countEntries?: number;
+
+  /**  */
+  lastEntry: string;
+
+  /**  */
+  gate?: string;
 }
 
 export interface AnnualPaymentVO {

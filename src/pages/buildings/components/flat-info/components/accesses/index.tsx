@@ -1,13 +1,14 @@
-import { KeyVO } from "backend/services/backend";
-
-import { AccessItem } from "./access-item";
-import "./styles.scss";
-import { showAddAccessItemModal } from "./access-item/add-modal";
-import { PlusOutlined } from "@ant-design/icons";
-import { Button, Typography } from "antd";
 import { useContext } from "react";
+import { Button, Typography } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+
+import { KeyVO } from "backend/services/backend";
 import { AccessContext } from "../../context/AccessContext";
-import { DictionariesContext } from "../../../../../context/AppContext";
+import { DictionariesContext } from "context/AppContext";
+import { AccessItem } from "./access-item";
+import { showAddAccessItemModal } from "./access-item/add-modal";
+import "./styles.scss";
+
 
 export const FlatAccesses = ({ keys = [] }: {
   keys: KeyVO[],

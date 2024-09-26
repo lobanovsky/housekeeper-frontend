@@ -1,0 +1,19 @@
+.buildings-search {
+  display: flex;
+  position: relative;
+  align-items: center;
+  gap: 1em;
+  padding: 4px;
+  margin-bottom: 0.5em;
+
+  .ant-input-affix-wrapper {
+    &.phone-number {
+      flex: 0 1 auto;
+    }
+
+    &.car-number {
+      width: 150px;
+      min-width: 150px;
+    }
+  }
+}

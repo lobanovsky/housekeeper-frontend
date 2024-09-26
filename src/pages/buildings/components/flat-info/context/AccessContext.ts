@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { EmptyFunction } from "../../../../utils/types";
+import { EmptyFunction } from "utils/types";
 
 interface IAccessContext {
   flatNumber: string;

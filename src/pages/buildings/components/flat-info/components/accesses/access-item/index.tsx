@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { DeleteOutlined, EditOutlined, LoadingOutlined } from "@ant-design/icons";
 import { Button, Popconfirm } from "antd";
 import { EnumAreaType, KeyVO } from "backend/services/backend";
+import { DictionariesContext } from "context/AppContext";
 import { ParkingIcon } from "icons/parking";
 import { PlaygroundIcon } from "icons/playground";
 import { CarFrontIcon } from "icons/car_front";
@@ -9,7 +10,6 @@ import { useAccessItemCRUD } from "./hooks";
 import { showAddAccessItemModal } from "./add-modal";
 import { AccessContext } from "../../../context/AccessContext";
 import "./styles.scss";
-import { DictionariesContext } from "../../../../../../context/AppContext";
 
 
 export const AccessItem = ({ accessInfo }: { accessInfo: KeyVO }) => {

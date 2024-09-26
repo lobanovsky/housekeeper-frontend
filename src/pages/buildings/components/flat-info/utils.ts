@@ -1,4 +1,4 @@
-import { EnumRoomVOType, RoomVO } from "../../../backend/services/backend";
+import { EnumRoomVOType, RoomVO } from "backend/services/backend";
 
 export const sortPropertyByFlatType = ({ type: type1, number: number1 = "" }: RoomVO, {
   type: type2,

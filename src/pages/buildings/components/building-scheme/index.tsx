@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo } from "react";
+import { Outlet, useNavigate, useParams } from "react-router";
 import { Skeleton } from "antd";
 import { Building, BuildingService, RoomVO } from "backend/services/backend";
-import "./styles.scss";
-import { BuildingPlan } from "./plan";
-import useRemoteData from "../../../hooks/use-remote-data";
-import { Outlet, useNavigate, useParams } from "react-router";
 
+import { BuildingPlan } from "./plan";
+import useRemoteData from "hooks/use-remote-data";
+import "./styles.scss";
 
 export const BuildingScheme = () => {
   let { buildingId: buildingIdStr = "", roomId: roomIdStr = "" } = useParams();
