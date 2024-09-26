@@ -123,7 +123,12 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 
   const exportToFile = useCallback((onFinish: (isSuccess: boolean) => void) => {
     const convertedFilters = getProcessedFilters(selectedFilters);
-    downloadFile(exportURL, convertedFilters, onFinish);
+    downloadFile({
+      url: exportURL,
+      requestParams: convertedFilters,
+      onFinish,
+      method: "post"
+    });
   }, [JSON.stringify(selectedFilters)]);
 
   const loadData = useCallback((params: { filters: FilterFormValues, pagination: IPagination }) => {

@@ -1,0 +1,24 @@
+.areas.view {
+  .ant-list {
+    .area-item {
+      //padding: 4px 8px;
+      //background: beige;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+
+      .icon {
+        .anticon {
+          &.icon-playground {
+            font-size: 18px;
+          }
+        }
+      }
+
+      //
+      //&:not(:last-child) {
+      //  border-bottom: 1px dashed gray;
+      //}
+    }
+  }
+}

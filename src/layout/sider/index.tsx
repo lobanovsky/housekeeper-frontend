@@ -4,8 +4,6 @@ import { NavigationItems } from "navigation/routes";
 import "./style.scss";
 import { useCallback, useState } from "react";
 
-const PathnameRegex = /^\/[a-zA-Z-\d]+$/;
-
 export const Sider = () => {
     const location = useLocation();
     const [isCollapsed, setCollapsed] = useState(true);

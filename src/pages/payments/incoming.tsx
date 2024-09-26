@@ -47,8 +47,10 @@ const IncomingPayments = () => {
     ]);
 
     const downloadRegistry = useCallback(() => {
-        downloadFile('registries/special-account', {}, () => {
-        });
+      downloadFile({
+        method: "post",
+        url: "registries/special-account"
+      });
     }, []);
 
     useEffect(() => {

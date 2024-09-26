@@ -15,6 +15,7 @@ import { showGatesImportModal } from "pages/gates/import";
 import { ExpenseIcon } from "../icons/expense";
 import { BuildingIcon } from "../icons/building";
 import { ApartmentPlanIcon } from "../icons/apartment_plan";
+import { PlaygroundIcon } from "../icons/playground";
 
 
 export const NavigationItems: any = [
@@ -100,10 +101,10 @@ export const NavigationItems: any = [
 
         children: [
             {
-              key: "/roles",
-              icon: <BankOutlined />,
-              title: "Выдача доступов",
-              label: <Link to="/roles">Выдача доступов</Link>
+                key: "/areas",
+                icon: <PlaygroundIcon />,
+                title: "Зоны доступа",
+                label: <Link to="/areas">Зоны доступа</Link>
             },
           {
                 key: '/uploaded-files',

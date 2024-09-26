@@ -19,6 +19,7 @@ import { BuildingScheme } from "./pages/buildings/components/building-scheme";
 import { FlatInfo } from "./pages/buildings/components/flat-info";
 import { DictionariesContext } from "./context/AppContext";
 import "./App.scss";
+import { AreasList } from "./pages/admin/areas";
 
 const { Header, Content } = Layout;
 
@@ -89,6 +90,10 @@ function App() {
                     <Route
                       path="/counterparties"
                       element={<Counterparties />}
+                    />
+                    <Route
+                      path="/areas"
+                      element={<AreasList />}
                     />
                     <Route
                       path="*"

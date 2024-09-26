@@ -1,16 +1,16 @@
-import {useCallback, useEffect, useState} from 'react';
-import {Card, Radio, Table, Typography} from 'antd';
-import {useLoading} from "hooks/use-loading";
-import {convertDateRange, downloadFile} from "../../utils/utils";
-import {EnumOutgoingGropingPaymentsFilterGroupBy} from "backend/services/backend";
-import {ExpensesChart} from "./chart";
-import {expenseColumns, expensePaymentColumns} from "./columns";
-import './style.scss';
-import {RangePickerWithQuickButtons, SelectedDatesShort} from "./range-picker";
+import { useCallback, useEffect, useState } from "react";
+import { Card, Radio, Table, Typography } from "antd";
+import { useLoading } from "hooks/use-loading";
+import { convertDateRange, downloadFile } from "../../utils/utils";
+import { EnumOutgoingGropingPaymentsFilterGroupBy } from "backend/services/backend";
+import { ExpensesChart } from "./chart";
+import { expenseColumns, expensePaymentColumns } from "./columns";
+import "./style.scss";
+import { RangePickerWithQuickButtons, SelectedDatesShort } from "./range-picker";
 import Loading from "../../components/loading";
-import {startOfCurrentMonth, today} from "./range-picker/utils";
-import {loadExpensesByDates} from "./services";
-import {CounterpartyData} from "./types";
+import { startOfCurrentMonth, today } from "./range-picker/utils";
+import { loadExpensesByDates } from "./services";
+import { CounterpartyData } from "./types";
 
 
 export const ExpensesView = () => {
@@ -33,11 +33,16 @@ export const ExpensesView = () => {
 
     const createReport = useCallback(() => {
         showReportLoading();
-        downloadFile('/reports/payments/outgoing/grouping', {
-            startDate: dates.dateStart,
-            endDate: dates.dateEnd,
-            groupBy
-        }, hideReportLoading);
+        downloadFile({
+            method: "post",
+            url: "/reports/payments/outgoing/grouping",
+            onFinish: hideReportLoading,
+            requestParams: {
+                startDate: dates.dateStart,
+                endDate: dates.dateEnd,
+                groupBy
+            }
+        });
     }, [dates.dateStart, dates.dateEnd, groupBy]);
 
 
