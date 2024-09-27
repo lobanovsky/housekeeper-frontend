@@ -1,19 +1,37 @@
 @import 'colors.scss';
 
 .phone-item {
-  padding: 2px 4px;
-  display: flex;
-  align-items: center;
-  gap: 1em;
+  padding-top: 4px;
 
-  .ant-input-affix-wrapper {
-    width: 190px;
+  .access-main-info {
+    padding: 2px 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 1em;
+
+
+    .ant-input-affix-wrapper {
+      width: 190px;
+    }
+
+    .ant-input.access-label {
+      width: 300px;
+    }
+
+
+    &:not(:last-child) {
+      margin-bottom: 0.5em;
+    }
+
   }
 
-
-  &:not(:last-child) {
-    margin-bottom: 0.5em;
+  .cars {
+    display: inline-flex;
+    align-items: flex-end;
+    width: 330px;
+    min-width: 330px;
   }
+
 
   &.is-edit {
     .phone-number {
@@ -25,6 +43,10 @@
       }
 
     }
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px dashed rgba(200, 200, 200, 0.6);
   }
 }
 

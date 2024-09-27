@@ -1,27 +1,27 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { Button, Checkbox } from "antd";
-import { CloseOutlined, SaveOutlined } from "@ant-design/icons";
+import { CloseOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
 import {
   AccessCreateRequest,
   AccessService,
   AccessUpdateRequest,
   AreaVO,
+  CarVO,
   EnumAreaType,
   KeyVO
 } from "backend/services/backend";
+import Loading from "components/loading";
+import { useLoading } from "hooks/use-loading";
+
+import { AreaNames } from "utils/constants";
 import { showModal } from "utils/modals";
+import { showError } from "utils/notifications";
 import { EmptyFunction } from "utils/types";
 import { getRandomId } from "utils/utils";
 import { PhoneItem, PhoneItemValues } from "./phone-item";
-
-import { useLoading } from "hooks/use-loading";
-import { showError } from "utils/notifications";
-import Loading from "components/loading";
+import { CarNumberRegex, PhoneRegexes } from "../../constants";
 import "./styles.scss";
-import { AreaNames } from "utils/constants";
-
-
-export const PhoneRegexes = [/^\+7(\s)?\(\d{3}\)(\s)?\d{3}-\d{2}-\d{2}$/, /^\+7\-\d{3}\-\d{3}-\d{2}-\d{2}$/];
+import { convertCars } from "./utils";
 
 
 interface AccessFormProps {
@@ -47,27 +47,43 @@ const AddAccessForm = ({ reloadInfo, closeModal, ownerId, areas: allAreas, acces
 
   const areaOptions = useMemo(() => allAreas.map(({ id = 0, type = "" }) => ({
     value: id,
-    label: <span>
+    label: (
+      <span>
           {AreaNames[type as EnumAreaType]?.title || type}
-      {AreaNames[type as EnumAreaType]?.icon ?
-        <span className={`icon ${type}`}>{AreaNames[type as EnumAreaType]?.icon}</span> : ""}
+        {AreaNames[type as EnumAreaType]?.icon ? <span className={`icon ${type}`}>
+            {AreaNames[type as EnumAreaType]?.icon}
+          </span> : ""}
         </span>
+    )
   })), [allAreas.length]);
 
+
   const accessesState = useMemo(() => {
-    const isValidPhones = accesses.every(({ phoneNumber = "" }) => PhoneRegexes.some(regex => regex.test(phoneNumber)));
+    const isValidAreas = !!selectedAreaIds.length;
+    const isValidAccesses = accesses.every(({
+                                              phoneNumber = "",
+                                              cars = []
+                                            }) => PhoneRegexes.some(regex => regex.test(phoneNumber))
+      && cars.every(({ number: carNumber = "" }) => CarNumberRegex.test(carNumber)));
+
     return ({
       changeId: getRandomId(),
-      isValid: isValidPhones
+      isValid: isValidAreas && isValidAccesses
     });
-  }, [accesses.map(({ phoneNumber, phoneLabel, tenant }) => `${phoneNumber}-${phoneLabel}-${tenant}`).join(";")]);
+  }, [
+    accesses.map(({ phoneNumber, phoneLabel, tenant, cars = [] }) =>
+      `${phoneNumber}-${phoneLabel}-${tenant}-${(cars || []).map(({
+                                                                    id = 0,
+                                                                    number = "",
+                                                                    description = ""
+                                                                  }) => `${id}-${number}-${description}`).join(",")}`).join(";")]);
 
   const addEmptyRow = useCallback(() => {
     // @ts-ignore
-    setAccesses(prev => prev.concat([{ id: getRandomId(), phoneNumber: "" }]));
+    setAccesses(prev => prev.concat([{ id: getRandomId(), phoneNumber: "", cars: [] }]));
   }, []);
 
-  const onChangeAccess = useCallback((accessId: number, fieldName: keyof PhoneItemValues, value: string | boolean) => {
+  const onChangeAccess = useCallback((accessId: number, fieldName: keyof PhoneItemValues, value: string | boolean | CarVO[]) => {
     const accessIndex = accesses.findIndex(item => item.id === accessId);
     if (accessIndex < 0) {
       return;
@@ -87,13 +103,15 @@ const AddAccessForm = ({ reloadInfo, closeModal, ownerId, areas: allAreas, acces
   }, []);
 
   const saveAccess = useCallback(() => {
-    let promise = null;
+    let promise;
+
     if (isEdit) {
       const access = accesses[0];
       const dataToSave: AccessUpdateRequest = {
         label: access.phoneLabel,
         tenant: access.tenant || false,
-        areas: selectedAreaIds
+        areas: selectedAreaIds,
+        cars: convertCars(access.cars || [])
       };
 
       promise = AccessService.updateAccess({ accessId: access.id || 0, body: dataToSave });
@@ -105,11 +123,11 @@ const AddAccessForm = ({ reloadInfo, closeModal, ownerId, areas: allAreas, acces
           phones: accesses.map(phone => ({
             number: phone.phoneNumber,
             label: phone.phoneLabel,
-            tenant: phone.tenant || false
+            tenant: phone.tenant || false,
+            cars: convertCars(phone.cars || [])
           }))
         }
       };
-
       promise = AccessService.createAccess({ body: dataToSave });
     }
 
@@ -145,8 +163,10 @@ const AddAccessForm = ({ reloadInfo, closeModal, ownerId, areas: allAreas, acces
         />
       ))}
       {!isEdit &&
-        <Button type="link" className="add-btn" size="small" onClick={addEmptyRow}>добавить
-          телефон</Button>}
+        <Button type="link" className="add-btn" size="small" onClick={addEmptyRow}>
+          <PlusOutlined />
+          добавить телефон
+        </Button>}
       <div className="footer">
         <Button type="primary" onClick={saveAccess} disabled={loading || !accessesState.isValid}><SaveOutlined />Сохранить</Button>
         <Button onClick={closeModal}><CloseOutlined />Отмена</Button>
@@ -158,7 +178,7 @@ const AddAccessForm = ({ reloadInfo, closeModal, ownerId, areas: allAreas, acces
 
 export const showAddAccessItemModal = (props: AccessFormProps) => {
   showModal({
-    width: 800,
+    width: 1000,
     className: "phone-add-modal",
     title: `Доступы для кв. ${props.flatNumber}`,
     closable: true,

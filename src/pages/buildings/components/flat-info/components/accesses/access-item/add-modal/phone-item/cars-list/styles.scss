@@ -1,0 +1,43 @@
+@import 'colors.scss';
+
+.car-list {
+  width: 100%;
+
+  .car-item {
+    .ant-input,
+    .ant-input-affix-wrapper {
+      &.car-number {
+        width: 100px;
+      }
+
+      &.car-description {
+        width: 180px;
+        margin-left: 1em;
+      }
+
+      &.invalid {
+        border-color: $red;
+
+        &:focus,
+        &:global(.ant-picker-focused) {
+          box-shadow: 0 0 0 2px rgba(242, 43, 43, 0.22);
+        }
+      }
+    }
+
+    .ant-btn-link.delete-btn {
+      @include rowActionButtonStyle();
+
+      .anticon {
+        vertical-align: -0.125em;
+      }
+
+      padding: 0 4px;
+      margin-left: 0.5em;
+    }
+
+    &:not(:first-child) {
+      margin-top: 4px;
+    }
+  }
+}
