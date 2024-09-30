@@ -7,12 +7,12 @@
     .ant-input,
     .ant-input-affix-wrapper {
       &.car-number {
-        width: 100px;
+        width: 114px;
       }
 
       &.car-description {
-        width: 180px;
-        margin-left: 1em;
+        width: 190px;
+        margin-left: 6px;
       }
 
       &.invalid {
@@ -33,7 +33,7 @@
       }
 
       padding: 0 4px;
-      margin-left: 0.5em;
+      margin-left: 2px;
     }
 
     &:not(:first-child) {

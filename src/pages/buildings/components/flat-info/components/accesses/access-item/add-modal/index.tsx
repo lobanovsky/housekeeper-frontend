@@ -8,6 +8,7 @@ import {
   AreaVO,
   CarVO,
   EnumAreaType,
+  EnumBuildingType,
   KeyVO
 } from "backend/services/backend";
 import Loading from "components/loading";
@@ -27,6 +28,7 @@ import { convertCars } from "./utils";
 interface AccessFormProps {
   accessInfo?: KeyVO,
   areas: AreaVO[],
+  buildingType?: EnumBuildingType,
   flatNumber: string;
   reloadInfo: EmptyFunction,
   ownerId: number

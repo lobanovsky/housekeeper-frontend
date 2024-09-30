@@ -164,7 +164,6 @@ export class RepairControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -372,6 +371,30 @@ export class AccessControllerService {
     });
   }
 
+  /**
+   * Get the info by the car number
+   */
+  getInfoByCarNumber(
+    params: {
+      /**  */
+      carNumber: string;
+      /**  */
+      active?: boolean;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/access/info/{car-number}";
+      url = url.replace("{car-number}", params["carNumber"] + "");
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
+      configs.params = { active: params["active"] };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
   /**
    * Export the access to .csv by the area id
    */
@@ -1685,10 +1708,10 @@ export interface PageRoomVO {
 
 export interface PageableObject {
   /**  */
-  paged?: boolean;
+  unpaged?: boolean;
 
   /**  */
-  unpaged?: boolean;
+  paged?: boolean;
 
   /**  */
   pageNumber?: number;
@@ -2588,6 +2611,29 @@ export interface AccountResponse {
 
   /**  */
   description?: string;
+}
+
+export interface InfoByPlateNumber {
+  /**  */
+  ownerName?: string;
+
+  /**  */
+  ownerRooms?: string;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  phoneLabel?: string;
+
+  /**  */
+  tenant?: boolean;
+
+  /**  */
+  carNumber?: string;
+
+  /**  */
+  carDescription?: string;
 }
 export enum EnumRoomVOType {
   'FLAT' = 'FLAT',
