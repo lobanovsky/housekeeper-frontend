@@ -24,7 +24,6 @@ interface IFilterFormProps {
   defaultFilterValues?: FilterFormValues;
   filters: FilterFieldsConfig;
   exportToFile?: ((onFinish: ActionFinishCallback) => void) | null;
-  extraControls?: React.ReactNode[];
   onChangeFilters: (filters: FilterFormValues) => void;
   onSearchBtnClick: () => void;
   isValidForm?: (filters: FilterFormValues) => boolean;

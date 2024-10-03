@@ -33,7 +33,6 @@ interface ITableProps extends TableProps<any> {
   // onSelectionChange?: (selectedIds: Array<number | string>)=> void;
   onRow?: (record: any) => React.HTMLAttributes<any> | React.TdHTMLAttributes<any>,
   exportURL?: string,
-  extraControls?: React.ReactNode[],
   rowKey?: string;
   requestParamsConverter?: (filters: any) => any,
   responseDataConverter?: (response: any) => any,
@@ -53,7 +52,6 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
     responseDataConverter = null,
     filters = [],
     onChangePagination = null,
-    extraControls = [],
     exportURL = '',
     isValidForm = () => true,
     ...tableProps
@@ -219,7 +217,6 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
           isValidForm={isValidForm}
           onChangeFilters={onChangeFilters}
           onSearchBtnClick={reloadTable}
-          extraControls={extraControls}
         />
       )}
       <div className="pagination-container">
