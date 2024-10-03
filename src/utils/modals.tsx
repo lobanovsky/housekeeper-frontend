@@ -18,13 +18,10 @@ export const showModal = ({ className = '', getContent, ...modalProps }: InfoMod
     width: 800,
     className: `app-static-modal ${className}`,
     ...modalProps,
-    content: <div className="info-modal-content" style={{ position: 'relative' }}>
-      {/* {modalProps.closable && ( */}
-      {/*  <Button className="info-modal-close-btn" onClick={closeModal}> */}
-      {/*    <CloseOutlined /> */}
-      {/*  </Button> */}
-      {/* )} */}
-      {getContent({ closeModal })}
-    </div>
+    content: (
+      <div className="info-modal-content" style={{ position: 'relative' }}>
+        {getContent({ closeModal })}
+      </div>
+    )
   });
 };
