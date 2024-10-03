@@ -1,7 +1,7 @@
 import { CarVO, KeyVO } from "backend/services/backend";
 import React, { useCallback, useMemo } from "react";
 import { MaskedInput } from "antd-mask-input";
-import { Checkbox, Input, Typography } from "antd";
+import { Input, Typography } from "antd";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import "./styles.scss";
 import { AccessItemCarList } from "./cars-list";
@@ -19,6 +19,7 @@ interface PhoneItemProps {
   onChangeAccess: (accessId: number, fieldName: keyof PhoneItemValues, value: string | boolean | CarVO[]) => void;
 }
 
+// @ts-ignore
 const EmptyAccess: PhoneItemValues = { cars: [], tenant: false, phoneNumber: "", phoneLabel: "" };
 
 export const PhoneItem = ({ isEdit = false, access = { ...EmptyAccess }, onChangeAccess }: PhoneItemProps) => {
@@ -31,6 +32,7 @@ export const PhoneItem = ({ isEdit = false, access = { ...EmptyAccess }, onChang
     }, [onChangeAccess, access.id]);
 
     const onChangeTenant = useCallback(({ target: { checked } }: CheckboxChangeEvent) => {
+      // @ts-ignore
       onChangeAccess(access.id || 0, "tenant", checked);
     }, [onChangeAccess, access.id]);
 
@@ -86,7 +88,7 @@ export const PhoneItem = ({ isEdit = false, access = { ...EmptyAccess }, onChang
           </div>
           <Input className="access-label" size="small" value={access.phoneLabel} placeholder="Кто это?"
                  onChange={onChangeLabel} />
-          <Checkbox checked={access.tenant} onChange={onChangeTenant}>Арендатор</Checkbox>
+          {/*<Checkbox checked={access.tenant} onChange={onChangeTenant}>Арендатор</Checkbox>*/}
         </div>
         <div className="cars">
           <AccessItemCarList cars={access.cars || []} onChangeCar={onChangeCar} deleteCar={deleteCar} />

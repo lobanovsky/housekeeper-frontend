@@ -14,7 +14,7 @@ import { ExpensesView } from "./pages/expences";
 import { Counterparties } from "./pages/admin/counterparties";
 import { Buildings } from "./pages/buildings";
 import useRemoteData from "./hooks/use-remote-data";
-import { AreaService, AreaVO } from "./backend/services/backend";
+import { Area, AreaService } from "./backend/services/backend";
 import { BuildingScheme } from "./pages/buildings/components/building-scheme";
 import { FlatInfo } from "./pages/buildings/components/flat-info";
 import { DictionariesContext } from "./context/AppContext";
@@ -25,7 +25,7 @@ const { Header, Content } = Layout;
 
 
 function App() {
-  const [areas, isLoadingAreas] = useRemoteData<AreaVO[]>(AreaService.findAll2, {
+  const [areas, isLoadingAreas] = useRemoteData<Area[]>(AreaService.findAll2, {
     errorMsg: "Не удалось загрузить список типов доступов"
   });
 

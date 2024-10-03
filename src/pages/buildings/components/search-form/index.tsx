@@ -4,7 +4,7 @@ import { Input } from "antd";
 import { MaskedInput } from "antd-mask-input";
 import { SearchOutlined } from "@ant-design/icons";
 
-import { AccessInfoVO, AccessService, EnumRoomVOType } from "backend/services/backend";
+import { AccessService, CreateAccessRequest, EnumRoomVOType } from "backend/services/backend";
 import Loading from "components/loading";
 import { useLoading } from "hooks/use-loading";
 import debounce from "lodash/debounce";
@@ -29,7 +29,7 @@ export const BuildingsSearchForm = () => {
       carNumber: carNum,
       active: true
     }) : AccessService.findByPhone({ phoneNumber: phoneDigits, active: true }))
-      .then((response: AccessInfoVO) => {
+      .then((response: CreateAccessRequest) => {
         hideLoading();
         // @ts-ignore
         const { owner: { ownerRooms = [] } = {} } = response || {};

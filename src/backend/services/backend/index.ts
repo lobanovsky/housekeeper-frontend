@@ -151,9 +151,26 @@ export class RepairControllerService {
   /**
    *
    */
-  initAccessInfo(options: IRequestOptions = {}): Promise<any> {
+  initYard(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/repairs/init-access-info";
+      let url = basePath + "/repairs/init-yard";
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options);
+
+      let data = null;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   *
+   */
+  initGarage(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/repairs/init-garage";
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options);
 
@@ -260,7 +277,7 @@ export class AccessControllerService {
       /**  */
       accessId: number;
       /** requestBody */
-      body?: AccessUpdateRequest;
+      body?: UpdateAccessRequest;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
@@ -301,12 +318,12 @@ export class AccessControllerService {
     });
   }
   /**
-   * Create the area access by the phone number (Were? -> Area, Who? -> Room)
+   * Create the area access by the phone number
    */
   createAccess(
     params: {
       /** requestBody */
-      body?: AccessCreateRequest;
+      body?: CreateAccessRequest;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
@@ -370,22 +387,21 @@ export class AccessControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
-   * Get the info by the car number
+   * Get the overview by the plate number
    */
-  getInfoByCarNumber(
+  overview(
     params: {
       /**  */
-      carNumber: string;
+      plateNumber: string;
       /**  */
       active?: boolean;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/access/info/{car-number}";
-      url = url.replace("{car-number}", params["carNumber"] + "");
+      let url = basePath + "/access/overview/{plate-number}";
+      url = url.replace("{plate-number}", params["plateNumber"] + "");
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
       configs.params = { active: params["active"] };
@@ -1512,7 +1528,18 @@ export interface CounterpartyResponse {
   createDate: string;
 }
 
-export interface AccessCar {
+export interface AccessToArea {
+  /**  */
+  areaId?: number;
+
+  /**  */
+  tenant?: boolean;
+
+  /**  */
+  places?: string[];
+}
+
+export interface CarRequest {
   /**  */
   plateNumber?: string;
 
@@ -1520,21 +1547,21 @@ export interface AccessCar {
   description?: string;
 }
 
-export interface AccessUpdateRequest {
+export interface UpdateAccessRequest {
   /**  */
   label?: string;
 
   /**  */
-  tenant?: boolean;
+  areas?: AccessToArea[];
 
   /**  */
-  areas?: number[];
-
-  /**  */
-  cars?: AccessCar[];
+  cars?: CarRequest[];
 }
 
-export interface AccessInfoVO {
+export interface AccessVO {
+  /**  */
+  id?: number;
+
   /**  */
   owner?: OwnerVO;
 
@@ -1550,7 +1577,10 @@ export interface AreaVO {
   name?: string;
 
   /**  */
-  type?: string;
+  tenant?: boolean;
+
+  /**  */
+  places?: string[];
 }
 
 export interface CarVO {
@@ -1573,9 +1603,6 @@ export interface KeyVO {
 
   /**  */
   phoneLabel?: string;
-
-  /**  */
-  tenant?: boolean;
 
   /**  */
   areas?: AreaVO[];
@@ -1604,7 +1631,7 @@ export interface OwnerVO_Old {
   dateOfLeft: string;
 
   /**  */
-  ownerRooms?: RoomVO[];
+  rooms?: RoomVO[];
 }
 
 export interface RoomVO {
@@ -1673,10 +1700,10 @@ export interface RoomFilter {
 
 export interface PageRoomVO {
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -1810,10 +1837,10 @@ export interface RangeRequest {
 
 export interface PagePaymentVO {
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2035,10 +2062,10 @@ export interface LogEntryResponse {
 
 export interface PageLogEntryResponse {
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2106,10 +2133,10 @@ export interface FileVO {
 
 export interface PageFileVO {
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2270,23 +2297,7 @@ export interface MailingResponse {
   sentEmail?: number;
 }
 
-export interface AccessCreateRequest {
-  /**  */
-  areas?: number[];
-
-  /**  */
-  person?: AccessPerson;
-}
-
-export interface AccessPerson {
-  /**  */
-  ownerId?: number;
-
-  /**  */
-  phones?: AccessPhone[];
-}
-
-export interface AccessPhone {
+export interface Contact {
   /**  */
   number?: string;
 
@@ -2294,19 +2305,32 @@ export interface AccessPhone {
   label?: string;
 
   /**  */
-  tenant?: boolean;
-
-  /**  */
-  cars?: AccessCar[];
+  cars?: CarRequest[];
 }
 
-export interface AccessCreateResponse {
+export interface CreateAccessRequest {
+  /**  */
+  areas?: AccessToArea[];
+
+  /**  */
+  ownerIds?: number[];
+
+  /**  */
+  contacts?: Contact[];
+}
+
+export interface CreateAccessResponse {
   /**  */
   id?: number;
 
   /**  */
   phoneNumber?: string;
 
+  /**  */
+  result?: CreateAccessResult;
+}
+
+export interface CreateAccessResult {
   /**  */
   success?: boolean;
 
@@ -2585,10 +2609,13 @@ export interface Area {
   name?: string;
 
   /**  */
-  description?: string;
+  specificPlace?: boolean;
 
   /**  */
-  type?: EnumAreaType;
+  fromNumber?: number;
+
+  /**  */
+  toNumber?: number;
 }
 
 export interface Link {
@@ -2613,7 +2640,7 @@ export interface AccountResponse {
   description?: string;
 }
 
-export interface InfoByPlateNumber {
+export interface OverviewAccessVO {
   /**  */
   ownerName?: string;
 
@@ -2627,13 +2654,53 @@ export interface InfoByPlateNumber {
   phoneLabel?: string;
 
   /**  */
-  tenant?: boolean;
+  overviewAreas?: OverviewArea[];
 
   /**  */
   carNumber?: string;
 
   /**  */
   carDescription?: string;
+}
+
+export interface OverviewArea {
+  /**  */
+  areaName?: string;
+
+  /**  */
+  tenant?: boolean;
+
+  /**  */
+  places?: string[];
+}
+
+export interface Access {
+  /**  */
+  id?: number;
+
+  /**  */
+  createDate: string;
+
+  /**  */
+  active?: boolean;
+
+  /**  */
+  blockDateTime: string;
+
+  /**  */
+  blockReason?: EnumAccessBlockReason;
+
+  /**  */
+  areas?: AccessToArea[];
+
+  /**  */
+  ownerIds?: number[];
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  phoneLabel?: string;
 }
 export enum EnumRoomVOType {
   'FLAT' = 'FLAT',
@@ -2733,9 +2800,10 @@ export enum EnumBuildingType {
   'APARTMENT_BUILDING' = 'APARTMENT_BUILDING',
   'UNDERGROUND_PARKING' = 'UNDERGROUND_PARKING'
 }
-export enum EnumAreaType {
-  'YARD_AREA' = 'YARD_AREA',
-  'UNDERGROUND_PARKING_AREA' = 'UNDERGROUND_PARKING_AREA'
+
+export enum EnumAccessBlockReason {
+  "MANUAL" = "MANUAL",
+  "EXPIRED" = "EXPIRED"
 }
 
 

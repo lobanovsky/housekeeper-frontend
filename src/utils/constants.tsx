@@ -1,5 +1,5 @@
 import React from "react";
-import { EnumAreaType, EnumBuildingType } from "../backend/services/backend";
+import { EnumBuildingType } from "../backend/services/backend";
 import { ParkingIcon } from "../icons/parking";
 import { PlaygroundIcon } from "../icons/playground";
 import { HomeOutlined } from "@ant-design/icons";
@@ -14,12 +14,12 @@ type AreaInfo = {
 }
 
 
-export const AreaNames: Record<EnumAreaType, AreaInfo> = {
-  [EnumAreaType.UNDERGROUND_PARKING_AREA]: {
+export const AreaNames: Record<number, AreaInfo> = {
+  2: {
     title: "Подземный паркинг",
     icon: <ParkingIcon />
   },
-  [EnumAreaType.YARD_AREA]: {
+  1: {
     title: "Дворовая территория",
     icon: <PlaygroundIcon />
   }

@@ -25,6 +25,7 @@ export const BuildingPlan = ({ building, selectedRoomIds = [], onSelectRoom }: {
   const getBuildingPlan = useCallback(() => {
     showLoading();
     const isParking = building?.type === EnumBuildingType.UNDERGROUND_PARKING;
+    debugger;
     RoomService.getBuildingStructure({ buildingId: building?.id || 0 })
       .then((floors: FloorResponse[]) => {
         hideLoading();

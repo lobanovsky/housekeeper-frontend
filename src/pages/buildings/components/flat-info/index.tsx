@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import { useParams } from "react-router";
 import { Card, Typography } from "antd";
 
-import { AccessInfoVO, AccessService, EnumRoomVOType, RoomService, RoomVO } from "backend/services/backend";
+import { AccessService, AccessVO, EnumRoomVOType, RoomService, RoomVO } from "backend/services/backend";
 import useRemoteData from "hooks/use-remote-data";
 import { FlatOwnerInfo } from "./components/owner-property";
 import { FlatAccesses } from "./components/accesses";
@@ -22,8 +22,8 @@ export const FlatInfo = () => {
 
   const [flatParams, isLoadingFlatParams, loadFlatParams] = useRemoteData<RoomVO, RoomVO>(roomLoader);
 
-  const [flatInfo, isLoadingFlatInfo, loadFlatInfo] = useRemoteData<AccessInfoVO>(accessesLoader, {
-    dataConverter: (info): AccessInfoVO => ({
+  const [flatInfo, isLoadingFlatInfo, loadFlatInfo] = useRemoteData<AccessVO>(accessesLoader, {
+    dataConverter: (info): AccessVO => ({
       ...info,
       // @ts-ignore
       owner: {

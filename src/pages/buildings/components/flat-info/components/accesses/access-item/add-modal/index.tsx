@@ -2,14 +2,13 @@ import React, { useCallback, useMemo, useState } from "react";
 import { Button, Checkbox } from "antd";
 import { CloseOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
 import {
-  AccessCreateRequest,
   AccessService,
-  AccessUpdateRequest,
-  AreaVO,
+  Area,
   CarVO,
-  EnumAreaType,
+  CreateAccessRequest,
   EnumBuildingType,
-  KeyVO
+  KeyVO,
+  UpdateAccessRequest
 } from "backend/services/backend";
 import Loading from "components/loading";
 import { useLoading } from "hooks/use-loading";
@@ -27,7 +26,7 @@ import { convertCars } from "./utils";
 
 interface AccessFormProps {
   accessInfo?: KeyVO,
-  areas: AreaVO[],
+  areas: Area[],
   buildingType?: EnumBuildingType,
   flatNumber: string;
   reloadInfo: EmptyFunction,
@@ -47,14 +46,12 @@ const AddAccessForm = ({ reloadInfo, closeModal, ownerId, areas: allAreas, acces
     id: getRandomId()
   }]);
 
-  const areaOptions = useMemo(() => allAreas.map(({ id = 0, type = "" }) => ({
+  const areaOptions = useMemo(() => allAreas.map(({ id = 0 }) => ({
     value: id,
     label: (
       <span>
-          {AreaNames[type as EnumAreaType]?.title || type}
-        {AreaNames[type as EnumAreaType]?.icon ? <span className={`icon ${type}`}>
-            {AreaNames[type as EnumAreaType]?.icon}
-          </span> : ""}
+          {AreaNames[id]?.title || id}
+        {AreaNames[id]?.icon ? <span className={`icon type-${id}`}>{AreaNames[id]?.icon}</span> : ""}
         </span>
     )
   })), [allAreas.length]);
@@ -73,8 +70,8 @@ const AddAccessForm = ({ reloadInfo, closeModal, ownerId, areas: allAreas, acces
       isValid: isValidAreas && isValidAccesses
     });
   }, [
-    accesses.map(({ phoneNumber, phoneLabel, tenant, cars = [] }) =>
-      `${phoneNumber}-${phoneLabel}-${tenant}-${(cars || []).map(({
+    accesses.map(({ phoneNumber, phoneLabel, cars = [] }) =>
+      `${phoneNumber}-${phoneLabel}-${(cars || []).map(({
                                                                     id = 0,
                                                                     number = "",
                                                                     description = ""
@@ -109,27 +106,28 @@ const AddAccessForm = ({ reloadInfo, closeModal, ownerId, areas: allAreas, acces
 
     if (isEdit) {
       const access = accesses[0];
-      const dataToSave: AccessUpdateRequest = {
+      const dataToSave: UpdateAccessRequest = {
         label: access.phoneLabel,
-        tenant: access.tenant || false,
-        areas: selectedAreaIds,
+        // tenant: access.tenant || false,
+        //todo всё поправить
+        areas: selectedAreaIds.map((areaId) => ({ areaId })),
         cars: convertCars(access.cars || [])
       };
 
       promise = AccessService.updateAccess({ accessId: access.id || 0, body: dataToSave });
     } else {
-      const dataToSave: AccessCreateRequest = {
-        areas: selectedAreaIds,
-        person: {
-          ownerId,
-          phones: accesses.map(phone => ({
-            number: phone.phoneNumber,
-            label: phone.phoneLabel,
-            tenant: phone.tenant || false,
-            cars: convertCars(phone.cars || [])
-          }))
-        }
+      const dataToSave: CreateAccessRequest = {
+        //todo всё поправить
+        areas: selectedAreaIds.map((areaId) => ({ areaId })),
+        ownerIds: [ownerId],
+        contacts: accesses.map(phone => ({
+          number: phone.phoneNumber,
+          label: phone.phoneLabel,
+          // tenant: phone.tenant || false,
+          cars: convertCars(phone.cars || [])
+        }))
       };
+
       promise = AccessService.createAccess({ body: dataToSave });
     }
 

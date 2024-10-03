@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import { AreaVO } from "../backend/services/backend";
+import { Area } from "../backend/services/backend";
 
 interface IAppContext {
-  areas: AreaVO[];
+  areas: Area[];
 }
 
 
