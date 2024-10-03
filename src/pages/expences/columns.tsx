@@ -1,5 +1,4 @@
-import { dateTimeRenderer, summRenderer } from "utils/renderers";
-
+import { dateTimeRenderer, summRenderer } from 'utils/renderers';
 
 export const expenseColumns = [
     {
@@ -12,7 +11,7 @@ export const expenseColumns = [
         title: 'Компания',
         // render: (company: Counterparty) => company.name
     },
-].map(column => ({
+].map((column) => ({
     ...column,
     className: column.dataIndex
 }));
@@ -59,8 +58,7 @@ export const expensePaymentColumns = [
         dataIndex: 'purpose',
         title: 'Назначение платежа'
     }
-].map(column => ({
+].map((column) => ({
     ...column,
     className: column.dataIndex
 }));
-

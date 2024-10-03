@@ -1,11 +1,11 @@
-import { EnumRoomVOType, RoomVO } from "backend/services/backend";
+import { EnumRoomVOType, RoomVO } from 'backend/services/backend';
 
-export const sortPropertyByFlatType = ({ type: type1, number: number1 = "" }: RoomVO, {
+export const sortPropertyByFlatType = ({ type: type1, number: number1 = '' }: RoomVO, {
   type: type2,
-  number: number2 = ""
+  number: number2 = ''
 }: RoomVO) => {
   if (type1 === type2) {
-    return parseInt(number1) - parseInt(number2);
+    return parseInt(number1, 10) - parseInt(number2, 10);
   }
 
   if (type1 === EnumRoomVOType.FLAT && type2 !== EnumRoomVOType.FLAT) {
@@ -17,5 +17,4 @@ export const sortPropertyByFlatType = ({ type: type1, number: number1 = "" }: Ro
   }
 
   return type1 === EnumRoomVOType.GARAGE && type2 === EnumRoomVOType.OFFICE ? -1 : 1;
-
 };

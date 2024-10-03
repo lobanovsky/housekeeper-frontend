@@ -1,18 +1,17 @@
-import React, { useCallback } from "react";
-import { Button, List } from "antd";
-import { DownloadOutlined, LoadingOutlined } from "@ant-design/icons";
-import useRemoteData from "hooks/use-remote-data";
-import { Area, AreaService } from "backend/services/backend";
-import { useLoading } from "hooks/use-loading";
-import { AreaNames } from "utils/constants";
-import { downloadFile } from "utils/utils";
-import "./styles.scss";
+import React, { useCallback } from 'react';
+import { Button, List } from 'antd';
+import { DownloadOutlined, LoadingOutlined } from '@ant-design/icons';
+import useRemoteData from 'hooks/use-remote-data';
+import { Area, AreaService } from 'backend/services/backend';
+import { useLoading } from 'hooks/use-loading';
+import { AreaNames } from 'utils/constants';
+import { downloadFile } from 'utils/utils';
+import './styles.scss';
 
-
-const DownloadButton = ({ areaId }: { areaId: number }) => {
+function DownloadButton({ areaId }: { areaId: number }) {
   const [isExporting, showExportLoading, hideExportLoading] = useLoading();
 
-  const downloadAreaAccesses = useCallback((areaId: number) => {
+  const downloadAreaAccesses = useCallback(() => {
     if (!areaId) {
       return;
     }
@@ -21,18 +20,22 @@ const DownloadButton = ({ areaId }: { areaId: number }) => {
       url: `/access/export/${areaId}`,
       onFinish: hideExportLoading
     });
-  }, []);
+  }, [areaId]);
 
-  return <Button type="link" onClick={() => {
-    downloadAreaAccesses(areaId || 0);
-  }}>{isExporting ? <LoadingOutlined /> : <DownloadOutlined />}</Button>;
-};
+  return (
+    <Button
+      type="link"
+      onClick={downloadAreaAccesses}
+    >
+      {isExporting ? <LoadingOutlined /> : <DownloadOutlined />}
+    </Button>
+  );
+}
 
-export const AreasList = () => {
-
+export function AreasList() {
   const [areas, isLoadingAreas] = useRemoteData<Area[]>(AreaService.findAll2);
 
-  const renderAreaItem = useCallback(({ id = 0, name }: Area) =>
+  const renderAreaItem = useCallback(({ id = 0, name }: Area) => (
     <List.Item>
       <div className="area-item" key={id}>
         <div className="icon">
@@ -42,15 +45,19 @@ export const AreasList = () => {
         <DownloadButton areaId={id} />
 
       </div>
-    </List.Item>, []);
+    </List.Item>
+  ), []);
 
-  return <div className="areas view">
-    <List
-      // bordered
-      style={{ width: 250 }}
-      dataSource={areas || []}
-      renderItem={renderAreaItem}
-      pagination={false}
-      loading={isLoadingAreas} />
-  </div>;
-};
+  return (
+    <div className="areas view">
+      <List
+        // bordered
+        style={{ width: 250 }}
+        dataSource={areas || []}
+        renderItem={renderAreaItem}
+        pagination={false}
+        loading={isLoadingAreas}
+      />
+    </div>
+  );
+}

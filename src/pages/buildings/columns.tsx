@@ -1,5 +1,5 @@
-import {ColumnsType} from 'antd/es/table';
-import {RoomVO} from 'backend/services/backend';
+import { ColumnsType } from 'antd/es/table';
+import { RoomVO } from 'backend/services/backend';
 
 export const buildingColumns: ColumnsType<RoomVO> = [
     {
@@ -14,7 +14,7 @@ export const buildingColumns: ColumnsType<RoomVO> = [
         dataIndex: 'numberOfApartments',
         title: 'Кол-во квартир',
     }
-].map(column => ({
+].map((column) => ({
     ...column,
     className: column.dataIndex
 }));

@@ -16,4 +16,4 @@ export const FloorColors: FloorNumberProps[] = [
         background: 'rgb(255, 157, 96)',
         label: 'rgb(255, 98, 0)'
     }
-]
+];

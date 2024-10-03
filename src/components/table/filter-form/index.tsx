@@ -1,21 +1,20 @@
-import React, { useCallback, useImperativeHandle, useState } from "react";
+import React, { useCallback, useImperativeHandle, useState } from 'react';
 import {
   CloseCircleOutlined,
   DownloadOutlined,
   DownOutlined,
   LoadingOutlined,
   SearchOutlined
-} from "@ant-design/icons";
-import { Button, Col, DatePicker, Dropdown, Input, Row, Select } from "antd";
+} from '@ant-design/icons';
+import { Button, Col, DatePicker, Dropdown, Input, Row, Select } from 'antd';
 
-import { filterOption } from "utils/utils";
-import { BreakpointsSpan, FilterFieldsConfig, IFilterFieldConfig } from "./types";
-import styles from "./styles.module.scss";
-import { useLoading } from "hooks/use-loading";
-import { ActionFinishCallback } from "utils/types";
-import RemoteSelect from "components/remote-select";
-import { Dayjs } from "dayjs";
-
+import { filterOption } from 'utils/utils';
+import { useLoading } from 'hooks/use-loading';
+import { ActionFinishCallback } from 'utils/types';
+import RemoteSelect from 'components/remote-select';
+import { Dayjs } from 'dayjs';
+import styles from './styles.module.scss';
+import { BreakpointsSpan, FilterFieldsConfig, IFilterFieldConfig } from './types';
 
 export type FilterValue = string | string[] | number | number[] | boolean | Dayjs | [Dayjs, Dayjs];
 export type FilterFormValues = Record<string, FilterValue>;
@@ -31,7 +30,6 @@ interface IFilterFormProps {
   isValidForm?: (filters: FilterFormValues) => boolean;
 }
 
-
 const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element => {
   const {
     onChangeFilters,
@@ -39,26 +37,21 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
     onSearchBtnClick,
     allowClear = true,
     exportToFile = null,
-    extraControls = [],
     isValidForm = () => true
   } = props;
 
   const [isExporting, showExportLoading, hideExportLoading] = useLoading();
 
-  const [filterValues, setFilterValues] = useState<any>(() => {
-    return ({
-      ...(props.defaultFilterValues || {})
-    });
-  });
+  const [filterValues, setFilterValues] = useState<any>(() => ({
+    ...(props.defaultFilterValues || {})
+  }));
 
   const clearValues = () => {
     setFilterValues({});
     onChangeFilters({});
   };
 
-  const getSelectedFilters = () => {
-    return filterValues;
-  };
+  const getSelectedFilters = () => filterValues;
 
   const onChangeFilter = useCallback((changedObj: any) => {
     const newFilters = {
@@ -70,11 +63,11 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
     onChangeFilters(newFilters);
   }, [JSON.stringify(filterValues), setFilterValues, onChangeFilters]);
 
-  const renderField = useCallback((props: IFilterFieldConfig) => {
+  const renderField = useCallback((filterFieldProps: IFilterFieldConfig) => {
     const {
       name,
       title,
-      type = "input",
+      type = 'input',
       options,
       optionsURL,
       getChangeAdditionalParams,
@@ -83,76 +76,88 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
       required = false,
       span = 6,
       ...fieldProps
-    } = props;
+    } = filterFieldProps;
     let input = null;
     const isEmptyValue = !filterValues[name];
-    if (type === "date-range") {
-      input = <DatePicker.RangePicker
-        allowClear
-        placeholder={["c", "по"]}
-        value={filterValues[name]}
-        onChange={(dates) => {
-          onChangeFilter({ [name]: dates });
-        }}
-      />;
-    } else if (type === "date") {
-      input = <DatePicker
-        allowClear
-        value={filterValues[name]}
-        onChange={(dates) => {
-          onChangeFilter({ [name]: dates });
-        }}
-      />;
-    } else if (type === "select") {
-      input = <Select
-        // @ts-ignore
-        mode={mode}
-        allowClear
-        {...fieldProps}
-        popupMatchSelectWidth={false}
-        placeholder={placeholder || title}
-        filterOption={filterOption}
-        value={filterValues[name]}
-        onChange={(selectedOption, options) => {
-          let changeObject = {
-            [name]: selectedOption
-          };
-          if (getChangeAdditionalParams) {
-            changeObject = {
-              ...changeObject,
-              ...(getChangeAdditionalParams(options) || {})
+    if (type === 'date-range') {
+      input = (
+        <DatePicker.RangePicker
+          allowClear
+          placeholder={['c', 'по']}
+          value={filterValues[name]}
+          onChange={(dates) => {
+            onChangeFilter({ [name]: dates });
+          }}
+        />
+      );
+    } else if (type === 'date') {
+      input = (
+        <DatePicker
+          allowClear
+          value={filterValues[name]}
+          onChange={(dates) => {
+            onChangeFilter({ [name]: dates });
+          }}
+        />
+      );
+    } else if (type === 'select') {
+      input = (
+        <Select
+          // @ts-ignore
+          mode={mode}
+          allowClear
+          {...fieldProps}
+          popupMatchSelectWidth={false}
+          placeholder={placeholder || title}
+          filterOption={filterOption}
+          value={filterValues[name]}
+          onChange={(selectedOption, selectedOptions) => {
+            let changeObject = {
+              [name]: selectedOption
             };
-          }
+            if (getChangeAdditionalParams) {
+              changeObject = {
+                ...changeObject,
+                ...(getChangeAdditionalParams(selectedOptions) || {})
+              };
+            }
 
-          onChangeFilter(changeObject);
-        }}
-      >{options}</Select>;
-    } else if (type === "remote-select") {
-      input = <RemoteSelect
-        allowClear
-        {...fieldProps}
-        optionsURL={optionsURL || ""}
-        placeholder={placeholder}
-        value={filterValues[name]}
-        onChange={(selectedOption, options) => {
-          onChangeFilter({ [name]: selectedOption });
-        }}
-      />;
-    } else if (type === "input") {
-      input = <Input
-        // className={styles.full_name}
-        allowClear
-        placeholder={placeholder}
-        value={filterValues[name]}
-        onChange={({ target: { value } }) => {
-          onChangeFilter({ [name]: value });
-        }}
-      />;
+            onChangeFilter(changeObject);
+          }}
+        >
+          {options}
+        </Select>
+      );
+    } else if (type === 'remote-select') {
+      input = (
+        <RemoteSelect
+          allowClear
+          {...fieldProps}
+          optionsURL={optionsURL || ''}
+          placeholder={placeholder}
+          value={filterValues[name]}
+          onChange={(selectedOption) => {
+            onChangeFilter({ [name]: selectedOption });
+          }}
+        />
+      );
+    } else if (type === 'input') {
+      input = (
+        <Input
+          // className={styles.full_name}
+          allowClear
+          placeholder={placeholder}
+          value={filterValues[name]}
+          onChange={({ target: { value } }) => {
+            onChangeFilter({ [name]: value });
+          }}
+        />
+      );
     }
 
     let spanProps: BreakpointsSpan & { span?: number } = {};
 
-    if (typeof span === "number") {
+    if (typeof span === 'number') {
       spanProps.span = span;
     } else if (Object.keys(span).length) {
       spanProps = { ...span };
@@ -161,14 +166,14 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
     return (
       <Col {...spanProps} key={name}>
         <div
-          className={`${styles.field} ${name} filter-field ${isEmptyValue ? "empty" : ""} ${required ? "required" : ""}`}>
+          className={`${styles.field} ${name} filter-field ${isEmptyValue ? 'empty' : ''} ${required ? 'required' : ''}`}
+        >
           <div className={`${styles.field_label} label`}>{title}</div>
           {input}
         </div>
       </Col>
     );
   }, [JSON.stringify(filterValues)]);
-
 
   const exportTableToFile = useCallback(() => {
     if (!exportToFile) {
@@ -189,9 +194,13 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
       <div className="filter-fields">
         <Row gutter={[8, 8]}>
           {filters.map(renderField)}
-          <Col {...{ md: 8, lg: 6, xl: 5, xxl: 4 }}>
+          <Col {...{
+            md: 8, lg: 6, xl: 5, xxl: 4
+          }}
+          >
             <div className="buttons">
-              {exportToFile ? <Dropdown.Button
+              {exportToFile ? (
+                <Dropdown.Button
                   type="primary"
                   disabled={!isValidForm(filterValues)}
                   icon={isExporting ? <LoadingOutlined /> : <DownOutlined />}
@@ -199,57 +208,44 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
                   menu={{
                     items: [
                       {
-                        key: "download",
-                        label: "Выгрузить в файл",
+                        key: 'download',
+                        label: 'Выгрузить в файл',
                         icon: <DownloadOutlined />,
                         onClick: exportTableToFile
                       }
                     ]
                   }}
                 >
-                  <SearchOutlined /> Найти
-                </Dropdown.Button> :
+                  <SearchOutlined />
+                  {' '}
+                  Найти
+                </Dropdown.Button>
+              ) : (
                 <Button
                   type="primary"
                   disabled={!isValidForm(filterValues)}
-                  onClick={onSearchBtnClick}>
-                  <SearchOutlined /> Найти
-                </Button>}
+                  onClick={onSearchBtnClick}
+                >
+                  <SearchOutlined />
+                  {' '}
+                  Найти
+                </Button>
+              )}
 
-              {allowClear && <Button
-                key="clear"
-                onClick={clearValues}
-              >
-                <CloseCircleOutlined style={{ marginRight: 5 }} /> Очистить
-              </Button>
-              }
+              {allowClear && (
+                <Button
+                  key="clear"
+                  onClick={clearValues}
+                >
+                  <CloseCircleOutlined style={{ marginRight: 5 }} />
+                  {' '}
+                  Очистить
+                </Button>
+              )}
             </div>
           </Col>
         </Row>
       </div>
-      {/*<div className='buttons'>*/}
-
-      {/*<Button*/}
-      {/*	key='search'*/}
-      {/*	className={styles.search_btn}*/}
-      {/*	type='primary'*/}
-      {/*	onClick={onSearchBtnClick}*/}
-      {/*	disabled={!isValidForm(filterValues)}*/}
-      {/*>*/}
-      {/*	<SearchOutlined style={{ marginRight: 5 }} /> Найти*/}
-      {/*</Button>*/}
-
-
-      {/*{!!exportToFile && <Button*/}
-      {/*	key='export'*/}
-      {/*	className={styles.export_btn}*/}
-      {/*	type='primary'*/}
-      {/*	onClick={exportTableToFile}*/}
-      {/*>*/}
-      {/*	{isExporting ? <LoadingOutlined style={{ marginRight: 5 }} /> :*/}
-      {/*		<DownloadOutlined style={{ marginRight: 5 }} />} Выгрузить в файл*/}
-      {/*</Button>}*/}
-      {/*</div>*/}
 
     </div>
   );

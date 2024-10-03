@@ -1,20 +1,16 @@
-import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { Pagination, Table as AntTable, TableProps } from "antd";
-import debounce from "lodash/debounce";
+import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { Pagination, Table as AntTable, TableProps } from 'antd';
+import debounce from 'lodash/debounce';
 
-import { FilterFieldsConfig } from "components/table/filter-form/types";
-import { showError } from "utils/notifications";
-import { EmptyFunction, IPagination } from "utils/types";
-import FilterForm, { FilterFormValues } from "./filter-form";
-import { downloadFile } from "utils/utils";
-import { Dayjs } from "dayjs";
-import { SERVER_DATE_FORMAT } from "../../utils/constants";
-import "./styles.scss";
-import { SUMM_REGEX, TablePaginationConfig } from "./constants";
-
-export interface TableRequestParams<T> extends IPagination {
-  body: T;
-}
+import { FilterFieldsConfig } from 'components/table/filter-form/types';
+import { showError } from 'utils/notifications';
+import { EmptyFunction, IPagination } from 'utils/types';
+import { downloadFile } from 'utils/utils';
+import { Dayjs } from 'dayjs';
+import FilterForm, { FilterFormValues } from './filter-form';
+import { SERVER_DATE_FORMAT } from '../../utils/constants';
+import './styles.scss';
+import { SUMM_REGEX, TablePaginationConfig } from './constants';
 
 export interface TablePublicMethods {
   reloadTable: EmptyFunction,
@@ -44,14 +40,12 @@ interface ITableProps extends TableProps<any> {
   loadDataFn: (requestParams: any) => Promise<{ content: any[], totalElements: number }>
 }
 
-
-
 const Table = React.forwardRef((props: ITableProps, ref) => {
   const {
     loadDataFn,
     pagination: paginationConfig = true,
     columns,
-    toolbar = "",
+    toolbar = '',
     className,
     defaultPagination = { pageNum: 1, pageSize: 100 },
     defaultFilterValues = {},
@@ -60,7 +54,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
     filters = [],
     onChangePagination = null,
     extraControls = [],
-    exportURL = "",
+    exportURL = '',
     isValidForm = () => true,
     ...tableProps
   } = props;
@@ -68,7 +62,6 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
   // const { user } = useContext(AuthContext);
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState<number>(0);
-  const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [pagination, setPagination] = useState<IPagination>(defaultPagination);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedFilters, setSelectedFilters] = useState<any>(() => ({
@@ -77,10 +70,10 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 
   const filterFormRef = useRef(null);
 
-  const onChangeFilters = useCallback((filters: any) => {
-    setSelectedFilters(filters);
+  const onChangeFilters = useCallback((changedFilters: any) => {
+    setSelectedFilters(changedFilters);
 
-    setPagination(prev => ({
+    setPagination((prev) => ({
       pageNum: 1,
       pageSize: prev.pageSize
     }));
@@ -89,8 +82,8 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
   const getProcessedFilters = useCallback((selectedFilterValues: any) => {
     const convertedFilters = {};
     Object.entries(selectedFilterValues).forEach(([filterName, filterValue]) => {
-      const isDate = filterName.endsWith("Date");
-      const isSum = filterName.toLowerCase().endsWith("sum");
+      const isDate = filterName.endsWith('Date');
+      const isSum = filterName.toLowerCase().endsWith('sum');
 
       if (isDate) {
         // @ts-ignore
@@ -99,7 +92,7 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
           convertedFilters[filterName] = filterValue.format(SERVER_DATE_FORMAT);
         }
       } else if (isSum) {
-        const amountStr = String(filterValue).replace(/\s+/g, "").replace(/,/g, ".");
+        const amountStr = String(filterValue).replace(/\s+/g, '').replace(/,/g, '.');
         if (SUMM_REGEX.test(amountStr)) {
           // @ts-ignore
           convertedFilters[filterName] = parseFloat(amountStr);
@@ -108,7 +101,6 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
         // @ts-ignore
         convertedFilters[filterName] = filterValue;
       }
-
     });
 
     return convertedFilters;
@@ -127,14 +119,13 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
       url: exportURL,
       requestParams: convertedFilters,
       onFinish,
-      method: "post"
+      method: 'post'
     });
   }, [JSON.stringify(selectedFilters)]);
 
   const loadData = useCallback((params: { filters: FilterFormValues, pagination: IPagination }) => {
-    const { filters, pagination: { pageNum = 0, pageSize = 10 } = {} } = params;
-    const convertedFilters = getProcessedFilters(filters);
-
+    const { filters: filtersToSearch, pagination: { pageNum = 0, pageSize = 10 } = {} } = params;
+    const convertedFilters = getProcessedFilters(filtersToSearch);
 
     setLoading(true);
     let requestParams: any & IPagination = {
@@ -149,9 +140,9 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
     loadDataFn(requestParams)
       .then((responseData: any) => {
         if (responseDataConverter) {
-          const { data, total } = responseDataConverter(responseData);
-          setData(data);
-          setTotal(total);
+          const { data: newData, total: newTotal } = responseDataConverter(responseData);
+          setData(newData);
+          setTotal(newTotal);
         } else {
           setData(responseData.content || []);
           setTotal(responseData.totalElements || 0);
@@ -159,8 +150,8 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 
         setLoading(false);
       })
-      .catch(e => {
-        showError("Не удалось загрузить данные для таблицы", e);
+      .catch((e) => {
+        showError('Не удалось загрузить данные для таблицы', e);
         setLoading(false);
       });
   }, [loadDataFn, requestParamsConverter, responseDataConverter]);
@@ -187,7 +178,8 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 
     if (fireSearch) {
       delayedSearch({
-        filters: {}, pagination: {
+        filters: {},
+        pagination: {
           pageNum: 1, pageSize: 10
         }
       });
@@ -199,9 +191,8 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
     if (filterFormRef.current && filterFormRef.current.getSelectedFilters) {
       // @ts-ignore
       return filterFormRef.current.getSelectedFilters();
-    } else {
-      return {};
     }
+    return {};
   };
 
   useImperativeHandle(ref, (): TablePublicMethods => ({
@@ -215,40 +206,46 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
     if (isValidForm(selectedFilters)) {
       delayedSearch({ filters: selectedFilters, pagination });
     }
-
   }, [JSON.stringify(selectedFilters), pagination.pageSize, pagination.pageNum]);
 
   return (
-    <div className={`app-table ${className} ${loading ? "with-loading" : ""} ${!total ? "empty" : ""}`}>
-      {filters.length > 0 && <FilterForm
-        defaultFilterValues={defaultFilterValues}
-        ref={filterFormRef}
-        exportToFile={exportURL ? exportToFile : null}
-        filters={filters}
-        isValidForm={isValidForm}
-        onChangeFilters={onChangeFilters}
-        onSearchBtnClick={reloadTable}
-        extraControls={extraControls}
-      />}
+    <div className={`app-table ${className} ${loading ? 'with-loading' : ''} ${!total ? 'empty' : ''}`}>
+      {filters.length > 0 && (
+        <FilterForm
+          defaultFilterValues={defaultFilterValues}
+          ref={filterFormRef}
+          exportToFile={exportURL ? exportToFile : null}
+          filters={filters}
+          isValidForm={isValidForm}
+          onChangeFilters={onChangeFilters}
+          onSearchBtnClick={reloadTable}
+          extraControls={extraControls}
+        />
+      )}
       <div className="pagination-container">
         {!!toolbar && <div className="table-toolbar">{toolbar}</div>}
-        {!!paginationConfig && <Pagination {...{
-          ...TablePaginationConfig,
-          total,
-          pageSize: pagination.pageSize,
-          current: pagination.pageNum,
-          onChange: onPaginationChange
-        }} />}
+        {!!paginationConfig && (
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          <Pagination {...{
+            ...TablePaginationConfig,
+            total,
+            pageSize: pagination.pageSize,
+            current: pagination.pageNum,
+            onChange: onPaginationChange
+          }}
+          />
+        )}
       </div>
       <AntTable
         bordered={false}
-        className={!data.length ? "empty-table" : ""}
+        className={!data.length ? 'empty-table' : ''}
         rowKey="id"
         size="small"
-        locale={{ emptyText: "Нет данных" }}
+        locale={{ emptyText: 'Нет данных' }}
         loading={loading}
         columns={columns}
         dataSource={data}
+        /* eslint-disable-next-line react/jsx-props-no-spreading */
         {...tableProps}
         pagination={false}
       />
@@ -256,6 +253,5 @@ const Table = React.forwardRef((props: ITableProps, ref) => {
 
   );
 });
-
 
 export default Table;

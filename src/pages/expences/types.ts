@@ -1,4 +1,4 @@
-import {GroupOfPayment} from "../../backend/services/backend";
+import { GroupOfPayment } from '../../backend/services/backend';
 
 export interface CounterpartyData {
     data: GroupOfPayment[],

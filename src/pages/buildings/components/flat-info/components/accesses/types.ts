@@ -1,4 +1,4 @@
-import { CarVO } from "backend/services/backend";
+import { CarVO } from 'backend/services/backend';
 
 export interface CarValues extends CarVO {
   isNew?: boolean;

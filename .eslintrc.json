@@ -1,5 +1,47 @@
 {
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "jest": true
+  },
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "airbnb",
+    "airbnb-typescript",
+    "plugin:import/typescript"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": [
+    "react",
+    "@typescript-eslint"
+  ],
   "rules": {
-    "react-hooks/exhaustive-deps": 0
+    "max-len": [
+      "error",
+      {
+        "code": 140
+      }
+    ],
+    "no-plusplus": 0,
+    "no-nested-ternary": 0,
+    "import/prefer-default-export": 0,
+    "import/no-extraneous-dependencies": 0,
+    "@typescript-eslint/indent": 0,
+    "@typescript-eslint/comma-dangle": 0,
+    "react-hooks/exhaustive-deps": 0,
+    "react/require-default-props": 0,
+    "react/jsx-indent": 0,
+    "react/jsx-props-no-spreading": 0,
+    "jsx-a11y/click-events-have-key-events": 0,
+    "jsx-a11y/interactive-supports-focus": 0
   }
 }

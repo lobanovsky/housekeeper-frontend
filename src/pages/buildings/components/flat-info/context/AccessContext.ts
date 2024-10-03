@@ -1,5 +1,5 @@
-import { createContext } from "react";
-import { EmptyFunction } from "utils/types";
+import { createContext } from 'react';
+import { EmptyFunction } from 'utils/types';
 
 interface IAccessContext {
   flatNumber: string;
@@ -7,9 +7,8 @@ interface IAccessContext {
   reloadFlatInfo: EmptyFunction
 }
 
-
 export const AccessContext = createContext<IAccessContext>({
-  flatNumber: "",
+  flatNumber: '',
   ownerId: 0,
   reloadFlatInfo: () => {
   }

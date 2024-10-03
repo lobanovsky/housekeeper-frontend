@@ -1,19 +1,32 @@
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from 'axios';
+import { Dayjs } from 'dayjs';
+import { QuickPeriods } from '../pages/expences/range-picker/constants';
 
-export type Modify<T, R> = Omit<T, keyof R> & R;
+export interface SelectedDatesShort {
+  dateStart: string,
+  dateEnd: string,
+  dateFromMoment: Dayjs | null,
+  dateToMoment: Dayjs | null,
+}
 
-
-export type SimpleFieldValue = string | number | boolean | undefined;
+export interface SelectedDateRange extends SelectedDatesShort {
+  selectedMonth: number,
+  selectedMonthName: string,
+  selectedPeriod?: QuickPeriods | null,
+  selectedYear: number,
+  selectedYearName: string,
+}
 
 export type EmptyFunction = () => void;
+
 // @ts-ignore
 export interface ServerError extends Error, AxiosError, AxiosResponse {
-	error?: string;
+  error?: string;
 }
 
 export interface DictionaryItem {
   id: string | number;
-  name: string;
+  description: string;
 }
 
 export interface CheckboxItem {
@@ -24,17 +37,11 @@ export interface CheckboxItem {
 export type LoadParams = Record<string, string | number | boolean>;
 
 export interface IPagination {
-	pageNum: number;
-	pageSize: number;
-}
-
-export interface DictionaryItem {
-	name: string;
-	description: string;
+  pageNum: number;
+  pageSize: number;
 }
 
 export type ActionFinishCallback = (isSuccess: boolean) => void;
 export type ActionCallbackWithData<T> = (isSuccess: boolean, data?: T | null) => void;
 
 export type ActionCallback = () => void;
-

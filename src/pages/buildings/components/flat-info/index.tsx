@@ -1,19 +1,18 @@
-import { useCallback, useEffect } from "react";
-import { useParams } from "react-router";
-import { Card, Typography } from "antd";
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { useParams } from 'react-router';
+import { Card, Typography } from 'antd';
 
-import { AccessService, AccessVO, EnumRoomVOType, RoomService, RoomVO } from "backend/services/backend";
-import useRemoteData from "hooks/use-remote-data";
-import { FlatOwnerInfo } from "./components/owner-property";
-import { FlatAccesses } from "./components/accesses";
-import { AccessContext } from "./context/AccessContext";
-import { sortPropertyByFlatType } from "./utils";
-import "./styles.scss";
+import { AccessService, AccessVO, EnumRoomVOType, RoomService, RoomVO } from 'backend/services/backend';
+import useRemoteData from 'hooks/use-remote-data';
+import { FlatOwnerInfo } from './components/owner-property';
+import { FlatAccesses } from './components/accesses';
+import { AccessContext } from './context/AccessContext';
+import { sortPropertyByFlatType } from './utils';
+import './styles.scss';
 
-
-//todo унести арии в контекст или ещё куда
-export const FlatInfo = () => {
-  const { roomId: selectedRoomStr = "" } = useParams();
+// todo унести арии в контекст или ещё куда
+export function FlatInfo() {
+  const { roomId: selectedRoomStr = '' } = useParams();
   const roomLoader = useCallback(() => RoomService.getRoomById({ id: parseInt(selectedRoomStr, 10) || 0 }), [selectedRoomStr]);
   const accessesLoader = useCallback(() => AccessService.findByRoom({
     roomId: parseInt(selectedRoomStr, 10) || 0,
@@ -33,6 +32,12 @@ export const FlatInfo = () => {
     })
   });
 
+  const flatContextValue = useMemo(() => ({
+    ownerId: flatInfo?.owner?.id || 0,
+    flatNumber: flatParams?.number || '',
+    reloadFlatInfo: loadFlatInfo
+  }), [loadFlatInfo, flatParams?.number]);
+
   useEffect(() => {
     const roomId = parseInt(selectedRoomStr, 10);
     if (roomId) {
@@ -41,26 +46,33 @@ export const FlatInfo = () => {
     }
   }, [selectedRoomStr]);
 
-  return <AccessContext.Provider value={{
-    ownerId: flatInfo?.owner?.id || 0,
-    flatNumber: flatParams?.number || "",
-    reloadFlatInfo: loadFlatInfo
-  }}>
-    <Card size="small" className="flat-info-card" loading={isLoadingFlatInfo || isLoadingFlatParams}
-          title={<div className="flat-title card-title">
+  return (
+    <AccessContext.Provider value={flatContextValue}>
+      <Card
+        size="small"
+        className="flat-info-card"
+        loading={isLoadingFlatInfo || isLoadingFlatParams}
+        title={(
+          <div className="flat-title card-title">
             <Typography.Title level={5}>
-              {flatParams?.type === EnumRoomVOType.GARAGE && "М/м "}
-              {flatParams?.type === EnumRoomVOType.FLAT && "Кв."}
-              {flatParams?.type === EnumRoomVOType.OFFICE && "Офис "}
+              {flatParams?.type === EnumRoomVOType.GARAGE && 'М/м '}
+              {flatParams?.type === EnumRoomVOType.FLAT && 'Кв.'}
+              {flatParams?.type === EnumRoomVOType.OFFICE && 'Офис '}
               {flatParams?.number}
             </Typography.Title>
             <div
-              className="address">{flatParams?.street && flatParams?.building ? `${flatParams?.street}, д. ${flatParams?.building}` : ""}</div>
-          </div>}>
-      <div className="flat-info">
-        <FlatOwnerInfo owner={flatInfo?.owner} />
-        <FlatAccesses keys={flatInfo?.keys || []} />
-      </div>
-    </Card>
-  </AccessContext.Provider>;
-};
+              className="address"
+            >
+              {flatParams?.street && flatParams?.building ? `${flatParams?.street}, д. ${flatParams?.building}` : ''}
+            </div>
+          </div>
+        )}
+      >
+        <div className="flat-info">
+          <FlatOwnerInfo owner={flatInfo?.owner} />
+          <FlatAccesses keys={flatInfo?.keys || []} />
+        </div>
+      </Card>
+    </AccessContext.Provider>
+  );
+}

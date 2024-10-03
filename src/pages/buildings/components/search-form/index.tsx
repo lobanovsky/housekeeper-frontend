@@ -1,31 +1,29 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import { Input } from "antd";
-import { MaskedInput } from "antd-mask-input";
-import { SearchOutlined } from "@ant-design/icons";
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { Input } from 'antd';
+import { MaskedInput } from 'antd-mask-input';
+import { SearchOutlined } from '@ant-design/icons';
+import { AccessService, CreateAccessRequest, EnumRoomVOType } from 'backend/services/backend';
+import Loading from 'components/loading';
+import { useLoading } from 'hooks/use-loading';
+import debounce from 'lodash/debounce';
+import { showError } from 'utils/notifications';
+import './styles.scss';
 
-import { AccessService, CreateAccessRequest, EnumRoomVOType } from "backend/services/backend";
-import Loading from "components/loading";
-import { useLoading } from "hooks/use-loading";
-import debounce from "lodash/debounce";
-import { showError } from "utils/notifications";
-import "./styles.scss";
-
-
-export const BuildingsSearchForm = () => {
+export function BuildingsSearchForm() {
   const navigate = useNavigate();
   const [loading, showLoading, hideLoading] = useLoading();
-  const [searchPhone, setSearchPhone] = useState("");
-  const [searchCarNun, setSearchCarNum] = useState("");
+  const [searchPhone, setSearchPhone] = useState('');
+  const [searchCarNun, setSearchCarNum] = useState('');
 
-  const searchData = useCallback((phone: string = "", carNum: string = "") => {
-    const phoneDigits = phone.replace(/\D/g, "");
+  const searchData = useCallback((phone: string = '', carNum: string = '') => {
+    const phoneDigits = phone.replace(/\D/g, '');
     if (phoneDigits.length < 4 && carNum.length < 3) {
       return;
     }
 
     showLoading();
-    (!!carNum ? AccessService.findByCarNumber({
+    (carNum ? AccessService.findByCarNumber({
       carNumber: carNum,
       active: true
     }) : AccessService.findByPhone({ phoneNumber: phoneDigits, active: true }))
@@ -34,8 +32,9 @@ export const BuildingsSearchForm = () => {
         // @ts-ignore
         const { owner: { ownerRooms = [] } = {} } = response || {};
         if (ownerRooms.length > 0) {
-          let buildingRoom = ownerRooms.find(({ type = "" }) => type === EnumRoomVOType.FLAT);
+          let buildingRoom = ownerRooms.find(({ type = '' }) => type === EnumRoomVOType.FLAT);
           if (!buildingRoom) {
+            // eslint-disable-next-line prefer-destructuring
             buildingRoom = ownerRooms[0];
           }
 
@@ -45,9 +44,9 @@ export const BuildingsSearchForm = () => {
           }
         }
       })
-      .catch(e => {
+      .catch((e) => {
         hideLoading();
-        showError("Ничего не найдено", e);
+        showError('Ничего не найдено', e);
       });
   }, []);
 
@@ -60,8 +59,7 @@ export const BuildingsSearchForm = () => {
     ev.stopPropagation();
     const pressedKeyCode = String(ev.key || ev.keyCode);
 
-    const isEnterKeyPressed =
-      pressedKeyCode === "13" || pressedKeyCode.toLowerCase() === "enter";
+    const isEnterKeyPressed = pressedKeyCode === '13' || pressedKeyCode.toLowerCase() === 'enter';
 
     if (isEnterKeyPressed) {
       searchData(searchPhone, searchCarNun);
@@ -81,29 +79,30 @@ export const BuildingsSearchForm = () => {
         disabled={!!searchCarNun}
         prefix={<SearchOutlined />}
         placeholder="Номер телефона"
-        mask={"+7 (000) 000-00-00"}
+        mask="+7 (000) 000-00-00"
         value={searchPhone}
         onChange={({ target: { value } }) => {
           setSearchPhone(value);
-          const phoneDigits = value.replace(/\D/g, "");
+          const phoneDigits = value.replace(/\D/g, '');
           if (phoneDigits.length > 1) {
-            setSearchCarNum("");
+            setSearchCarNum('');
           }
         }}
       />
       <Input
         allowClear
         className="car-number"
-        disabled={searchPhone.replace(/\D/g, "").length > 2}
-        placeholder="Номер машины" value={searchCarNun}
+        disabled={searchPhone.replace(/\D/g, '').length > 2}
+        placeholder="Номер машины"
+        value={searchCarNun}
         onChange={({ target: { value } }) => {
           setSearchCarNum(value);
 
           if (value) {
-            setSearchPhone("");
+            setSearchPhone('');
           }
         }}
       />
     </div>
   );
-};
+}

@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const codegen = require('./codegen');
 const dotenv = require('dotenv');
+const codegen = require("./codegen");
 
 dotenv.config();
 

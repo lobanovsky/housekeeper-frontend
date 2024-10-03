@@ -27,7 +27,6 @@ module.exports = async (options) => {
       to: "export interface OwnerVO_Old"
     });
 
-
     await fs.appendFile(outFile, `
 			
 export interface TopResponse {
@@ -73,5 +72,4 @@ export const AreaService = new AreaControllerService();
     console.log("%cCodegen error!!!", "color: red");
     console.log(e);
   }
-
 };

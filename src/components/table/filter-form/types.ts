@@ -1,5 +1,5 @@
-import React from "react";
-import { ColSize } from "antd/es/grid/col";
+import React from 'react';
+import { ColSize } from 'antd/es/grid/col';
 
 export type FilterFieldType = 'input' | 'date-range' | 'date' | 'select' | 'remote-select';
 

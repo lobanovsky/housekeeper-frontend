@@ -1,18 +1,16 @@
-import { useCallback, useEffect, useMemo } from "react";
-import { Outlet, useNavigate, useParams } from "react-router";
-import { Skeleton } from "antd";
-import { Building, BuildingService, RoomVO } from "backend/services/backend";
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { Outlet, useNavigate, useParams } from 'react-router';
+import { Skeleton } from 'antd';
+import { Building, BuildingService, RoomVO } from 'backend/services/backend';
 
-import { BuildingPlan } from "./plan";
-import useRemoteData from "hooks/use-remote-data";
-import "./styles.scss";
+import useRemoteData from 'hooks/use-remote-data';
+import { BuildingPlan } from './plan';
+import './styles.scss';
 
-export const BuildingScheme = () => {
-  let { buildingId: buildingIdStr = "", roomId: roomIdStr = "" } = useParams();
+export function BuildingScheme() {
+  const { buildingId: buildingIdStr = '', roomId: roomIdStr = '' } = useParams();
   const navigate = useNavigate();
-  const buildingLoader = useCallback(() => {
-    return BuildingService.findById({ id: parseInt(buildingIdStr, 10) });
-  }, [buildingIdStr]);
+  const buildingLoader = useCallback(() => BuildingService.findById({ id: parseInt(buildingIdStr, 10) }), [buildingIdStr]);
 
   const [building, isLoadingBuilding, loadBuilding] = useRemoteData<Building, Building>(buildingLoader);
 
@@ -31,18 +29,20 @@ export const BuildingScheme = () => {
 
   // @ts-ignore
   return (
-    <div className={`building-plan ${building?.type} ${isLoadingBuilding ? "loading" : ""}`}>
+    <div className={`building-plan ${building?.type} ${isLoadingBuilding ? 'loading' : ''}`}>
       {isLoadingBuilding && <Skeleton active />}
-      {!isLoadingBuilding && !!building?.id && <div className="plan-container">
-        <BuildingPlan
-          /* @ts-ignore */
-          building={building}
-          onSelectRoom={onRoomClick}
-          selectedRoomIds={selectedRoomIds}
-        />
-        <Outlet />
-        {/*{selectedFlat?.id && <div className="flat-info"><FlatInfo areas={areas} flat={selectedFlat} /></div>}*/}
-      </div>}
+      {!isLoadingBuilding && !!building?.id && (
+        <div className="plan-container">
+          <BuildingPlan
+            /* @ts-ignore */
+            building={building}
+            onSelectRoom={onRoomClick}
+            selectedRoomIds={selectedRoomIds}
+          />
+          <Outlet />
+          {/* {selectedFlat?.id && <div className="flat-info"><FlatInfo areas={areas} flat={selectedFlat} /></div>} */}
+        </div>
+      )}
     </div>
   );
-};
+}

@@ -1,11 +1,11 @@
-import { useCallback } from "react";
-import { AccessService, KeyVO } from "backend/services/backend";
-import { useLoading } from "hooks/use-loading";
-import { showError } from "utils/notifications";
+import { useCallback } from 'react';
+import { AccessService } from 'backend/services/backend';
+import { useLoading } from 'hooks/use-loading';
+import { showError } from 'utils/notifications';
 
 export function useAccessItemCRUD({ accessId, onFinish = undefined }: { accessId: number, onFinish?: () => void }) {
   const [isDeleting, setDeleting, hideDeleting] = useLoading();
-  const [isSaving, setSaving, hideSaving] = useLoading();
+  const [isSaving] = useLoading();
 
   const deleteAccessItem = useCallback(() => {
     setDeleting();
@@ -16,15 +16,17 @@ export function useAccessItemCRUD({ accessId, onFinish = undefined }: { accessId
           onFinish();
         }
       })
-      .catch(e => {
-        showError("Не получилось удалить доступ", e);
+      .catch((e) => {
+        showError('Не получилось удалить доступ', e);
         hideDeleting();
       });
   }, [accessId, onFinish]);
 
-  const saveAccessItem = useCallback((newValues: KeyVO) => {
+  const saveAccessItem = useCallback(() => {
 
   }, [accessId, onFinish]);
 
-  return { isDeleting, isSaving, deleteAccessItem, saveAccessItem };
+  return {
+    isDeleting, isSaving, deleteAccessItem, saveAccessItem
+  };
 }

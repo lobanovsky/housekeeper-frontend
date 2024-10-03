@@ -1,7 +1,7 @@
-import {GroupOfPayment, OutgoingGropingPaymentsFilter, PaymentService} from "../../backend/services/backend";
-import {ActionCallbackWithData} from "../../utils/types";
-import {showError} from "../../utils/notifications";
-import {CounterpartyData} from "./types";
+import { GroupOfPayment, OutgoingGropingPaymentsFilter, PaymentService } from '../../backend/services/backend';
+import { ActionCallbackWithData } from '../../utils/types';
+import { showError } from '../../utils/notifications';
+import { CounterpartyData } from './types';
 
 // export interface ExpensesResponse {
 //     data: Array<GroupOfPayment & {id: string}>,
@@ -9,9 +9,9 @@ import {CounterpartyData} from "./types";
 //     totalSum: number
 // }
 export const loadExpensesByDates = (requestParams: OutgoingGropingPaymentsFilter, onFinish: ActionCallbackWithData<CounterpartyData>) => {
-    PaymentService.findOutgoingPaymentsGroupingByCounterparty({body: requestParams})
+  PaymentService.findOutgoingPaymentsGroupingByCounterparty({ body: requestParams })
         .then((loadedData: GroupOfPayment[]) => {
-            const totalSum = loadedData.reduce((accum, {total: categoryTotal = 0}) => accum + categoryTotal, 0);
+          const totalSum = loadedData.reduce((accum, { total: categoryTotal = 0 }) => accum + categoryTotal, 0);
             onFinish(true, {
                 data: loadedData.map((item) => ({
                     ...item,
@@ -21,8 +21,8 @@ export const loadExpensesByDates = (requestParams: OutgoingGropingPaymentsFilter
                 totalSum
             });
         })
-        .catch(e => {
+    .catch((e) => {
             onFinish(false);
             showError('Не удалось загрузить траты', e);
-        })
-}
+    });
+};
