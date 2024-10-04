@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd';
 import { KeyVO } from 'backend/services/backend';
@@ -9,6 +9,7 @@ import { useAccessItemCRUD } from './hooks';
 import { showAddAccessItemModal } from '../access-add-modal';
 import { AccessContext } from '../../context/AccessContext';
 import './styles.scss';
+import { LetterAIcon } from '../../../../../../icons/letter_a';
 
 export function AccessItem({ accessInfo }: { accessInfo: KeyVO }) {
   const { areas } = useContext(DictionariesContext);
@@ -18,6 +19,12 @@ export function AccessItem({ accessInfo }: { accessInfo: KeyVO }) {
   const {
     id = 0, phoneLabel = '', phoneNumber, areas: infoAreas = [], cars = []
   } = accessInfo;
+
+  const sortedAreas = useMemo(
+    () => infoAreas.sort((a1, a2) => (a1.id || 0) - (a2.id || 0)),
+    [infoAreas.length]
+  );
+
   const { isDeleting, deleteAccessItem } = useAccessItemCRUD({ accessId: id || 0, onFinish: reloadFlatInfo });
   return (
     <div className="access-item" key={id}>
@@ -30,12 +37,12 @@ export function AccessItem({ accessInfo }: { accessInfo: KeyVO }) {
             </div>
           </div>
           <div className="area-icons">
-            {infoAreas.map(({ id: areaId = 0, tenant = false, places = [] }) => (
-              <div className={`access-icon type-${areaId}`}>
+            {sortedAreas.map(({ id: areaId = 0, tenant = false, places = [] }) => (
+              <div key={areaId} className={`access-icon type-${areaId}`}>
                 <div className="icon">
                   {AreaNames[areaId]?.icon || String(areaId)}
                 </div>
-                {tenant && <span className="tenant-icon">A</span>}
+                {tenant && <span className="tenant-icon"><LetterAIcon /></span>}
                 {!!places.length && <div className="places">{places.join(', ')}</div>}
               </div>
             ))}

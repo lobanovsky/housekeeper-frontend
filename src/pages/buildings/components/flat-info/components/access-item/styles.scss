@@ -33,13 +33,29 @@ $grayDark: rgba(0, 0, 0, 0.88);
         display: inline-flex;
         align-items: flex-start;
 
-        gap: 1em;
+        gap: 1.5em;
 
         .access-icon {
           line-height: 21px;
+          position: relative;
           display: flex;
           align-items: center;
           gap: 4px;
+
+          .tenant-icon {
+            position: absolute;
+            left: 15px;
+            top: -10px;
+            //color: orange;
+
+            .anticon {
+              svg {
+                color: rgba(230, 133, 41, 0.8);
+              }
+            }
+
+
+          }
 
           .anticon {
             font-size: 16px;

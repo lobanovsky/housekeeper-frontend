@@ -39,7 +39,8 @@ function App() {
             <Layout>
               <Header style={{ paddingInline: 25 }}>
                 <HouseIcon style={{ marginRight: 5, fontSize: '26px' }} />
-                HouseKeeper
+                <div className="app-title">HouseKeeper</div>
+                <div className="company-name">© 2020-2024 Бюро Лобановского</div>
               </Header>
               <Layout>
                 <Sider />
