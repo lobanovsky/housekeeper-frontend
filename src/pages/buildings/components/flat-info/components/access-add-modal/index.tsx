@@ -4,16 +4,15 @@ import { CloseOutlined, PlusOutlined, SaveOutlined } from '@ant-design/icons';
 import { AccessService, Area, CarVO, CreateAccessRequest, KeyVO, UpdateAccessRequest } from 'backend/services/backend';
 import Loading from 'components/loading';
 import { useLoading } from 'hooks/use-loading';
-
+import { CarNumberRegex, PhoneRegexes } from 'pages/buildings/constants';
 import { AreaNames } from 'utils/constants';
 import { showModal } from 'utils/modals';
 import { showError } from 'utils/notifications';
 import { EmptyFunction } from 'utils/types';
 import { getRandomId } from 'utils/utils';
-import { PhoneItem, PhoneItemValues } from './phone-item';
-import { CarNumberRegex, PhoneRegexes } from '../../constants';
-import './styles.scss';
 import { convertCars } from './utils';
+import { PhoneItem, PhoneItemValues } from './phone-item';
+import './styles.scss';
 
 interface AccessFormProps {
   accessInfo?: KeyVO,

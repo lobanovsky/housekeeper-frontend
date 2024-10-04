@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { Input } from 'antd';
 import { MaskedInput } from 'antd-mask-input';
 import { SearchOutlined } from '@ant-design/icons';
-import { AccessService, CreateAccessRequest, EnumRoomVOType } from 'backend/services/backend';
+import { AccessService, AccessVO, EnumRoomVOType } from 'backend/services/backend';
 import Loading from 'components/loading';
 import { useLoading } from 'hooks/use-loading';
 import debounce from 'lodash/debounce';
@@ -27,15 +27,15 @@ export function BuildingsSearchForm() {
       carNumber: carNum,
       active: true
     }) : AccessService.findByPhone({ phoneNumber: phoneDigits, active: true }))
-      .then((response: CreateAccessRequest) => {
+      .then((response: AccessVO) => {
+        // todo починить поиск
         hideLoading();
-        // @ts-ignore
-        const { owner: { ownerRooms = [] } = {} } = response || {};
-        if (ownerRooms.length > 0) {
-          let buildingRoom = ownerRooms.find(({ type = '' }) => type === EnumRoomVOType.FLAT);
+        const { owner: { rooms = [] } = {} } = response || {};
+        if (rooms.length > 0) {
+          let buildingRoom = rooms.find(({ type = '' }) => type === EnumRoomVOType.FLAT);
           if (!buildingRoom) {
             // eslint-disable-next-line prefer-destructuring
-            buildingRoom = ownerRooms[0];
+            buildingRoom = rooms[0];
           }
 
           if (buildingRoom) {

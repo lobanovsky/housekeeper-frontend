@@ -1,4 +1,4 @@
-@import 'colors.scss';
+@import '../../../../../../colors';
 
 .access-item {
   padding: 2px 4px;
@@ -19,9 +19,57 @@
   .access-info {
     flex: 1 0 auto;
 
+    .phone-and-areas {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5em;
+      margin-bottom: 4px;
+
+      .area-icons {
+        flex: 1 0 auto;
+        display: inline-flex;
+        align-items: flex-start;
+
+        gap: 1em;
+
+        .access-icon {
+          line-height: 21px;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+
+          .anticon {
+            font-size: 16px;
+
+            &.icon-playground {
+              color: rgb(88, 158, 116);
+              font-size: 20px;
+            }
+
+            &.parking-icon {
+              color: rgb(119, 106, 195);
+            }
+
+            &.rent-icon {
+              color: $orange;
+            }
+
+
+          }
+
+          .places {
+            font-size: 13px;
+            line-height: 14px;
+            color: rgba(60, 60, 60, 0.8);
+          }
+        }
+
+      }
+    }
+
     .phone-container {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
 
       .phone-index {
         width: 24px;
@@ -47,36 +95,7 @@
         //}
       }
 
-      .access-icons {
-        //text-align: end;
-        width: 80px;
 
-        .anticon {
-          font-size: 15px;
-
-          &:not(:last-child) {
-            margin-right: 6px;
-          }
-
-          &.icon-playground {
-            //color: rgb(21, 138, 111);;
-            //color: rgb(45, 194, 105);
-            color: rgb(88, 158, 116);
-            font-size: 17px;
-          }
-
-          &.parking-icon {
-            color: rgb(119, 106, 195);
-            //color: rgb(116, 113, 132);
-          }
-
-          &.rent-icon {
-            color: $orange;
-          }
-
-
-        }
-      }
 
 
     }
@@ -97,14 +116,23 @@
     }
 
     .cars {
-      margin: 2px 0;
+      margin-top: 4px;
 
       .car {
         display: flex;
         align-items: center;
 
+        .car-icon {
+
+          font-size: 18px;
+
+          > svg {
+            fill: rgba(0, 0, 0, 0.68);
+          }
+        }
+
         .car-number {
-          margin-left: 12px;
+          margin-left: 4px;
         }
 
         .car-description {
@@ -121,7 +149,7 @@
     text-align: end;
 
     .ant-btn {
-      @include rowActionButtonStyle();
+      @include rowActionButtonStyle(#b5b5b5);
       padding: 0 2px;
 
       &:not(:last-child) {

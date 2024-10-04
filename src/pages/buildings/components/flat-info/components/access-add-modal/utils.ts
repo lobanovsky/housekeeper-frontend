@@ -1,6 +1,6 @@
 import { CarRequest } from 'backend/services/backend';
-import { CarValues } from '../../types';
-import { CarNumberRegex } from '../../constants';
+import { CarNumberRegex } from 'pages/buildings/constants';
+import { CarValues } from 'pages/buildings/types';
 
 export const convertCars = (cars: CarValues[]): CarRequest[] => cars
   .filter(({ number = '' }) => CarNumberRegex.test(number))

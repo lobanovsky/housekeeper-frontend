@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from 'react';
 import { MaskedInput } from 'antd-mask-input';
 import { Input, Typography } from 'antd';
 import { getRandomId } from 'utils/utils';
-import { CarValues } from '../../../types';
+import { CarValues } from '../../../../../types';
 import { AccessItemCarList } from './cars-list';
 import './styles.scss';
 

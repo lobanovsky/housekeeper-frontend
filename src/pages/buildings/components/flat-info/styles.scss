@@ -1,3 +1,5 @@
+@import 'colors.scss';
+
 $cardWidth: 460px;
 
 .flat-info-card.ant-card {
@@ -20,6 +22,31 @@ $cardWidth: 460px;
       color: gray;
       flex: 1 0 auto;
       text-align: end;
+    }
+  }
+
+  .flat-accesses {
+    padding-top: 2em;
+
+    .access-header {
+      display: flex;
+      gap: 1em;
+      align-items: center;
+
+      h5 {
+        margin: 0;
+      }
+
+      .ant-btn-link.add-btn {
+        @include linkButtonStyle();
+        padding: 0;
+        height: 22px;
+        line-height: 22px;
+
+        .anticon {
+          font-size: 12px;
+        }
+      }
     }
   }
 

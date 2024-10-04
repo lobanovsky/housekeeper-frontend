@@ -1,31 +1,31 @@
 // @ts-ignore
-const { codegen } = require("swagger-axios-codegen");
-const path = require("path");
-const fs = require("fs");
+const { codegen } = require('swagger-axios-codegen');
+const path = require('path');
+const fs = require('fs');
 
-const replace = require("replace-in-file");
+const replace = require('replace-in-file');
 
 module.exports = async (options) => {
-  const outFile = path.resolve(options.outputDir, "index.ts");
+  const outFile = path.resolve(options.outputDir, 'index.ts');
 
   try {
     await codegen({
       strictNullChecks: false,
-      modelMode: "interface",
+      modelMode: 'interface',
       ...options
     });
 
     await replace({
       files: outFile,
       from: /\?: Date;/g,
-      to: ": string;"
+      to: ': string;'
     });
-
-    await replace({
-      files: outFile,
-      from: /export interface OwnerVO/g,
-      to: "export interface OwnerVO_Old"
-    });
+    //
+    // await replace({
+    //   files: outFile,
+    //   from: /export interface OwnerVO/g,
+    //   to: "export interface OwnerVO_Old"
+    // });
 
     await fs.appendFile(outFile, `
 			
@@ -41,10 +41,6 @@ export interface TopFilter {
 	gateId?: number;
 	startDate?: string;
 	endDate?: string;
-}
-
-export interface OwnerVO extends OwnerVO_Old {
-	ownerRooms?: RoomVO[]
 }
 
 
@@ -63,13 +59,13 @@ export const AccessService = new AccessControllerService();
 export const AreaService = new AreaControllerService();
 	`, (err) => {
       if (err) {
-        console.error("Append error");
+        console.error('Append error');
       } else {
-        console.log("Append success");
+        console.log('Append success');
       }
     });
   } catch (e) {
-    console.log("%cCodegen error!!!", "color: red");
+    console.log('%cCodegen error!!!', 'color: red');
     console.log(e);
   }
 };

@@ -5,8 +5,8 @@ import { DeleteOutlined } from '@ant-design/icons';
 
 import { CarIcon } from 'icons/car';
 import { getRandomId } from 'utils/utils';
-import { CarNumberRegex } from '../../../../constants';
-import { CarValues } from '../../../../types';
+import { CarNumberRegex } from 'pages/buildings/constants';
+import { CarValues } from 'pages/buildings/types';
 import './styles.scss';
 
 export function AccessItemCarList({ cars, onChangeCar, deleteCar }: {

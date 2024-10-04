@@ -5,7 +5,7 @@
 /** Generate by swagger-axios-codegen */
 /* eslint-disable */
 // @ts-nocheck
-import { AxiosInstance, AxiosRequestConfig } from "axios";
+import { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 export interface IRequestOptions extends AxiosRequestConfig {
   /** only in axios interceptor config*/
@@ -153,9 +153,9 @@ export class RepairControllerService {
    */
   initYard(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/repairs/init-yard";
+      let url = basePath + '/repairs/init-yard';
 
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options);
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
       let data = null;
 
@@ -164,15 +164,14 @@ export class RepairControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
   initGarage(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/repairs/init-garage";
+      let url = basePath + '/repairs/init-garage';
 
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options);
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
       let data = null;
 
@@ -192,10 +191,10 @@ export class RepairControllerService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/repairs/block-expired-phone-numbers";
+      let url = basePath + '/repairs/block-expired-phone-numbers';
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
-      configs.params = { months: params["months"] };
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { months: params['months'] };
 
       /** 适配ios13，get请求不允许带body */
 
@@ -282,10 +281,10 @@ export class AccessControllerService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/access/{access-id}";
-      url = url.replace("{access-id}", params["accessId"] + "");
+      let url = basePath + '/access/{access-id}';
+      url = url.replace('{access-id}', params['accessId'] + '');
 
-      const configs: IRequestConfig = getConfigs("put", "application/json", url, options);
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
       let data = params.body;
 
@@ -305,10 +304,10 @@ export class AccessControllerService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/access/{access-id}";
-      url = url.replace("{access-id}", params["accessId"] + "");
+      let url = basePath + '/access/{access-id}';
+      url = url.replace('{access-id}', params['accessId'] + '');
 
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options);
+      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
 
       let data = null;
 
@@ -328,9 +327,9 @@ export class AccessControllerService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/access";
+      let url = basePath + '/access';
 
-      const configs: IRequestConfig = getConfigs("post", "application/json", url, options);
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
       let data = params.body;
 
@@ -352,11 +351,11 @@ export class AccessControllerService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/access/rooms/{room-id}";
-      url = url.replace("{room-id}", params["roomId"] + "");
+      let url = basePath + '/access/rooms/{room-id}';
+      url = url.replace('{room-id}', params['roomId'] + '');
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
-      configs.params = { active: params["active"] };
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { active: params['active'] };
 
       /** 适配ios13，get请求不允许带body */
 
@@ -376,11 +375,11 @@ export class AccessControllerService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/access/phones/{phone-number}";
-      url = url.replace("{phone-number}", params["phoneNumber"] + "");
+      let url = basePath + '/access/phones/{phone-number}';
+      url = url.replace('{phone-number}', params['phoneNumber'] + '');
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
-      configs.params = { active: params["active"] };
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { active: params['active'] };
 
       /** 适配ios13，get请求不允许带body */
 
@@ -400,11 +399,11 @@ export class AccessControllerService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/access/overview/{plate-number}";
-      url = url.replace("{plate-number}", params["plateNumber"] + "");
+      let url = basePath + '/access/overview/{plate-number}';
+      url = url.replace('{plate-number}', params['plateNumber'] + '');
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
-      configs.params = { active: params["active"] };
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { active: params['active'] };
 
       /** 适配ios13，get请求不允许带body */
 
@@ -422,10 +421,10 @@ export class AccessControllerService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/access/export/{area-id}";
-      url = url.replace("{area-id}", params["areaId"] + "");
+      let url = basePath + '/access/export/{area-id}';
+      url = url.replace('{area-id}', params['areaId'] + '');
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
       /** 适配ios13，get请求不允许带body */
 
@@ -445,11 +444,11 @@ export class AccessControllerService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/access/cars/{car-number}";
-      url = url.replace("{car-number}", params["carNumber"] + "");
+      let url = basePath + '/access/cars/{car-number}';
+      url = url.replace('{car-number}', params['carNumber'] + '');
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
-      configs.params = { active: params["active"] };
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { active: params['active'] };
 
       /** 适配ios13，get请求不允许带body */
 
@@ -497,10 +496,10 @@ export class RoomControllerService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/rooms/{id}";
-      url = url.replace("{id}", params["id"] + "");
+      let url = basePath + '/rooms/{id}';
+      url = url.replace('{id}', params['id'] + '');
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
       /** 适配ios13，get请求不允许带body */
 
@@ -671,7 +670,7 @@ export class RegistryControllerService {
       let url = basePath + '/registries/special-account';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-      configs.params = { useInactiveAccount: params["useInactiveAccount"] };
+      configs.params = { useInactiveAccount: params['useInactiveAccount'] };
 
       let data = null;
 
@@ -710,7 +709,7 @@ export class RegistryControllerService {
       let url = basePath + '/registries/custom-account';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-      configs.params = { sum: params["sum"] };
+      configs.params = { sum: params['sum'] };
 
       let data = null;
 
@@ -733,7 +732,7 @@ export class RegistryControllerService {
       let url = basePath + '/registries/account';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-      configs.params = { useInactiveAccount: params["useInactiveAccount"] };
+      configs.params = { useInactiveAccount: params['useInactiveAccount'] };
 
       let data = null;
 
@@ -763,7 +762,7 @@ export class PaymentControllerService {
       let url = basePath + '/payments/outgoing';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-      configs.params = { pageNum: params["pageNum"], pageSize: params["pageSize"] };
+      configs.params = { pageNum: params['pageNum'], pageSize: params['pageSize'] };
 
       let data = params.body;
 
@@ -1406,10 +1405,10 @@ export class BuildingControllerService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/buildings/{id}";
-      url = url.replace("{id}", params["id"] + "");
+      let url = basePath + '/buildings/{id}';
+      url = url.replace('{id}', params['id'] + '');
 
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options);
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
       /** 适配ios13，get请求不允许带body */
 
@@ -1611,7 +1610,7 @@ export interface KeyVO {
   cars?: CarVO[];
 }
 
-export interface OwnerVO_Old {
+export interface OwnerVO {
   /**  */
   id?: number;
 
@@ -1700,10 +1699,10 @@ export interface RoomFilter {
 
 export interface PageRoomVO {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -1735,10 +1734,10 @@ export interface PageRoomVO {
 
 export interface PageableObject {
   /**  */
-  unpaged?: boolean;
+  paged?: boolean;
 
   /**  */
-  paged?: boolean;
+  unpaged?: boolean;
 
   /**  */
   pageNumber?: number;
@@ -1755,10 +1754,10 @@ export interface PageableObject {
 
 export interface SortObject {
   /**  */
-  unsorted?: boolean;
+  sorted?: boolean;
 
   /**  */
-  sorted?: boolean;
+  unsorted?: boolean;
 
   /**  */
   empty?: boolean;
@@ -1837,10 +1836,10 @@ export interface RangeRequest {
 
 export interface PagePaymentVO {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2062,10 +2061,10 @@ export interface LogEntryResponse {
 
 export interface PageLogEntryResponse {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2133,10 +2132,10 @@ export interface FileVO {
 
 export interface PageFileVO {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2425,29 +2424,6 @@ export interface FloorResponse {
 
   /**  */
   rooms?: RoomVO[];
-}
-
-export interface Blocked {
-  /**  */
-  accessId?: number;
-
-  /**  */
-  phoneNumber?: string;
-
-  /**  */
-  flatNumber?: string;
-
-  /**  */
-  userName?: string;
-
-  /**  */
-  countEntries?: number;
-
-  /**  */
-  lastEntry: string;
-
-  /**  */
-  gate?: string;
 }
 
 export interface AnnualPaymentVO {
@@ -2800,10 +2776,9 @@ export enum EnumBuildingType {
   'APARTMENT_BUILDING' = 'APARTMENT_BUILDING',
   'UNDERGROUND_PARKING' = 'UNDERGROUND_PARKING'
 }
-
 export enum EnumAccessBlockReason {
-  "MANUAL" = "MANUAL",
-  "EXPIRED" = "EXPIRED"
+  'MANUAL' = 'MANUAL',
+  'EXPIRED' = 'EXPIRED'
 }
 
 
@@ -2819,10 +2794,6 @@ export interface TopFilter {
   gateId?: number;
   startDate?: string;
   endDate?: string;
-}
-
-export interface OwnerVO extends OwnerVO_Old {
-  ownerRooms?: RoomVO[];
 }
 
 

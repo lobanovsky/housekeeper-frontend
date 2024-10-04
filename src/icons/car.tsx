@@ -18,7 +18,7 @@ function CarSvg() {
       enableBackground="new 0 0 32 32"
       viewBox="0 0 32 32"
       // stroke="currentColor"
-      // fill='currentColor'
+      fill="currentColor"
       width="1em"
       height="1em"
       // strokeLinecap="round"

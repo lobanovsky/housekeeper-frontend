@@ -6,8 +6,8 @@ import { DictionariesContext } from 'context/AppContext';
 import { CarFrontIcon } from 'icons/car_front';
 import { AreaNames } from 'utils/constants';
 import { useAccessItemCRUD } from './hooks';
-import { showAddAccessItemModal } from './add-modal';
-import { AccessContext } from '../../../context/AccessContext';
+import { showAddAccessItemModal } from '../access-add-modal';
+import { AccessContext } from '../../context/AccessContext';
 import './styles.scss';
 
 export function AccessItem({ accessInfo }: { accessInfo: KeyVO }) {
@@ -22,25 +22,36 @@ export function AccessItem({ accessInfo }: { accessInfo: KeyVO }) {
   return (
     <div className="access-item" key={id}>
       <div className="access-info">
-        <div className="phone-container">
-          {/* <div className="phone-index">{index + 1}.</div> */}
-          <div className="phone-number">
-            {phoneNumber}
+        <div className="phone-and-areas">
+          <div className="phone-container">
+            {/* <div className="phone-index">{index + 1}.</div> */}
+            <div className="phone-number">
+              {phoneNumber}
+            </div>
           </div>
-          <div className="access-icons">
-            {infoAreas.map(({ id: areaId = 0 }) => AreaNames[areaId]?.icon || String(areaId))}
+          <div className="area-icons">
+            {infoAreas.map(({ id: areaId = 0, tenant = false, places = [] }) => (
+              <div className={`access-icon type-${areaId}`}>
+                <div className="icon">
+                  {AreaNames[areaId]?.icon || String(areaId)}
+                </div>
+                {tenant && <span className="tenant-icon">A</span>}
+                {!!places.length && <div className="places">{places.join(', ')}</div>}
+              </div>
+            ))}
           </div>
+
         </div>
+        {!!phoneLabel && <div className={`phone-label ${phoneLabel ? 'has-label' : ''}`}>{phoneLabel || ''}</div>}
         <div className="cars">
           {cars.map(({ description = '', number = '' }) => (
             <div className="car" key={number}>
-              <CarFrontIcon style={{ fontSize: '21px' }} />
+              <CarFrontIcon className="car-icon" />
               <span className="car-number">{number}</span>
               <span className="car-description">{description}</span>
             </div>
           ))}
         </div>
-        {!!phoneLabel && <div className={`phone-label ${phoneLabel ? 'has-label' : ''}`}>{phoneLabel || ''}</div>}
       </div>
       <div className="access-actions">
         <Button
@@ -60,7 +71,6 @@ export function AccessItem({ accessInfo }: { accessInfo: KeyVO }) {
           </Button>
         </Popconfirm>
       </div>
-
     </div>
   );
 }

@@ -5,12 +5,12 @@ import './styles.scss';
 
 export const EmptyOwner: OwnerVO = {
   fullName: '',
-  ownerRooms: [],
+  rooms: [],
   active: false,
   dateOfLeft: ''
 };
 
-export function FlatOwnerInfo({ owner: { fullName = '', ownerRooms = [] } = EmptyOwner }: {
+export function FlatOwnerInfo({ owner: { fullName = '', rooms = [] } = EmptyOwner }: {
   owner: OwnerVO | undefined
 }) {
   return (
@@ -21,7 +21,7 @@ export function FlatOwnerInfo({ owner: { fullName = '', ownerRooms = [] } = Empt
         <span className="owner-name">{fullName}</span>
       </div>
       <div className="owner-property">
-        {ownerRooms.map(({ type, number }: RoomVO) => (
+        {rooms.map(({ type, number }: RoomVO) => (
           <div key={number} className={`property-item ${type}`}>
             {type === EnumRoomVOType.GARAGE && 'мм. '}
             {type === EnumRoomVOType.FLAT && 'кв. '}
