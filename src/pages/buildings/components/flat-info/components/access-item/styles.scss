@@ -1,7 +1,10 @@
 @import '../../../../../../colors';
 
+$gray: #727272;
+$grayDark: rgba(0, 0, 0, 0.88);
+
 .access-item {
-  padding: 2px 4px;
+  padding: 2px 6px;
   display: flex;
   align-items: center;
   gap: 1em;
@@ -13,7 +16,7 @@
   &:not(:last-child) {
     padding-bottom: 6px;
     margin-bottom: 8px;
-    border-bottom: 1px dashed rgba(230, 230, 230, 0.9);
+    border-bottom: 1px dashed rgba(220, 220, 220, 0.8);
   }
 
   .access-info {
@@ -77,7 +80,9 @@
       }
 
       .phone-number {
-        font-size: 15px;
+        font-size: 16px;
+        line-height: 16px;
+        //color: $antd-blue-active;
         font-weight: 500;
         position: relative;
         width: 158px;
@@ -96,8 +101,6 @@
       }
 
 
-
-
     }
 
     .phone-label {
@@ -106,7 +109,7 @@
       line-height: 16px;
 
       &.has-label {
-        color: rgba(60, 60, 60, 0.8);
+        color: $grayDark;
       }
     }
 
@@ -127,12 +130,13 @@
           font-size: 18px;
 
           > svg {
-            fill: rgba(0, 0, 0, 0.68);
+            fill: $gray;
           }
         }
 
         .car-number {
           margin-left: 4px;
+          color: $gray;
         }
 
         .car-description {

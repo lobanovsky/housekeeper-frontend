@@ -18,8 +18,6 @@ interface AccessFormProps {
   accessInfo?: KeyVO,
   areas: Area[],
   // eslint-disable-next-line react/no-unused-prop-types
-  buildingType?: any,
-  // eslint-disable-next-line react/no-unused-prop-types
   flatNumber: string;
   reloadInfo: EmptyFunction,
   ownerId: number
