@@ -1,14 +1,8 @@
 import React from 'react';
-import { EnumRoomVOType, OwnerVO, RoomVO } from 'backend/services/backend';
+import { EnumRoomVOType, RoomVO } from 'backend/services/backend';
 import { OwnerIcon } from 'icons/owner';
 import './styles.scss';
-import { RoomTypeNames } from '../../../../../../utils/constants';
-
-export const EmptyOwner: OwnerVO = {
-  fullName: '',
-  active: false,
-  dateOfLeft: ''
-};
+import { RoomTypeNames } from 'utils/constants';
 
 export function FlatOwnerInfo({ roomInfo, ownerProperties = [] }: {
   roomInfo: RoomVO,

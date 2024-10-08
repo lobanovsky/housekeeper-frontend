@@ -64,18 +64,16 @@ export function useRoomInfo({ roomId: initialRoomId }: { roomId: number }) {
         ownerProperty: []
       };
 
-      if (flatParamsResult.status === 'fulfilled') {
-        result.roomInfo = flatParamsResult.value as RoomVO;
-      } else {
-        hideLoading();
-        showError('Не удалось загрузить информацию о квартире', flatParamsResult.reason || flatParamsResult);
-      }
-
       if (accessesResult.status === 'fulfilled') {
         result.accesses = convertAccessForForm(accessesResult.value);
+      } else {
+        showError('Не удалось загрузить доступы', accessesResult.reason || accessesResult);
+      }
 
-        if (result.accesses.length) {
-          const { ownerId: loadedOwnerId = 0 } = result.accesses[0];
+      if (flatParamsResult.status === 'fulfilled') {
+        result.roomInfo = flatParamsResult.value as RoomVO;
+        if ((result.roomInfo.ownerIds || []).length) {
+          const loadedOwnerId = result.roomInfo.ownerIds?.length ? result.roomInfo.ownerIds[0] : 0;
           if (loadedOwnerId) {
             setOwnerId(loadedOwnerId);
             OwnerService.getRoomsByOwnerId({ ownerId: loadedOwnerId })
@@ -96,7 +94,7 @@ export function useRoomInfo({ roomId: initialRoomId }: { roomId: number }) {
         }
       } else {
         hideLoading();
-        showError('Не удалось загрузить доступы', accessesResult.reason || accessesResult);
+        showError('Не удалось загрузить информацию о квартире', flatParamsResult.reason || flatParamsResult);
         setRoomInfo(result);
       }
     });

@@ -24,7 +24,7 @@ $grayDark: rgba(0, 0, 0, 0.88);
 
     .phone-and-areas {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 0.5em;
       margin-bottom: 4px;
 
@@ -43,6 +43,8 @@ $grayDark: rgba(0, 0, 0, 0.88);
           gap: 4px;
 
           .tenant-icon {
+            color: red;
+            font-weight: 500;
             position: absolute;
             left: 12px;
             top: -10px;

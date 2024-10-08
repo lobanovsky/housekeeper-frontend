@@ -201,6 +201,21 @@ export class RepairControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   *
+   */
+  addAreas(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/repairs/add-availabel-access-areas';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
 }
 
 export class CounterpartyControllerService {
@@ -1304,6 +1319,28 @@ export class OwnerControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   *
+   */
+  getOwnerById(
+    params: {
+      /**  */
+      id: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/owners/{id}';
+      url = url.replace('{id}', params['id'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
 }
 
 export class GateControllerService {
@@ -1563,26 +1600,6 @@ export interface RoomFilter {
   ownerName?: string;
 }
 
-export interface OwnerVO {
-  /**  */
-  id?: number;
-
-  /**  */
-  fullName?: string;
-
-  /**  */
-  emails?: string[];
-
-  /**  */
-  phones?: string[];
-
-  /**  */
-  active?: boolean;
-
-  /**  */
-  dateOfLeft: string;
-}
-
 export interface PageRoomVO {
   /**  */
   totalPages?: number;
@@ -1620,16 +1637,16 @@ export interface PageRoomVO {
 
 export interface PageableObject {
   /**  */
-  pageNumber?: number;
-
-  /**  */
-  pageSize?: number;
-
-  /**  */
   paged?: boolean;
 
   /**  */
   unpaged?: boolean;
+
+  /**  */
+  pageNumber?: number;
+
+  /**  */
+  pageSize?: number;
 
   /**  */
   offset?: number;
@@ -1676,18 +1693,15 @@ export interface RoomVO {
   typeDescription?: string;
 
   /**  */
-  owners?: OwnerVO[];
-
-  /**  */
-  tenants?: OwnerVO[];
+  ownerIds?: number[];
 }
 
 export interface SortObject {
   /**  */
-  sorted?: boolean;
+  unsorted?: boolean;
 
   /**  */
-  unsorted?: boolean;
+  sorted?: boolean;
 
   /**  */
   empty?: boolean;
@@ -2376,6 +2390,41 @@ export interface DepositResponse {
   payment?: PaymentVO;
 }
 
+export interface OwnerEntity {
+  /**  */
+  id?: number;
+
+  /**  */
+  fullName?: string;
+
+  /**  */
+  sex?: EnumOwnerEntitySex;
+
+  /**  */
+  emails?: string[];
+
+  /**  */
+  phones?: string[];
+
+  /**  */
+  active?: boolean;
+
+  /**  */
+  dateOfLeft: string;
+
+  /**  */
+  rooms?: number[];
+
+  /**  */
+  source?: string;
+
+  /**  */
+  createDate: string;
+
+  /**  */
+  availableAccessArea?: number[];
+}
+
 export interface LogEntryStatusResponse {
   /**  */
   name?: string;
@@ -2622,6 +2671,11 @@ export enum EnumMonthPaymentVOMonth {
   'OCTOBER' = 'OCTOBER',
   'NOVEMBER' = 'NOVEMBER',
   'DECEMBER' = 'DECEMBER'
+}
+
+export enum EnumOwnerEntitySex {
+  'MALE' = 'MALE',
+  'FEMALE' = 'FEMALE'
 }
 export enum EnumBuildingType {
   'APARTMENT_BUILDING' = 'APARTMENT_BUILDING',
