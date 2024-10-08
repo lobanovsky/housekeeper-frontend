@@ -1,16 +1,15 @@
 import React from 'react';
-import { EnumRoomVOType, OwnerVO, RoomVO } from 'backend/services/backend';
+import { OwnerVO } from 'backend/services/backend';
 import { OwnerIcon } from 'icons/owner';
 import './styles.scss';
 
 export const EmptyOwner: OwnerVO = {
   fullName: '',
-  rooms: [],
   active: false,
   dateOfLeft: ''
 };
 
-export function FlatOwnerInfo({ owner: { fullName = '', rooms = [] } = EmptyOwner }: {
+export function FlatOwnerInfo({ owner: { fullName = '' } = EmptyOwner }: {
   owner: OwnerVO | undefined
 }) {
   return (
@@ -20,16 +19,16 @@ export function FlatOwnerInfo({ owner: { fullName = '', rooms = [] } = EmptyOwne
         {' '}
         <span className="owner-name">{fullName}</span>
       </div>
-      <div className="owner-property">
-        {rooms.map(({ type, number }: RoomVO) => (
-          <div key={number} className={`property-item ${type}`}>
-            {type === EnumRoomVOType.GARAGE && 'мм. '}
-            {type === EnumRoomVOType.FLAT && 'кв. '}
-            {type === EnumRoomVOType.OFFICE && 'оф. '}
-            {number}
-          </div>
-        ))}
-      </div>
+      { /* <div className="owner-property"> */}
+      { /*   {rooms.map(({ type, number }: RoomVO) => ( */}
+      { /*     <div key={number} className={`property-item ${type}`}> */}
+      { /*       {type === EnumRoomVOType.GARAGE && 'мм. '} */}
+      { /*       {type === EnumRoomVOType.FLAT && 'кв. '} */}
+      { /*       {type === EnumRoomVOType.OFFICE && 'оф. '} */}
+      { /*       {number} */}
+      { /*     </div> */}
+      { /*   ))} */}
+      { /* </div> */}
     </div>
   );
 }

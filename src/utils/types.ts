@@ -1,6 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { Dayjs } from 'dayjs';
 import { QuickPeriods } from '../pages/expences/range-picker/constants';
+import { CarRequest } from '../backend/services/backend';
 
 export interface SelectedDatesShort {
   dateStart: string,
@@ -45,3 +46,8 @@ export type ActionFinishCallback = (isSuccess: boolean) => void;
 export type ActionCallbackWithData<T> = (isSuccess: boolean, data?: T | null) => void;
 
 export type ActionCallback = () => void;
+
+export interface CarValues extends CarRequest {
+  id: number;
+  isNew?: boolean;
+}

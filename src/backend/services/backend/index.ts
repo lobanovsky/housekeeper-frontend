@@ -294,7 +294,7 @@ export class AccessControllerService {
     });
   }
   /**
-   * Remove the area access by the phone number
+   * Block the area access by the phone number
    */
   deleteAccess(
     params: {
@@ -363,30 +363,6 @@ export class AccessControllerService {
     });
   }
   /**
-   * Get the access by the phone number
-   */
-  findByPhone(
-    params: {
-      /**  */
-      phoneNumber: string;
-      /**  */
-      active?: boolean;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/access/phones/{phone-number}';
-      url = url.replace('{phone-number}', params['phoneNumber'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { active: params['active'] };
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
    * Get the overview by the plate number
    */
   overview(
@@ -425,30 +401,6 @@ export class AccessControllerService {
       url = url.replace('{area-id}', params['areaId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      /** 适配ios13，get请求不允许带body */
-
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Get the access by the car number
-   */
-  findByCarNumber(
-    params: {
-      /**  */
-      carNumber: string;
-      /**  */
-      active?: boolean;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/access/cars/{car-number}';
-      url = url.replace('{car-number}', params['carNumber'] + '');
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { active: params['active'] };
 
       /** 适配ios13，get请求不允许带body */
 
@@ -1199,22 +1151,6 @@ export class FileImporterControllerService {
     });
   }
   /**
-   * Import contacts from *.xlsx
-   */
-  importContacts(options: IRequestOptions = {}): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/files/contacts/importer';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
    * Import answers from *.xlsx
    */
   importAnswers(options: IRequestOptions = {}): Promise<any> {
@@ -1527,12 +1463,9 @@ export interface CounterpartyResponse {
   createDate: string;
 }
 
-export interface AccessToArea {
+export interface AreaRequest {
   /**  */
   areaId?: number;
-
-  /**  */
-  tenant?: boolean;
 
   /**  */
   places?: string[];
@@ -1548,54 +1481,27 @@ export interface CarRequest {
 
 export interface UpdateAccessRequest {
   /**  */
-  label?: string;
-
-  /**  */
-  areas?: AccessToArea[];
+  phoneLabel?: string;
 
   /**  */
   cars?: CarRequest[];
+
+  /**  */
+  areas?: AreaRequest[];
 }
 
-export interface AccessVO {
+export interface AccessResponse {
   /**  */
-  id?: number;
+  accessId?: number;
 
   /**  */
-  owner?: OwnerVO;
+  active?: boolean;
 
   /**  */
-  keys?: KeyVO[];
-}
-
-export interface AreaVO {
-  /**  */
-  id?: number;
+  ownerId?: number;
 
   /**  */
-  name?: string;
-
-  /**  */
-  tenant?: boolean;
-
-  /**  */
-  places?: string[];
-}
-
-export interface CarVO {
-  /**  */
-  id?: number;
-
-  /**  */
-  number?: string;
-
-  /**  */
-  description?: string;
-}
-
-export interface KeyVO {
-  /**  */
-  id?: number;
+  areas?: AreaResponse[];
 
   /**  */
   phoneNumber?: string;
@@ -1604,77 +1510,29 @@ export interface KeyVO {
   phoneLabel?: string;
 
   /**  */
-  areas?: AreaVO[];
+  tenant?: boolean;
 
   /**  */
-  cars?: CarVO[];
+  cars?: CarResponse[];
 }
 
-export interface OwnerVO {
+export interface AreaResponse {
   /**  */
-  id?: number;
+  areaId?: number;
 
   /**  */
-  fullName?: string;
+  areaName?: string;
 
   /**  */
-  emails?: string[];
-
-  /**  */
-  phones?: string[];
-
-  /**  */
-  active?: boolean;
-
-  /**  */
-  dateOfLeft: string;
-
-  /**  */
-  rooms?: RoomVO[];
+  places?: string[];
 }
 
-export interface RoomVO {
+export interface CarResponse {
   /**  */
-  id?: number;
+  plateNumber?: string;
 
   /**  */
-  street?: string;
-
-  /**  */
-  building?: number;
-
-  /**  */
-  cadastreNumber?: string;
-
-  /**  */
-  account?: string;
-
-  /**  */
-  ownerName?: string;
-
-  /**  */
-  number?: string;
-
-  /**  */
-  certificate?: string;
-
-  /**  */
-  square?: number;
-
-  /**  */
-  percentage?: number;
-
-  /**  */
-  type?: EnumRoomVOType;
-
-  /**  */
-  typeDescription?: string;
-
-  /**  */
-  owners?: OwnerVO[];
-
-  /**  */
-  tenants?: OwnerVO[];
+  description?: string;
 }
 
 export interface RoomFilter {
@@ -1695,6 +1553,26 @@ export interface RoomFilter {
 
   /**  */
   ownerName?: string;
+}
+
+export interface OwnerVO {
+  /**  */
+  id?: number;
+
+  /**  */
+  fullName?: string;
+
+  /**  */
+  emails?: string[];
+
+  /**  */
+  phones?: string[];
+
+  /**  */
+  active?: boolean;
+
+  /**  */
+  dateOfLeft: string;
 }
 
 export interface PageRoomVO {
@@ -1752,12 +1630,56 @@ export interface PageableObject {
   sort?: SortObject;
 }
 
-export interface SortObject {
+export interface RoomVO {
   /**  */
-  sorted?: boolean;
+  id?: number;
 
   /**  */
+  street?: string;
+
+  /**  */
+  building?: number;
+
+  /**  */
+  cadastreNumber?: string;
+
+  /**  */
+  account?: string;
+
+  /**  */
+  ownerName?: string;
+
+  /**  */
+  number?: string;
+
+  /**  */
+  certificate?: string;
+
+  /**  */
+  square?: number;
+
+  /**  */
+  percentage?: number;
+
+  /**  */
+  type?: EnumRoomVOType;
+
+  /**  */
+  typeDescription?: string;
+
+  /**  */
+  owners?: OwnerVO[];
+
+  /**  */
+  tenants?: OwnerVO[];
+}
+
+export interface SortObject {
+  /**  */
   unsorted?: boolean;
+
+  /**  */
+  sorted?: boolean;
 
   /**  */
   empty?: boolean;
@@ -2246,23 +2168,6 @@ export interface CounterpartyInfoResponse {
   numberOfUnique?: number;
 }
 
-export interface ContactInfoResponse {
-  /**  */
-  fileName?: string;
-
-  /**  */
-  totalSize?: number;
-
-  /**  */
-  officeEmailSize?: number;
-
-  /**  */
-  flatEmailSize?: number;
-
-  /**  */
-  garageEmailSize?: number;
-}
-
 export interface AnswerInfoResponse {
   /**  */
   fileName?: string;
@@ -2296,12 +2201,18 @@ export interface MailingResponse {
   sentEmail?: number;
 }
 
-export interface Contact {
+export interface AccessRequest {
   /**  */
-  number?: string;
+  areas?: AreaRequest[];
 
   /**  */
-  label?: string;
+  phoneNumber?: string;
+
+  /**  */
+  contactLabel?: string;
+
+  /**  */
+  tenant?: boolean;
 
   /**  */
   cars?: CarRequest[];
@@ -2309,32 +2220,10 @@ export interface Contact {
 
 export interface CreateAccessRequest {
   /**  */
-  areas?: AccessToArea[];
+  ownerId?: number;
 
   /**  */
-  ownerIds?: number[];
-
-  /**  */
-  contacts?: Contact[];
-}
-
-export interface CreateAccessResponse {
-  /**  */
-  id?: number;
-
-  /**  */
-  phoneNumber?: string;
-
-  /**  */
-  result?: CreateAccessResult;
-}
-
-export interface CreateAccessResult {
-  /**  */
-  success?: boolean;
-
-  /**  */
-  reason?: string;
+  accesses?: AccessRequest[];
 }
 
 export interface ManualAccountRequest {
@@ -2571,7 +2460,7 @@ export interface Building {
   type?: EnumBuildingType;
 }
 
-export interface Area {
+export interface AreaEntity {
   /**  */
   id?: number;
 
@@ -2616,74 +2505,47 @@ export interface AccountResponse {
   description?: string;
 }
 
-export interface OverviewAccessVO {
-  /**  */
-  ownerName?: string;
-
-  /**  */
-  ownerRooms?: string;
-
-  /**  */
-  phoneNumber?: string;
-
-  /**  */
-  phoneLabel?: string;
-
-  /**  */
-  overviewAreas?: OverviewArea[];
-
-  /**  */
-  carNumber?: string;
-
-  /**  */
-  carDescription?: string;
-}
-
 export interface OverviewArea {
   /**  */
   areaName?: string;
 
   /**  */
-  tenant?: boolean;
-
-  /**  */
   places?: string[];
 }
 
-export interface Access {
+export interface OverviewResponse {
   /**  */
-  id?: number;
+  carNumber?: string;
 
   /**  */
-  createDate: string;
-
-  /**  */
-  active?: boolean;
-
-  /**  */
-  blockDateTime: string;
-
-  /**  */
-  blockReason?: EnumAccessBlockReason;
-
-  /**  */
-  areas?: AccessToArea[];
-
-  /**  */
-  ownerIds?: number[];
+  carDescription?: string;
 
   /**  */
   phoneNumber?: string;
 
   /**  */
   phoneLabel?: string;
+
+  /**  */
+  tenant?: boolean;
+
+  /**  */
+  overviewAreas?: OverviewArea[];
+
+  /**  */
+  ownerName?: string;
+
+  /**  */
+  ownerRooms?: string;
 }
-export enum EnumRoomVOType {
+
+export enum EnumRoomFilterType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
-export enum EnumRoomFilterType {
+
+export enum EnumRoomVOType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
@@ -2775,10 +2637,6 @@ export enum EnumMonthPaymentVOMonth {
 export enum EnumBuildingType {
   'APARTMENT_BUILDING' = 'APARTMENT_BUILDING',
   'UNDERGROUND_PARKING' = 'UNDERGROUND_PARKING'
-}
-export enum EnumAccessBlockReason {
-  'MANUAL' = 'MANUAL',
-  'EXPIRED' = 'EXPIRED'
 }
 
 

@@ -2,15 +2,16 @@ import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 import { Button, Card, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { AccessService, AccessVO, EnumRoomVOType, KeyVO, RoomService, RoomVO } from 'backend/services/backend';
+import { AccessResponse, AccessService, EnumRoomVOType, RoomService, RoomVO } from 'backend/services/backend';
 import useRemoteData from 'hooks/use-remote-data';
 import { DictionariesContext } from '../../../../context/AppContext';
 import { AccessItem } from './components/access-item';
-import { FlatOwnerInfo } from './components/owner-property';
 import { showAddAccessItemModal } from './components/access-add-modal';
 import { AccessContext } from './context/AccessContext';
-import { sortPropertyByFlatType } from './utils';
 import './styles.scss';
+
+// todo убрать
+const OWNER_ID = 25;
 
 export function FlatInfo() {
   const { roomId: selectedRoomStr = '' } = useParams();
@@ -21,34 +22,25 @@ export function FlatInfo() {
   }), [selectedRoomStr]);
 
   const [flatParams, isLoadingFlatParams, loadFlatParams] = useRemoteData<RoomVO, RoomVO>(roomLoader);
-
-  const [flatInfo, isLoadingFlatInfo, loadFlatInfo] = useRemoteData<AccessVO>(accessesLoader, {
-    dataConverter: (info): AccessVO => ({
-      ...info,
-      // @ts-ignore
-      owner: {
-        ...info.owner,
-        rooms: (info.owner?.rooms || []).sort(sortPropertyByFlatType)
-      }
-    })
-  });
+  const [accesses, isLoadingFlatInfo, loadFlatInfo] = useRemoteData<AccessResponse[]>(accessesLoader);
 
   const { areas } = useContext(DictionariesContext);
 
   const flatContextValue = useMemo(() => ({
-    ownerId: flatInfo?.owner?.id || 0,
+    // todo убрать ownerId
+    ownerId: OWNER_ID,
     flatNumber: flatParams?.number || '',
     reloadFlatInfo: loadFlatInfo
   }), [loadFlatInfo, flatParams?.number]);
 
   const showAccessAddModal = useCallback(() => {
     showAddAccessItemModal({
+      accesses: [],
       reloadInfo: loadFlatInfo,
-      ownerId: flatInfo?.owner?.id || 0,
-      areas,
-      flatNumber: flatParams?.number || ''
+      ownerId: OWNER_ID,
+      areas
     });
-  }, [flatInfo?.owner?.id, flatParams?.number, loadFlatInfo]);
+  }, [flatParams?.number, loadFlatInfo]);
 
   useEffect(() => {
     const roomId = parseInt(selectedRoomStr, 10);
@@ -81,7 +73,9 @@ export function FlatInfo() {
         )}
       >
         <div className="flat-info">
-          <FlatOwnerInfo owner={flatInfo?.owner} />
+          { /* todo ?? */}
+          { /* <FlatOwnerInfo owner={accesses?.owner} /> */}
+          {flatParams?.ownerName || ''}
           <div className="flat-accesses">
             <div className="access-header">
               <Typography.Title level={5}>Доступы</Typography.Title>
@@ -95,10 +89,10 @@ export function FlatInfo() {
                 добавить
               </Button>
             </div>
-            {!(flatInfo?.keys || []).length && <span className="emtpy-placeholder">не указаны</span>}
+            {!(accesses?.keys || []).length && <span className="emtpy-placeholder">не указаны</span>}
             <div style={{ padding: '4px 0' }} />
-            {(flatInfo?.keys || []).map((accessInfo: KeyVO) => (
-              <AccessItem key={accessInfo.id} accessInfo={accessInfo} />
+            {(accesses || []).map((accessInfo: AccessResponse) => (
+              <AccessItem key={accessInfo.accessId} accessInfo={accessInfo} />
             ))}
           </div>
         </div>

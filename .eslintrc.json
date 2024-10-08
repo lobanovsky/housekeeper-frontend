@@ -32,11 +32,14 @@
       }
     ],
     "object-curly-newline": 0,
+
     "no-plusplus": 0,
+    "no-debugger": 1,
     "no-nested-ternary": 0,
     "import/prefer-default-export": 0,
     "import/no-extraneous-dependencies": 0,
     "@typescript-eslint/indent": 0,
+    "@typescript-eslint/no-unused-vars": 1,
     "@typescript-eslint/comma-dangle": 0,
     "react-hooks/exhaustive-deps": 0,
     "react/require-default-props": 0,

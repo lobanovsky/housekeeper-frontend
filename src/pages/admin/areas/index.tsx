@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { Button, List } from 'antd';
 import { DownloadOutlined, LoadingOutlined } from '@ant-design/icons';
 import useRemoteData from 'hooks/use-remote-data';
-import { Area, AreaService } from 'backend/services/backend';
+import { AreaEntity, AreaService } from 'backend/services/backend';
 import { useLoading } from 'hooks/use-loading';
 import { AreaNames } from 'utils/constants';
 import { downloadFile } from 'utils/utils';
@@ -33,10 +33,10 @@ function DownloadButton({ areaId }: { areaId: number }) {
 }
 
 export function AreasList() {
-  const [areas, isLoadingAreas] = useRemoteData<Area[]>(AreaService.findAll2);
+  const [areas, isLoadingAreas] = useRemoteData<AreaEntity[]>(AreaService.findAll2);
 
-  const renderAreaItem = useCallback(({ id = 0, name }: Area) => (
-    <List.Item>
+  const renderAreaItem = useCallback(({ id = 0, name = '' }: AreaEntity) => (
+    <List.Item key={id}>
       <div className="area-item" key={id}>
         <div className="icon">
           {AreaNames[id]?.icon}

@@ -1,40 +1,39 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Checkbox } from 'antd';
 import { CloseOutlined, PlusOutlined, SaveOutlined } from '@ant-design/icons';
-import { AccessService, Area, CarVO, CreateAccessRequest, KeyVO, UpdateAccessRequest } from 'backend/services/backend';
+import { AccessService, AreaEntity, CreateAccessRequest, UpdateAccessRequest } from 'backend/services/backend';
 import Loading from 'components/loading';
 import { useLoading } from 'hooks/use-loading';
 import { CarNumberRegex, PhoneRegexes } from 'pages/buildings/constants';
 import { AreaNames } from 'utils/constants';
 import { showModal } from 'utils/modals';
 import { showError } from 'utils/notifications';
-import { EmptyFunction } from 'utils/types';
 import { getRandomId } from 'utils/utils';
+import { CarValues, EmptyFunction } from 'utils/types';
 import { convertCars } from './utils';
-import { PhoneItem, PhoneItemValues } from './phone-item';
+import { AccessValues, PhoneItem } from './phone-item';
 import './styles.scss';
 
 interface AccessFormProps {
-  accessInfo?: KeyVO,
-  areas: Area[],
-  // eslint-disable-next-line react/no-unused-prop-types
-  flatNumber: string;
+  accesses: AccessValues[],
+  areas: AreaEntity[],
   reloadInfo: EmptyFunction,
   ownerId: number
 }
 
-function AddAccessForm({
-                         reloadInfo, closeModal, ownerId, areas: allAreas, accessInfo = undefined
-                       }: AccessFormProps & {
-  closeModal: EmptyFunction,
-}) {
-  const isEdit = Object.keys(accessInfo || {}).length > 0;
+function AddAccessForm(props: AccessFormProps & { closeModal: EmptyFunction, }) {
+  const {
+    reloadInfo, closeModal, ownerId, areas: allAreas, accesses: initialAccesses = []
+  } = props;
+
+  const isEdit = initialAccesses.length > 0;
 
   const [loading, showLoading, hideLoading] = useLoading();
-  const [selectedAreaIds, setSelectedAreas] = useState<number[]>((accessInfo?.areas || []).map(({ id = 0 }) => id));
+  // const [selectedAreaIds, setSelectedAreas] = useState<number[]>((accessInfo?.areas || []).map(({ id = 0 }) => id));
 
-  const [accesses, setAccesses] = useState<PhoneItemValues[]>([accessInfo ? { ...accessInfo } : {
-    id: getRandomId()
+  const [accesses, setAccesses] = useState<AccessValues[]>(initialAccesses.length ? [...initialAccesses] : [{
+    accessId: getRandomId(),
+    cars: []
   }]);
 
   const areaOptions = useMemo(() => allAreas.map(({ id = 0 }) => ({
@@ -48,12 +47,13 @@ function AddAccessForm({
   })), [allAreas.length]);
 
   const accessesState = useMemo(() => {
-    const isValidAreas = !!selectedAreaIds.length;
+    // const isValidAreas = !!selectedAreaIds.length;
+    const isValidAreas = true;
     const isValidAccesses = accesses.every(({
                                               phoneNumber = '',
                                               cars = []
                                             }) => PhoneRegexes.some((regex) => regex.test(phoneNumber))
-      && cars.every(({ number: carNumber = '' }) => CarNumberRegex.test(carNumber)));
+      && cars.every(({ plateNumber = '' }) => CarNumberRegex.test(plateNumber)));
 
     return ({
       changeId: getRandomId(),
@@ -67,18 +67,18 @@ function AddAccessForm({
     ) => `${phoneNumber}-${phoneLabel}-${(cars || []).map((
       {
         id = 0,
-        number = '',
+        plateNumber = '',
         description = ''
       }
-    ) => `${id}-${number}-${description}`).join(',')}`).join(';')]);
+    ) => `${id}-${plateNumber}-${description}`).join(',')}`).join(';')]);
 
   const addEmptyRow = useCallback(() => {
     // @ts-ignore
     setAccesses((prev) => prev.concat([{ id: getRandomId(), phoneNumber: '', cars: [] }]));
   }, []);
 
-  const onChangeAccess = useCallback((accessId: number, fieldName: keyof PhoneItemValues, value: string | boolean | CarVO[]) => {
-    const accessIndex = accesses.findIndex((item) => item.id === accessId);
+  const onChangeAccess = useCallback((accessId: number, fieldName: keyof AccessValues, value: string | boolean | CarValues[]) => {
+    const accessIndex = accesses.findIndex((item) => item.accessId === accessId);
     if (accessIndex < 0) {
       return;
     }
@@ -92,7 +92,7 @@ function AddAccessForm({
   }, [accessesState.changeId]);
 
   const onChangeAreas = useCallback((checkedValues: number[]) => {
-    setSelectedAreas(checkedValues);
+    // setSelectedAreas(checkedValues);
   }, []);
 
   const saveAccess = useCallback(() => {
@@ -101,23 +101,24 @@ function AddAccessForm({
     if (isEdit) {
       const access = accesses[0];
       const dataToSave: UpdateAccessRequest = {
-        label: access.phoneLabel,
+        phoneLabel: access.phoneLabel,
         // tenant: access.tenant || false,
         // todo всё поправить
-        areas: selectedAreaIds.map((areaId) => ({ areaId })),
+        // areas: selectedAreaIds.map((id) => ({ id })),
         cars: convertCars(access.cars || [])
       };
 
-      promise = AccessService.updateAccess({ accessId: access.id || 0, body: dataToSave });
+      promise = AccessService.updateAccess({ accessId: access.accessId || 0, body: dataToSave });
     } else {
+      // todo всё поправить
       const dataToSave: CreateAccessRequest = {
-        // todo всё поправить
-        areas: selectedAreaIds.map((areaId) => ({ areaId })),
-        ownerIds: [ownerId],
-        contacts: accesses.map((phone) => ({
-          number: phone.phoneNumber,
-          label: phone.phoneLabel,
-          // tenant: phone.tenant || false,
+        ownerId,
+        accesses: accesses.map((phone) => ({
+          // todo арии
+          areas: [{ areaId: 1 }, { areaId: 2 }],
+          // areas: selectedAreaIds.map((id) => ({ id })),
+          phoneNumber: phone.phoneNumber,
+          contactLabel: phone.phoneLabel,
           cars: convertCars(phone.cars || [])
         }))
       };
@@ -137,8 +138,7 @@ function AddAccessForm({
       });
   }, [
     reloadInfo,
-    accessesState.changeId,
-    selectedAreaIds.length
+    accessesState.changeId
   ]);
 
   return (
@@ -150,7 +150,7 @@ function AddAccessForm({
       <div className="sub-header phones">Кому</div>
       {accesses.map((item) => (
         <PhoneItem
-          key={item.id}
+          key={item.accessId}
           isEdit={isEdit}
           access={item}
           onChangeAccess={onChangeAccess}
@@ -181,7 +181,9 @@ export const showAddAccessItemModal = (props: AccessFormProps) => {
   showModal({
     width: 1000,
     className: 'phone-add-modal',
-    title: `Доступы для кв. ${props.flatNumber}`,
+    // todo выводить номер кв или мм
+    title: 'Доступы',
+    // title: `Доступы для кв. ${props.flatNumber}`,
     closable: true,
     // eslint-disable-next-line react/jsx-props-no-spreading
     getContent: ({ closeModal }) => <AddAccessForm {...props} closeModal={closeModal} />

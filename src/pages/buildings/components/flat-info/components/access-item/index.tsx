@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import { DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd';
-import { KeyVO } from 'backend/services/backend';
+import { AccessResponse } from 'backend/services/backend';
 import { DictionariesContext } from 'context/AppContext';
 import { CarFrontIcon } from 'icons/car_front';
 import { AreaNames } from 'utils/constants';
@@ -9,25 +9,40 @@ import { useAccessItemCRUD } from './hooks';
 import { showAddAccessItemModal } from '../access-add-modal';
 import { AccessContext } from '../../context/AccessContext';
 import './styles.scss';
-import { LetterAIcon } from '../../../../../../icons/letter_a';
+import { AccessValues } from '../access-add-modal/phone-item';
+import { getRandomId } from '../../../../../../utils/utils';
 
-export function AccessItem({ accessInfo }: { accessInfo: KeyVO }) {
+export function AccessItem({ accessInfo }: { accessInfo: AccessResponse }) {
   const { areas } = useContext(DictionariesContext);
   const contextValue = useContext(AccessContext);
   const { ownerId, flatNumber, reloadFlatInfo } = contextValue;
 
+
+  const accessValues = useMemo(() => {
+    const result: AccessValues = {
+      ...accessInfo,
+      cars: (accessInfo.cars || []).map((car) => ({
+        ...car,
+        id: getRandomId(),
+        isNew: false
+      }))
+    };
+
+    return result;
+  }, [accessInfo.phoneNumber]);
+
   const {
-    id = 0, phoneLabel = '', phoneNumber, areas: infoAreas = [], cars = []
+    accessId = 0, phoneLabel = '', phoneNumber, areas: infoAreas = [], cars = []
   } = accessInfo;
 
   const sortedAreas = useMemo(
-    () => infoAreas.sort((a1, a2) => (a1.id || 0) - (a2.id || 0)),
+    () => infoAreas.sort((a1, a2) => (a1.areaId || 0) - (a2.areaId || 0)),
     [infoAreas.length]
   );
 
-  const { isDeleting, deleteAccessItem } = useAccessItemCRUD({ accessId: id || 0, onFinish: reloadFlatInfo });
+  const { isDeleting, deleteAccessItem } = useAccessItemCRUD({ accessId, onFinish: reloadFlatInfo });
   return (
-    <div className="access-item" key={id}>
+    <div className="access-item" key={accessId}>
       <div className="access-info">
         <div className="phone-and-areas">
           <div className="phone-container">
@@ -37,12 +52,12 @@ export function AccessItem({ accessInfo }: { accessInfo: KeyVO }) {
             </div>
           </div>
           <div className="area-icons">
-            {sortedAreas.map(({ id: areaId = 0, tenant = false, places = [] }) => (
+            {sortedAreas.map(({ areaId = 0, places = [] }) => (
               <div key={areaId} className={`access-icon type-${areaId}`}>
                 <div className="icon">
                   {AreaNames[areaId]?.icon || String(areaId)}
                 </div>
-                {tenant && <span className="tenant-icon"><LetterAIcon /></span>}
+                { /* {tenant && <span className="tenant-icon"><LetterAIcon /></span>} */}
                 {!!places.length && <div className="places">{places.join(', ')}</div>}
               </div>
             ))}
@@ -51,10 +66,10 @@ export function AccessItem({ accessInfo }: { accessInfo: KeyVO }) {
         </div>
         {!!phoneLabel && <div className={`phone-label ${phoneLabel ? 'has-label' : ''}`}>{phoneLabel || ''}</div>}
         <div className="cars">
-          {cars.map(({ description = '', number = '' }) => (
-            <div className="car" key={number}>
+          {cars.map(({ description = '', plateNumber = '' }) => (
+            <div className="car" key={plateNumber}>
               <CarFrontIcon className="car-icon" />
-              <span className="car-number">{number}</span>
+              <span className="car-number">{plateNumber}</span>
               <span className="car-description">{description}</span>
             </div>
           ))}
@@ -66,7 +81,7 @@ export function AccessItem({ accessInfo }: { accessInfo: KeyVO }) {
           size="small"
           onClick={() => {
             showAddAccessItemModal({
-              reloadInfo: reloadFlatInfo, accessInfo, ownerId, areas, flatNumber
+              reloadInfo: reloadFlatInfo, accesses: [accessValues], ownerId, areas
             });
           }}
         >

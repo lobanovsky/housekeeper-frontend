@@ -1,8 +1,8 @@
 import { createContext } from 'react';
-import { Area } from '../backend/services/backend';
+import { AreaEntity } from '../backend/services/backend';
 
 interface IAppContext {
-  areas: Area[];
+  areas: AreaEntity[];
 }
 
 export const DictionariesContext = createContext<IAppContext>({

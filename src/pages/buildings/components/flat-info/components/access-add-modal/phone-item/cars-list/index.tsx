@@ -6,7 +6,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { CarIcon } from 'icons/car';
 import { getRandomId } from 'utils/utils';
 import { CarNumberRegex } from 'pages/buildings/constants';
-import { CarValues } from 'pages/buildings/types';
+import { CarValues } from 'utils/types';
 import './styles.scss';
 
 export function AccessItemCarList({ cars, onChangeCar, deleteCar }: {
@@ -17,7 +17,7 @@ export function AccessItemCarList({ cars, onChangeCar, deleteCar }: {
   const addNewCar = useCallback(() => {
     const newCar: CarValues = {
       id: getRandomId(),
-      number: '',
+      plateNumber: '',
       description: '',
       isNew: true
     };
@@ -26,19 +26,19 @@ export function AccessItemCarList({ cars, onChangeCar, deleteCar }: {
 
   return (
     <div className="car-list">
-      {cars.map(({ id = -1, number = '', description = '' }) => (
+      {cars.map(({ id = -1, plateNumber = '', description = '' }) => (
         <div className="car-item" key={id}>
           <MaskedInput
-            className={`car-number ${!CarNumberRegex.test(number) ? 'invalid' : ''}`}
+            className={`car-number ${!CarNumberRegex.test(plateNumber) ? 'invalid' : ''}`}
             size="small"
             allowClear
             placeholder="Номер"
             mask="a000aa00[0]"
-            value={number}
+            value={plateNumber}
             onChange={({ target: { value } }) => {
               onChangeCar({
                 id,
-                number: value
+                plateNumber: value
               });
             }}
           />

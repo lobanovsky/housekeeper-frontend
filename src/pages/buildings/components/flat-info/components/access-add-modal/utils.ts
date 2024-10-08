@@ -1,12 +1,12 @@
 import { CarRequest } from 'backend/services/backend';
 import { CarNumberRegex } from 'pages/buildings/constants';
-import { CarValues } from 'pages/buildings/types';
+import { CarValues } from 'utils/types';
 
 export const convertCars = (cars: CarValues[]): CarRequest[] => cars
-  .filter(({ number = '' }) => CarNumberRegex.test(number))
-  .map(({ number = '', description = '' }) => {
+  .filter(({ plateNumber = '' }) => CarNumberRegex.test(plateNumber))
+  .map(({ plateNumber = '', description = '' }) => {
     const car: CarRequest = {
-      plateNumber: number.replace(/\s/g, ''),
+      plateNumber: plateNumber.replace(/\s/g, ''),
       description
     };
     return car;

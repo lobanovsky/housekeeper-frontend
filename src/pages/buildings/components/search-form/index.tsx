@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { Input } from 'antd';
 import { MaskedInput } from 'antd-mask-input';
 import { SearchOutlined } from '@ant-design/icons';
-import { AccessService, AccessVO, EnumRoomVOType } from 'backend/services/backend';
+import { AccessService, OverviewResponse } from 'backend/services/backend';
 import Loading from 'components/loading';
 import { useLoading } from 'hooks/use-loading';
 import debounce from 'lodash/debounce';
@@ -16,34 +16,40 @@ export function BuildingsSearchForm() {
   const [searchPhone, setSearchPhone] = useState('');
   const [searchCarNun, setSearchCarNum] = useState('');
 
-  const searchData = useCallback((phone: string = '', carNum: string = '') => {
-    const phoneDigits = phone.replace(/\D/g, '');
-    if (phoneDigits.length < 4 && carNum.length < 3) {
+  const searchData = useCallback((carNum: string = '') => {
+    // const phoneDigits = phone.replace(/\D/g, '');
+    // if (phoneDigits.length < 4 && carNum.length < 3) {
+    //   return;
+    // }
+
+    const carNumStr = carNum.replace(/\s/g, '');
+    if (carNum.length < 3) {
       return;
     }
 
+// : AccessService.findByPhone({ phoneNumber: phoneDigits, active: true }))
     showLoading();
-    (carNum ? AccessService.findByCarNumber({
-      carNumber: carNum,
+    AccessService.overview({
+      plateNumber: carNumStr,
       active: true
-    }) : AccessService.findByPhone({ phoneNumber: phoneDigits, active: true }))
-      .then((response: AccessVO) => {
-        // todo починить поиск
-        hideLoading();
-        const { owner: { rooms = [] } = {} } = response || {};
-        if (rooms.length > 0) {
-          let buildingRoom = rooms.find(({ type = '' }) => type === EnumRoomVOType.FLAT);
-          if (!buildingRoom) {
-            // eslint-disable-next-line prefer-destructuring
-            buildingRoom = rooms[0];
-          }
-
-          if (buildingRoom) {
-            const url = `/buildings/${buildingRoom.building}/rooms/${buildingRoom.id}`;
-            navigate(url);
-          }
-        }
-      })
+    }).then((response: OverviewResponse) => {
+      // todo починить поиск
+      hideLoading();
+      const { ownerRooms = [] } = response || {};
+      if (ownerRooms.length > 0) {
+        debugger;
+        // let buildingRoom = ownerRooms.find(({ type = '' }) => type === EnumRoomVOType.FLAT);
+        // if (!buildingRoom) {
+        //   // eslint-disable-next-line prefer-destructuring
+        //   buildingRoom = ownerRooms[0];
+        // }
+        //
+        // if (buildingRoom) {
+        //   const url = `/buildings/${buildingRoom.building}/rooms/${buildingRoom.id}`;
+        //   navigate(url);
+        // }
+      }
+    })
       .catch((e) => {
         hideLoading();
         showError('Ничего не найдено', e);
@@ -51,7 +57,7 @@ export function BuildingsSearchForm() {
   }, []);
 
   const delayedSearch = useCallback(
-    debounce((phone: string, carNum: string) => searchData(phone, carNum), 600),
+    debounce((carNum: string) => searchData(carNum), 600),
     []
   );
 
@@ -62,12 +68,12 @@ export function BuildingsSearchForm() {
     const isEnterKeyPressed = pressedKeyCode === '13' || pressedKeyCode.toLowerCase() === 'enter';
 
     if (isEnterKeyPressed) {
-      searchData(searchPhone, searchCarNun);
+      searchData(searchCarNun);
     }
   }, [searchPhone, searchCarNun]);
 
   useEffect(() => {
-    delayedSearch(searchPhone, searchCarNun);
+    delayedSearch(searchCarNun);
   }, [searchPhone, searchCarNun]);
 
   return (
