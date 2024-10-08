@@ -18,9 +18,8 @@ import { AreaEntity, AreaService } from './backend/services/backend';
 import { BuildingScheme } from './pages/buildings/components/building-scheme';
 import { FlatInfo } from './pages/buildings/components/flat-info';
 import { DictionariesContext } from './context/AppContext';
-import './App.scss';
 import { AreasList } from './pages/admin/areas';
-
+import './App.scss';
 // todo роуты вынести отдельно
 const { Header, Content } = Layout;
 
@@ -47,10 +46,7 @@ function App() {
                 <Content>
                   <PageHeader />
                   <Routes>
-                    <Route
-                      path="/rooms"
-                      element={<Rooms />}
-                    />
+                    <Route path="/rooms" element={<Rooms />} />
                     <Route path="/buildings" element={<Buildings />}>
                       <Route
                         path=":buildingId"
@@ -64,18 +60,12 @@ function App() {
                         />
                       </Route>
                     </Route>
-                    <Route
-                      path="/buildings"
-                      element={<Buildings />}
-                    />
+                    <Route path="/buildings" element={<Buildings />} />
                     {/* <Route */}
                     {/*  path="/counters" */}
                     {/*  element={<Counters />} */}
                     {/* /> */}
-                    <Route
-                      path="/gates"
-                      element={<Gates />}
-                    />
+                    <Route path="/gates" element={<Gates />} />
                     <Route
                       path="/payments-incoming"
                       element={<IncomingPayments />}
@@ -84,30 +74,16 @@ function App() {
                       path="/payments-outgoing"
                       element={<OutgoingPayments />}
                     />
-                    <Route
-                      path="/uploaded-files"
-                      element={<UploadedFiles />}
-                    />
-                    <Route
-                      path="/expenses"
-                      element={<ExpensesView />}
-                    />
+                    <Route path="/uploaded-files" element={<UploadedFiles />} />
+                    <Route path="/expenses" element={<ExpensesView />} />
                     <Route
                       path="/counterparties"
                       element={<Counterparties />}
                     />
-                    <Route
-                      path="/areas"
-                      element={<AreasList />}
-                    />
+                    <Route path="/areas" element={<AreasList />} />
                     <Route
                       path="*"
-                      element={(
-                        <Navigate
-                          replace
-                          to="/buildings"
-                        />
-                      )}
+                      element={<Navigate replace to="/buildings" />}
                     />
                   </Routes>
                 </Content>

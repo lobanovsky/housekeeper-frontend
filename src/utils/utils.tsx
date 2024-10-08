@@ -94,3 +94,10 @@ export const convertDateRange = (range: Array<string | Dayjs | null> = [], forma
 // @ts-ignore
 export const MonthNames = dayjs.months();
 export const ShortMonthNames: string[] = ['янв', 'фев', 'март', 'апр', 'май', 'июнь', 'июль', 'авг', 'сент', 'окт', 'нояб', 'дек'];
+
+export function addRandomIdToData<T>(data: T[]): Array<T & { id: number }> {
+  return data.map((item) => ({
+    ...item,
+    id: getRandomId()
+  }));
+}

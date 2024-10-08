@@ -1,7 +1,8 @@
 import React from 'react';
-import { OwnerVO } from 'backend/services/backend';
+import { EnumRoomVOType, OwnerVO, RoomVO } from 'backend/services/backend';
 import { OwnerIcon } from 'icons/owner';
 import './styles.scss';
+import { RoomTypeNames } from '../../../../../../utils/constants';
 
 export const EmptyOwner: OwnerVO = {
   fullName: '',
@@ -9,26 +10,25 @@ export const EmptyOwner: OwnerVO = {
   dateOfLeft: ''
 };
 
-export function FlatOwnerInfo({ owner: { fullName = '' } = EmptyOwner }: {
-  owner: OwnerVO | undefined
+export function FlatOwnerInfo({ roomInfo, ownerProperties = [] }: {
+  roomInfo: RoomVO,
+  ownerProperties: RoomVO[],
 }) {
   return (
     <div className="flat-owner-info">
       <div className="owner-name-container">
         <OwnerIcon className="owner-icon" />
         {' '}
-        <span className="owner-name">{fullName}</span>
+        <span className="owner-name">{roomInfo.ownerName}</span>
       </div>
-      { /* <div className="owner-property"> */}
-      { /*   {rooms.map(({ type, number }: RoomVO) => ( */}
-      { /*     <div key={number} className={`property-item ${type}`}> */}
-      { /*       {type === EnumRoomVOType.GARAGE && 'мм. '} */}
-      { /*       {type === EnumRoomVOType.FLAT && 'кв. '} */}
-      { /*       {type === EnumRoomVOType.OFFICE && 'оф. '} */}
-      { /*       {number} */}
-      { /*     </div> */}
-      { /*   ))} */}
-      { /* </div> */}
+      <div className="owner-property">
+        {ownerProperties.map(({ type, number }: RoomVO) => (
+          <div key={number} className={`property-item ${type}`}>
+            {(RoomTypeNames[type as EnumRoomVOType] || '').toLowerCase()}
+            {number}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

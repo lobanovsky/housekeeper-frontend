@@ -1071,22 +1071,6 @@ export class FileImporterControllerService {
     });
   }
   /**
-   * Import accounts from "HOMEOWNER" from *.xlsx
-   */
-  importAccountsFromHomeowners(options: IRequestOptions = {}): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/files/homeowner/accounts/importer';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
    * Import eldes gate from *.log
    */
   importEldesGate(options: IRequestOptions = {}): Promise<any> {
@@ -1288,6 +1272,30 @@ export class DecisionReportControllerService {
   makeNotVotedDecisionsReport(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/reports/decisions/not-voted';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class OwnerControllerService {
+  /**
+   *
+   */
+  getRoomsByOwnerId(
+    params: {
+      /**  */
+      ownerId: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/owners/{ownerId}/rooms';
+      url = url.replace('{ownerId}', params['ownerId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -1612,16 +1620,16 @@ export interface PageRoomVO {
 
 export interface PageableObject {
   /**  */
-  paged?: boolean;
-
-  /**  */
-  unpaged?: boolean;
-
-  /**  */
   pageNumber?: number;
 
   /**  */
   pageSize?: number;
+
+  /**  */
+  paged?: boolean;
+
+  /**  */
+  unpaged?: boolean;
 
   /**  */
   offset?: number;
@@ -1676,10 +1684,10 @@ export interface RoomVO {
 
 export interface SortObject {
   /**  */
-  unsorted?: boolean;
+  sorted?: boolean;
 
   /**  */
-  sorted?: boolean;
+  unsorted?: boolean;
 
   /**  */
   empty?: boolean;
@@ -2124,23 +2132,6 @@ export interface PaymentInfoResponse {
   outgoingSum?: number;
 }
 
-export interface AccountHomeownersResponse {
-  /**  */
-  fileName?: string;
-
-  /**  */
-  roomSize?: number;
-
-  /**  */
-  ownerSize?: number;
-
-  /**  */
-  totalSquare?: number;
-
-  /**  */
-  totalPercentage?: number;
-}
-
 export interface EldesGateInfoResponse {
   /**  */
   fileName?: string;
@@ -2538,13 +2529,11 @@ export interface OverviewResponse {
   /**  */
   ownerRooms?: string;
 }
-
 export enum EnumRoomFilterType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
   'OFFICE' = 'OFFICE'
 }
-
 export enum EnumRoomVOType {
   'FLAT' = 'FLAT',
   'GARAGE' = 'GARAGE',
@@ -2668,3 +2657,4 @@ export const CounterpartyService = new CounterpartyControllerService();
 export const BuildingService = new BuildingControllerService();
 export const AccessService = new AccessControllerService();
 export const AreaService = new AreaControllerService();
+export const OwnerService = new OwnerControllerService();

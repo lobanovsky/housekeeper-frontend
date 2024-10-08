@@ -5,18 +5,18 @@ import { AccessResponse } from 'backend/services/backend';
 import { DictionariesContext } from 'context/AppContext';
 import { CarFrontIcon } from 'icons/car_front';
 import { AreaNames } from 'utils/constants';
+import { AccessValues } from 'utils/types';
+import { getRandomId } from 'utils/utils';
 import { useAccessItemCRUD } from './hooks';
 import { showAddAccessItemModal } from '../access-add-modal';
 import { AccessContext } from '../../context/AccessContext';
+
 import './styles.scss';
-import { AccessValues } from '../access-add-modal/phone-item';
-import { getRandomId } from '../../../../../../utils/utils';
 
 export function AccessItem({ accessInfo }: { accessInfo: AccessResponse }) {
   const { areas } = useContext(DictionariesContext);
   const contextValue = useContext(AccessContext);
   const { ownerId, flatNumber, reloadFlatInfo } = contextValue;
-
 
   const accessValues = useMemo(() => {
     const result: AccessValues = {

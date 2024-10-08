@@ -1,16 +1,10 @@
-import { AccessResponse } from 'backend/services/backend';
 import React, { useCallback, useMemo } from 'react';
 import { MaskedInput } from 'antd-mask-input';
 import { Input, Typography } from 'antd';
 import { getRandomId } from 'utils/utils';
-import { CarValues } from 'utils/types';
+import { AccessValues, CarValues } from 'utils/types';
 import { AccessItemCarList } from './cars-list';
 import './styles.scss';
-
-export interface AccessValues extends Omit<AccessResponse, 'cars'> {
-  cars: CarValues[],
-  isValid?: boolean;
-}
 
 interface PhoneItemProps {
   access: AccessValues,

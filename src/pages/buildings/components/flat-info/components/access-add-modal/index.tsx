@@ -9,9 +9,9 @@ import { AreaNames } from 'utils/constants';
 import { showModal } from 'utils/modals';
 import { showError } from 'utils/notifications';
 import { getRandomId } from 'utils/utils';
-import { CarValues, EmptyFunction } from 'utils/types';
+import { AccessValues, CarValues, EmptyFunction } from 'utils/types';
 import { convertCars } from './utils';
-import { AccessValues, PhoneItem } from './phone-item';
+import { PhoneItem } from './phone-item';
 import './styles.scss';
 
 interface AccessFormProps {
