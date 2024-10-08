@@ -35,9 +35,7 @@ export function PhoneItem({ isEdit = false, access = { ...EmptyAccess }, onChang
   }, [onChangeAccess, access.accessId]);
 
   const onChangeCar = useCallback((changedCar: CarValues) => {
-    debugger;
-    // todo добавить айдишники к тачкам
-    const carIndex = (access.cars || []).findIndex((item) => item.plateNumber === changedCar.plateNumber);
+    const carIndex = (access.cars || []).findIndex((item) => item.id === changedCar.id);
     const newCars = [...(access.cars || [])];
     if (carIndex < 0) {
       newCars.push({ ...changedCar });
@@ -56,13 +54,12 @@ export function PhoneItem({ isEdit = false, access = { ...EmptyAccess }, onChang
   ]);
 
   const deleteCar = useCallback((carId: number) => {
-    // todo проверять айдишник тачки
-    // const carIndex = (access.cars || []).findIndex((item) => item.plateNumber === carId);
-    // const newCars = [...(access.cars || [])];
-    // if (carIndex > -1) {
-    //   newCars.splice(carIndex, 1);
-    //   onChangeAccess(access.accessId || 0, 'cars', newCars);
-    // }
+    const carIndex = (access.cars || []).findIndex((item) => item.id === carId);
+    const newCars = [...(access.cars || [])];
+    if (carIndex > -1) {
+      newCars.splice(carIndex, 1);
+      onChangeAccess(access.accessId || 0, 'cars', newCars);
+    }
   }, [carsChangeId]);
 
   return (

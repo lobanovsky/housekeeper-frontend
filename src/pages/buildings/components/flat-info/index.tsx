@@ -90,13 +90,14 @@ export function FlatInfo() {
                 добавить
               </Button>
             </div>
-            {!(accesses?.keys || []).length && (
-              <span className="emtpy-placeholder">не указаны</span>
-            )}
-            <div style={{ padding: '4px 0' }} />
-            {(accesses || []).map((accessInfo: AccessResponse) => (
-              <AccessItem key={accessInfo.accessId} accessInfo={accessInfo} />
-            ))}
+            {accesses.length ? (
+                <div className="accesses-list">
+                  {accesses.map((accessInfo: AccessResponse) => (
+                    <AccessItem key={accessInfo.accessId} access={accessInfo} />
+                  ))}
+                </div>
+              )
+              : <span className="emtpy-placeholder">не указаны</span>}
           </div>
         </div>
       </Card>

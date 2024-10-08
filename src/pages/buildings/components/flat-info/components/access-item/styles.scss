@@ -44,13 +44,13 @@ $grayDark: rgba(0, 0, 0, 0.88);
 
           .tenant-icon {
             position: absolute;
-            left: 15px;
+            left: 12px;
             top: -10px;
             //color: orange;
 
             .anticon {
               svg {
-                color: rgba(230, 133, 41, 0.8);
+                color: rgba(249, 130, 17, 0.7);
               }
             }
 
@@ -86,43 +86,31 @@ $grayDark: rgba(0, 0, 0, 0.88);
       }
     }
 
-    .phone-container {
-      display: flex;
-      align-items: flex-start;
+    .phone-number {
+      font-size: 16px;
+      line-height: 16px;
+      //color: $antd-blue-active;
+      font-weight: 500;
+      position: relative;
+      width: 158px;
 
-      .phone-index {
-        width: 24px;
-        //text-align: end;
+      &.tenant {
+        color: #c86405;
+        font-weight: normal;
       }
 
-      .phone-number {
-        font-size: 16px;
-        line-height: 16px;
-        //color: $antd-blue-active;
-        font-weight: 500;
-        position: relative;
-        width: 158px;
-
-        &.tenant {
-          color: #c86405;
-          font-weight: normal;
-        }
-
-        //.rent-icon {
-        //  position: absolute;
-        //  right: 0;
-        //  top:0;
-        //  color: red;
-        //}
-      }
-
-
+      //.rent-icon {
+      //  position: absolute;
+      //  right: 0;
+      //  top:0;
+      //  color: red;
+      //}
     }
 
     .phone-label {
-      padding-top: 2px;
+      //padding-top: 2px;
       color: gray;
-      line-height: 16px;
+      line-height: 14px;
 
       &.has-label {
         color: $grayDark;

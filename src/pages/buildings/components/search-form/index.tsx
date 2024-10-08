@@ -37,7 +37,6 @@ export function BuildingsSearchForm() {
       hideLoading();
       const { ownerRooms = [] } = response || {};
       if (ownerRooms.length > 0) {
-        debugger;
         // let buildingRoom = ownerRooms.find(({ type = '' }) => type === EnumRoomVOType.FLAT);
         // if (!buildingRoom) {
         //   // eslint-disable-next-line prefer-destructuring

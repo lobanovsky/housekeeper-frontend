@@ -3,6 +3,7 @@ import { AccessResponse, AccessService, CarResponse, OwnerService, RoomService, 
 import { showError, useLoading } from 'utils';
 import { AccessValues, ServerError } from 'utils/types';
 import { addRandomIdToData } from 'utils/utils';
+import { sortPropertyByFlatType } from '../utils';
 
 export interface RoomFullInfo {
   roomInfo: RoomVO,
@@ -79,7 +80,7 @@ export function useRoomInfo({ roomId: initialRoomId }: { roomId: number }) {
             setOwnerId(loadedOwnerId);
             OwnerService.getRoomsByOwnerId({ ownerId: loadedOwnerId })
               .then((properties: RoomVO[]) => {
-                result.ownerProperty = properties;
+                result.ownerProperty = properties.sort(sortPropertyByFlatType);
                 setRoomInfo(result);
                 hideLoading();
               })
