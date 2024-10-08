@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, Checkbox } from 'antd';
+import { Button } from 'antd';
 import { CloseOutlined, PlusOutlined, SaveOutlined } from '@ant-design/icons';
 import { AccessService, AreaEntity, CreateAccessRequest, UpdateAccessRequest } from 'backend/services/backend';
 import Loading from 'components/loading';
@@ -146,7 +146,7 @@ function AddAccessForm(props: AccessFormProps & { closeModal: EmptyFunction, }) 
       {loading && <Loading />}
       <div className="sub-header areas">Куда</div>
       {/* @ts-ignore */}
-      <Checkbox.Group value={selectedAreaIds} onChange={onChangeAreas} options={areaOptions} />
+      {/* <Checkbox.Group value={selectedAreaIds} onChange={onChangeAreas} options={areaOptions} /> */}
       <div className="sub-header phones">Кому</div>
       {accesses.map((item) => (
         <PhoneItem

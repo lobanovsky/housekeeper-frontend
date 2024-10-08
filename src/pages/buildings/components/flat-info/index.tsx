@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
-import { Button, Card, Typography } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Button, Card, Empty, Tooltip, Typography } from 'antd';
+import { InfoCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import { AccessResponse, EnumRoomVOType } from 'backend/services/backend';
 import { DictionariesContext } from 'context/AppContext';
 import { RoomTypeNames } from 'utils/constants';
@@ -19,9 +19,10 @@ export function FlatInfo() {
   const {
     roomInfo: { roomInfo, accesses, ownerProperty },
     loadRoomFullInfo,
+    grantedAreas,
     ownerId,
     loading
-  } = useRoomInfo({ roomId: parseInt(selectedRoomStr, 10) });
+  } = useRoomInfo({ roomId: parseInt(selectedRoomStr, 10), allAreas: areas });
 
   const reloadInfo = useCallback(() => {
     const parsedRoomId = parseInt(selectedRoomStr, 10);
@@ -51,10 +52,6 @@ export function FlatInfo() {
     loadRoomFullInfo(parsedRoomId);
   }, [selectedRoomStr]);
 
-  useEffect(() => {
-
-  }, []);
-
   return (
     <AccessContext.Provider value={flatContextValue}>
       <Card
@@ -77,28 +74,31 @@ export function FlatInfo() {
       >
         <div className="flat-info">
           <FlatOwnerInfo roomInfo={roomInfo} ownerProperties={ownerProperty} />
-          <div className="flat-accesses">
-            <div className="access-header">
-              <Typography.Title level={5}>Доступы</Typography.Title>
-              <Button
-                type="link"
-                size="small"
-                className="add-btn"
-                onClick={showAccessAddModal}
-              >
-                <PlusOutlined />
-                добавить
-              </Button>
-            </div>
-            {accesses.length ? (
+          {!loading && (
+            <div className="flat-accesses">
+              <div className="access-header">
+                <Typography.Title level={5}>Доступы</Typography.Title>
+                {grantedAreas.length ? (
+                  <Button
+                    type="link"
+                    size="small"
+                    className="add-btn"
+                    onClick={showAccessAddModal}
+                  >
+                    <PlusOutlined />
+                    добавить
+                  </Button>
+                ) : <Tooltip title="За выдачей доступов обращайтесь к администратору"><InfoCircleTwoTone twoToneColor="orange" /></Tooltip>}
+              </div>
+              {accesses.length ? (
                 <div className="accesses-list">
                   {accesses.map((accessInfo: AccessResponse) => (
                     <AccessItem key={accessInfo.accessId} access={accessInfo} />
                   ))}
                 </div>
-              )
-              : <span className="emtpy-placeholder">не указаны</span>}
-          </div>
+              ) : <Empty description="нет доступов" />}
+            </div>
+          )}
         </div>
       </Card>
     </AccessContext.Provider>

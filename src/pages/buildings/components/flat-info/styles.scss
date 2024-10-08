@@ -34,7 +34,7 @@ $cardWidth: 460px;
 
     .access-header {
       display: flex;
-      gap: 1em;
+      gap: 0.5em;
       align-items: center;
 
       h5 {
@@ -51,6 +51,25 @@ $cardWidth: 460px;
           font-size: 12px;
         }
       }
+    }
+
+    .ant-empty {
+      margin-top: 1em;
+
+      .ant-empty-image {
+        height: 64px;
+      }
+    }
+
+    .no-available-areas {
+      margin-top: 0.5em;
+
+      .anticon {
+        font-size: 16px;
+        margin-right: 0.5em;
+      }
+
+      color: rgba(50, 50, 50, 0.8);
     }
   }
 
