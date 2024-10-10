@@ -4,6 +4,9 @@
     "es2021": true,
     "jest": true
   },
+  "ignorePatterns": [
+    "*.js"
+  ],
   "extends": [
     "react-app",
     "react-app/jest",
@@ -44,6 +47,7 @@
     "react/require-default-props": 0,
     "react/jsx-indent": 0,
     "react/jsx-props-no-spreading": 0,
+    "react/no-unused-prop-types": 1,
     "jsx-a11y/click-events-have-key-events": 0,
     "jsx-a11y/interactive-supports-focus": 0
   }

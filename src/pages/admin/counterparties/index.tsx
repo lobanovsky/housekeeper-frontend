@@ -36,7 +36,10 @@ export function Counterparties() {
         type="link"
         onClick={() => {
           showCounterpartyModal({
-            counterparty: { id: 0 },
+            counterparty: {
+              id: 0,
+              name: ''
+            },
             onFinish: loadData
           });
         }}

@@ -2,7 +2,6 @@ import React, { useContext, useMemo } from 'react';
 import { DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd';
 import { AccessResponse, CarResponse } from 'backend/services/backend';
-import { DictionariesContext } from 'context/AppContext';
 import { CarFrontIcon } from 'icons/car_front';
 import { LetterAIcon } from 'icons/letter_a';
 import { AreaNames } from 'utils/constants';
@@ -12,19 +11,27 @@ import { showAddAccessItemModal } from '../access-add-modal';
 import { AccessContext } from '../../context/AccessContext';
 import './styles.scss';
 import { phoneNumberRenderer } from '../../../../../../utils/renderers';
+import { AccessValues } from '../../../../../../utils/types';
 
 export function AccessItem({ access }: { access: AccessResponse }) {
-  const { areas } = useContext(DictionariesContext);
   const contextValue = useContext(AccessContext);
-  const { reloadFlatInfo } = contextValue;
+  const {
+    reloadFlatInfo,
+    grantedAreas
+  } = contextValue;
 
-  const accessValues = useMemo(() => ({
+  const accessValues = useMemo<AccessValues>(() => ({
     ...access,
+    areaIds: (access.areas || []).map(({ areaId = 0 }) => areaId),
     cars: addRandomIdToData<CarResponse>(access.cars || [])
   }), [access.phoneNumber]);
 
   const {
-    accessId = 0, phoneLabel = '', phoneNumber, areas: infoAreas = [], cars = []
+    accessId = 0,
+    phoneLabel = '',
+    phoneNumber,
+    areas: infoAreas = [],
+    cars = []
   } = access;
 
   const sortedAreas = useMemo(
@@ -32,14 +39,23 @@ export function AccessItem({ access }: { access: AccessResponse }) {
     [infoAreas.length]
   );
 
-  const { isDeleting, deleteAccessItem } = useAccessItemCRUD({ accessId, onFinish: reloadFlatInfo });
+  const {
+    isDeleting,
+    deleteAccessItem
+  } = useAccessItemCRUD({
+    accessId,
+    onFinish: reloadFlatInfo
+  });
   return (
     <div className="access-item" key={accessId}>
       <div className="access-info">
         <div className="phone-and-areas">
           <div className="phone-number">{phoneNumberRenderer(phoneNumber)}</div>
           <div className="area-icons">
-            {sortedAreas.map(({ areaId = 0, places = [] }) => (
+            {sortedAreas.map(({
+                                areaId = 0,
+                                places = []
+                              }) => (
               <div key={areaId} className={`access-icon type-${areaId}`}>
                 <div className="icon">
                   {AreaNames[areaId]?.icon || String(areaId)}
@@ -53,7 +69,10 @@ export function AccessItem({ access }: { access: AccessResponse }) {
         </div>
         {!!phoneLabel && <div className={`phone-label ${phoneLabel ? 'has-label' : ''}`}>{phoneLabel || ''}</div>}
         <div className="cars">
-          {cars.map(({ description = '', plateNumber = '' }) => (
+          {cars.map(({
+                       description = '',
+                       plateNumber = ''
+                     }) => (
             <div className="car" key={plateNumber}>
               <CarFrontIcon className="car-icon" />
               <span className="car-number">{plateNumber}</span>
@@ -68,7 +87,10 @@ export function AccessItem({ access }: { access: AccessResponse }) {
           size="small"
           onClick={() => {
             showAddAccessItemModal({
-              reloadInfo: reloadFlatInfo, accesses: [accessValues], ownerId: access.ownerId || 0, areas
+              reloadFlatInfo,
+              access: accessValues,
+              ownerId: access.ownerId || 0,
+              grantedAreas
             });
           }}
         >

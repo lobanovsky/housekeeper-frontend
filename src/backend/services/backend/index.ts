@@ -201,7 +201,6 @@ export class RepairControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -1319,7 +1318,6 @@ export class OwnerControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -1479,7 +1477,7 @@ export class AccountControllerService {
 
 export interface CounterpartyRequest {
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   inn?: string;
@@ -1487,10 +1485,10 @@ export interface CounterpartyRequest {
 
 export interface CounterpartyResponse {
   /**  */
-  id?: number;
+  id: number;
 
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   inn?: string;
@@ -1527,6 +1525,9 @@ export interface CarRequest {
 export interface UpdateAccessRequest {
   /**  */
   phoneLabel?: string;
+
+  /**  */
+  tenant?: boolean;
 
   /**  */
   cars?: CarRequest[];
@@ -1657,7 +1658,7 @@ export interface PageableObject {
 
 export interface RoomVO {
   /**  */
-  id?: number;
+  id: number;
 
   /**  */
   street?: string;
@@ -1815,7 +1816,7 @@ export interface PagePaymentVO {
 
 export interface PaymentVO {
   /**  */
-  id?: number;
+  id: number;
 
   /**  */
   uuid?: string;
@@ -1880,7 +1881,7 @@ export interface PaymentVO {
 
 export interface GroupOfPayment {
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   payments?: OutgoingPayment[];
@@ -1891,7 +1892,7 @@ export interface GroupOfPayment {
 
 export interface OutgoingPayment {
   /**  */
-  id?: number;
+  id: number;
 
   /**  */
   uuid?: string;
@@ -1976,7 +1977,7 @@ export interface LogEntryFilter {
 
 export interface LogEntryResponse {
   /**  */
-  id?: number;
+  id: number;
 
   /**  */
   dateTime: string;
@@ -2040,7 +2041,7 @@ export interface PageLogEntryResponse {
 
 export interface FileFilter {
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   fileType?: EnumFileFilterFileType;
@@ -2048,7 +2049,7 @@ export interface FileFilter {
 
 export interface FileType {
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   description?: string;
@@ -2056,10 +2057,10 @@ export interface FileType {
 
 export interface FileVO {
   /**  */
-  id?: number;
+  id: number;
 
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   size?: number;
@@ -2214,7 +2215,7 @@ export interface AccessRequest {
   phoneNumber?: string;
 
   /**  */
-  contactLabel?: string;
+  phoneLabel?: string;
 
   /**  */
   tenant?: boolean;
@@ -2238,7 +2239,7 @@ export interface ManualAccountRequest {
 
 export interface IncomingPayment {
   /**  */
-  id?: number;
+  id: number;
 
   /**  */
   uuid?: string;
@@ -2306,7 +2307,7 @@ export interface IncomingPayment {
 
 export interface RoomTypeResponse {
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   description?: string;
@@ -2392,7 +2393,7 @@ export interface DepositResponse {
 
 export interface OwnerEntity {
   /**  */
-  id?: number;
+  id: number;
 
   /**  */
   fullName?: string;
@@ -2427,7 +2428,7 @@ export interface OwnerEntity {
 
 export interface LogEntryStatusResponse {
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   description?: string;
@@ -2449,7 +2450,7 @@ export interface TopRatingResponse {
 
 export interface LogEntryAccessMethodResponse {
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   description?: string;
@@ -2457,10 +2458,10 @@ export interface LogEntryAccessMethodResponse {
 
 export interface GateResponse {
   /**  */
-  id?: number;
+  id: number;
 
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   phoneNumber?: string;
@@ -2471,7 +2472,7 @@ export interface GateResponse {
 
 export interface FileTypeResponse {
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   description?: string;
@@ -2479,7 +2480,7 @@ export interface FileTypeResponse {
 
 export interface Building {
   /**  */
-  id?: number;
+  id: number;
 
   /**  */
   createDate: string;
@@ -2488,7 +2489,7 @@ export interface Building {
   active?: boolean;
 
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   numberOfApartments?: number;
@@ -2502,7 +2503,7 @@ export interface Building {
 
 export interface AreaEntity {
   /**  */
-  id?: number;
+  id: number;
 
   /**  */
   createDate: string;
@@ -2511,7 +2512,7 @@ export interface AreaEntity {
   active?: boolean;
 
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   specificPlace?: boolean;
@@ -2672,7 +2673,6 @@ export enum EnumMonthPaymentVOMonth {
   'NOVEMBER' = 'NOVEMBER',
   'DECEMBER' = 'DECEMBER'
 }
-
 export enum EnumOwnerEntitySex {
   'MALE' = 'MALE',
   'FEMALE' = 'FEMALE'
@@ -2681,7 +2681,6 @@ export enum EnumBuildingType {
   'APARTMENT_BUILDING' = 'APARTMENT_BUILDING',
   'UNDERGROUND_PARKING' = 'UNDERGROUND_PARKING'
 }
-
 
 export interface TopResponse {
   count: number,

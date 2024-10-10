@@ -3,15 +3,21 @@
 .car-list {
   width: 100%;
 
+  .add-btn {
+    height: 18px;
+    padding: 0;
+    line-height: 18px;
+  }
+
   .car-item {
     .ant-input,
     .ant-input-affix-wrapper {
       &.car-number {
-        width: 114px;
+        width: 140px;
       }
 
       &.car-description {
-        width: 190px;
+        width: 280px;
         margin-left: 6px;
       }
 

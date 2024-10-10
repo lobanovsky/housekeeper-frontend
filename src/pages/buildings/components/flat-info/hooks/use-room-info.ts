@@ -25,22 +25,37 @@ export interface RoomFullInfo {
   ownerProperty: RoomVO[]
 }
 
+interface RoomInfoProps {
+  roomId: number,
+  allAreas: AreaEntity[]
+}
+
 const convertAccessForForm = (accesses: AccessResponse[]): AccessValues[] => accesses.map(
-  ({ cars = [], ...access }) => ({
+  ({
+     cars = [],
+     ...access
+   }) => ({
+    areaIds: (access.areas || []).map(({ areaId = 0 }) => areaId),
     ...access,
     cars: addRandomIdToData<CarResponse>(cars)
   })
 );
 
-export function useRoomInfo({ roomId: initialRoomId, allAreas }: { roomId: number, allAreas: AreaEntity[] }) {
+export function useRoomInfo({
+                              roomId: initialRoomId,
+                              allAreas
+                            }: RoomInfoProps) {
   const [loading, showLoading, hideLoading] = useLoading(!!initialRoomId);
+  const [isLoadingAccesses, showAccessLoading, hideAccessLoading] = useLoading(false);
 
   const [roomInfo, setRoomInfo] = useState<RoomFullInfo>({
-    roomInfo: {},
+    roomInfo: { id: 0 },
     accesses: [],
     ownerProperty: []
   });
+
   const [ownerInfo, setOwnerInfo] = useState<OwnerEntity>({
+    id: 0,
     availableAccessArea: [],
     dateOfLeft: '',
     createDate: ''
@@ -57,13 +72,13 @@ export function useRoomInfo({ roomId: initialRoomId, allAreas }: { roomId: numbe
   }, [allAreas.length, ownerInfo.availableAccessArea?.length]);
 
   const loadAccesses = useCallback((loadRoomId: number) => {
-    showLoading();
+    showAccessLoading();
     AccessService.findByRoom({
       roomId: loadRoomId,
       active: true
     })
       .then((responseData: AccessResponse[]) => {
-        hideLoading();
+        hideAccessLoading();
         const convertedValues = convertAccessForForm(responseData);
         setRoomInfo((prev) => ({
           ...prev,
@@ -72,7 +87,7 @@ export function useRoomInfo({ roomId: initialRoomId, allAreas }: { roomId: numbe
       })
       .catch((e: ServerError) => {
         showError('Не удалось загрузить список доступов', e);
-        hideLoading();
+        hideAccessLoading();
       });
   }, []);
 
@@ -83,7 +98,11 @@ export function useRoomInfo({ roomId: initialRoomId, allAreas }: { roomId: numbe
     ])
       .then(([ownerInfoResult, ownerPropertiesResult]) => {
         const ownerFullInfo: OwnerFullInfo = {
-          info: { dateOfLeft: '', createDate: '' },
+          info: {
+            id: 0,
+            dateOfLeft: '',
+            createDate: ''
+          },
           rooms: []
         };
 
@@ -112,44 +131,48 @@ export function useRoomInfo({ roomId: initialRoomId, allAreas }: { roomId: numbe
         active: true
       })
 
-    ]).then(([flatParamsResult, accessesResult]) => {
-      const result: RoomFullInfo = {
-        roomInfo: {},
-        accesses: [],
-        ownerProperty: []
-      };
+    ])
+      .then(([flatParamsResult, accessesResult]) => {
+        const result: RoomFullInfo = {
+          roomInfo: { id: 0 },
+          accesses: [],
+          ownerProperty: []
+        };
 
-      if (accessesResult.status === 'fulfilled') {
-        result.accesses = convertAccessForForm(accessesResult.value);
-      } else {
-        showError('Не удалось загрузить доступы', accessesResult.reason || accessesResult);
-      }
+        if (accessesResult.status === 'fulfilled') {
+          result.accesses = convertAccessForForm(accessesResult.value);
+        } else {
+          showError('Не удалось загрузить доступы', accessesResult.reason || accessesResult);
+        }
 
-      if (flatParamsResult.status === 'fulfilled') {
-        result.roomInfo = flatParamsResult.value as RoomVO;
-        if ((result.roomInfo.ownerIds || []).length) {
-          const loadedOwnerId = result.roomInfo.ownerIds?.length ? result.roomInfo.ownerIds[0] : 0;
-          if (loadedOwnerId) {
-            loadOwnerInfo(loadedOwnerId, ({ info, rooms }: OwnerFullInfo) => {
+        if (flatParamsResult.status === 'fulfilled') {
+          result.roomInfo = flatParamsResult.value as RoomVO;
+          if ((result.roomInfo.ownerIds || []).length) {
+            const loadedOwnerId = result.roomInfo.ownerIds?.length ? result.roomInfo.ownerIds[0] : 0;
+            if (loadedOwnerId) {
+              loadOwnerInfo(loadedOwnerId, ({
+                                              info,
+                                              rooms
+                                            }: OwnerFullInfo) => {
+                hideLoading();
+                result.ownerProperty = rooms;
+                setOwnerInfo(info);
+                setRoomInfo(result);
+              });
+            } else {
               hideLoading();
-              result.ownerProperty = rooms;
-              setOwnerInfo(info);
               setRoomInfo(result);
-            });
+            }
           } else {
             hideLoading();
             setRoomInfo(result);
           }
         } else {
           hideLoading();
+          showError('Не удалось загрузить информацию о квартире', flatParamsResult.reason || flatParamsResult);
           setRoomInfo(result);
         }
-      } else {
-        hideLoading();
-        showError('Не удалось загрузить информацию о квартире', flatParamsResult.reason || flatParamsResult);
-        setRoomInfo(result);
-      }
-    });
+      });
   }, []);
 
   useEffect(() => {
@@ -158,5 +181,13 @@ export function useRoomInfo({ roomId: initialRoomId, allAreas }: { roomId: numbe
     }
   }, [initialRoomId]);
 
-  return { roomInfo, ownerId, loading, grantedAreas, loadRoomFullInfo, loadAccesses };
+  return {
+    roomInfo,
+    ownerId,
+    loading,
+    isLoadingAccesses,
+    grantedAreas,
+    loadRoomFullInfo,
+    loadAccesses
+  };
 }

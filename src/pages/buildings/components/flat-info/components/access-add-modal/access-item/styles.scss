@@ -1,0 +1,50 @@
+@import 'colors';
+
+.access-item-form {
+  padding-top: 4px;
+
+  .areas {
+
+  }
+
+  .user-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 1em;
+
+    .label-container {
+      flex: 1 0 auto;
+    }
+
+    .ant-input-affix-wrapper {
+      width: 220px;
+    }
+
+    .tenant-container {
+      padding-left: 6px;
+      padding-top: 4px;
+    }
+
+
+  }
+
+  .cars {
+    min-width: 500px;
+  }
+
+  &.is-edit {
+    //todo
+    .phone-number {
+      width: 150px;
+      min-width: 150px;
+
+      > .ant-typography {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 32px;
+      }
+
+    }
+  }
+}
+

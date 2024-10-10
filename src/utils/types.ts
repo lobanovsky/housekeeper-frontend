@@ -54,6 +54,7 @@ export interface CarValues extends CarRequest {
 
 export interface AccessValues extends Omit<AccessResponse, 'cars'> {
   cars: CarValues[],
+  areaIds: number[],
+  areaPlaces?: Record<number, string>,
   isValid?: boolean;
 }
-

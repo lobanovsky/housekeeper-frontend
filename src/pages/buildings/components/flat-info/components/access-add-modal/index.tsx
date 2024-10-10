@@ -1,170 +1,137 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button } from 'antd';
-import { CloseOutlined, PlusOutlined, SaveOutlined } from '@ant-design/icons';
-import { AccessService, AreaEntity, CreateAccessRequest, UpdateAccessRequest } from 'backend/services/backend';
+import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
+import { AccessService, UpdateAccessRequest } from 'backend/services/backend';
 import Loading from 'components/loading';
-import { useLoading } from 'hooks/use-loading';
 import { CarNumberRegex, PhoneRegexes } from 'pages/buildings/constants';
-import { AreaNames } from 'utils/constants';
-import { showModal } from 'utils/modals';
-import { showError } from 'utils/notifications';
-import { getRandomId } from 'utils/utils';
-import { AccessValues, CarValues, EmptyFunction } from 'utils/types';
-import { convertCars } from './utils';
-import { PhoneItem } from './phone-item';
+import { getRandomId, showError, showModal, useLoading } from 'utils';
+import { AccessValues, EmptyFunction } from 'utils/types';
+import { IAccessContext } from '../../context/AccessContext';
+import { convertAccessFromBackendToForm, convertCars } from './utils';
+import { AccessFieldValue, AccessItemForm } from './access-item';
 import './styles.scss';
 
-interface AccessFormProps {
-  accesses: AccessValues[],
-  areas: AreaEntity[],
-  reloadInfo: EmptyFunction,
-  ownerId: number
+interface AccessFormProps extends IAccessContext {
+  access?: AccessValues,
 }
 
 function AddAccessForm(props: AccessFormProps & { closeModal: EmptyFunction, }) {
   const {
-    reloadInfo, closeModal, ownerId, areas: allAreas, accesses: initialAccesses = []
+    reloadFlatInfo,
+    closeModal,
+    ownerId,
+    grantedAreas,
+    access: initialAccess = {
+      areaPlaces: {},
+      cars: [],
+      areaIds: [],
+      accessId: 0,
+      areas: []
+    }
   } = props;
 
-  const isEdit = initialAccesses.length > 0;
+  const isEdit = !!initialAccess?.accessId;
 
   const [loading, showLoading, hideLoading] = useLoading();
-  // const [selectedAreaIds, setSelectedAreas] = useState<number[]>((accessInfo?.areas || []).map(({ id = 0 }) => id));
 
-  const [accesses, setAccesses] = useState<AccessValues[]>(initialAccesses.length ? [...initialAccesses] : [{
-    accessId: getRandomId(),
-    cars: []
-  }]);
+  const [{
+    phoneNumber = '',
+    phoneLabel = '',
+    cars = [],
+    areaIds = [],
+    tenant = false,
+    accessId = 0,
+    areaPlaces = {}
+  }, setAccessValues] = useState<AccessValues>(convertAccessFromBackendToForm(initialAccess));
 
-  const areaOptions = useMemo(() => allAreas.map(({ id = 0 }) => ({
-    value: id,
-    label: (
-      <span>
-          {AreaNames[id]?.title || id}
-        {AreaNames[id]?.icon ? <span className={`icon type-${id}`}>{AreaNames[id]?.icon}</span> : ''}
-      </span>
-    )
-  })), [allAreas.length]);
+  const accessState = useMemo(() => {
+    const isValidAccess = !!areaIds.length
+      && (isEdit || PhoneRegexes.some((regex) => regex.test(phoneNumber)))
+      && cars.every(({ plateNumber = '' }) => CarNumberRegex.test(plateNumber));
 
-  const accessesState = useMemo(() => {
-    // const isValidAreas = !!selectedAreaIds.length;
-    const isValidAreas = true;
-    const isValidAccesses = accesses.every(({
-                                              phoneNumber = '',
-                                              cars = []
-                                            }) => PhoneRegexes.some((regex) => regex.test(phoneNumber))
-      && cars.every(({ plateNumber = '' }) => CarNumberRegex.test(plateNumber)));
-
+    // todo проверять строку areaPlaces на валидность
     return ({
       changeId: getRandomId(),
-      isValid: isValidAreas && isValidAccesses
+      isValid: isValidAccess
     });
   }, [
-    accesses.map((
-      {
-        phoneNumber, phoneLabel, cars = []
-      }
-    ) => `${phoneNumber}-${phoneLabel}-${(cars || []).map((
-      {
-        id = 0,
-        plateNumber = '',
-        description = ''
-      }
-    ) => `${id}-${plateNumber}-${description}`).join(',')}`).join(';')]);
+    isEdit,
+    areaIds.length,
+    `${phoneNumber}-${phoneLabel}-${(cars || []).map(
+      ({
+         id = 0,
+         plateNumber = '',
+         description = ''
+       }) => `${id}-${plateNumber}-${description}`
+    )
+      .join(',')}`]);
 
-  const addEmptyRow = useCallback(() => {
-    // @ts-ignore
-    setAccesses((prev) => prev.concat([{ id: getRandomId(), phoneNumber: '', cars: [] }]));
-  }, []);
-
-  const onChangeAccess = useCallback((accessId: number, fieldName: keyof AccessValues, value: string | boolean | CarValues[]) => {
-    const accessIndex = accesses.findIndex((item) => item.accessId === accessId);
-    if (accessIndex < 0) {
-      return;
-    }
-
-    setAccesses((prev) => {
-      const newAccesses = [...prev];
-      // @ts-ignore
-      newAccesses[accessIndex][fieldName] = value;
-      return newAccesses;
-    });
-  }, [accessesState.changeId]);
-
-  const onChangeAreas = useCallback((checkedValues: number[]) => {
-    // setSelectedAreas(checkedValues);
-  }, []);
+  const onChangeAccess = useCallback((fieldName: keyof AccessValues, value: AccessFieldValue) => {
+    setAccessValues((prev) => ({
+      ...prev,
+      [fieldName]: value
+    }));
+  }, [accessState.changeId]);
 
   const saveAccess = useCallback(() => {
-    let promise;
+    // todo взять места из мапы areaPlaces только по выбранным ариям
+    // todo проверять строку на валидность
+    const phoneNumberOnlyDigits = phoneNumber.replace(/\D/g, '');
+    const dataToSave: UpdateAccessRequest = {
+      phoneLabel,
+      tenant,
+      areas: areaIds.map((areaId) => ({ areaId })),
+      cars: convertCars(cars || [])
+    };
 
-    if (isEdit) {
-      const access = accesses[0];
-      const dataToSave: UpdateAccessRequest = {
-        phoneLabel: access.phoneLabel,
-        // tenant: access.tenant || false,
-        // todo всё поправить
-        // areas: selectedAreaIds.map((id) => ({ id })),
-        cars: convertCars(access.cars || [])
-      };
-
-      promise = AccessService.updateAccess({ accessId: access.accessId || 0, body: dataToSave });
-    } else {
-      // todo всё поправить
-      const dataToSave: CreateAccessRequest = {
-        ownerId,
-        accesses: accesses.map((phone) => ({
-          // todo арии
-          areas: [{ areaId: 1 }, { areaId: 2 }],
-          // areas: selectedAreaIds.map((id) => ({ id })),
-          phoneNumber: phone.phoneNumber,
-          contactLabel: phone.phoneLabel,
-          cars: convertCars(phone.cars || [])
-        }))
-      };
-
-      promise = AccessService.createAccess({ body: dataToSave });
-    }
+    const promise = isEdit
+      ? AccessService.updateAccess({
+        accessId,
+        body: dataToSave
+      }) : AccessService.createAccess({
+        body: {
+          ownerId,
+          accesses: [{
+            ...dataToSave,
+            phoneNumber: phoneNumberOnlyDigits
+          }]
+        }
+      });
 
     showLoading();
     promise
       .then(() => {
         closeModal();
-        reloadInfo();
+        reloadFlatInfo();
       })
       .catch((e) => {
         hideLoading();
         showError('Не удалось сохранить доступ', e);
       });
   }, [
-    reloadInfo,
-    accessesState.changeId
+    reloadFlatInfo,
+    accessState.changeId
   ]);
 
   return (
     <div className="access-add-form">
       {loading && <Loading />}
-      <div className="sub-header areas">Куда</div>
-      {/* @ts-ignore */}
-      {/* <Checkbox.Group value={selectedAreaIds} onChange={onChangeAreas} options={areaOptions} /> */}
-      <div className="sub-header phones">Кому</div>
-      {accesses.map((item) => (
-        <PhoneItem
-          key={item.accessId}
-          isEdit={isEdit}
-          access={item}
-          onChangeAccess={onChangeAccess}
-        />
-      ))}
-      {!isEdit
-        && (
-          <Button type="link" className="add-btn" size="small" onClick={addEmptyRow}>
-            <PlusOutlined />
-            добавить телефон
-          </Button>
-        )}
+      <AccessItemForm
+        key={accessId}
+        isEdit={isEdit}
+        onChangeAccess={onChangeAccess}
+        grantedAreas={grantedAreas}
+        access={{
+          phoneNumber,
+          phoneLabel,
+          cars,
+          areaIds,
+          tenant,
+          accessId
+        }}
+      />
       <div className="footer">
-        <Button type="primary" onClick={saveAccess} disabled={loading || !accessesState.isValid}>
+        <Button type="primary" onClick={saveAccess} disabled={loading || !accessState.isValid}>
           <SaveOutlined />
           Сохранить
         </Button>
@@ -179,7 +146,7 @@ function AddAccessForm(props: AccessFormProps & { closeModal: EmptyFunction, }) 
 
 export const showAddAccessItemModal = (props: AccessFormProps) => {
   showModal({
-    width: 1000,
+    width: 800,
     className: 'phone-add-modal',
     // todo выводить номер кв или мм
     title: 'Доступы',

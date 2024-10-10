@@ -67,16 +67,21 @@ export const summRenderer = (amount: number | string, options = {}) => {
 };
 
 export const phoneNumberRenderer = (phoneStr: string = '') => {
-  if (!PhoneBackendRegex.test(phoneStr)) {
-    return '';
+  const phoneOnlyDigits = phoneStr.replace(/\D/g, '');
+  if (!PhoneBackendRegex.test(phoneOnlyDigits)) {
+    return phoneStr;
   }
 
   // @ts-ignore
-  const { groups = {} } = PhoneDisplayRegex.exec(phoneStr);
-  const { code = '', ...otherGroups } = groups;
+  const { groups = {} } = PhoneDisplayRegex.exec(phoneOnlyDigits);
+  const {
+    code = '',
+    ...otherGroups
+  } = groups;
   if (!code) {
     return '';
   }
 
-  return `+7 (${code}) ${Object.values(otherGroups).join('-')}`;
+  return `+7 (${code}) ${Object.values(otherGroups)
+    .join('-')}`;
 };

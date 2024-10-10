@@ -8,44 +8,54 @@ import { RoomTypeNames } from 'utils/constants';
 import { AccessItem } from './components/access-item';
 import { showAddAccessItemModal } from './components/access-add-modal';
 import { FlatOwnerInfo } from './components/owner-property';
-import { AccessContext } from './context/AccessContext';
+import { AccessContext, IAccessContext } from './context/AccessContext';
 import { useRoomInfo } from './hooks/use-room-info';
 import './styles.scss';
+import { getRandomId } from '../../../../utils';
+import Loading from '../../../../components/loading';
 
 export function FlatInfo() {
   const { roomId: selectedRoomStr = '' } = useParams();
   const { areas } = useContext(DictionariesContext);
 
   const {
-    roomInfo: { roomInfo, accesses, ownerProperty },
+    roomInfo: {
+      roomInfo,
+      accesses,
+      ownerProperty
+    },
     loadRoomFullInfo,
+    loadAccesses,
     grantedAreas,
     ownerId,
-    loading
-  } = useRoomInfo({ roomId: parseInt(selectedRoomStr, 10), allAreas: areas });
+    loading,
+    isLoadingAccesses
+  } = useRoomInfo({
+    roomId: parseInt(selectedRoomStr, 10),
+    allAreas: areas
+  });
 
   const reloadInfo = useCallback(() => {
     const parsedRoomId = parseInt(selectedRoomStr, 10);
-    loadRoomFullInfo(parsedRoomId);
-  }, [loadRoomFullInfo, selectedRoomStr]);
+    loadAccesses(parsedRoomId);
+  }, [loadAccesses, selectedRoomStr]);
 
-  const flatContextValue = useMemo(
+  const flatContextState = useMemo<{ changeId: number, value: IAccessContext }>(
     () => ({
-      ownerId,
-      flatNumber: roomInfo.number || '',
-      reloadFlatInfo: reloadInfo
+      changeId: getRandomId(),
+      value: {
+        ownerId,
+        reloadFlatInfo: reloadInfo,
+        grantedAreas
+      }
     }),
-    [reloadInfo, roomInfo.number, ownerId]
+    [reloadInfo, roomInfo.number, ownerId, grantedAreas.map((area) => area.id)
+      .join(',')]
   );
 
   const showAccessAddModal = useCallback(() => {
-    showAddAccessItemModal({
-      accesses: [],
-      reloadInfo,
-      ownerId,
-      areas
-    });
-  }, [roomInfo.number, ownerId, reloadInfo]);
+    showAddAccessItemModal(flatContextState.value);
+  }, [flatContextState.changeId]);
 
   useEffect(() => {
     const parsedRoomId = parseInt(selectedRoomStr, 10);
@@ -53,7 +63,7 @@ export function FlatInfo() {
   }, [selectedRoomStr]);
 
   return (
-    <AccessContext.Provider value={flatContextValue}>
+    <AccessContext.Provider value={flatContextState.value}>
       <Card
         size="small"
         className="flat-info-card"
@@ -76,6 +86,7 @@ export function FlatInfo() {
           <FlatOwnerInfo roomInfo={roomInfo} ownerProperties={ownerProperty} />
           {!loading && (
             <div className="flat-accesses">
+              {isLoadingAccesses && <Loading />}
               <div className="access-header">
                 <Typography.Title level={5}>Доступы</Typography.Title>
                 {grantedAreas.length ? (
