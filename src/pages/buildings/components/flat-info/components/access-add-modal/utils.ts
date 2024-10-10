@@ -3,7 +3,7 @@ import { CarNumberRegex } from 'pages/buildings/constants';
 import { AccessValues, CarValues } from 'utils/types';
 import { getRandomId } from '../../../../../../utils';
 
-export const convertCars = (cars: CarValues[]): CarRequest[] => cars
+export const convertCarsForBackend = (cars: CarValues[]): CarRequest[] => cars
   .filter(({ plateNumber = '' }) => CarNumberRegex.test(plateNumber))
   .map(({
           plateNumber = '',
@@ -14,6 +14,17 @@ export const convertCars = (cars: CarValues[]): CarRequest[] => cars
       description
     };
     return car;
+  });
+
+export const convertAreasForBackend = (areaIds: number[], areaPlacesMap: Record<number, string>) => areaIds
+  .map((areaId) => {
+    const selectedPlaces = (areaPlacesMap[areaId] || '');
+    const placeNumbers = selectedPlaces.split(', ')
+      .filter((placeStr) => /^\d{1,3}$/.test(placeStr));
+    return ({
+      areaId,
+      places: placeNumbers
+    });
   });
 
 export const convertAccessFromBackendToForm = (access: AccessValues = {

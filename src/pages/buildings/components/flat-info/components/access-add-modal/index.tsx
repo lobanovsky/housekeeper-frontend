@@ -7,7 +7,7 @@ import { CarNumberRegex, PhoneRegexes } from 'pages/buildings/constants';
 import { getRandomId, showError, showModal, useLoading } from 'utils';
 import { AccessValues, EmptyFunction } from 'utils/types';
 import { IAccessContext } from '../../context/AccessContext';
-import { convertAccessFromBackendToForm, convertCars } from './utils';
+import { convertAccessFromBackendToForm, convertAreasForBackend, convertCarsForBackend } from './utils';
 import { AccessFieldValue, AccessItemForm } from './access-item';
 import './styles.scss';
 
@@ -31,7 +31,6 @@ function AddAccessForm(props: AccessFormProps & { closeModal: EmptyFunction, }) 
   } = props;
 
   const isEdit = !!initialAccess?.accessId;
-
   const [loading, showLoading, hideLoading] = useLoading();
 
   const [{
@@ -74,14 +73,12 @@ function AddAccessForm(props: AccessFormProps & { closeModal: EmptyFunction, }) 
   }, [accessState.changeId]);
 
   const saveAccess = useCallback(() => {
-    // todo взять места из мапы areaPlaces только по выбранным ариям
-    // todo проверять строку на валидность
     const phoneNumberOnlyDigits = phoneNumber.replace(/\D/g, '');
     const dataToSave: UpdateAccessRequest = {
       phoneLabel,
       tenant,
-      areas: areaIds.map((areaId) => ({ areaId })),
-      cars: convertCars(cars || [])
+      areas: convertAreasForBackend(areaIds, areaPlaces),
+      cars: convertCarsForBackend(cars || [])
     };
 
     const promise = isEdit

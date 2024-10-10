@@ -24,7 +24,18 @@ export function AccessItem({ access }: { access: AccessResponse }) {
     ...access,
     areaIds: (access.areas || []).map(({ areaId = 0 }) => areaId),
     cars: addRandomIdToData<CarResponse>(access.cars || [])
-  }), [access.phoneNumber]);
+  }), [access.phoneNumber,
+    access.tenant,
+    access.phoneLabel,
+    (access.areas || [])
+      .map((area) => `${area.areaId}-${(area.places || []).join(',')}`)
+      .join('-'),
+    (access.cars || [])
+      .map(({
+              plateNumber = '',
+              description = ''
+            }) => `${plateNumber}-${description}`)
+      .join(',')]);
 
   const {
     accessId = 0,

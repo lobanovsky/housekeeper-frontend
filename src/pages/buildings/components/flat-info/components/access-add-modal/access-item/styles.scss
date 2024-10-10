@@ -16,9 +16,14 @@
       flex: 1 0 auto;
     }
 
-    .ant-input-affix-wrapper {
+    .phone-number {
       width: 220px;
+
+      .ant-input-affix-wrapper {
+        width: 100%;
+      }
     }
+
 
     .tenant-container {
       padding-left: 6px;
@@ -33,10 +38,9 @@
   }
 
   &.is-edit {
-    //todo
     .phone-number {
-      width: 150px;
-      min-width: 150px;
+      width: 180px;
+      min-width: 180px;
 
       > .ant-typography {
         font-weight: 500;

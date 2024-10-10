@@ -1579,6 +1579,9 @@ export interface CarResponse {
 
   /**  */
   description?: string;
+
+  /**  */
+  active?: boolean;
 }
 
 export interface RoomFilter {
@@ -1603,16 +1606,16 @@ export interface RoomFilter {
 
 export interface PageRoomVO {
   /**  */
-  totalPages?: number;
-
-  /**  */
   totalElements?: number;
 
   /**  */
-  pageable?: PageableObject;
+  totalPages?: number;
 
   /**  */
   numberOfElements?: number;
+
+  /**  */
+  pageable?: PageableObject;
 
   /**  */
   size?: number;
@@ -1781,16 +1784,16 @@ export interface RangeRequest {
 
 export interface PagePaymentVO {
   /**  */
-  totalPages?: number;
-
-  /**  */
   totalElements?: number;
 
   /**  */
-  pageable?: PageableObject;
+  totalPages?: number;
 
   /**  */
   numberOfElements?: number;
+
+  /**  */
+  pageable?: PageableObject;
 
   /**  */
   size?: number;
@@ -2006,16 +2009,16 @@ export interface LogEntryResponse {
 
 export interface PageLogEntryResponse {
   /**  */
-  totalPages?: number;
-
-  /**  */
   totalElements?: number;
 
   /**  */
-  pageable?: PageableObject;
+  totalPages?: number;
 
   /**  */
   numberOfElements?: number;
+
+  /**  */
+  pageable?: PageableObject;
 
   /**  */
   size?: number;
@@ -2077,16 +2080,16 @@ export interface FileVO {
 
 export interface PageFileVO {
   /**  */
-  totalPages?: number;
-
-  /**  */
   totalElements?: number;
 
   /**  */
-  pageable?: PageableObject;
+  totalPages?: number;
 
   /**  */
   numberOfElements?: number;
+
+  /**  */
+  pageable?: PageableObject;
 
   /**  */
   size?: number;
