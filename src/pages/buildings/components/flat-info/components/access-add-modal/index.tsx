@@ -125,6 +125,7 @@ function AddAccessForm(props: AccessFormProps & { closeModal: EmptyFunction, }) 
           phoneNumber,
           phoneLabel,
           cars,
+          areaPlaces,
           areaIds,
           tenant,
           accessId

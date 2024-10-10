@@ -6,11 +6,11 @@ import { CheckboxValueType } from 'antd/es/checkbox/Group';
 
 import { AreaEntity } from 'backend/services/backend';
 import { AreaNames } from 'utils/constants';
+import { phoneNumberRenderer } from 'utils/renderers';
 import { AccessValues, CarValues } from 'utils/types';
 import { getRandomId } from 'utils/utils';
 import { AccessItemCarList } from './cars-list';
 import './styles.scss';
-import { phoneNumberRenderer } from '../../../../../../../utils/renderers';
 
 export type AccessFieldValue = string | boolean | number[] | CarValues[];
 
@@ -30,6 +30,7 @@ export function AccessItemForm({
                                    phoneNumber,
                                    areaIds = [],
                                    phoneLabel,
+                                   areaPlaces = {},
                                    tenant,
                                    accessId
                                  }
