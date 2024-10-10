@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from 'react';
 import { MaskedInput } from 'antd-mask-input';
 import { Checkbox, Input, Typography } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { CheckboxValueType } from 'antd/es/checkbox/Group';
 
 import { AreaEntity } from 'backend/services/backend';
 import { AreaNames } from 'utils/constants';
@@ -66,8 +65,8 @@ export function AccessItemForm({
     onChangeAccess('phoneLabel', value);
   }, [onChangeAccess]);
 
-  const onChangeAreas = useCallback((checkedValues: CheckboxValueType[]) => {
-    onChangeAccess('areaIds', checkedValues as number[]);
+  const onChangeAreas = useCallback((checkedValues: number[]) => {
+    onChangeAccess('areaIds', checkedValues);
   }, []);
 
   const onChangeCar = useCallback((changedCar: CarValues) => {
@@ -101,6 +100,7 @@ export function AccessItemForm({
     <div className={`access-item-form ${isEdit ? 'is-edit' : ''}`}>
       <div className="areas">
         <Typography.Title level={5}>Куда</Typography.Title>
+        { /* @ts-ignore */}
         <Checkbox.Group value={areaIds} onChange={onChangeAreas} options={areaOptions} />
       </div>
       <Typography.Title level={5}>Кому</Typography.Title>
