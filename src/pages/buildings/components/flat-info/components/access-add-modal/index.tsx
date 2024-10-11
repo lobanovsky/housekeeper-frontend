@@ -55,15 +55,18 @@ function AddAccessForm(props: AccessFormProps & { closeModal: EmptyFunction, }) 
     });
   }, [
     isEdit,
+    tenant,
+    phoneNumber,
+    phoneLabel,
     areaIds.length,
-    `${phoneNumber}-${phoneLabel}-${(cars || []).map(
+    (cars || []).map(
       ({
          id = 0,
          plateNumber = '',
          description = ''
        }) => `${id}-${plateNumber}-${description}`
     )
-      .join(',')}`]);
+      .join(',')]);
 
   const onChangeAccess = useCallback((fieldName: keyof AccessValues, value: AccessFieldValue) => {
     setAccessValues((prev) => ({
