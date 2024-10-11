@@ -7,16 +7,19 @@ import { IRequestOptions } from '../backend/services/backend';
 export interface RemoteDataParams<T, OutputT> {
   errorMsg?: string,
   dataConverter?: (data: T) => OutputT,
+  defaultShowLoading?: boolean
 }
 
 function useRemoteData<T, OutputT = T>(loader: (options?: IRequestOptions) => Promise<T>, {
   errorMsg = 'Не удалось загрузить данные',
-  dataConverter = undefined,
+  defaultShowLoading = false,
+  dataConverter = undefined
 }: RemoteDataParams<T, OutputT> = {
   errorMsg: 'Не удалось загрузить данные',
-  dataConverter: undefined,
+  defaultShowLoading: false,
+  dataConverter: undefined
 }): [OutputT | null, boolean, () => void] {
-  const [loading, showLoading, hideLoading] = useLoading();
+  const [loading, showLoading, hideLoading] = useLoading(defaultShowLoading);
   const [data, setData] = useState<OutputT | null>(null);
 
   const loadData = useCallback(() => {

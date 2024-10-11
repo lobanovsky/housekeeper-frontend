@@ -8,7 +8,7 @@ import { getRandomId, showError, showModal, useLoading } from 'utils';
 import { AccessValues, EmptyFunction } from 'utils/types';
 import { IAccessContext } from '../../context/AccessContext';
 import { convertAccessFromBackendToForm, convertAreasForBackend, convertCarsForBackend } from './utils';
-import { AccessFieldValue, AccessItemForm } from './access-item';
+import { AccessFieldValue, AccessItemForm } from './access-item-form';
 import './styles.scss';
 
 interface AccessFormProps extends IAccessContext {

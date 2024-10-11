@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react';
-import { DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
-import { Button, Popconfirm } from 'antd';
+import { DeleteOutlined, EditOutlined, InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Button, Popconfirm, Popover } from 'antd';
 import { AccessResponse, CarResponse } from 'backend/services/backend';
 import { CarFrontIcon } from 'icons/car_front';
 import { LetterAIcon } from 'icons/letter_a';
@@ -12,19 +12,41 @@ import { AccessContext } from '../../context/AccessContext';
 import './styles.scss';
 import { phoneNumberRenderer } from '../../../../../../utils/renderers';
 import { AccessValues } from '../../../../../../utils/types';
+import { CarGateLogs } from './gate-logs';
 
 export function AccessItem({ access }: { access: AccessResponse }) {
-  const contextValue = useContext(AccessContext);
   const {
     reloadFlatInfo,
     grantedAreas
-  } = contextValue;
+  } = useContext(AccessContext);
+
+  const {
+    isDeleting,
+    deleteAccessItem
+  } = useAccessItemCRUD({
+    accessId: access.accessId || 0,
+    onFinish: reloadFlatInfo
+  });
+
+  const {
+    accessId = 0,
+    phoneLabel = '',
+    phoneNumber,
+    areas: accessAreas = [],
+    cars = []
+  } = access;
+
+  const sortedAreas = useMemo(
+    () => accessAreas.sort((a1, a2) => (a1.areaId || 0) - (a2.areaId || 0)),
+    [accessAreas.length]
+  );
 
   const accessValues = useMemo<AccessValues>(() => ({
     ...access,
     areaIds: (access.areas || []).map(({ areaId = 0 }) => areaId),
     cars: addRandomIdToData<CarResponse>(access.cars || [])
-  }), [access.phoneNumber,
+  }), [
+    access.phoneNumber,
     access.tenant,
     access.phoneLabel,
     (access.areas || [])
@@ -37,31 +59,20 @@ export function AccessItem({ access }: { access: AccessResponse }) {
             }) => `${plateNumber}-${description}`)
       .join(',')]);
 
-  const {
-    accessId = 0,
-    phoneLabel = '',
-    phoneNumber,
-    areas: infoAreas = [],
-    cars = []
-  } = access;
-
-  const sortedAreas = useMemo(
-    () => infoAreas.sort((a1, a2) => (a1.areaId || 0) - (a2.areaId || 0)),
-    [infoAreas.length]
-  );
-
-  const {
-    isDeleting,
-    deleteAccessItem
-  } = useAccessItemCRUD({
-    accessId,
-    onFinish: reloadFlatInfo
-  });
   return (
     <div className="access-item" key={accessId}>
       <div className="access-info">
         <div className="phone-and-areas">
-          <div className="phone-number">{phoneNumberRenderer(phoneNumber)}</div>
+          <div className="phone-number-container">
+            <div className="phone-number">
+              {phoneNumberRenderer(phoneNumber)}
+            </div>
+            <div className="info-icon-container">
+              <Popover destroyTooltipOnHide content={<CarGateLogs phoneNumber={phoneNumber || ''} />} trigger={['click']}>
+                <InfoCircleOutlined />
+              </Popover>
+            </div>
+          </div>
           <div className="area-icons">
             {sortedAreas.map(({
                                 areaId = 0,

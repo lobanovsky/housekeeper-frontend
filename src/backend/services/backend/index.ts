@@ -943,6 +943,28 @@ export class LogEntryControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   * Get log entry overview by phone number
+   */
+  getLastByPhoneNumber(
+    params: {
+      /**  */
+      phoneNumber: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/log-entries/overview/{phone-number}';
+      url = url.replace('{phone-number}', params['phoneNumber'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
   /**
    * Get top by flat number
    */
@@ -1606,16 +1628,16 @@ export interface RoomFilter {
 
 export interface PageRoomVO {
   /**  */
-  totalElements?: number;
-
-  /**  */
   totalPages?: number;
 
   /**  */
-  numberOfElements?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
+
+  /**  */
+  numberOfElements?: number;
 
   /**  */
   size?: number;
@@ -1784,16 +1806,16 @@ export interface RangeRequest {
 
 export interface PagePaymentVO {
   /**  */
-  totalElements?: number;
-
-  /**  */
   totalPages?: number;
 
   /**  */
-  numberOfElements?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
+
+  /**  */
+  numberOfElements?: number;
 
   /**  */
   size?: number;
@@ -2009,16 +2031,16 @@ export interface LogEntryResponse {
 
 export interface PageLogEntryResponse {
   /**  */
-  totalElements?: number;
-
-  /**  */
   totalPages?: number;
 
   /**  */
-  numberOfElements?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
+
+  /**  */
+  numberOfElements?: number;
 
   /**  */
   size?: number;
@@ -2080,16 +2102,16 @@ export interface FileVO {
 
 export interface PageFileVO {
   /**  */
-  totalElements?: number;
-
-  /**  */
   totalPages?: number;
 
   /**  */
-  numberOfElements?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
+
+  /**  */
+  numberOfElements?: number;
 
   /**  */
   size?: number;
@@ -2449,6 +2471,20 @@ export interface TopRatingResponse {
 
   /**  */
   userName?: string;
+}
+
+export interface LogEntryOverview {
+  /**  */
+  lastLogEntry?: LogEntryResponse;
+
+  /**  */
+  lastLogEntries?: LogEntryResponse[];
+
+  /**  */
+  firstLogEntry?: LogEntryResponse;
+
+  /**  */
+  totalSize?: number;
 }
 
 export interface LogEntryAccessMethodResponse {

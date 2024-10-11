@@ -1,4 +1,4 @@
-@import '../../../../../../colors';
+@import 'colors';
 
 $gray: #727272;
 $grayDark: rgba(0, 0, 0, 0.88);
@@ -88,13 +88,43 @@ $grayDark: rgba(0, 0, 0, 0.88);
       }
     }
 
-    .phone-number {
-      font-size: 16px;
-      line-height: 16px;
-      //color: $antd-blue-active;
-      font-weight: 500;
-      position: relative;
-      width: 158px;
+    .phone-number-container {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      width: 180px;
+
+      .phone-number {
+        font-size: 16px;
+        line-height: 16px;
+        font-weight: 500;
+        white-space: nowrap;
+        //width: 160px;
+      }
+
+      .info-icon-container {
+        width: 12px;
+        height: 16px;
+        line-height: 16px;
+        position: relative;
+
+        .anticon.anticon-info-circle {
+          position: absolute;
+          color: rgb(199, 199, 199);
+          right: 0;
+          top: -6px;
+          font-size: 13px;
+
+          &:hover {
+            color: $antd-blue-hover;
+          }
+
+          &:active {
+            color: $antd-blue;
+          }
+        }
+      }
+
 
       &.tenant {
         color: #c86405;
