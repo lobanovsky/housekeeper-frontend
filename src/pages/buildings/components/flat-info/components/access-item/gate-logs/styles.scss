@@ -1,3 +1,5 @@
+@import 'colors';
+
 .ant-popover {
   .car-logs {
     min-width: 320px;
@@ -9,6 +11,16 @@
       .label {
         font-weight: 500;
         margin-right: 6px;
+      }
+
+      .date {
+        &.empty {
+          color: gray;
+        }
+
+        &.outdated {
+          color: $red;
+        }
       }
 
       &:not(:last-child) {

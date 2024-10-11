@@ -2,8 +2,14 @@ import React, { useCallback } from 'react';
 import Loading from 'components/loading';
 import useRemoteData from 'hooks/use-remote-data';
 import { GateService, LogEntryOverview, LogEntryResponse } from 'backend/services/backend';
-import { dateTimeRenderer } from 'utils/renderers';
 import './styles.scss';
+import dayjs from 'dayjs';
+
+const today = dayjs();
+const isOutdatedEntry = (dateTime: string = '') => {
+  const monthDif = dateTime ? today.diff(dateTime, 'month') : 0;
+  return dateTime && monthDif > 3;
+};
 
 const renderDateValue = ({
                            dateTime = '',
@@ -12,9 +18,10 @@ const renderDateValue = ({
   dateTime: '',
   id: 0,
   gateId: 0
-}) => (
-  <span className={`date ${!dateTime ? 'empty' : ''}`}>
-  {dateTime ? dateTimeRenderer(dateTime) : ' - '}
+}, checkForOutdated = false) => (
+  <span className={`date ${!dateTime ? 'empty' : ''} ${checkForOutdated && isOutdatedEntry(dateTime) ? 'outdated' : ''}`}>
+  {dateTime ? dayjs(dateTime)
+    .format('LLLL') : ' - '}
     {!!(dateTime && gateName) && ` (${gateName})`}
   </span>
 );
@@ -30,7 +37,7 @@ export function CarGateLogs({ phoneNumber }: { phoneNumber: string }) {
         <>
           <div className="field last-entry">
             <span className="label">Последний заезд:</span>
-            {renderDateValue(log?.lastLogEntry)}
+            {renderDateValue(log?.lastLogEntry, true)}
           </div>
           <div className="field last-entries">
             <div className="label">История въездов:</div>
@@ -39,6 +46,10 @@ export function CarGateLogs({ phoneNumber }: { phoneNumber: string }) {
           <div className="field first-entry">
             <span className="label">Первый заезд:</span>
             {renderDateValue(log?.firstLogEntry)}
+          </div>
+          <div className="field total">
+            <span className="label">Всего заездов:</span>
+            {log?.totalSize || 0}
           </div>
         </>
       )}
