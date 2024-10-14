@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Button, List } from 'antd';
+import { Button, List, Tooltip } from 'antd';
 import { DownloadOutlined, LoadingOutlined } from '@ant-design/icons';
 import useRemoteData from 'hooks/use-remote-data';
 import { AreaEntity, AreaService } from 'backend/services/backend';
@@ -17,25 +17,39 @@ function DownloadButton({ areaId }: { areaId: number }) {
     }
     showExportLoading();
     downloadFile({
-      url: `/access/export/${areaId}`,
+      url: `/access/export/eldes/${areaId}`,
       onFinish: hideExportLoading
     });
   }, [areaId]);
 
   return (
-    <Button
-      type="link"
-      onClick={downloadAreaAccesses}
-    >
-      {isExporting ? <LoadingOutlined /> : <DownloadOutlined />}
-    </Button>
+    <Tooltip title="Скачать файл для ELDES">
+      <Button
+        type="link"
+        onClick={downloadAreaAccesses}
+      >
+        {isExporting ? <LoadingOutlined /> : <DownloadOutlined />}
+      </Button>
+    </Tooltip>
   );
 }
 
 export function AreasList() {
   const [areas, isLoadingAreas] = useRemoteData<AreaEntity[]>(AreaService.findAll2);
+  const [loading, showLoading, hideLoading] = useLoading();
 
-  const renderAreaItem = useCallback(({ id = 0, name = '' }: AreaEntity) => (
+  const downloadExcel = useCallback(() => {
+    showLoading();
+    downloadFile({
+      url: '/access/export',
+      onFinish: hideLoading
+    });
+  }, []);
+
+  const renderAreaItem = useCallback(({
+                                        id = 0,
+                                        name = ''
+                                      }: AreaEntity) => (
     <List.Item key={id}>
       <div className="area-item" key={id}>
         <div className="icon">
@@ -50,6 +64,10 @@ export function AreasList() {
 
   return (
     <div className="areas view">
+      <Button className="export-btn" size="small" onClick={downloadExcel}>
+        {loading ? <LoadingOutlined /> : <DownloadOutlined />}
+        Выгрузить доступы в Excel
+      </Button>
       <List
         // bordered
         style={{ width: 250 }}

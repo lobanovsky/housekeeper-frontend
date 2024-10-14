@@ -400,6 +400,21 @@ export class AccessControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   * Export the accesses to excel
+   */
+  exportAccesses(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/access/export';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
   /**
    * Export the access to .csv by the area id
    */
@@ -411,7 +426,7 @@ export class AccessControllerService {
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/access/export/{area-id}';
+      let url = basePath + '/access/export/eldes/{area-id}';
       url = url.replace('{area-id}', params['areaId'] + '');
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
@@ -943,7 +958,6 @@ export class LogEntryControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Get log entry overview by phone number
    */
@@ -1663,10 +1677,10 @@ export interface PageRoomVO {
 
 export interface PageableObject {
   /**  */
-  paged?: boolean;
+  unpaged?: boolean;
 
   /**  */
-  unpaged?: boolean;
+  paged?: boolean;
 
   /**  */
   pageNumber?: number;
@@ -2561,6 +2575,9 @@ export interface AreaEntity {
 
   /**  */
   toNumber?: number;
+
+  /**  */
+  buildingIds?: number[];
 }
 
 export interface Link {

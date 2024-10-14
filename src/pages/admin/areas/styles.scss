@@ -1,4 +1,11 @@
 .areas.view {
+  position: relative;
+
+  .export-btn {
+    position: absolute;
+    left: 220px;
+    top: - 32px;
+  }
   .ant-list {
     .area-item {
       //padding: 4px 8px;
