@@ -1,0 +1,31 @@
+@import "colors";
+
+.access-item-cars {
+  margin-top: 4px;
+
+  .car {
+    display: flex;
+    align-items: center;
+
+    .car-icon {
+
+      font-size: 18px;
+
+      > svg {
+        fill: $gray;
+      }
+    }
+
+    .car-number {
+      margin-left: 4px;
+      color: $gray;
+    }
+
+    .car-description {
+      color: gray;
+      margin-left: 8px;
+      font-style: italic;
+    }
+  }
+}
+

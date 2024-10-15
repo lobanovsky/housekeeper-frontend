@@ -97,7 +97,7 @@ export function FlatInfo() {
                     onClick={showAccessAddModal}
                   >
                     <PlusOutlined />
-                    добавить
+                    {/* добавить */}
                   </Button>
                 ) : <Tooltip title="За выдачей доступов обращайтесь к администратору"><InfoCircleTwoTone twoToneColor="orange" /></Tooltip>}
               </div>

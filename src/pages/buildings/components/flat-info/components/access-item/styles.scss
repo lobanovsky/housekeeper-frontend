@@ -1,12 +1,9 @@
 @import 'colors';
 
-$gray: #727272;
-$grayDark: rgba(0, 0, 0, 0.88);
-
 .access-item {
-  padding: 2px 6px;
+  //padding: 2px 6px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 1em;
 
   &:first-child {
@@ -21,164 +18,47 @@ $grayDark: rgba(0, 0, 0, 0.88);
 
   .access-info {
     flex: 1 0 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5em;
 
-    .phone-and-areas {
-      display: flex;
-      align-items: center;
-      gap: 0.5em;
-      margin-bottom: 4px;
-
-      .area-icons {
-        flex: 1 0 auto;
-        display: inline-flex;
-        align-items: flex-start;
-
-        gap: 1.5em;
-
-        .access-icon {
-          line-height: 21px;
-          position: relative;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-
-          .tenant-icon {
-            color: red;
-            font-weight: 500;
-            position: absolute;
-            left: 12px;
-            top: -10px;
-            //color: orange;
-
-            .anticon {
-              svg {
-                color: rgba(249, 130, 17, 0.7);
-              }
-            }
-
-
-          }
-
-          .anticon {
-            font-size: 16px;
-
-            &.icon-playground {
-              color: rgb(88, 158, 116);
-              font-size: 20px;
-            }
-
-            &.parking-icon {
-              color: rgb(119, 106, 195);
-            }
-
-            &.rent-icon {
-              color: $orange;
-            }
-
-
-          }
-
-          .places {
-            font-size: 13px;
-            line-height: 14px;
-            color: rgba(60, 60, 60, 0.8);
-          }
-        }
-
-      }
-    }
-
-    .phone-number-container {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      width: 180px;
-
-      .phone-number {
-        font-size: 16px;
-        line-height: 16px;
-        font-weight: 500;
-        white-space: nowrap;
-        //width: 160px;
-      }
-
-      .info-icon-container {
-        width: 12px;
-        height: 16px;
-        line-height: 16px;
+    .access-user-info {
+      .phone-number-container {
+        margin-bottom: 6px;
         position: relative;
 
-        .anticon.anticon-info-circle {
-          position: absolute;
-          color: rgb(199, 199, 199);
-          right: 0;
-          top: -6px;
-          font-size: 13px;
+        .phone-number {
+          font-size: 16px;
+          line-height: 16px;
+          font-weight: 500;
+          white-space: nowrap;
 
           &:hover {
-            color: $antd-blue-hover;
+            color: $antd-blue;
+            cursor: pointer;
           }
 
           &:active {
-            color: $antd-blue;
-          }
-        }
-      }
-
-
-      &.tenant {
-        color: #c86405;
-        font-weight: normal;
-      }
-
-      //.rent-icon {
-      //  position: absolute;
-      //  right: 0;
-      //  top:0;
-      //  color: red;
-      //}
-    }
-
-    .phone-label {
-      //padding-top: 2px;
-      color: gray;
-      line-height: 14px;
-
-      &.has-label {
-        color: $grayDark;
-      }
-    }
-
-    .access-areas {
-      margin: 2px 0;
-
-    }
-
-    .cars {
-      margin-top: 4px;
-
-      .car {
-        display: flex;
-        align-items: center;
-
-        .car-icon {
-
-          font-size: 18px;
-
-          > svg {
-            fill: $gray;
+            color: $antd-blue-active;
           }
         }
 
-        .car-number {
-          margin-left: 4px;
-          color: $gray;
+        .tenant-icon {
+          cursor: help;
+          position: absolute;
+          font-weight: 500;
+          color: #f0851e;
+          right: -12px;
+          top: - 8px;
         }
+      }
 
-        .car-description {
-          color: gray;
-          margin-left: 8px;
-          font-style: italic;
+      .phone-label {
+        color: gray;
+        line-height: 14px;
+
+        &.has-label {
+          color: $grayDark;
         }
       }
     }
@@ -195,8 +75,6 @@ $grayDark: rgba(0, 0, 0, 0.88);
       &:not(:last-child) {
         margin-right: 0.5em;
       }
-
-      //&:not(:focus),
     }
   }
 

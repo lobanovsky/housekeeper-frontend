@@ -1,18 +1,15 @@
 import React, { useContext, useMemo } from 'react';
-import { DeleteOutlined, EditOutlined, InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Popover } from 'antd';
+import { DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Button, Popconfirm, Popover, Tooltip } from 'antd';
 import { AccessResponse, CarResponse } from 'backend/services/backend';
-import { CarFrontIcon } from 'icons/car_front';
-import { LetterAIcon } from 'icons/letter_a';
-import { AreaNames } from 'utils/constants';
 import { addRandomIdToData } from 'utils/utils';
-import { useAccessItemCRUD } from './hooks';
+import { AccessValues } from 'utils/types';
+import { phoneNumberRenderer } from 'utils/renderers';
 import { showAddAccessItemModal } from '../access-add-modal';
 import { AccessContext } from '../../context/AccessContext';
+import { AccessAreas, AccessItemCars, CarGateLogs } from './components';
+import { useAccessItemCRUD } from './hooks';
 import './styles.scss';
-import { phoneNumberRenderer } from '../../../../../../utils/renderers';
-import { AccessValues } from '../../../../../../utils/types';
-import { CarGateLogs } from './gate-logs';
 
 export function AccessItem({ access }: { access: AccessResponse }) {
   const {
@@ -29,17 +26,12 @@ export function AccessItem({ access }: { access: AccessResponse }) {
   });
 
   const {
-    accessId = 0,
     phoneLabel = '',
-    phoneNumber,
+    phoneNumber = '',
+    tenant = false,
     areas: accessAreas = [],
     cars = []
   } = access;
-
-  const sortedAreas = useMemo(
-    () => accessAreas.sort((a1, a2) => (a1.areaId || 0) - (a2.areaId || 0)),
-    [accessAreas.length]
-  );
 
   const accessValues = useMemo<AccessValues>(() => ({
     ...access,
@@ -60,48 +52,21 @@ export function AccessItem({ access }: { access: AccessResponse }) {
       .join(',')]);
 
   return (
-    <div className="access-item" key={accessId}>
+    <div className="access-item">
       <div className="access-info">
-        <div className="phone-and-areas">
+        <AccessAreas areas={accessAreas} />
+        <div className="access-user-info">
           <div className="phone-number-container">
-            <div className="phone-number">
-              {phoneNumberRenderer(phoneNumber)}
-            </div>
-            <div className="info-icon-container">
-              <Popover destroyTooltipOnHide content={<CarGateLogs phoneNumber={phoneNumber || ''} />} trigger={['click']}>
-                <InfoCircleOutlined />
-              </Popover>
-            </div>
+            <Popover destroyTooltipOnHide content={<CarGateLogs phoneNumber={phoneNumber || ''} />} trigger={['click']}>
+              <div className="phone-number">{phoneNumberRenderer(phoneNumber)}</div>
+            </Popover>
+            {/* eslint-disable-next-line react/jsx-no-undef */}
+            {tenant && <Tooltip mouseEnterDelay={0.2} title="Арендатор"><span className="tenant-icon">А</span></Tooltip>}
           </div>
-          <div className="area-icons">
-            {sortedAreas.map(({
-                                areaId = 0,
-                                places = []
-                              }) => (
-              <div key={areaId} className={`access-icon type-${areaId}`}>
-                <div className="icon">
-                  {AreaNames[areaId]?.icon || String(areaId)}
-                </div>
-                {!!access.tenant && <span className="tenant-icon"><LetterAIcon /></span>}
-                {!!places.length && <div className="places">{places.join(', ')}</div>}
-              </div>
-            ))}
-          </div>
+          {!!phoneLabel && <div className={`phone-label ${phoneLabel ? 'has-label' : ''}`}>{phoneLabel || ''}</div>}
+          <AccessItemCars cars={cars} />
+        </div>
 
-        </div>
-        {!!phoneLabel && <div className={`phone-label ${phoneLabel ? 'has-label' : ''}`}>{phoneLabel || ''}</div>}
-        <div className="cars">
-          {cars.map(({
-                       description = '',
-                       plateNumber = ''
-                     }) => (
-            <div className="car" key={plateNumber}>
-              <CarFrontIcon className="car-icon" />
-              <span className="car-number">{plateNumber}</span>
-              <span className="car-description">{description}</span>
-            </div>
-          ))}
-        </div>
       </div>
       <div className="access-actions">
         <Button

@@ -2,7 +2,8 @@ import React from 'react';
 import { HomeOutlined } from '@ant-design/icons';
 import { EnumBuildingType, EnumRoomVOType } from '../backend/services/backend';
 import { ParkingIcon } from '../icons/parking';
-import { PlaygroundIcon } from '../icons/playground';
+import { TreeFilledIcon } from '../icons/tree-filled';
+import { ParkingFilledIcon } from '../icons/parking_filled';
 
 export const IS_DEBUG = process.env.NODE_ENV === 'development';
 
@@ -16,11 +17,11 @@ type AreaInfo = {
 export const AreaNames: Record<number, AreaInfo> = {
   2: {
     title: 'Подземный паркинг',
-    icon: <ParkingIcon />
+    icon: <ParkingFilledIcon />
   },
   1: {
     title: 'Дворовая территория',
-    icon: <PlaygroundIcon />
+    icon: <TreeFilledIcon />
   }
 };
 

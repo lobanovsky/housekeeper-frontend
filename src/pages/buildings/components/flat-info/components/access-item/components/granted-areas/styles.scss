@@ -1,0 +1,38 @@
+$areasWidth: 52px;
+
+.access-item-areas {
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  width: $areasWidth;
+  gap: 6px;
+  line-height: 16px;
+  min-height: 36px;
+
+  .access-area {
+    .anticon {
+      font-size: 19px;
+
+      &.leaf-icon {
+        //color: #61a938;
+      }
+
+      &.parking-filled-icon {
+        //color: rgb(85, 120, 188);
+      }
+    }
+
+    .places {
+      text-align: center;
+
+      .place {
+        font-size: 13px;
+        line-height: 15px;
+        color: rgba(110, 110, 110, 0.8);
+      }
+
+    }
+  }
+
+}
+
