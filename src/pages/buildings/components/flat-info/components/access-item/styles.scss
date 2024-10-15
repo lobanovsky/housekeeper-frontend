@@ -28,6 +28,8 @@
         position: relative;
 
         .phone-number {
+          position: relative;
+          display: inline-block;
           font-size: 16px;
           line-height: 16px;
           font-weight: 500;
@@ -41,16 +43,19 @@
           &:active {
             color: $antd-blue-active;
           }
+
+          .tenant-icon {
+            cursor: help;
+            position: absolute;
+            font-weight: 500;
+            font-size: 13px;
+            color: #f0851e;
+            right: -11px;
+            top: - 6px;
+          }
         }
 
-        .tenant-icon {
-          cursor: help;
-          position: absolute;
-          font-weight: 500;
-          color: #f0851e;
-          right: -12px;
-          top: - 8px;
-        }
+
       }
 
       .phone-label {

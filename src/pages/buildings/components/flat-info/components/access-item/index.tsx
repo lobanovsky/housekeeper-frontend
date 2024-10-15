@@ -56,10 +56,13 @@ export function AccessItem({ access }: { access: AccessResponse }) {
         <div className="access-user-info">
           <div className="phone-number-container">
             <Popover destroyTooltipOnHide content={<CarGateLogs phoneNumber={phoneNumber || ''} />} trigger={['click']}>
-              <div className="phone-number">{phoneNumberRenderer(phoneNumber)}</div>
+              <div className="phone-number">
+                {phoneNumberRenderer(phoneNumber)}
+                {tenant && <Tooltip mouseEnterDelay={0.2} title="Арендатор"><span className="tenant-icon">А</span></Tooltip>}
+              </div>
             </Popover>
             {/* eslint-disable-next-line react/jsx-no-undef */}
-            {tenant && <Tooltip mouseEnterDelay={0.2} title="Арендатор"><span className="tenant-icon">А</span></Tooltip>}
+
           </div>
           {!!phoneLabel && <div className={`phone-label ${phoneLabel ? 'has-label' : ''}`}>{phoneLabel || ''}</div>}
           <AccessItemCars cars={cars} />
