@@ -21,7 +21,7 @@ const renderDateValue = ({
 }, checkForOutdated = false) => (
   <span className={`date ${!dateTime ? 'empty' : ''} ${checkForOutdated && isOutdatedEntry(dateTime) ? 'outdated' : ''}`}>
   {dateTime ? dayjs(dateTime)
-    .format('LLLL') : ' - '}
+    .format('LLL') : ' - '}
     {!!(dateTime && gateName) && ` (${gateName})`}
   </span>
 );
@@ -35,13 +35,20 @@ export function CarGateLogs({ phoneNumber }: { phoneNumber: string }) {
       {isLoading && <Loading />}
       {!isLoading && (
         <>
-          <div className="field last-entry">
-            <span className="label">Последний заезд:</span>
-            {renderDateValue(log?.lastLogEntry, true)}
-          </div>
+          {/* <div className="field last-entry"> */}
+          {/*   <span className="label">Последний заезд:</span> */}
+          {/*   {renderDateValue(log?.lastLogEntry, true)} */}
+          {/* </div> */}
           <div className="field last-entries">
             <div className="label">История въездов:</div>
-            {(log?.lastLogEntries || []).map((entry) => <div key={entry.id}>{renderDateValue(entry)}</div>)}
+            {(log?.lastLogEntries || []).map((entry, index) => (
+              <div
+                key={entry.id}
+                className={index === 0 ? 'last-entry' : ''}
+              >
+                {renderDateValue(entry)}
+              </div>
+            ))}
           </div>
           <div className="field first-entry">
             <span className="label">Первый заезд:</span>

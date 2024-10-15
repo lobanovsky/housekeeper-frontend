@@ -1,4 +1,4 @@
-@import '../../../../../../../../colors';
+@import 'colors';
 
 .ant-popover {
   .car-logs {
@@ -11,6 +11,10 @@
       .label {
         font-weight: 500;
         margin-right: 6px;
+      }
+
+      .last-entry {
+        color: $antd-blue-active;
       }
 
       .date {

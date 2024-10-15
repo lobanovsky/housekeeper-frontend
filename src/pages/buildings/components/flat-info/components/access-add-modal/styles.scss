@@ -1,6 +1,14 @@
 @import '../../../../../../colors';
 
 .access-add-form {
+  .ant-alert.ant-alert-info {
+    padding: 8px 12px;
+    //border-color:
+    background-color: rgba(243, 248, 251, 0.8);
+    border-color: rgba(146, 194, 238, 0.6);
+
+  }
+
   h5 {
     margin-top: 18px;
     margin-bottom: 6px;
@@ -36,7 +44,6 @@
       }
     }
   }
-
 
 
   .ant-btn-link.add-btn {

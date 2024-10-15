@@ -22,7 +22,8 @@ export function FlatInfo() {
     roomInfo: {
       roomInfo,
       accesses,
-      ownerProperty
+      ownerProperty,
+      building
     },
     loadRoomFullInfo,
     loadAccesses,
@@ -45,11 +46,20 @@ export function FlatInfo() {
       changeId: getRandomId(),
       value: {
         ownerId,
+        roomInfo,
+        building,
         reloadFlatInfo: reloadInfo,
         grantedAreas
       }
     }),
-    [reloadInfo, roomInfo.number, ownerId, grantedAreas.map((area) => area.id)
+    [
+      reloadInfo,
+      roomInfo.ownerName,
+      roomInfo.number,
+      ownerId,
+      building?.name,
+      building?.type,
+      grantedAreas.map((area) => area.id)
       .join(',')]
   );
 

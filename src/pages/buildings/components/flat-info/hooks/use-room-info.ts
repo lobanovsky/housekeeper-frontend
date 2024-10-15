@@ -3,6 +3,8 @@ import {
   AccessResponse,
   AccessService,
   AreaEntity,
+  Building,
+  BuildingService,
   CarResponse,
   OwnerEntity,
   OwnerService,
@@ -13,6 +15,7 @@ import { showError, useLoading } from 'utils';
 import { AccessValues, ServerError } from 'utils/types';
 import { addRandomIdToData } from 'utils/utils';
 import { sortPropertyByFlatType } from '../utils';
+import { EmptyBuilding } from '../../../constants';
 
 interface OwnerFullInfo {
   info: OwnerEntity,
@@ -21,6 +24,7 @@ interface OwnerFullInfo {
 
 export interface RoomFullInfo {
   roomInfo: RoomVO,
+  building: Building,
   accesses: AccessValues[],
   ownerProperty: RoomVO[]
 }
@@ -51,7 +55,8 @@ export function useRoomInfo({
   const [roomInfo, setRoomInfo] = useState<RoomFullInfo>({
     roomInfo: { id: 0 },
     accesses: [],
-    ownerProperty: []
+    ownerProperty: [],
+    building: EmptyBuilding
   });
 
   const [ownerInfo, setOwnerInfo] = useState<OwnerEntity>({
@@ -60,6 +65,8 @@ export function useRoomInfo({
     dateOfLeft: '',
     createDate: ''
   });
+
+  const [buildingInfo, setBuildingInfo] = useState<Building>({ ...EmptyBuilding });
 
   const ownerId = useMemo(() => ownerInfo?.id || 0, [ownerInfo?.id]);
 
@@ -122,6 +129,16 @@ export function useRoomInfo({
       });
   }, []);
 
+  const loadBuildingInfo = useCallback((buildingId: number) => {
+    BuildingService.findById({ id: buildingId })
+      .then((resp: Building) => {
+        setBuildingInfo(resp);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }, []);
+
   const loadRoomFullInfo = useCallback((loadRoomId: number) => {
     showLoading();
     Promise.allSettled([
@@ -135,6 +152,7 @@ export function useRoomInfo({
       .then(([flatParamsResult, accessesResult]) => {
         const result: RoomFullInfo = {
           roomInfo: { id: 0 },
+          building: { ...EmptyBuilding },
           accesses: [],
           ownerProperty: []
         };
@@ -147,6 +165,10 @@ export function useRoomInfo({
 
         if (flatParamsResult.status === 'fulfilled') {
           result.roomInfo = flatParamsResult.value as RoomVO;
+
+          if (result.roomInfo.building) {
+            loadBuildingInfo(result.roomInfo.building);
+          }
           if ((result.roomInfo.ownerIds || []).length) {
             const loadedOwnerId = result.roomInfo.ownerIds?.length ? result.roomInfo.ownerIds[0] : 0;
             if (loadedOwnerId) {
@@ -173,7 +195,7 @@ export function useRoomInfo({
           setRoomInfo(result);
         }
       });
-  }, []);
+  }, [loadBuildingInfo]);
 
   useEffect(() => {
     if (initialRoomId) {
@@ -182,7 +204,10 @@ export function useRoomInfo({
   }, [initialRoomId]);
 
   return {
-    roomInfo,
+    roomInfo: {
+      ...roomInfo,
+      building: buildingInfo
+    },
     ownerId,
     loading,
     isLoadingAccesses,

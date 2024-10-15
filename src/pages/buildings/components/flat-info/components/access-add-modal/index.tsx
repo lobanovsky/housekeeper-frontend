@@ -1,11 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button } from 'antd';
+import { Alert, Button } from 'antd';
 import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
 import { AccessService, UpdateAccessRequest } from 'backend/services/backend';
 import Loading from 'components/loading';
 import { CarNumberRegex, PhoneRegexes } from 'pages/buildings/constants';
 import { getRandomId, showError, showModal, useLoading } from 'utils';
 import { AccessValues, EmptyFunction } from 'utils/types';
+import { phoneNumberRenderer } from 'utils/renderers';
+import { RoomTypeNames } from 'utils/constants';
 import { IAccessContext } from '../../context/AccessContext';
 import { convertAccessFromBackendToForm, convertAreasForBackend, convertCarsForBackend } from './utils';
 import { AccessFieldValue, AccessItemForm } from './access-item-form';
@@ -21,6 +23,11 @@ function AddAccessForm(props: AccessFormProps & { closeModal: EmptyFunction, }) 
     closeModal,
     ownerId,
     grantedAreas,
+    roomInfo: {
+      type: roomType,
+      ownerName = '',
+      number = ''
+    },
     access: initialAccess = {
       areaPlaces: {},
       cars: [],
@@ -116,6 +123,15 @@ function AddAccessForm(props: AccessFormProps & { closeModal: EmptyFunction, }) 
   return (
     <div className="access-add-form">
       {loading && <Loading />}
+      <Alert
+        type="info"
+        description={(
+          <>
+            <span style={{ fontWeight: 500 }}>Выдаёт:&nbsp;</span>
+            {`${ownerName} (${roomType ? RoomTypeNames[roomType] : ''} ${number})`}
+          </>
+        )}
+      />
       <AccessItemForm
         key={accessId}
         isEdit={isEdit}
@@ -146,12 +162,14 @@ function AddAccessForm(props: AccessFormProps & { closeModal: EmptyFunction, }) 
 }
 
 export const showAddAccessItemModal = (props: AccessFormProps) => {
+  const { access } = props;
+
+  const isEdit = !!props.access?.accessId;
   showModal({
     width: 800,
     className: 'phone-add-modal',
-    // todo выводить номер кв или мм
-    title: 'Доступы',
-    // title: `Доступы для кв. ${props.flatNumber}`,
+    // eslint-disable-next-line max-len
+    title: isEdit ? `Доступ для ${phoneNumberRenderer(access?.phoneNumber)}${access?.phoneLabel ? ` (${access.phoneLabel})` : ''}` : 'Новый доступ',
     closable: true,
     // eslint-disable-next-line react/jsx-props-no-spreading
     getContent: ({ closeModal }) => <AddAccessForm {...props} closeModal={closeModal} />

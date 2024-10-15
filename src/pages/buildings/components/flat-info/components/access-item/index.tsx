@@ -12,17 +12,15 @@ import { useAccessItemCRUD } from './hooks';
 import './styles.scss';
 
 export function AccessItem({ access }: { access: AccessResponse }) {
-  const {
-    reloadFlatInfo,
-    grantedAreas
-  } = useContext(AccessContext);
+  const context = useContext(AccessContext);
 
   const {
     isDeleting,
     deleteAccessItem
   } = useAccessItemCRUD({
     accessId: access.accessId || 0,
-    onFinish: reloadFlatInfo
+    // eslint-disable-next-line react/destructuring-assignment
+    onFinish: context.reloadFlatInfo
   });
 
   const {
@@ -74,10 +72,8 @@ export function AccessItem({ access }: { access: AccessResponse }) {
           size="small"
           onClick={() => {
             showAddAccessItemModal({
-              reloadFlatInfo,
-              access: accessValues,
-              ownerId: access.ownerId || 0,
-              grantedAreas
+              ...context,
+              access: accessValues
             });
           }}
         >
