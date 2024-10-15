@@ -32,6 +32,22 @@ $cardWidth: 460px;
   .flat-accesses {
     padding-top: 2em;
 
+    .accesses-list {
+
+      &.same-length {
+        &.length-1 {
+          .access-item {
+            .access-info {
+              .access-item-areas {
+                width: 26px;
+              }
+
+            }
+          }
+        }
+      }
+    }
+
     .access-header {
       display: flex;
       gap: 0.5em;

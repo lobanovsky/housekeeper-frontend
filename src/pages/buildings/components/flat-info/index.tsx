@@ -60,8 +60,14 @@ export function FlatInfo() {
       building?.name,
       building?.type,
       grantedAreas.map((area) => area.id)
-      .join(',')]
+        .join(',')]
   );
+
+  const allAccessesAreasCount = useMemo<number>(() => {
+    const targetLength = accesses.length ? (accesses[0].areas?.length || 1) : 1;
+    const allLengthSame = accesses.every((a) => (a.areas || []).length === targetLength);
+    return allLengthSame ? targetLength : 0;
+  }, [accesses.map((a) => `${a.accessId}-${(a.areas || []).length}`)]);
 
   const showAccessAddModal = useCallback(() => {
     showAddAccessItemModal(flatContextState.value);
@@ -112,7 +118,7 @@ export function FlatInfo() {
                 ) : <Tooltip title="За выдачей доступов обращайтесь к администратору"><InfoCircleTwoTone twoToneColor="orange" /></Tooltip>}
               </div>
               {accesses.length ? (
-                <div className="accesses-list">
+                <div className={`accesses-list ${allAccessesAreasCount ? `same-length length-${allAccessesAreasCount}` : ''}`}>
                   {accesses.map((accessInfo: AccessResponse) => (
                     <AccessItem key={accessInfo.accessId} access={accessInfo} />
                   ))}
