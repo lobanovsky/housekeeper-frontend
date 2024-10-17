@@ -5,6 +5,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.2",
     "@nivo/pie": "^0.83.0",
+    "@reduxjs/toolkit": "^2.3.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
