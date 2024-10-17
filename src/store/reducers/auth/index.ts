@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUserData } from 'utils/types';
 
 export const EMPTY_USER: IUserData = {
@@ -26,7 +26,7 @@ export interface AuthStoreState {
   isUserLoggedIn: boolean,
 }
 
-const authSlice = createSlice<AuthStoreState, SliceCaseReducers<AuthStoreState>>({
+const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: EMPTY_USER,

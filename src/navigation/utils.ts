@@ -1,10 +1,11 @@
-import { MenuItemType, SubMenuType } from 'antd/es/menu/hooks/useItems';
 import { PermissionsConfig, RoleResponse } from '../utils/types';
 
-export const getNavigationItemByPathname = (pathname: string, item: MenuItemType | SubMenuType = {
+export type IMenuItem = { key: string, label?: string, icon?: string };
+export type MenuItemType = IMenuItem & { children?: IMenuItem[] };
+export const getNavigationItemByPathname = (pathname: string, item: MenuItemType = {
   key: '',
   children: []
-}): MenuItemType | SubMenuType | null => {
+}): MenuItemType | null => {
   let result = null;
 
   if (pathname === item.key) {
