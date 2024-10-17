@@ -57,7 +57,7 @@ function App() {
                 <Content>
                   {isUserLoggedIn && <PageHeader />}
                   <Routes>
-                    <Route path="/buildings" element={<Buildings />}>
+                    <Route path="/buildings" element={<PrivatePage><Buildings /></PrivatePage>}>
                       <Route
                         path=":buildingId"
                         element={<PrivatePage><BuildingScheme /></PrivatePage>}
@@ -89,9 +89,9 @@ function App() {
                     />
                   </Routes>
                 </Content>
-                <Footer>
-                  <div className="company-name">© 2020-2024 Бюро Лобановского</div>
-                </Footer>
+                {/* <Footer> */}
+                {/*   <div className="company-name">© 2020-2024 Бюро Лобановского</div> */}
+                {/* </Footer> */}
               </Layout>
 
             </Layout>
