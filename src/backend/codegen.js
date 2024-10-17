@@ -39,6 +39,13 @@ module.exports = async (options) => {
       to: "export class AuthentificationService"
     });
 
+    await replace({
+      files: outFile,
+      from: /export class UserService/g,
+      to: "export class UserControllerService"
+    });
+
+
 
 
     await fs.appendFile(outFile, `
@@ -73,6 +80,7 @@ export const AccessService = new AccessControllerService();
 export const AreaService = new AreaControllerService();
 export const OwnerService = new OwnerControllerService();
 export const AuthService = new AuthentificationService();
+export const UserService = new UserControllerService();
 	`, (err) => {
       if (err) {
         console.error("Append error");

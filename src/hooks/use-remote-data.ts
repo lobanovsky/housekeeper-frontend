@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useLoading } from './use-loading';
 import { showError } from '../utils/notifications';
 import { ServerError } from '../utils/types';
 import { IRequestOptions } from '../backend/services/backend';
+import { StoreState } from '../store';
 
 export interface RemoteDataParams<T, OutputT> {
   errorMsg?: string,
@@ -19,10 +21,20 @@ function useRemoteData<T, OutputT = T>(loader: (options?: IRequestOptions) => Pr
   defaultShowLoading: false,
   dataConverter: undefined
 }): [OutputT | null, boolean, () => void] {
+  const {
+    user,
+    isUserLoggedIn,
+    isCheckingToken
+  } = useSelector((state: StoreState) => state.auth);
+
   const [loading, showLoading, hideLoading] = useLoading(defaultShowLoading);
   const [data, setData] = useState<OutputT | null>(null);
 
   const loadData = useCallback(() => {
+    if (!isUserLoggedIn || isCheckingToken) {
+      return;
+    }
+
     showLoading();
     loader()
       .then((responseData: T) => {
@@ -35,11 +47,11 @@ function useRemoteData<T, OutputT = T>(loader: (options?: IRequestOptions) => Pr
         showError(errorMsg, e);
         hideLoading();
       });
-  }, [loader]);
+  }, [loader, isUserLoggedIn, isCheckingToken]);
 
   useEffect(() => {
     loadData();
-  }, [loader]);
+  }, [loadData]);
 
   return [data, loading, loadData];
 }

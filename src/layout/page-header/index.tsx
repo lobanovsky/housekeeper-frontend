@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Typography } from 'antd';
 import { useLocation } from 'react-router-dom';
-import { getNavigationItemByPathname, NavigationItems } from '../../navigation';
+import { getNavigationItemByPathname, NavigationItems } from 'navigation';
 
 function PageHeader() {
   const location = useLocation();

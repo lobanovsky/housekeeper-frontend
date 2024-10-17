@@ -1,43 +1,47 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { App as AppContext, Layout } from 'antd';
-import { HouseIcon } from 'icons/house';
 import NotificationsProvider from 'global/NotificationsProvider';
-import PageHeader from 'layout/page-header';
-import { Sider } from 'layout/sider';
-import { Buildings } from './pages/buildings';
-import useRemoteData from './hooks/use-remote-data';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from 'store/reducers/auth';
+
 import { AreaEntity, AreaService } from './backend/services/backend';
+import { DictionariesContext } from './context/AppContext';
+import { getUserData } from './pages/auth/login/helpers';
+import useRemoteData from './hooks/use-remote-data';
+import { AppHeader, PageHeader, Sider } from './layout';
+import { AppRoutes } from './navigation/routes';
+import { StoreState } from './store';
+import './App.scss';
+import { Buildings } from './pages/buildings';
+import { PrivatePage } from './navigation/routes/private-route';
 import { BuildingScheme } from './pages/buildings/components/building-scheme';
 import { FlatInfo } from './pages/buildings/components/flat-info';
-import { DictionariesContext } from './context/AppContext';
-import './App.scss';
-import { AppRoutes } from './navigation/routes';
 
 const {
-  Header,
-  Content
+  Content,
+  Footer
 } = Layout;
 
 function App() {
   const [areas] = useRemoteData<AreaEntity[]>(AreaService.findAll2, {
     errorMsg: 'Не удалось загрузить список типов доступов'
   });
-  //
-  // const dispatch = useDispatch();
-  // const {
-  //   user,
-  //   isUserLoggedIn
-  // } = useSelector((state: StoreState) => state.auth);
-  //
-  // useEffect(() => {
-  //   if (isUserLoggedIn) {
-  //     getUserData(user, dispatch);
-  //   } else {
-  //     // @ts-ignore
-  //     dispatch(logout());
-  //   }
-  // }, []);
+
+  const dispatch = useDispatch();
+  const {
+    user,
+    isUserLoggedIn
+  } = useSelector((state: StoreState) => state.auth);
+
+  useEffect(() => {
+    if (isUserLoggedIn) {
+      getUserData(user, dispatch);
+    } else {
+      // @ts-ignore
+      dispatch(logout());
+    }
+  }, []);
 
   return (
     <div className="App">
@@ -47,32 +51,20 @@ function App() {
           <NotificationsProvider />
           <BrowserRouter>
             <Layout>
-              <Header style={{ paddingInline: 25 }}>
-                <HouseIcon style={{
-                  marginRight: 5,
-                  fontSize: '26px'
-                }}
-                />
-                <div className="app-title">HouseKeeper</div>
-                <div className="company-name">© 2020-2024 Бюро Лобановского</div>
-              </Header>
+              {isUserLoggedIn && <Sider />}
               <Layout>
-                <Sider />
+                <AppHeader />
                 <Content>
-                  <PageHeader />
+                  {isUserLoggedIn && <PageHeader />}
                   <Routes>
-
                     <Route path="/buildings" element={<Buildings />}>
                       <Route
                         path=":buildingId"
-                        // todo возможно добавить PrivateRoute и в чилдренов
-                        /* @ts-ignore */
-                        element={<BuildingScheme />}
+                        element={<PrivatePage><BuildingScheme /></PrivatePage>}
                       >
                         <Route
                           path="rooms/:roomId"
-                          /* @ts-ignore */
-                          element={<FlatInfo />}
+                          element={<PrivatePage><FlatInfo /></PrivatePage>}
                         />
                       </Route>
                     </Route>
@@ -87,7 +79,7 @@ function App() {
                           key={path}
                           {...routeProps}
                           path={path}
-                          element={element}
+                          element={<PrivatePage>{element}</PrivatePage>}
                         />
                       )
                     )}
@@ -97,7 +89,11 @@ function App() {
                     />
                   </Routes>
                 </Content>
+                <Footer>
+                  <div className="company-name">© 2020-2024 Бюро Лобановского</div>
+                </Footer>
               </Layout>
+
             </Layout>
           </BrowserRouter>
         </AppContext>

@@ -76,7 +76,7 @@ export function FlatInfo() {
   useEffect(() => {
     const parsedRoomId = parseInt(selectedRoomStr, 10);
     console.log(`%c Flat info [${parsedRoomId}] mounted!`, 'color: red');
-    loadRoomFullInfo(parsedRoomId);
+    // loadRoomFullInfo(parsedRoomId);
   }, [selectedRoomStr]);
 
   // @ts-ignore

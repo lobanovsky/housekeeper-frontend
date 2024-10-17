@@ -141,77 +141,65 @@ export function useRoomInfo({
 
   const loadRoomFullInfo = useCallback((loadRoomId: number) => {
     showLoading();
-    debugger;
-    RoomService.getRoomById({ id: loadRoomId })
-      .then((info) => {
-        setRoomInfo((prev) => ({
-          ...prev,
-          roomInfo: info
-        }));
-        hideLoading();
+    Promise.allSettled([
+      RoomService.getRoomById({ id: loadRoomId }),
+      AccessService.findByRoom({
+        roomId: loadRoomId,
+        active: true
       })
-      .catch((e) => {
-        showError('ОШибка загрузки инфо о квартире', e);
-        hideLoading();
+
+    ])
+      .then(([flatParamsResult, accessesResult]) => {
+        const result: RoomFullInfo = {
+          roomInfo: { id: 0 },
+          building: { ...EmptyBuilding },
+          accesses: [],
+          ownerProperty: []
+        };
+
+        if (accessesResult.status === 'fulfilled') {
+          result.accesses = convertAccessForForm(accessesResult.value);
+        } else {
+          showError('Не удалось загрузить доступы', accessesResult.reason || accessesResult);
+        }
+
+        if (flatParamsResult.status === 'fulfilled') {
+          result.roomInfo = flatParamsResult.value as RoomVO;
+
+          if (result.roomInfo.building) {
+            loadBuildingInfo(result.roomInfo.building);
+          }
+          if ((result.roomInfo.ownerIds || []).length) {
+            const loadedOwnerId = result.roomInfo.ownerIds?.length ? result.roomInfo.ownerIds[0] : 0;
+            if (loadedOwnerId) {
+              loadOwnerInfo(loadedOwnerId, ({
+                                              info,
+                                              rooms
+                                            }: OwnerFullInfo) => {
+                hideLoading();
+                result.ownerProperty = rooms;
+                setOwnerInfo(info);
+                setRoomInfo(result);
+              });
+            } else {
+              hideLoading();
+              setRoomInfo(result);
+            }
+          } else {
+            hideLoading();
+            setRoomInfo(result);
+          }
+        } else {
+          hideLoading();
+          showError('Не удалось загрузить информацию о квартире', flatParamsResult.reason || flatParamsResult);
+          setRoomInfo(result);
+        }
       });
-    // Promise.allSettled([
-    //   RoomService.getRoomById({ id: loadRoomId }),
-    //   AccessService.findByRoom({
-    //     roomId: loadRoomId,
-    //     active: true
-    //   })
-    //
-    // ])
-    //   .then(([flatParamsResult, accessesResult]) => {
-    //     const result: RoomFullInfo = {
-    //       roomInfo: { id: 0 },
-    //       building: { ...EmptyBuilding },
-    //       accesses: [],
-    //       ownerProperty: []
-    //     };
-    //
-    //     if (accessesResult.status === 'fulfilled') {
-    //       result.accesses = convertAccessForForm(accessesResult.value);
-    //     } else {
-    //       showError('Не удалось загрузить доступы', accessesResult.reason || accessesResult);
-    //     }
-    //
-    //     if (flatParamsResult.status === 'fulfilled') {
-    //       result.roomInfo = flatParamsResult.value as RoomVO;
-    //
-    //       if (result.roomInfo.building) {
-    //         loadBuildingInfo(result.roomInfo.building);
-    //       }
-    //       if ((result.roomInfo.ownerIds || []).length) {
-    //         const loadedOwnerId = result.roomInfo.ownerIds?.length ? result.roomInfo.ownerIds[0] : 0;
-    //         if (loadedOwnerId) {
-    //           loadOwnerInfo(loadedOwnerId, ({
-    //                                           info,
-    //                                           rooms
-    //                                         }: OwnerFullInfo) => {
-    //             hideLoading();
-    //             result.ownerProperty = rooms;
-    //             setOwnerInfo(info);
-    //             setRoomInfo(result);
-    //           });
-    //         } else {
-    //           hideLoading();
-    //           setRoomInfo(result);
-    //         }
-    //       } else {
-    //         hideLoading();
-    //         setRoomInfo(result);
-    //       }
-    //     } else {
-    //       hideLoading();
-    //       showError('Не удалось загрузить информацию о квартире', flatParamsResult.reason || flatParamsResult);
-    //       setRoomInfo(result);
-    //     }
-    //   });
   }, [loadBuildingInfo]);
 
   useEffect(() => {
     if (initialRoomId) {
+      console.log(`%c Load room info in hook [${initialRoomId}]`, 'color: blue');
       loadRoomFullInfo(initialRoomId);
     }
   }, [initialRoomId]);

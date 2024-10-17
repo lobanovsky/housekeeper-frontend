@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { Dayjs } from 'dayjs';
 import { QuickPeriods } from '../pages/expences/range-picker/constants';
-import { AccessResponse, CarRequest } from '../backend/services/backend';
+import { AccessResponse, CarRequest, UserResponse } from '../backend/services/backend';
 
 export interface SelectedDatesShort {
   dateStart: string,
@@ -75,7 +75,7 @@ export interface ICredentials {
   password: string;
 }
 
-export interface IUserData extends AuthData {
+export interface IUserData extends AuthData, UserResponse {
   userName?: string;
   workspaceId: number;
   workspaceName: string;

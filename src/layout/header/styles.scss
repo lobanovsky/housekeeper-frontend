@@ -1,0 +1,37 @@
+@import "colors";
+
+.ant-layout-header {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 18px;
+
+  .app-title {
+    flex: 1 0 auto;
+    padding-left: 24px;
+    font-size: 18px;
+  }
+
+  .company-name {
+    font-size: 14px;
+    color: rgba(240, 240, 240, 0.7);
+  }
+
+  .user-info {
+    .ant-dropdown-trigger.user-name {
+      color: $antd-blue-hover;
+
+      &:hover {
+        color: #acd1fb;
+      }
+
+      &:active {
+        color: $antd-blue;
+      }
+
+      .anticon {
+        margin-right: 6px;
+      }
+    }
+  }
+}

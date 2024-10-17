@@ -115,7 +115,6 @@ export class WorkspacesService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -141,7 +140,6 @@ export class WorkspacesService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -165,7 +163,6 @@ export class WorkspacesService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -195,7 +192,6 @@ export class WorkspacesService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -220,7 +216,7 @@ export class WorkspacesService {
   }
 }
 
-export class UserService {
+export class UserControllerService {
   /**
    *
    */
@@ -242,7 +238,6 @@ export class UserService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -268,7 +263,6 @@ export class UserService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -292,7 +286,6 @@ export class UserService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -340,7 +333,6 @@ export class UserService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -366,7 +358,6 @@ export class UserService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -390,7 +381,6 @@ export class UserService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -405,7 +395,6 @@ export class UserService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -427,7 +416,6 @@ export class UserService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -449,7 +437,6 @@ export class UserService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -2170,13 +2157,13 @@ export interface PageableObject {
   unpaged?: boolean;
 
   /**  */
-  paged?: boolean;
-
-  /**  */
   pageNumber?: number;
 
   /**  */
   pageSize?: number;
+
+  /**  */
+  paged?: boolean;
 
   /**  */
   offset?: number;
@@ -3220,7 +3207,6 @@ export interface OverviewResponse {
   /**  */
   ownerRooms?: string;
 }
-
 export enum EnumUserRequestRole {
   'SUPER_ADMIN' = 'SUPER_ADMIN',
   'ADMIN' = 'ADMIN',
@@ -3359,3 +3345,4 @@ export const AccessService = new AccessControllerService();
 export const AreaService = new AreaControllerService();
 export const OwnerService = new OwnerControllerService();
 export const AuthService = new AuthentificationService();
+export const UserService = new UserControllerService();
