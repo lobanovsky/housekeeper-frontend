@@ -5,28 +5,39 @@ import { HouseIcon } from 'icons/house';
 import NotificationsProvider from 'global/NotificationsProvider';
 import PageHeader from 'layout/page-header';
 import { Sider } from 'layout/sider';
-import IncomingPayments from 'pages/payments/incoming';
-import OutgoingPayments from 'pages/payments/outgoing';
-import Rooms from 'pages/rooms';
-import Gates from 'pages/gates';
-import UploadedFiles from 'pages/admin/uploaded-files';
-import { ExpensesView } from './pages/expences';
-import { Counterparties } from './pages/admin/counterparties';
 import { Buildings } from './pages/buildings';
 import useRemoteData from './hooks/use-remote-data';
 import { AreaEntity, AreaService } from './backend/services/backend';
 import { BuildingScheme } from './pages/buildings/components/building-scheme';
 import { FlatInfo } from './pages/buildings/components/flat-info';
 import { DictionariesContext } from './context/AppContext';
-import { AreasList } from './pages/admin/areas';
 import './App.scss';
-// todo роуты вынести отдельно
-const { Header, Content } = Layout;
+import { AppRoutes } from './navigation/routes';
+
+const {
+  Header,
+  Content
+} = Layout;
 
 function App() {
   const [areas] = useRemoteData<AreaEntity[]>(AreaService.findAll2, {
     errorMsg: 'Не удалось загрузить список типов доступов'
   });
+  //
+  // const dispatch = useDispatch();
+  // const {
+  //   user,
+  //   isUserLoggedIn
+  // } = useSelector((state: StoreState) => state.auth);
+  //
+  // useEffect(() => {
+  //   if (isUserLoggedIn) {
+  //     getUserData(user, dispatch);
+  //   } else {
+  //     // @ts-ignore
+  //     dispatch(logout());
+  //   }
+  // }, []);
 
   return (
     <div className="App">
@@ -37,7 +48,11 @@ function App() {
           <BrowserRouter>
             <Layout>
               <Header style={{ paddingInline: 25 }}>
-                <HouseIcon style={{ marginRight: 5, fontSize: '26px' }} />
+                <HouseIcon style={{
+                  marginRight: 5,
+                  fontSize: '26px'
+                }}
+                />
                 <div className="app-title">HouseKeeper</div>
                 <div className="company-name">© 2020-2024 Бюро Лобановского</div>
               </Header>
@@ -46,10 +61,11 @@ function App() {
                 <Content>
                   <PageHeader />
                   <Routes>
-                    <Route path="/rooms" element={<Rooms />} />
+
                     <Route path="/buildings" element={<Buildings />}>
                       <Route
                         path=":buildingId"
+                        // todo возможно добавить PrivateRoute и в чилдренов
                         /* @ts-ignore */
                         element={<BuildingScheme />}
                       >
@@ -60,27 +76,21 @@ function App() {
                         />
                       </Route>
                     </Route>
-                    <Route path="/buildings" element={<Buildings />} />
-                    {/* <Route */}
-                    {/*  path="/counters" */}
-                    {/*  element={<Counters />} */}
-                    {/* /> */}
-                    <Route path="/gates" element={<Gates />} />
-                    <Route
-                      path="/payments-incoming"
-                      element={<IncomingPayments />}
-                    />
-                    <Route
-                      path="/payments-outgoing"
-                      element={<OutgoingPayments />}
-                    />
-                    <Route path="/uploaded-files" element={<UploadedFiles />} />
-                    <Route path="/expenses" element={<ExpensesView />} />
-                    <Route
-                      path="/counterparties"
-                      element={<Counterparties />}
-                    />
-                    <Route path="/areas" element={<AreasList />} />
+                    {AppRoutes.map(
+                      ({
+                         permissions = [],
+                         path,
+                         element,
+                         ...routeProps
+                       }) => (
+                        <Route
+                          key={path}
+                          {...routeProps}
+                          path={path}
+                          element={element}
+                        />
+                      )
+                    )}
                     <Route
                       path="*"
                       element={<Navigate replace to="/buildings" />}

@@ -75,9 +75,11 @@ export function FlatInfo() {
 
   useEffect(() => {
     const parsedRoomId = parseInt(selectedRoomStr, 10);
+    console.log(`%c Flat info [${parsedRoomId}] mounted!`, 'color: red');
     loadRoomFullInfo(parsedRoomId);
   }, [selectedRoomStr]);
 
+  // @ts-ignore
   return (
     <AccessContext.Provider value={flatContextState.value}>
       <Card
@@ -112,10 +114,16 @@ export function FlatInfo() {
                     className="add-btn"
                     onClick={showAccessAddModal}
                   >
+                    {/* @ts-ignore */}
                     <PlusOutlined />
                     {/* добавить */}
                   </Button>
-                ) : <Tooltip title="За выдачей доступов обращайтесь к администратору"><InfoCircleTwoTone twoToneColor="orange" /></Tooltip>}
+                ) : (
+                  <Tooltip title="За выдачей доступов обращайтесь к администратору">
+                    {/* @ts-ignore */}
+                    <InfoCircleTwoTone twoToneColor="orange" />
+                  </Tooltip>
+                )}
               </div>
               {accesses.length ? (
                 <div className={`accesses-list ${allAccessesAreasCount ? `same-length length-${allAccessesAreasCount}` : ''}`}>

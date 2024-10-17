@@ -33,6 +33,13 @@ module.exports = async (options) => {
       to: "name: string;"
     });
 
+    await replace({
+      files: outFile,
+      from: /export class AuthService/g,
+      to: "export class AuthentificationService"
+    });
+
+
 
     await fs.appendFile(outFile, `
 			
@@ -65,6 +72,7 @@ export const BuildingService = new BuildingControllerService();
 export const AccessService = new AccessControllerService();
 export const AreaService = new AreaControllerService();
 export const OwnerService = new OwnerControllerService();
+export const AuthService = new AuthentificationService();
 	`, (err) => {
       if (err) {
         console.error("Append error");

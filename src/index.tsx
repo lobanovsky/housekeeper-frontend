@@ -5,15 +5,20 @@ import { ConfigProvider } from 'antd';
 import ruRU from 'antd/lib/locale/ru_RU';
 import './backend/axios';
 import reportWebVitals from './reportWebVitals';
+
+// import store, { persistor } from './store';
 import App from './App';
 import './index.css';
-
 // @ts-ignore
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ConfigProvider locale={ruRU}>
+      {/* <Provider store={store}> */}
+      {/*   <PersistGate loading={null} persistor={persistor}> */}
       <App />
+      {/*   </PersistGate> */}
+      {/* </Provider> */}
     </ConfigProvider>
   </React.StrictMode>
 );

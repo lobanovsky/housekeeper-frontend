@@ -101,3 +101,31 @@ export function addRandomIdToData<T>(data: T[]): Array<T & { id: number }> {
     id: getRandomId()
   }));
 }
+
+export const stringToColor = (str: string) => {
+  let hash = 0;
+  str.split('')
+    .forEach((char) => {
+      // eslint-disable-next-line no-bitwise
+      hash = char.charCodeAt(0) + ((hash << 5) - hash);
+    });
+  let colour = '#';
+  for (let i = 0; i < 3; i++) {
+    // eslint-disable-next-line no-bitwise
+    const value = (hash >> (i * 8)) & 0xff;
+    colour += value.toString(16)
+      .padStart(2, '0');
+  }
+  return colour;
+};
+
+export const userHasPermissions = () => true;
+// let result = true;
+// if (Array.isArray(requiredRoleConfig)) {
+//   result = requiredRoleConfig.every((requiredRole) => userHasRole(requiredRole, userRoles));
+// }
+// else if (Array.isArray(requiredRoleConfig.OR)) {
+//   result = requiredRoleConfig.OR.some((requiredRole) => userHasRole(requiredRole, userRoles));
+// }
+//
+// return result;

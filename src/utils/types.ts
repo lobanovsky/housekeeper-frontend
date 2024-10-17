@@ -58,3 +58,29 @@ export interface AccessValues extends Omit<AccessResponse, 'cars'> {
   areaPlaces?: Record<number, string>,
   isValid?: boolean;
 }
+
+export type PermissionsConfig = string[] | { OR: string[] };
+
+export type RoleResponse = string;
+
+export interface AuthData {
+  access_token: string;
+  token_type?: string;
+  expires_in?: number,
+  userId: number,
+}
+
+export interface ICredentials {
+  login: string;
+  password: string;
+}
+
+export interface IUserData extends AuthData {
+  userName?: string;
+  workspaceId: number;
+  workspaceName: string;
+  // workspaces: Workspace[],
+  isAdmin: boolean;
+  isSuperAdmin: boolean;
+  roles: string[];
+}

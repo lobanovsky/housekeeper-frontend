@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Layout, Menu } from 'antd';
 import { useLocation } from 'react-router-dom';
-import { NavigationItems } from 'navigation/routes';
+import { NavigationItems } from 'navigation';
 import './style.scss';
 
 export function Sider() {
