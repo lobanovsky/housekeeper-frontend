@@ -9,10 +9,13 @@ import { FileItem } from 'components/file-upload/file-list-renderer';
 import { useLoading } from 'hooks/use-loading';
 import './style.scss';
 
-export function FileUpload({
-                             url,
-                             onFinish
-                           }: FileUploadProps) {
+export function FileUpload(
+  {
+    url,
+    onFinish,
+    closeModal
+  }: FileUploadProps
+) {
   const [selectedFiles, setSelectedFiles] = useState<UploadFile[]>([]);
   const [uploading] = useLoading();
 
@@ -78,8 +81,13 @@ export function FileUpload({
   useEffect(() => {
     const allLoaded = selectedFiles.length
       && selectedFiles.every((file: UploadFile) => file.status === 'success' || file.status === 'error');
+
     if (allLoaded && onFinish) {
-      onFinish(selectedFiles[0].status === 'success');
+      const isSuccess = selectedFiles[0].status === 'success';
+      onFinish(isSuccess);
+      if (isSuccess) {
+        closeModal();
+      }
     }
   }, [selectedFiles.map((file: UploadFile) => `${file.uid}-${file.status}`)]);
 

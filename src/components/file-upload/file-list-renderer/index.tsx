@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckOutlined, CloseOutlined, DeleteOutlined, LoadingOutlined } from '@ant-design/icons';
+import { DeleteOutlined, LoadingOutlined } from '@ant-design/icons';
 import Button from 'antd/lib/button';
 import { RcFile } from 'antd/es/upload';
 import { UploadFile } from 'antd/lib';
@@ -42,12 +42,12 @@ export function FileItem({ file, index, onRemoveFile }: {
           {index + 1}
           .
         </div>
-        <div className="status-icon">
-          {/* @ts-ignore */}
-          {file.status === 'success' && <CheckOutlined />}
-          {/* @ts-ignore */}
-          {file.status === 'error' && <CloseOutlined />}
-        </div>
+        {/* <div className="status-icon"> */}
+        {/*   /!* @ts-ignore *!/ */}
+        {/*   {file.status === 'success' && <CheckOutlined />} */}
+        {/*   /!* @ts-ignore *!/ */}
+        {/*   {file.status === 'error' && <CloseOutlined />} */}
+        {/* </div> */}
       </div>
 
       <div className="file-info">

@@ -1,18 +1,15 @@
 import React from 'react';
 import {
-  ArrowDownOutlined,
-  ArrowUpOutlined,
   BankOutlined,
-  CloudUploadOutlined,
   DollarCircleFilled,
   GroupOutlined,
   LockFilled,
+  MinusCircleFilled,
+  PlusCircleFilled,
   SettingFilled
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { GateIcon } from 'icons/gate';
-import { showPaymentsImportModal } from 'pages/payments/import';
-import { ExpenseIcon } from '../icons/expense';
 import { BuildingIcon } from '../icons/building';
 import { ApartmentPlanIcon } from '../icons/apartment_plan';
 import { TreeFilledIcon } from '../icons/tree-filled';
@@ -50,27 +47,14 @@ export const NavigationItems: any = [
     label: 'Деньги',
     children: [
       {
-        key: '/payments-incoming',
-        icon: <ArrowDownOutlined />,
-        title: 'Входящие',
-        label: <Link to="/payments-incoming">Входящие платежи</Link>
-      },
-      {
-        key: '/payments-outgoing',
-        icon: <ArrowUpOutlined />,
-        title: 'Исходящие',
-        label: <Link to="/payments-outgoing">Исходящие платежи</Link>
-      },
-      {
-        key: '/import-payments',
-        icon: <CloudUploadOutlined />,
-        title: 'Загрузить файл',
-        onClick: showPaymentsImportModal,
-        label: 'Загрузить файл с платежами'
+        key: '/payments',
+        icon: <PlusCircleFilled />,
+        title: 'Платежи',
+        label: <Link to="/payments">Платежи</Link>
       },
       {
         key: '/expenses',
-        icon: <ExpenseIcon />,
+        icon: <MinusCircleFilled />,
         title: 'Траты',
         label: <Link to="/expenses">Траты</Link>
       },
@@ -101,7 +85,7 @@ export const NavigationItems: any = [
         icon: <ApartmentPlanIcon />,
         title: 'Помещения',
         label: <Link to="/rooms">Помещения</Link>
-      },
+      }
     ]
   }
 ];

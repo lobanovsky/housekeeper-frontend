@@ -3,14 +3,8 @@ import { Button, Typography } from 'antd';
 import { ColumnsType, ColumnType } from 'antd/es/table';
 import { EditOutlined } from '@ant-design/icons';
 import { EnumPaymentVOType, PaymentVO } from 'backend/services/backend';
-import {
-  accountNumberRendererShort,
-  copyableRenderer,
-  dateTimeRenderer,
-  personalAccountRenderer,
-  summRenderer
-} from 'utils/renderers';
-import { showPaymentEditModal } from './edit-modal';
+import { accountNumberRendererShort, copyableRenderer, dateTimeRenderer, personalAccountRenderer, summRenderer } from 'utils/renderers';
+import { showPaymentEditModal } from './components/edit-modal';
 
 interface PaymentColumnType<T> extends ColumnType<T> {
   outgoing?: boolean;

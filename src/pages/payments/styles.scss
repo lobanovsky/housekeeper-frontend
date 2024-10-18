@@ -1,11 +1,13 @@
-$green: #03aa85;
-$blue: #2a08ff;
-$red: #ea1c01;
-$yellow: #ffbb00;
-$orange: #ff7c00;
+
+.payments.view {
+  .upload-btn {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    z-index: 1000;
+  }
 
 
-.payments {
   .filter-form {
     .filter-fields {
       .filter-field {
@@ -110,37 +112,6 @@ $orange: #ff7c00;
               }
             }
 
-            //&.ACCOUNT {
-            //  > span {
-            //    color: $green !important;
-            //  }
-            //
-            //}
-            //
-            //&.VTB_REGISTRY {
-            //  > span {
-            //    color: $blue !important;
-            //  }
-            //}
-            //
-            //&.DEPOSIT_PERCENTAGES {
-            //  > span {
-            //    color: $yellow !important;
-            //  }
-            //
-            //}
-            //
-            //&.TAXABLE {
-            //  > span {
-            //    color: $orange !important;
-            //  }
-            //}
-            //
-            //&.UNKNOWN_ACCOUNT {
-            //  > span {
-            //    color: $red !important;
-            //  }
-            //}
           }
         }
 

@@ -1,3 +1,5 @@
+@import 'colors';
+
 .app-table {
   padding: 2px 4px;
   position: relative;
@@ -19,6 +21,8 @@
   .ant-table-wrapper {
     margin-top: 12px;
 
+    @include tableCellPaddingRule(4px 8px);
+
     .ant-table-thead {
       th {
         line-height: 18px;
@@ -36,8 +40,8 @@
       .ant-table-tbody {
         > tr {
           > td {
-            padding: 4px 6px;
-            line-height: 16px;
+            //padding: 4px 6px;
+            //line-height: 16px;
             //text-align: start;
 
             > span.ant-typography {

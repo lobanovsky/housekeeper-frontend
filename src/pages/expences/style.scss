@@ -1,3 +1,5 @@
+@import "colors";
+
 .expenses {
   position: relative;
 
@@ -5,26 +7,21 @@
     .ant-card-body {
       padding: 12px 16px;
     }
-
-    //
-    //.report-btn {
-    //  position: absolute;
-    //  left: 540px;
-    //  top: 44px;
-    //}
   }
 
 
   .ant-table-wrapper.expenses-table {
-    tr.ant-table-row {
-      th, td {
-        &.ant-table-row-expand-icon-cell {
-          //.anticon {
-          //  color: rgba(180, 180, 180, 0.8);
-          //
-          //  &:hover {
-          //    color: red;
-          //  }
+    @include tableCellPaddingRule();
+
+    tr.ant-table-expanded-row {
+      .ant-table-wrapper {
+        @include tableCellPaddingRule();
+
+        td {
+          &.date,
+          &.sum {
+            white-space: nowrap;
+          }
         }
       }
     }

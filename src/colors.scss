@@ -46,3 +46,14 @@ $action-icon-table-color: #969696;
     color: $antd-blue-active;
   }
 }
+
+@mixin tableCellPaddingRule($padding: 4px 8px, $lineHeight: 16px) {
+  .ant-table {
+    .ant-table-tbody > tr > td,
+    .ant-table-thead > tr > th {
+      padding: $padding;
+      line-height: $lineHeight;
+    }
+  }
+
+}

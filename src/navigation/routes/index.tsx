@@ -2,8 +2,7 @@ import React from 'react';
 import { PathRouteProps } from 'react-router/dist/lib/components';
 import Rooms from 'pages/rooms';
 import Gates from 'pages/gates';
-import IncomingPayments from 'pages/payments/incoming';
-import OutgoingPayments from 'pages/payments/outgoing';
+import Payments from 'pages/payments';
 import UploadedFiles from 'pages/admin/uploaded-files';
 import { ExpensesView } from 'pages/expences';
 import { Counterparties } from 'pages/admin/counterparties';
@@ -24,12 +23,8 @@ export const AppRoutes: PrivateRouteProps[] = [
     element: <Gates />
   },
   {
-    path: '/payments-incoming',
-    element: <IncomingPayments />
-  },
-  {
-    path: '/payments-outgoing',
-    element: <OutgoingPayments />
+    path: '/payments',
+    element: <Payments />
   },
   {
     path: '/uploaded-files',

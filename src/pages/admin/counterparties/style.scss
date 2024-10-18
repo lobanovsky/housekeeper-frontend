@@ -1,16 +1,44 @@
+@import 'colors';
 
-.counterparties {
-  .ant-table {
-    tr {
-      &:hover {
-        cursor: pointer;
+.counterparties.view {
+  .add-btn {
+    position: absolute;
+    top: 4px;
+    padding: 0;
+    left: 4px;
+    z-index: 100;
+  }
 
-        td {
-          //background: #6694bd;
+  &.loading.no-data {
+    //.add-btn {
+    //  top: 0;
+    //}
+
+    .ant-table-wrapper {
+      margin-top: 32px;
+    }
+  }
+
+  .ant-table-wrapper {
+    @include tableCellPaddingRule(4px 8px);
+
+    .ant-pagination.ant-pagination-mini {
+      margin: 4px 0;
+    }
+
+    .ant-table {
+      tr {
+        &:hover {
+          cursor: pointer;
+
+          td {
+            //background: #6694bd;
+          }
         }
       }
     }
   }
+
 }
 
 .ant-modal-confirm.ant-modal-confirm-info.counterparty-modal {

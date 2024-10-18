@@ -84,7 +84,7 @@ export function ExpensesView() {
   return (
     <div className="expenses">
       {loading && <Loading />}
-      <Card>
+      <Card className="expence-params">
         <Typography.Text strong>Группировка:</Typography.Text>
         <Radio.Group
           style={{ marginBottom: 12, marginLeft: 6 }}
@@ -111,6 +111,7 @@ export function ExpensesView() {
         pagination={{
           size: 'small',
           hideOnSinglePage: false,
+          defaultPageSize: 100,
           position: ['topRight'],
           showSizeChanger: true,
           pageSizeOptions: [10, 20, 50, 100],

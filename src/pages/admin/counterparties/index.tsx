@@ -12,12 +12,14 @@ import './style.scss';
 export function Counterparties() {
   const [data, setData] = useState([]);
   const [loading, showLoading, hideLoading] = useLoading();
+  const [isEmptyTable, setIsEmptyTable] = useState(true);
 
   const loadData = useCallback(() => {
     showLoading();
     CounterpartyService.findAll()
       .then((loadedData) => {
         hideLoading();
+        setIsEmptyTable(!loadedData.length);
         setData(loadedData);
       })
       .catch((e) => {
@@ -31,9 +33,10 @@ export function Counterparties() {
   }, []);
 
   return (
-    <div className="counterparties">
+    <div className={`view counterparties ${loading ? 'loading' : ''} ${isEmptyTable ? 'no-data' : ''}`}>
       <Button
         type="link"
+        className="add-btn"
         onClick={() => {
           showCounterpartyModal({
             counterparty: {
