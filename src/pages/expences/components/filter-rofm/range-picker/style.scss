@@ -1,0 +1,21 @@
+.range-picker-with-quick-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1em;
+
+  .period-changer {
+    display: flex;
+    margin-left: 0.5em;
+    gap: 0.5em;
+
+    .selected-date {
+      font-size: 16px;
+      line-height: 24px;
+      color: rgb(244, 0, 138);
+      white-space: nowrap;
+    }
+  }
+
+
+}

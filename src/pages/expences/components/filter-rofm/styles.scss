@@ -1,0 +1,20 @@
+.expence-params {
+  .ant-card-body {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2em;
+
+    &::before,
+    &::after {
+      display: none;
+    }
+
+    .ant-typography.label {
+      font-weight: 500;
+    }
+
+  }
+
+
+}

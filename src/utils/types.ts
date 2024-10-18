@@ -1,6 +1,6 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { Dayjs } from 'dayjs';
-import { QuickPeriods } from '../pages/expences/range-picker/constants';
+import { QuickPeriods } from '../pages/expences/components/filter-rofm/range-picker/constants';
 import { AccessResponse, CarRequest, UserResponse } from '../backend/services/backend';
 
 export interface SelectedDatesShort {
@@ -19,6 +19,7 @@ export interface SelectedDateRange extends SelectedDatesShort {
 }
 
 export type EmptyFunction = () => void;
+export type ChangeHandler<T> = (value: T) => void;
 
 // @ts-ignore
 export interface ServerError extends Error, AxiosError, AxiosResponse {
