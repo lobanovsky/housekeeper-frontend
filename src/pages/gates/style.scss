@@ -1,45 +1,26 @@
 .gates.view {
-	.ant-tabs {
-		.ant-tabs-nav-list {
-			.ant-tabs-tab {
-				padding: 6px 0;
-			}
-		}
-	}
+  .upload-btn {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    z-index: 1000;
+  }
 
-	.filter-form {
-		.filter-fields {
-			.filter-field {
-              .ant-select,
-              .ant-picker {
-                width: 100%;
-              }
+  .filter-form {
+    .filter-fields {
+      .filter-field {
+        .ant-select,
+        .ant-picker {
+          width: 100%;
+        }
 
-              //
-              //&.gateId {
-              //	.ant-select {
-              //		width: 150px;
-              //	}
-              //}
-              //
-              //&.method {
-              //	.ant-select {
-              //		width: 170px;
-              //	}
-              //}
-              //
-              //
-              //.ant-picker {
-              //	width: 130px;
-              //}
-
-              &.gateId {
-                .ant-select-selection-item {
-                  font-size: 16px;
-                  color: #eb2f96;
-                }
-              }
-            }
-		}
-	}
+        &.gateId {
+          .ant-select-selection-item {
+            font-size: 16px;
+            color: #eb2f96;
+          }
+        }
+      }
+    }
+  }
 }

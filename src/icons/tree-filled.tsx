@@ -36,5 +36,5 @@ function TreeFilledSvg() {
 }
 
 export function TreeFilledIcon(props: any) {
-  return <Icon component={TreeFilledSvg} className="leaf-icon" style={{ color: '#61a938' }} {...props} />;
+  return <Icon component={TreeFilledSvg} className="leaf-icon" {...props} />;
 }

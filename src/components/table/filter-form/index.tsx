@@ -1,11 +1,5 @@
 import React, { useCallback, useImperativeHandle, useState } from 'react';
-import {
-  CloseCircleOutlined,
-  DownloadOutlined,
-  DownOutlined,
-  LoadingOutlined,
-  SearchOutlined
-} from '@ant-design/icons';
+import { CloseCircleOutlined, DownloadOutlined, DownOutlined, LoadingOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Dropdown, Input, Row, Select } from 'antd';
 
 import { filterOption } from 'utils/utils';
@@ -13,8 +7,8 @@ import { useLoading } from 'hooks/use-loading';
 import { ActionFinishCallback } from 'utils/types';
 import RemoteSelect from 'components/remote-select';
 import { Dayjs } from 'dayjs';
-import styles from './styles.module.scss';
 import { BreakpointsSpan, FilterFieldsConfig, IFilterFieldConfig } from './types';
+import './styles.scss';
 
 export type FilterValue = string | string[] | number | number[] | boolean | Dayjs | [Dayjs, Dayjs];
 export type FilterFormValues = Record<string, FilterValue>;
@@ -165,9 +159,9 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
     return (
       <Col {...spanProps} key={name}>
         <div
-          className={`${styles.field} ${name} filter-field ${isEmptyValue ? 'empty' : ''} ${required ? 'required' : ''}`}
+          className={` filter-field ${name} ${isEmptyValue ? 'empty' : ''} ${required ? 'required' : ''}`}
         >
-          <div className={`${styles.field_label} label`}>{title}</div>
+          <div className="label">{title}</div>
           {input}
         </div>
       </Col>
@@ -189,12 +183,15 @@ const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element 
   }), [clearValues, getSelectedFilters]);
 
   return (
-    <div className={`${styles.filter_form} filter-form`}>
+    <div className="filter-form">
       <div className="filter-fields">
         <Row gutter={[8, 8]}>
           {filters.map(renderField)}
           <Col {...{
-            md: 8, lg: 6, xl: 5, xxl: 4
+            md: 8,
+            lg: 6,
+            xl: 5,
+            xxl: 4
           }}
           >
             <div className="buttons">

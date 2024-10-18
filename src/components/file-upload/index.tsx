@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { UploadOutlined } from '@ant-design/icons';
+import React, { useCallback, useEffect, useState } from 'react';
+import { LoadingOutlined, UploadOutlined } from '@ant-design/icons';
 import { Button, Upload } from 'antd';
 import { UploadFile } from 'antd/lib';
 import { RcFile } from 'antd/es/upload';
@@ -9,7 +9,10 @@ import { FileItem } from 'components/file-upload/file-list-renderer';
 import { useLoading } from 'hooks/use-loading';
 import './style.scss';
 
-export function FileUpload({ url }: FileUploadProps) {
+export function FileUpload({
+                             url,
+                             onFinish
+                           }: FileUploadProps) {
   const [selectedFiles, setSelectedFiles] = useState<UploadFile[]>([]);
   const [uploading] = useLoading();
 
@@ -72,6 +75,14 @@ export function FileUpload({ url }: FileUploadProps) {
     [selectedFiles.length]
   );
 
+  useEffect(() => {
+    const allLoaded = selectedFiles.length
+      && selectedFiles.every((file: UploadFile) => file.status === 'success' || file.status === 'error');
+    if (allLoaded && onFinish) {
+      onFinish(selectedFiles[0].status === 'success');
+    }
+  }, [selectedFiles.map((file: UploadFile) => `${file.uid}-${file.status}`)]);
+
   return (
     <div className="file-upload">
       <Upload
@@ -89,15 +100,19 @@ export function FileUpload({ url }: FileUploadProps) {
           setSelectedFiles(newFileList);
         }}
       >
-        <Button icon={<UploadOutlined />}>Выбрать файлы</Button>
+        <Button type="dashed">Выбрать файлы</Button>
       </Upload>
       <Button
         type="primary"
         onClick={uploadSelectedFiles}
         disabled={selectedFiles.length === 0}
         loading={uploading}
-        style={{ marginTop: 16, marginLeft: 20 }}
+        style={{
+          marginTop: 16,
+          marginLeft: 20
+        }}
       >
+        {uploading ? <LoadingOutlined /> : <UploadOutlined />}
         {uploading ? 'Загружаем файлы' : 'Загрузить'}
       </Button>
       <div className="selected-files">

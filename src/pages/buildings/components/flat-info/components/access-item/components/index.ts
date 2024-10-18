@@ -1,5 +1,5 @@
 import { AccessItemCars } from './user-cars';
 import { AccessAreas } from './granted-areas';
-import { CarGateLogs } from './gate-logs';
+import { AccessGateHistory } from './access-gate-history';
 
-export { AccessAreas, AccessItemCars, CarGateLogs };
+export { AccessAreas, AccessItemCars, AccessGateHistory };

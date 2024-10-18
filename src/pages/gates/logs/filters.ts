@@ -19,7 +19,10 @@ export const gateLogFilters = [
     title: 'Дата с',
     type: 'date' as FilterFieldType,
     span: {
-      md: 6, lg: 4, xl: 3, xxl: 2
+      md: 6,
+      lg: 4,
+      xl: 2,
+      xxl: 2
     }
   },
   {
@@ -27,7 +30,10 @@ export const gateLogFilters = [
     title: 'Дата по',
     type: 'date' as FilterFieldType,
     span: {
-      md: 6, lg: 4, xl: 3, xxl: 2
+      md: 6,
+      lg: 4,
+      xl: 2,
+      xxl: 2
     }
   },
   {

@@ -2,12 +2,13 @@ import React, { useContext, useMemo } from 'react';
 import { DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Button, Popconfirm, Popover, Tooltip } from 'antd';
 import { AccessResponse, CarResponse } from 'backend/services/backend';
+import { RoomTypeNames } from 'utils/constants';
 import { addRandomIdToData } from 'utils/utils';
 import { AccessValues } from 'utils/types';
 import { phoneNumberRenderer } from 'utils/renderers';
 import { showAddAccessItemModal } from '../access-add-modal';
 import { AccessContext } from '../../context/AccessContext';
-import { AccessAreas, AccessItemCars, CarGateLogs } from './components';
+import { AccessAreas, AccessGateHistory, AccessItemCars } from './components';
 import { useAccessItemCRUD } from './hooks';
 import './styles.scss';
 
@@ -30,6 +31,13 @@ export function AccessItem({ access }: { access: AccessResponse }) {
     areas: accessAreas = [],
     cars = []
   } = access;
+
+  const flatNumber = useMemo(
+    // eslint-disable-next-line react/destructuring-assignment
+    () => `${context.roomInfo?.type ? RoomTypeNames[context.roomInfo.type] : ''} ${context.roomInfo?.number}`,
+    // eslint-disable-next-line react/destructuring-assignment
+    [context.roomInfo?.type]
+  );
 
   const accessValues = useMemo<AccessValues>(() => ({
     ...access,
@@ -55,7 +63,11 @@ export function AccessItem({ access }: { access: AccessResponse }) {
         <AccessAreas areas={accessAreas} />
         <div className="access-user-info">
           <div className="phone-number-container">
-            <Popover destroyTooltipOnHide content={<CarGateLogs phoneNumber={phoneNumber || ''} />} trigger={['click']}>
+            <Popover
+              destroyTooltipOnHide
+              content={<AccessGateHistory phoneNumber={phoneNumber || ''} flatNumber={flatNumber} />}
+              trigger={['click']}
+            >
               <div className="phone-number">
                 {phoneNumberRenderer(phoneNumber)}
                 {tenant && <Tooltip mouseEnterDelay={0.2} title="Арендатор"><span className="tenant-icon">А</span></Tooltip>}

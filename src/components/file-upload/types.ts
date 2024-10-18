@@ -1,9 +1,9 @@
-import { ActionCallback } from 'utils/types';
+import { ActionFinishCallback } from 'utils/types';
 
 export interface FileUploadProps {
   closeModal: () => void;
   errorMsg: string;
-  onSuccessUpload?: ActionCallback;
+  onFinish?: ActionFinishCallback;
   successMsg: string;
   url: string;
 }

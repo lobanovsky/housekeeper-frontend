@@ -26,10 +26,12 @@ const renderDateValue = ({
   </span>
 );
 
-export function CarGateLogs({ phoneNumber }: { phoneNumber: string }) {
+export function AccessGateHistory({
+                                    phoneNumber,
+                                    flatNumber
+                                  }: { phoneNumber: string, flatNumber: string }) {
   const logsLoader = useCallback(() => GateService.getLastByPhoneNumber({ phoneNumber }), [phoneNumber]);
   const [log, isLoading] = useRemoteData<LogEntryOverview>(logsLoader, { defaultShowLoading: true });
-
   return (
     <div className="car-logs">
       {isLoading && <Loading />}
@@ -40,7 +42,11 @@ export function CarGateLogs({ phoneNumber }: { phoneNumber: string }) {
           {/*   {renderDateValue(log?.lastLogEntry, true)} */}
           {/* </div> */}
           <div className="field last-entries">
-            <div className="label">История въездов:</div>
+            <div className="label">
+              История въездов: (
+              {flatNumber}
+              )
+            </div>
             {(log?.lastLogEntries || []).map((entry, index) => (
               <div
                 key={entry.id}

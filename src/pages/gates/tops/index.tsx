@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Typography } from 'antd';
 
 import { GateService } from 'backend/services/backend';
@@ -12,7 +12,7 @@ const DefaultFilters = {
   gateId: 1
 };
 
-function GateTopUsers() {
+export const GateTopUsers = forwardRef((props, ref) => {
   const [selectedFilters, setFilters] = useState<TopFilterValues>(DefaultFilters as TopFilterValues);
   const tableByFlatRef = useRef(null);
   const tableByUserRef = useRef(null);
@@ -27,6 +27,10 @@ function GateTopUsers() {
   }, [JSON.stringify(selectedFilters)]);
 
   useEffect(loadTops, [JSON.stringify(selectedFilters)]);
+
+  useImperativeHandle(ref, () => ({
+    reloadTable: loadTops
+  }), [loadTops]);
 
   return (
     <div className="tops">
@@ -58,6 +62,4 @@ function GateTopUsers() {
       </div>
     </div>
   );
-}
-
-export default GateTopUsers;
+});

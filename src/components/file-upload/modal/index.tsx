@@ -7,7 +7,10 @@ interface FileUploadModalProps extends Omit<FileUploadProps, 'closeModal'>, Moda
 }
 
 export const showFileUploadModal = ({
-                                      title, width = 800, className = '', ...uploadProps
+                                      title,
+                                      width = 800,
+                                      className = '',
+                                      ...uploadProps
                                     }: FileUploadModalProps) => {
   let modal: any = null;
 

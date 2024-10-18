@@ -5,53 +5,26 @@ import Icon from '@ant-design/icons';
 function ExpenseSvg() {
   return (
     <svg
-      enableBackground="new 0 0 32 32"
-      id="Stock_cut"
-      version="1.1"
-      viewBox="0 0 32 32"
+      viewBox="0 0 24 24"
+      fill="none"
       width="1em"
       height="1em"
     >
-      <g>
-        <path
-          d="M23,12V3   c0-1.105-0.895-2-2-2H3C1.895,1,1,1.895,1,3v22c0,1.105,0.895,2,2,2h9"
-          fill="none"
-          stroke="currentColor"
-          strokeLinejoin="round"
-          strokeMiterlimit="10"
-          strokeWidth="2"
-        />
-        <path
-          d="M7,10H1v8h6   c2.209,0,4-1.791,4-4v0C11,11.791,9.209,10,7,10z"
-          fill="none"
-          stroke="currentColor"
-          strokeLinejoin="round"
-          strokeMiterlimit="10"
-          strokeWidth="2"
-        />
-        <circle cx="7" cy="14" r="1" />
-        <circle
-          cx="23"
-          cy="23"
-          fill="none"
-          r="8"
-          stroke="currentColor"
-          strokeLinejoin="round"
-          strokeMiterlimit="10"
-          strokeWidth="2"
-        />
-        <line
-          fill="none"
-          stroke="currentColor"
-          strokeLinejoin="round"
-          strokeMiterlimit="10"
-          strokeWidth="2"
-          x1="18"
-          x2="28"
-          y1="23"
-          y2="23"
-        />
-      </g>
+      <path
+        d="M7 12H9H10M17 9H14V12H15.5C16.3284 12 17 12.6716 17 13.5V13.5C17 14.3284 16.3284 15 15.5 15H14"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
+      <circle
+        r="10"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        transform="matrix(-1 0 0 1 12 12)"
+      />
     </svg>
   );
 }
