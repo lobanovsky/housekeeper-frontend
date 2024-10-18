@@ -80,10 +80,10 @@ export function FileUpload(
 
   useEffect(() => {
     const allLoaded = selectedFiles.length
-      && selectedFiles.every((file: UploadFile) => file.status === 'success' || file.status === 'error');
+      && selectedFiles.every((file: UploadFile) => (file.status as string) === 'success' || (file.status as string) === 'error');
 
     if (allLoaded && onFinish) {
-      const isSuccess = selectedFiles[0].status === 'success';
+      const isSuccess = (selectedFiles[0].status as string) === 'success';
       onFinish(isSuccess);
       if (isSuccess) {
         closeModal();

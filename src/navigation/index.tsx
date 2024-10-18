@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  BankOutlined,
-  DollarCircleFilled,
-  GroupOutlined,
-  LockFilled,
-  MinusCircleFilled,
-  PlusCircleFilled,
-  SettingFilled
-} from '@ant-design/icons';
+import { BankOutlined, DollarCircleFilled, GroupOutlined, LockFilled, MinusOutlined, PlusOutlined, SettingFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { GateIcon } from 'icons/gate';
 import { BuildingIcon } from '../icons/building';
@@ -48,13 +40,13 @@ export const NavigationItems: any = [
     children: [
       {
         key: '/payments',
-        icon: <PlusCircleFilled />,
+        icon: <PlusOutlined />,
         title: 'Платежи',
         label: <Link to="/payments">Платежи</Link>
       },
       {
         key: '/expenses',
-        icon: <MinusCircleFilled />,
+        icon: <MinusOutlined />,
         title: 'Траты',
         label: <Link to="/expenses">Траты</Link>
       },

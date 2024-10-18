@@ -42,12 +42,6 @@ export function FileItem({ file, index, onRemoveFile }: {
           {index + 1}
           .
         </div>
-        {/* <div className="status-icon"> */}
-        {/*   /!* @ts-ignore *!/ */}
-        {/*   {file.status === 'success' && <CheckOutlined />} */}
-        {/*   /!* @ts-ignore *!/ */}
-        {/*   {file.status === 'error' && <CloseOutlined />} */}
-        {/* </div> */}
       </div>
 
       <div className="file-info">
