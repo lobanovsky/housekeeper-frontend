@@ -42,7 +42,12 @@
 }
 
 .ant-modal.ant-modal-confirm.ant-modal-confirm-info.modal-no-btns,
+.ant-modal.ant-modal-confirm.ant-modal-confirm-confirm.modal-no-btns,
 .ant-modal.ant-modal-confirm.ant-modal-confirm-info.app-static-modal {
+  .anticon.anticon-exclamation-circle {
+    display: none;
+  }
+
   .ant-modal-content {
     padding: 8px 12px;
     padding-bottom: 12px;
@@ -68,6 +73,7 @@
           max-width: 100%;
 
           .buttons,
+          .modal-buttons,
           .footer {
             margin-top: 1.5em;
             text-align: end;

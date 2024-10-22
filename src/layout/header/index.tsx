@@ -71,6 +71,7 @@ export function AppHeader() {
                       key: `${workspace.id} - ${workspace.name}`,
                       label: <div className="workspace-item">
                         <Avatar style={{
+                          marginRight: 4,
                           // todo wp color
                           backgroundColor: 'gray',
                           color: 'white'

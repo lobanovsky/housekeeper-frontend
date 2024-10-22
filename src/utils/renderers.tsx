@@ -85,3 +85,14 @@ export const phoneNumberRenderer = (phoneStr: string = '') => {
   return `+7 (${code}) ${Object.values(otherGroups)
     .join('-')}`;
 };
+
+export const fioRenderer = (fullName: string): string => {
+  const nameParts = fullName.length ? fullName.split(/\s/) : [];
+  if (nameParts.length <= 1) {
+    return fullName;
+  }
+  const [lastName, firstName] = nameParts;
+  const secondName = nameParts.length > 2 ? nameParts[2] : '';
+
+  return [lastName, firstName, secondName].join(' ');
+};

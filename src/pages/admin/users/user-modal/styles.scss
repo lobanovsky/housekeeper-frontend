@@ -1,0 +1,15 @@
+//@import 'src/colors';
+
+.user-edit-modal {
+  .user-form {
+    .field {
+      .ant-select {
+        width: 100%;
+      }
+
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
+    }
+  }
+}

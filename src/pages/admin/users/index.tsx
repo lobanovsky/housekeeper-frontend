@@ -7,19 +7,18 @@ import Table from 'components/table';
 import { useLoading } from 'hooks/use-loading';
 import { StoreState } from 'store';
 import { showError, showMessage } from 'utils/notifications';
+import { ServerError } from 'utils/types';
 
 import { userColumns } from './columns';
 import { useUserRoleOptions } from './hooks';
 import { userFilters } from './filters';
 import { sendInvitationToUser } from './services';
-// import { showUserModal } from './user-modal';
 import './style.scss';
-import { ServerError } from '../../../utils/types';
+import { showUserModal } from './user-modal';
 
 export function Users() {
   const {
     user: {
-      isAdmin,
       workspaceId,
       isSuperAdmin
     }
@@ -36,30 +35,32 @@ export function Users() {
 
   const onAddClick = useCallback(() => {
     // todo
-    // showUserModal({
-    //   user: { id: 0 },
-    //   roleOptions,
-    //   projectOptions,
-    //   onFinish: (isSuccess) => {
-    //     if (isSuccess) {
-    //       reloadTable();
-    //     }
-    //   }
-    // });
+    showUserModal({
+      user: {
+        id: 0,
+        name: '',
+        createDate: ''
+      },
+      roleOptions,
+      onFinish: (isSuccess) => {
+        if (isSuccess) {
+          reloadTable();
+        }
+      }
+    });
   }, [reloadTable, roleOptions.length]);
 
   const onEditClick = useCallback((user: UserResponse) => {
     // todo
-    // showUserModal({
-    //   user,
-    //   roleOptions,
-    //   projectOptions,
-    //   onFinish: (isSuccess) => {
-    //     if (isSuccess) {
-    //       reloadTable();
-    //     }
-    //   }
-    // });
+    showUserModal({
+      user,
+      roleOptions,
+      onFinish: (isSuccess) => {
+        if (isSuccess) {
+          reloadTable();
+        }
+      }
+    });
   }, [reloadTable, roleOptions.length]);
 
   const onDeleteClick = useCallback((user: UserResponse, hardDelete = false) => {

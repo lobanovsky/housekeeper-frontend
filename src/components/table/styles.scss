@@ -72,6 +72,31 @@
                 }
               }
             }
+
+            &.actions {
+              text-align: center;
+
+              .ant-btn {
+                border: none;
+
+                &:not(:last-child) {
+                  margin-right: 6px;
+                }
+
+                &:not(:disabled) {
+                  color: rgba(100, 100, 100, 0.7);
+
+                  &:hover,
+                  &:focus,
+                  &:active {
+                    color: $antd-blue-hover;
+                  }
+
+                }
+
+
+              }
+            }
           }
         }
 
