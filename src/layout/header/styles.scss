@@ -1,6 +1,7 @@
 @import "colors";
 
 .ant-layout-header {
+  padding: 0;
   display: flex;
   align-items: center;
   color: white;
@@ -34,5 +35,7 @@
         margin-right: 6px;
       }
     }
+
+    padding-right: 12px;
   }
 }

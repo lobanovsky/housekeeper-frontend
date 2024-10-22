@@ -12,6 +12,7 @@ export const EMPTY_USER: IUserData = {
   roles: [],
   isAdmin: false,
   workspaceId: 0,
+  workspaces: [],
   workspaceName: '',
   isSuperAdmin: false
 };

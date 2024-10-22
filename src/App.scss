@@ -113,3 +113,36 @@
   }
 }
 
+.ant-modal.workspace-selector {
+  .ant-modal-content {
+    padding: 12px 16px;
+
+    .ant-modal-confirm-body {
+      .anticon.anticon-info-circle {
+        opacity: 0;
+        margin-right: 0;
+        width: 1px;
+      }
+
+      .ant-modal-confirm-content {
+        margin-inline-start: 1px;
+        max-width: calc(100% - 1px);
+
+        .ant-menu-item {
+          padding-inline: 8px;
+
+          .workspace-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+          }
+        }
+      }
+    }
+
+    .ant-modal-confirm-btns {
+      display: none;
+    }
+  }
+}
+

@@ -8,6 +8,7 @@ import { ExpensesView } from 'pages/expences';
 import { Counterparties } from 'pages/admin/counterparties';
 import { AreasList } from 'pages/admin/areas';
 import { PermissionsConfig } from 'utils/types';
+import { Users } from '../../pages/admin/users';
 
 export interface PrivateRouteProps extends PathRouteProps {
   permissions?: PermissionsConfig;
@@ -29,6 +30,10 @@ export const AppRoutes: PrivateRouteProps[] = [
   {
     path: '/uploaded-files',
     element: <UploadedFiles />
+  },
+  {
+    path: '/users',
+    element: <Users />
   },
   {
     path: '/expenses',

@@ -1,0 +1,31 @@
+@import 'colors';
+
+.users-list {
+  .app-table {
+    td {
+      &.actions {
+        width: 160px;
+        text-align: center;
+        padding: 6px !important;
+
+        .ant-btn {
+          //border: none;
+          //font-size: 15px;
+          //&:not(:last-child) {
+          //  margin-right: 8px;
+          //}
+
+          &.kill-btn {
+            color: #b2062c;
+
+            &:hover,
+            &:focus,
+            &:active {
+              color: $red;
+            }
+          }
+        }
+      }
+    }
+  }
+}

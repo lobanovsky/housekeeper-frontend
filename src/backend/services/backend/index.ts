@@ -93,7 +93,7 @@ export class PagedResultDto<T = any> implements IPagedResult<T> {
 // customer definition
 // empty
 
-export class WorkspacesService {
+export class WorkspacesControllerService {
   /**
    *
    */
@@ -2157,13 +2157,13 @@ export interface PageableObject {
   unpaged?: boolean;
 
   /**  */
+  paged?: boolean;
+
+  /**  */
   pageNumber?: number;
 
   /**  */
   pageSize?: number;
-
-  /**  */
-  paged?: boolean;
 
   /**  */
   offset?: number;
@@ -2531,6 +2531,9 @@ export interface LogEntryResponse {
 
   /**  */
   flatNumber?: string;
+
+  /**  */
+  buildingId?: number;
 
   /**  */
   method?: string;
@@ -3209,7 +3212,10 @@ export interface OverviewResponse {
 }
 export enum EnumUserRequestRole {
   'SUPER_ADMIN' = 'SUPER_ADMIN',
-  'ADMIN' = 'ADMIN',
+  'STAFF_ADMIN' = 'STAFF_ADMIN',
+  'STAFF_READ_ONLY' = 'STAFF_READ_ONLY',
+  'STAFF_ACCOUNTANT' = 'STAFF_ACCOUNTANT',
+  'STAFF_OPERATOR' = 'STAFF_OPERATOR',
   'USER' = 'USER'
 }
 export enum EnumRoomFilterType {
@@ -3346,3 +3352,4 @@ export const AreaService = new AreaControllerService();
 export const OwnerService = new OwnerControllerService();
 export const AuthService = new AuthentificationService();
 export const UserService = new UserControllerService();
+export const WorkspacesService = new WorkspacesControllerService();

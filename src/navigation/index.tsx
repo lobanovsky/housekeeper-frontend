@@ -1,5 +1,14 @@
 import React from 'react';
-import { BankOutlined, DollarCircleFilled, GroupOutlined, LockFilled, MinusOutlined, PlusOutlined, SettingFilled } from '@ant-design/icons';
+import {
+  BankOutlined,
+  DollarCircleFilled,
+  GroupOutlined,
+  LockFilled,
+  MinusOutlined,
+  PlusOutlined,
+  SettingFilled,
+  UserOutlined
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { GateIcon } from 'icons/gate';
 import { BuildingIcon } from '../icons/building';
@@ -71,6 +80,12 @@ export const NavigationItems: any = [
         icon: <GroupOutlined />,
         title: 'Загруженные файлы',
         label: <Link to="/uploaded-files">Загруженные файлы</Link>
+      },
+      {
+        key: '/users',
+        icon: <UserOutlined />,
+        title: 'Пользователи',
+        label: <Link to="/users">Пользователи</Link>
       },
       {
         key: '/rooms',

@@ -45,6 +45,12 @@ module.exports = async (options) => {
       to: "export class UserControllerService"
     });
 
+    await replace({
+      files: outFile,
+      from: /export class WorkspacesService/g,
+      to: "export class WorkspacesControllerService"
+    });
+
 
 
 
@@ -81,6 +87,7 @@ export const AreaService = new AreaControllerService();
 export const OwnerService = new OwnerControllerService();
 export const AuthService = new AuthentificationService();
 export const UserService = new UserControllerService();
+export const WorkspacesService = new WorkspacesControllerService();
 	`, (err) => {
       if (err) {
         console.error("Append error");
