@@ -43,14 +43,6 @@ function Login() {
       setIsLoggingIn(false);
       if (isSuccess) {
         getUserData(loginData as IUserData, dispatch);
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-
-        // // @ts-ignore
-        // getUserData({
-        //   id: loggedUser.userId,
-        //   token: loggedUser.access_token
-        //   // workspaceId: loggedUser.workspaceId
-        // })
       } else {
         const serverError = loginData as ServerError;
         // В случае ошибки в data будет объект ошибки от бэка

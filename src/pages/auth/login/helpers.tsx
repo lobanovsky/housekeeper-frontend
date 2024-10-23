@@ -3,7 +3,6 @@ import { IUserData } from 'utils/types';
 import axios from 'axios';
 import { Avatar, Menu } from 'antd';
 import { loginSuccess, logout } from 'store/reducers/auth';
-import store from 'store';
 import { axiosNotAuthorizedInterceptor } from 'backend/axios';
 import { modal } from 'global/NotificationsProvider';
 import { AvailableWorkspaceResponse, UserResponse, UserService, Workspace } from '../../../backend/services/backend';
@@ -94,14 +93,16 @@ export const getUserData = (authData: IUserData, dispatch: any) => {
           onOk: (selectedWorkspace) => {
             resultUser.workspaceId = selectedWorkspace.id || 0;
             resultUser.workspaceName = selectedWorkspace.name || '';
-            store.dispatch(loginSuccess(resultUser));
+            onSuccessLoadUser(resultUser, dispatch);
           }
         });
       } else {
+        // если есть сохранённый в localStorage воркспейс, то берём его
         if (authData.workspaceId) {
           resultUser.workspaceId = authData.workspaceId;
           resultUser.workspaceName = authData.workspaceName;
         } else {
+          // иначе берём единственный из доступных
           const grantedWorkspace = resultUser.workspaces.length ? resultUser.workspaces[0] : {
             id: 0,
             name: ''
