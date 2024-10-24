@@ -1615,6 +1615,28 @@ export class MailingControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   * Ping by email
+   */
+  ping(
+    params: {
+      /**  */
+      email?: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/emails/ping';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { email: params['email'] };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
 }
 
 export class DecisionControllerService {
@@ -1917,7 +1939,7 @@ export interface Workspace {
   id: number;
 
   /**  */
-  createDate: string;
+  createDate?: string;
 
   /**  */
   active?: boolean;
@@ -1964,7 +1986,7 @@ export interface UserResponse {
   id: number;
 
   /**  */
-  createDate: string;
+  createDate?: string;
 
   /**  */
   active?: boolean;
@@ -2016,7 +2038,7 @@ export interface CounterpartyResponse {
   sign?: string;
 
   /**  */
-  createDate: string;
+  createDate?: string;
 }
 
 export interface AreaRequest {
@@ -2119,10 +2141,10 @@ export interface RoomFilter {
 
 export interface PageRoomVO {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2154,9 +2176,6 @@ export interface PageRoomVO {
 
 export interface PageableObject {
   /**  */
-  unpaged?: boolean;
-
-  /**  */
   paged?: boolean;
 
   /**  */
@@ -2164,6 +2183,9 @@ export interface PageableObject {
 
   /**  */
   pageSize?: number;
+
+  /**  */
+  unpaged?: boolean;
 
   /**  */
   offset?: number;
@@ -2215,10 +2237,10 @@ export interface RoomVO {
 
 export interface SortObject {
   /**  */
-  unsorted?: boolean;
+  sorted?: boolean;
 
   /**  */
-  sorted?: boolean;
+  unsorted?: boolean;
 
   /**  */
   empty?: boolean;
@@ -2297,10 +2319,10 @@ export interface RangeRequest {
 
 export interface PagePaymentVO {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2453,7 +2475,7 @@ export interface OutgoingPayment {
   purpose?: string;
 
   /**  */
-  createDate: string;
+  createDate?: string;
 
   /**  */
   source?: string;
@@ -2550,10 +2572,10 @@ export interface LogEntryResponse {
 
 export interface PageLogEntryResponse {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2616,15 +2638,15 @@ export interface FileVO {
   type?: FileType;
 
   /**  */
-  createDate: string;
+  createDate?: string;
 }
 
 export interface PageFileVO {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2828,7 +2850,7 @@ export interface IncomingPayment {
   purpose?: string;
 
   /**  */
-  createDate: string;
+  createDate?: string;
 
   /**  */
   source?: string;
@@ -2851,10 +2873,10 @@ export interface IncomingPayment {
 
 export interface PageWorkspace {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -2886,10 +2908,10 @@ export interface PageWorkspace {
 
 export interface PageUserResponse {
   /**  */
-  totalElements?: number;
+  totalPages?: number;
 
   /**  */
-  totalPages?: number;
+  totalElements?: number;
 
   /**  */
   pageable?: PageableObject;
@@ -3034,7 +3056,7 @@ export interface OwnerEntity {
   source?: string;
 
   /**  */
-  createDate: string;
+  createDate?: string;
 
   /**  */
   availableAccessArea?: number[];
@@ -3111,7 +3133,7 @@ export interface Building {
   id: number;
 
   /**  */
-  createDate: string;
+  createDate?: string;
 
   /**  */
   active?: boolean;
@@ -3134,7 +3156,7 @@ export interface AreaEntity {
   id: number;
 
   /**  */
-  createDate: string;
+  createDate?: string;
 
   /**  */
   active?: boolean;
@@ -3214,8 +3236,6 @@ export enum EnumUserRequestRole {
   'SUPER_ADMIN' = 'SUPER_ADMIN',
   'STAFF_ADMIN' = 'STAFF_ADMIN',
   'STAFF_READ_ONLY' = 'STAFF_READ_ONLY',
-  'STAFF_ACCOUNTANT' = 'STAFF_ACCOUNTANT',
-  'STAFF_OPERATOR' = 'STAFF_OPERATOR',
   'USER' = 'USER'
 }
 export enum EnumRoomFilterType {

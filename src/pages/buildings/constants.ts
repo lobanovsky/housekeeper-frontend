@@ -12,5 +12,4 @@ export const PhoneRegexes = [
 export const EmptyBuilding: Building = {
   id: 0,
   name: '',
-  createDate: ''
 };

@@ -4,7 +4,6 @@ import { IUserData } from 'utils/types';
 
 export const EMPTY_USER: IUserData = {
   id: 0,
-  createDate: '',
   name: '',
   userId: -1,
   userName: '',

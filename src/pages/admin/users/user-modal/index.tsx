@@ -5,7 +5,7 @@ import { UserRequest, UserResponse, UserService } from 'backend/services/backend
 import { modal } from 'global/NotificationsProvider';
 import { useLoading } from 'hooks/use-loading';
 import store from 'store';
-import { getWorkspaceId } from 'store/selectors/selectors';
+import { getWorkspaceId } from 'store/selectors/auth';
 import { showError, showMessage } from 'utils/notifications';
 import { sendInvitationToUser } from '../services';
 import { UserAddForm, UserAddFormProps, UserSelectType } from './user-add-form';
@@ -20,8 +20,7 @@ function UserAddFormContainer({
                                 onCancel,
                                 user = {
                                   id: 0,
-                                  name: '',
-                                  createDate: ''
+                                  name: ''
                                 },
                                 roleOptions
                               }: UserModalProps) {
@@ -93,7 +92,6 @@ export const showUserModal = ({
                                 roleOptions,
                                 user = {
                                   id: 0,
-                                  createDate: '',
                                   name: ''
                                 }
 

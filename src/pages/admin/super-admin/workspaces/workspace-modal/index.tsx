@@ -19,8 +19,7 @@ interface WorkspaceModalProps {
 
 const EmptyWorkspace: Workspace = {
   id: 0,
-  name: '',
-  createDate: ''
+  name: ''
 };
 
 const WORKSPACE_FIELDS: Array<{ dataIndex: keyof Workspace, title: string }> = [

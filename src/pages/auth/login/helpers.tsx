@@ -40,7 +40,6 @@ const showWorkspaceSelectModal = ({
           modalCmp.destroy();
           onOk({
             id: workspaceId,
-            createDate: '',
             name: workspaceName || workspaceIdStr
           });
         }

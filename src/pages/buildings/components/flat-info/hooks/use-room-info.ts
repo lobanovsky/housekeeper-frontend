@@ -62,8 +62,7 @@ export function useRoomInfo({
   const [ownerInfo, setOwnerInfo] = useState<OwnerEntity>({
     id: 0,
     availableAccessArea: [],
-    dateOfLeft: '',
-    createDate: ''
+    dateOfLeft: ''
   });
 
   const [buildingInfo, setBuildingInfo] = useState<Building>({ ...EmptyBuilding });
@@ -107,8 +106,7 @@ export function useRoomInfo({
         const ownerFullInfo: OwnerFullInfo = {
           info: {
             id: 0,
-            dateOfLeft: '',
-            createDate: ''
+            dateOfLeft: ''
           },
           rooms: []
         };

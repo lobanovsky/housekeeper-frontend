@@ -29,6 +29,12 @@ module.exports = async (options) => {
 
     await replace({
       files: outFile,
+      from: /createDate: string;/g,
+      to: "createDate?: string;"
+    });
+
+    await replace({
+      files: outFile,
       from: /name\?: string;/g,
       to: "name: string;"
     });
@@ -50,9 +56,6 @@ module.exports = async (options) => {
       from: /export class WorkspacesService/g,
       to: "export class WorkspacesControllerService"
     });
-
-
-
 
     await fs.appendFile(outFile, `
 			

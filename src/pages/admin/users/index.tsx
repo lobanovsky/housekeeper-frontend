@@ -34,12 +34,10 @@ export function Users() {
   }, [tableRef.current]);
 
   const onAddClick = useCallback(() => {
-    // todo
     showUserModal({
       user: {
         id: 0,
-        name: '',
-        createDate: ''
+        name: ''
       },
       roleOptions,
       onFinish: (isSuccess) => {
