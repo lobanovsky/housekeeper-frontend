@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { Dayjs } from 'dayjs';
 import { QuickPeriods } from '../pages/expences/components/filter-rofm/range-picker/constants';
-import { AccessResponse, AvailableWorkspaceResponse, CarRequest, UserResponse } from '../backend/services/backend';
+import { AccessResponse, AvailableWorkspaceResponse, CarRequest, EnumUserRequestRole, UserResponse } from '../backend/services/backend';
 
 export interface SelectedDatesShort {
   dateStart: string,
@@ -83,5 +83,9 @@ export interface IUserData extends AuthData, UserResponse {
   workspaces: AvailableWorkspaceResponse[],
   isAdmin: boolean;
   isSuperAdmin: boolean;
-  roles: string[];
+  roles: EnumUserRequestRole[];
 }
+
+export type ModalFormProps<T> = T & {
+  onClose: () => void
+};

@@ -1,0 +1,32 @@
+//@import 'src/colors';
+
+.workspace-edi-modal {
+  .ant-modal-content {
+    .ant-modal-body {
+      .ant-modal-confirm-body {
+        display: block;
+
+        .anticon.anticon-exclamation-circle,
+        .anticon.anticon-info-circle {
+          display: none;
+        }
+
+        .ant-modal-confirm-title {
+          margin-bottom: 20px;
+        }
+
+        .ant-modal-confirm-content {
+          .field {
+            &:not(:last-child) {
+              margin-bottom: 5px;
+            }
+
+            .ant-input {
+              width: calc(100% - 120px);
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -8,7 +8,11 @@ import { dateTimeRenderer } from 'utils/renderers';
 import { useLoading } from 'hooks/use-loading';
 import { showError } from 'utils/notifications';
 
-function DeleteFileButton({ fileId, fileName, onSuccess }: {
+function DeleteFileButton({
+                            fileId,
+                            fileName,
+                            onSuccess
+                          }: {
   fileId: number,
   fileName: string,
   onSuccess: EmptyFunction
@@ -37,7 +41,10 @@ function DeleteFileButton({ fileId, fileName, onSuccess }: {
   );
 }
 
-export const getFileColumns = ({ reloadTable }: { reloadTable: ActionCallback }): ColumnsType<FileVO> => [
+export const getFileColumns = ({
+                                 reloadTable,
+                                 canDeleteFiles
+                               }: { canDeleteFiles: boolean, reloadTable: ActionCallback }): ColumnsType<FileVO> => [
   {
     dataIndex: 'createDate',
     title: 'Дата загрузки',
@@ -59,7 +66,11 @@ export const getFileColumns = ({ reloadTable }: { reloadTable: ActionCallback })
   {
     dataIndex: 'actions',
     title: '',
-    render: (value: string, { id = 0, name = '' }: FileVO) => (
+    hidden: !canDeleteFiles,
+    render: (value: string, {
+      id = 0,
+      name = ''
+    }: FileVO) => (
       <DeleteFileButton
         fileId={id}
         fileName={name}
@@ -67,8 +78,9 @@ export const getFileColumns = ({ reloadTable }: { reloadTable: ActionCallback })
       />
     )
   }
-
-].map((column) => ({
-  ...column,
-  className: column.dataIndex
-}));
+]
+  .filter(({ hidden }) => !hidden)
+  .map((column) => ({
+    ...column,
+    className: column.dataIndex
+  }));

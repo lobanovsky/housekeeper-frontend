@@ -70,7 +70,7 @@ function App() {
                     </Route>
                     {AppRoutes.map(
                       ({
-                         permissions = [],
+                         roles = [],
                          path,
                          element,
                          ...routeProps
@@ -79,7 +79,7 @@ function App() {
                           key={path}
                           {...routeProps}
                           path={path}
-                          element={<PrivatePage>{element}</PrivatePage>}
+                          element={<PrivatePage roles={roles}>{element}</PrivatePage>}
                         />
                       )
                     )}

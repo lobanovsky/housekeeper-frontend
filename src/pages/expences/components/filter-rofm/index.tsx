@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { Card, Radio, Typography } from 'antd';
+import { Button, Card, Radio, Typography } from 'antd';
+import { DownloadOutlined, LoadingOutlined } from '@ant-design/icons';
 import { RadioChangeEvent } from 'antd/es/radio/interface';
 import { EnumOutgoingGropingPaymentsFilterGroupBy } from 'backend/services/backend';
 import { ChangeHandler, EmptyFunction, SelectedDatesShort } from 'utils/types';
@@ -9,6 +10,7 @@ import './styles.scss';
 interface ExpensesSettingsFormProps {
   selectedGrouping: string;
   createReport: EmptyFunction,
+  isLoadingReport: boolean,
   onChangeGrouping: ChangeHandler<EnumOutgoingGropingPaymentsFilterGroupBy>
   onChangeDates: ChangeHandler<SelectedDatesShort>
 }
@@ -16,6 +18,7 @@ interface ExpensesSettingsFormProps {
 export function ExpensesSettingsForm({
                                        selectedGrouping,
                                        createReport,
+                                       isLoadingReport,
                                        onChangeGrouping,
                                        onChangeDates
                                      }: ExpensesSettingsFormProps) {
@@ -29,10 +32,6 @@ export function ExpensesSettingsForm({
         <Typography.Text className="label">Группировка:</Typography.Text>
         <div>
           <Radio.Group
-            style={{
-              marginBottom: 12,
-              marginLeft: 6
-            }}
             value={selectedGrouping}
             onChange={onRadioClick}
           >
@@ -43,8 +42,12 @@ export function ExpensesSettingsForm({
       </div>
       <div className="dates">
         <Typography.Text className="label">Период:</Typography.Text>
-        <RangePickerWithQuickButtons onChange={onChangeDates} downloadReport={createReport} />
+        <RangePickerWithQuickButtons onChange={onChangeDates} />
       </div>
+      <Button type="link" size="small" onClick={createReport} disabled={isLoadingReport}>
+        {isLoadingReport ? <LoadingOutlined /> : <DownloadOutlined />}
+        Скачать отчёт
+      </Button>
 
     </Card>
   );

@@ -10,7 +10,10 @@ interface PaymentColumnType<T> extends ColumnType<T> {
   outgoing?: boolean;
 }
 
-const commonPaymentColumns = ({ reloadTable }: { reloadTable?: () => void }): PaymentColumnType<PaymentVO>[] => [
+const commonPaymentColumns = ({
+                                reloadTable,
+                                canEdit
+                              }: { canEdit: boolean, reloadTable?: () => void }): PaymentColumnType<PaymentVO>[] => [
   {
     dataIndex: 'date',
     title: 'Дата',
@@ -69,7 +72,11 @@ const commonPaymentColumns = ({ reloadTable }: { reloadTable?: () => void }): Pa
     title: 'Тип платежа',
     outgoing: false,
     render: (account: string, payment: PaymentVO) => {
-      const { type, typeName, typeColor } = payment;
+      const {
+        type,
+        typeName,
+        typeColor
+      } = payment;
       const isUnknownSource = type === EnumPaymentVOType.UNKNOWN_ACCOUNT || type === EnumPaymentVOType.UNKNOWN;
       const paymentType = type
         ? (
@@ -85,28 +92,45 @@ const commonPaymentColumns = ({ reloadTable }: { reloadTable?: () => void }): Pa
       return (
         <div className={`payment-type ${type}`}>
           {paymentType}
-          <Button
-            size="small"
-            className="edit-btn"
-            onClick={() => {
-              showPaymentEditModal({ payment, onSuccess: reloadTable });
-            }}
-          >
-            <EditOutlined />
-          </Button>
+          {canEdit && (
+            <Button
+              size="small"
+              className="edit-btn"
+              onClick={() => {
+                showPaymentEditModal({
+                  payment,
+                  onSuccess: reloadTable
+                });
+              }}
+            >
+              <EditOutlined />
+            </Button>
+          )}
+
         </div>
       );
     }
   }
 ];
 
-export const getPaymentColumns = ({ isOutgoing, reloadTable }: {
+export const getPaymentColumns = ({
+                                    isOutgoing,
+                                    canEdit,
+                                    reloadTable
+                                  }: {
   isOutgoing: boolean,
+  canEdit: boolean,
   reloadTable?: () => void
 }): ColumnsType<PaymentVO> => {
-  const commonColumns = commonPaymentColumns({ reloadTable });
+  const commonColumns = commonPaymentColumns({
+    reloadTable,
+    canEdit
+  });
   const result = commonColumns.filter(({ outgoing }) => typeof outgoing !== 'boolean' || outgoing === isOutgoing);
-  return result.map(({ outgoing, ...column }) => ({
+  return result.map(({
+                       outgoing,
+                       ...column
+                     }) => ({
     ...(column as ColumnType<PaymentVO>),
     className: column.dataIndex as string
   }));

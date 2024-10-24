@@ -6,14 +6,20 @@ import { RoomTypeNames } from 'utils/constants';
 import { addRandomIdToData } from 'utils/utils';
 import { AccessValues } from 'utils/types';
 import { phoneNumberRenderer } from 'utils/renderers';
+import { useSelector } from 'react-redux';
 import { showAddAccessItemModal } from '../access-add-modal';
 import { AccessContext } from '../../context/AccessContext';
 import { AccessAreas, AccessGateHistory, AccessItemCars } from './components';
 import { useAccessItemCRUD } from './hooks';
 import './styles.scss';
+import { getUser } from '../../../../../../store/reducers/auth/selectors';
 
 export function AccessItem({ access }: { access: AccessResponse }) {
   const context = useContext(AccessContext);
+  const {
+    isAdmin,
+    isSuperAdmin
+  } = useSelector(getUser);
 
   const {
     isDeleting,
@@ -79,27 +85,29 @@ export function AccessItem({ access }: { access: AccessResponse }) {
           {!!phoneLabel && <div className={`phone-label ${phoneLabel ? 'has-label' : ''}`}>{phoneLabel || ''}</div>}
           <AccessItemCars cars={cars} />
         </div>
-
       </div>
-      <div className="access-actions">
-        <Button
-          type="link"
-          size="small"
-          onClick={() => {
-            showAddAccessItemModal({
-              ...context,
-              access: accessValues
-            });
-          }}
-        >
-          <EditOutlined />
-        </Button>
-        <Popconfirm title="Удалить доступ?" onConfirm={deleteAccessItem}>
-          <Button type="link" size="small">
-            {isDeleting ? <LoadingOutlined /> : <DeleteOutlined />}
+      {(isAdmin || isSuperAdmin) && (
+        <div className="access-actions">
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              showAddAccessItemModal({
+                ...context,
+                access: accessValues
+              });
+            }}
+          >
+            <EditOutlined />
           </Button>
-        </Popconfirm>
-      </div>
+          <Popconfirm title="Удалить доступ?" onConfirm={deleteAccessItem}>
+            <Button type="link" size="small">
+              {isDeleting ? <LoadingOutlined /> : <DeleteOutlined />}
+            </Button>
+          </Popconfirm>
+        </div>
+      )}
+
     </div>
   );
 }

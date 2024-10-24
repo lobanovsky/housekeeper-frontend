@@ -14,8 +14,10 @@ import { GateIcon } from 'icons/gate';
 import { BuildingIcon } from '../icons/building';
 import { ApartmentPlanIcon } from '../icons/apartment_plan';
 import { TreeFilledIcon } from '../icons/tree-filled';
+import { EnumUserRequestRole } from '../backend/services/backend';
+import { NavigationType } from './types';
 
-export const NavigationItems: any = [
+export const NavigationItems: NavigationType = [
   {
 
     key: 'accesses',
@@ -74,24 +76,35 @@ export const NavigationItems: any = [
     key: 'admin',
     icon: <SettingFilled />,
     label: 'Управление',
+    roles: [EnumUserRequestRole.STAFF_ADMIN, EnumUserRequestRole.SUPER_ADMIN],
     children: [
       {
         key: '/uploaded-files',
         icon: <GroupOutlined />,
         title: 'Загруженные файлы',
+        roles: [EnumUserRequestRole.STAFF_ADMIN, EnumUserRequestRole.SUPER_ADMIN],
         label: <Link to="/uploaded-files">Загруженные файлы</Link>
       },
       {
         key: '/users',
         icon: <UserOutlined />,
         title: 'Пользователи',
+        roles: [EnumUserRequestRole.STAFF_ADMIN, EnumUserRequestRole.SUPER_ADMIN],
         label: <Link to="/users">Пользователи</Link>
       },
       {
         key: '/rooms',
         icon: <ApartmentPlanIcon />,
         title: 'Помещения',
+        roles: [EnumUserRequestRole.STAFF_ADMIN, EnumUserRequestRole.SUPER_ADMIN],
         label: <Link to="/rooms">Помещения</Link>
+      },
+      {
+        key: '/workspaces',
+        icon: <ApartmentPlanIcon />,
+        roles: [EnumUserRequestRole.SUPER_ADMIN],
+        title: 'Пространства',
+        label: <Link to="/workspaces">Пространства</Link>
       }
     ]
   }

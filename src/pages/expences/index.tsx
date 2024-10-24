@@ -23,7 +23,7 @@ export function ExpensesView() {
 
   const [groupBy, setGroupBy] = useState<EnumOutgoingGropingPaymentsFilterGroupBy>(EnumOutgoingGropingPaymentsFilterGroupBy.CATEGORY);
   const [loading, showLoading, hideLoading] = useLoading();
-  const [, showReportLoading, hideReportLoading] = useLoading();
+  const [reportLoading, showReportLoading, hideReportLoading] = useLoading();
 
   const [data, setData] = useState<CounterpartyData>({
     data: [],
@@ -89,6 +89,7 @@ export function ExpensesView() {
     <div className="expenses">
       {loading && <Loading />}
       <ExpensesSettingsForm
+        isLoadingReport={reportLoading}
         selectedGrouping={groupBy}
         onChangeGrouping={setGroupBy}
         createReport={createReport}

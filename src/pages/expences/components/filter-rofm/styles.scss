@@ -1,7 +1,7 @@
 .expence-params {
   .ant-card-body {
     display: flex;
-    align-items: center;
+    align-items: end;
     justify-content: flex-start;
     gap: 2em;
 
@@ -12,6 +12,16 @@
 
     .ant-typography.label {
       font-weight: 500;
+    }
+
+    .grouping {
+      .ant-radio-group {
+        margin: 0;
+
+        .ant-radio-wrapper {
+          line-height: 24px;
+        }
+      }
     }
 
   }

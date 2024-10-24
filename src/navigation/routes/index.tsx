@@ -7,11 +7,12 @@ import UploadedFiles from 'pages/admin/uploaded-files';
 import { ExpensesView } from 'pages/expences';
 import { Counterparties } from 'pages/admin/counterparties';
 import { AreasList } from 'pages/admin/areas';
-import { PermissionsConfig } from 'utils/types';
 import { Users } from '../../pages/admin/users';
+import { WorkspacesList } from '../../pages/admin/super-admin/workspaces';
+import { EnumUserRequestRole } from '../../backend/services/backend';
 
 export interface PrivateRouteProps extends PathRouteProps {
-  permissions?: PermissionsConfig;
+  roles?: EnumUserRequestRole[];
 }
 
 export const AppRoutes: PrivateRouteProps[] = [
@@ -29,10 +30,12 @@ export const AppRoutes: PrivateRouteProps[] = [
   },
   {
     path: '/uploaded-files',
+    roles: [EnumUserRequestRole.STAFF_ADMIN, EnumUserRequestRole.SUPER_ADMIN],
     element: <UploadedFiles />
   },
   {
     path: '/users',
+    roles: [EnumUserRequestRole.STAFF_ADMIN, EnumUserRequestRole.SUPER_ADMIN],
     element: <Users />
   },
   {
@@ -46,5 +49,10 @@ export const AppRoutes: PrivateRouteProps[] = [
   {
     path: '/areas',
     element: <AreasList />
+  },
+  {
+    path: '/workspaces',
+    roles: [EnumUserRequestRole.SUPER_ADMIN],
+    element: <WorkspacesList />
   }
 ];

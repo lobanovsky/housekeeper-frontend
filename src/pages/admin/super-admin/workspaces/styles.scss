@@ -1,0 +1,50 @@
+$inactiveColor: rgba(235, 235, 235, 0.8);
+
+.workspaces-list {
+  position: relative;
+
+  .add-workspace-btn {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 1000;
+  }
+
+  .ant-table {
+    tr {
+      td, th {
+        line-height: 16px;
+
+        &.actions {
+          width: 50px;
+        }
+      }
+
+
+    }
+
+    .ant-table-tbody {
+      tr {
+        &:hover {
+          cursor: pointer;
+        }
+
+        &:not(.active) {
+          td {
+            background-color: $inactiveColor;
+            color: rgba(0, 0, 0, 0.45);
+
+            &:hover,
+            &.ant-table-cell-row-hover {
+              background-color: $inactiveColor;
+            }
+          }
+
+          &:hover {
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
+import Loading from 'components/loading';
 
-export function useLoading(defaultValue = false): [boolean, () => void, () => void] {
+function useLoading(defaultValue = false): [boolean, () => void, () => void] {
   const [isLoading, setIsLoading] = useState(defaultValue);
 
   const showLoading = useCallback(() => {
@@ -13,3 +14,5 @@ export function useLoading(defaultValue = false): [boolean, () => void, () => vo
 
   return [isLoading, showLoading, hideLoading];
 }
+
+export { Loading, useLoading };

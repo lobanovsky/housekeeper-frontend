@@ -6,4 +6,5 @@ export interface FileUploadProps {
   onFinish?: ActionFinishCallback;
   successMsg: string;
   url: string;
+  canEdit?: boolean,
 }

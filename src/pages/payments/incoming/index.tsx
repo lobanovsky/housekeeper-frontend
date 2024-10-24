@@ -8,11 +8,18 @@ import useRemoteData from 'hooks/use-remote-data';
 import { getPaymentColumns } from 'pages/payments/columns';
 import { getPaymentFilters } from 'pages/payments/filters';
 import { downloadFile } from 'utils/utils';
+import { useSelector } from 'react-redux';
 import { createAccountOptions, createPaymentTypeOptions } from './utils';
+import { getUser } from '../../../store/reducers/auth/selectors';
 
 const rowClassName = (record: PaymentVO) => (!record.account ? 'empty-account' : '');
 
 const IncomingPayments = forwardRef((props, ref) => {
+  const {
+    isAdmin,
+    isSuperAdmin
+  } = useSelector(getUser);
+
   const tableRef = React.useRef(null);
 
   const [accountOptions = []] = useRemoteData<AccountResponse[], ReactNode[]>(AccountService.findAllAccounts, {
@@ -32,6 +39,7 @@ const IncomingPayments = forwardRef((props, ref) => {
 
   const tableColumns = useMemo(() => getPaymentColumns({
     isOutgoing: false,
+    canEdit: isAdmin || isSuperAdmin,
     reloadTable: reloadIncomingPayments
   }), [reloadIncomingPayments]);
 

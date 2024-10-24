@@ -6,13 +6,13 @@ import Loading from 'components/loading';
 import AccessDeniedPage from 'pages/auth/access-denied-page';
 import LoginView from 'pages/auth/login';
 import { userHasPermissions } from '../../utils';
-import { PermissionsConfig } from '../../../utils/types';
+import { EnumUserRequestRole } from '../../../backend/services/backend';
 
 export function PrivatePage({
                               children,
-                              permissions = undefined,
+                              roles = [],
                               path = ''
-                            }: { children: React.ReactNode, path?: string, permissions?: PermissionsConfig }): JSX.Element {
+                            }: { children: React.ReactNode, path?: string, roles?: EnumUserRequestRole[] }): JSX.Element {
   const {
     isLoggingIn,
     isCheckingToken,
@@ -25,10 +25,10 @@ export function PrivatePage({
   if (!isCheckingToken) {
     if (!isUserLoggedIn) {
       element = <LoginView />;
-    } else if (permissions) {
-      const userHasAllRequiredRoles = userHasPermissions(permissions, user.roles);
+    } else if (roles.length) {
+      const userHasRoles = userHasPermissions(roles, user.roles);
       // @ts-ignore
-      element = userHasAllRequiredRoles ? children : <AccessDeniedPage />;
+      element = userHasRoles ? children : <AccessDeniedPage />;
     } else {
       // @ts-ignore
       element = children;

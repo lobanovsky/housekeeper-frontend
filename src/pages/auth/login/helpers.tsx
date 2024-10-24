@@ -5,7 +5,7 @@ import { Avatar, Menu } from 'antd';
 import { loginSuccess, logout } from 'store/reducers/auth';
 import { axiosNotAuthorizedInterceptor } from 'backend/axios';
 import { modal } from 'global/NotificationsProvider';
-import { AvailableWorkspaceResponse, UserResponse, UserService, Workspace } from '../../../backend/services/backend';
+import { AvailableWorkspaceResponse, EnumUserRequestRole, UserResponse, UserService, Workspace } from '../../../backend/services/backend';
 import { showError } from '../../../utils';
 
 const onSuccessLoadUser = (userData: UserResponse & IUserData, dispatch: any) => {
@@ -15,8 +15,8 @@ const onSuccessLoadUser = (userData: UserResponse & IUserData, dispatch: any) =>
   axios.interceptors.response.use((response) => response, (resp) => axiosNotAuthorizedInterceptor(resp, dispatch));
   dispatch(loginSuccess({
     ...userData,
-    roles: userData.role?.roleCode ? [userData.role?.roleCode] : [],
-    isAdmin: userData.role?.roleCode === 'ADMIN',
+    roles: userData.role?.roleCode ? [userData.role?.roleCode as EnumUserRequestRole] : [],
+    isAdmin: userData.role?.roleCode === 'STAFF_ADMIN',
     isSuperAdmin: userData.role?.roleCode === 'SUPER_ADMIN'
   }));
 };

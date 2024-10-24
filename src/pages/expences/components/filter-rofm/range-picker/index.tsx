@@ -19,11 +19,9 @@ const currentYear = today.get('year');
 
 // eslint-disable-next-line import/prefer-default-export
 export function RangePickerWithQuickButtons({
-                                              onChange: onChangeDates,
-                                              downloadReport
+                                              onChange: onChangeDates
                                             }: {
-  onChange: (newValue: SelectedDatesShort) => void,
-  downloadReport: () => void
+  onChange: (newValue: SelectedDatesShort) => void
 }) {
   const [dates, setDates] = useState<DateRangeValue>([startOfMonth, today]);
 

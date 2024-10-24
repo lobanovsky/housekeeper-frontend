@@ -8,7 +8,8 @@ export const userColumns = ({
                               onEditClick,
                               onDeleteClick,
                               sendInvitation,
-                              isSuperAdmin
+                              isSuperAdmin,
+                              isAdmin
                             }: any): ColumnsType<UserResponse> => [
   {
     title: 'ФИО',
@@ -26,6 +27,7 @@ export const userColumns = ({
   {
     dataIndex: 'actions',
     width: 160,
+    hidden: !(isAdmin || isSuperAdmin),
     render: (value: any, record: UserResponse) => (
       <>
 
@@ -108,7 +110,9 @@ export const userColumns = ({
       </>
     )
   }
-].map((column) => ({
-  ...column,
-  className: column.dataIndex
-}));
+]
+  .filter(({ hidden }) => !hidden)
+  .map((column) => ({
+    ...column,
+    className: column.dataIndex
+  }));
