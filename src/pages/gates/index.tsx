@@ -1,12 +1,15 @@
 import React, { useCallback, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { Button, Tabs } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { showFileUploadModal } from 'components/file-upload/modal';
 import GatesLog from 'pages/gates/logs';
+import { getIsAdmin } from 'store/selectors/auth';
 import { GateTopUsers } from './tops';
 import './style.scss';
 
 function Gates() {
+  const isAdmin = useSelector(getIsAdmin);
   const gatesTableRef = useRef(null);
   const ratingTableRef = useRef(null);
 
@@ -34,10 +37,13 @@ function Gates() {
 
   return (
     <div className="gates view">
-      <Button size="small" className="upload-btn" type="dashed" onClick={showGatesUploadModal}>
-        <UploadOutlined />
-        Загрузить файл
-      </Button>
+      {isAdmin && (
+        <Button size="small" className="upload-btn" type="dashed" onClick={showGatesUploadModal}>
+          <UploadOutlined />
+          Загрузить файл
+        </Button>
+      )}
+
       <Tabs
         defaultActiveKey="log"
         type="card"

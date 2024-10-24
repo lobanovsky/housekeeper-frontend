@@ -1,4 +1,5 @@
 import React, { useContext, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Button, Popconfirm, Popover, Tooltip } from 'antd';
 import { AccessResponse, CarResponse } from 'backend/services/backend';
@@ -6,20 +7,17 @@ import { RoomTypeNames } from 'utils/constants';
 import { addRandomIdToData } from 'utils/utils';
 import { AccessValues } from 'utils/types';
 import { phoneNumberRenderer } from 'utils/renderers';
-import { useSelector } from 'react-redux';
+
+import { getIsAdmin } from 'store/selectors/auth';
 import { showAddAccessItemModal } from '../access-add-modal';
 import { AccessContext } from '../../context/AccessContext';
 import { AccessAreas, AccessGateHistory, AccessItemCars } from './components';
 import { useAccessItemCRUD } from './hooks';
 import './styles.scss';
-import { getUser } from '../../../../../../store/reducers/auth/selectors';
 
 export function AccessItem({ access }: { access: AccessResponse }) {
   const context = useContext(AccessContext);
-  const {
-    isAdmin,
-    isSuperAdmin
-  } = useSelector(getUser);
+  const isAdmin = useSelector(getIsAdmin);
 
   const {
     isDeleting,
@@ -86,7 +84,7 @@ export function AccessItem({ access }: { access: AccessResponse }) {
           <AccessItemCars cars={cars} />
         </div>
       </div>
-      {(isAdmin || isSuperAdmin) && (
+      {isAdmin && (
         <div className="access-actions">
           <Button
             type="link"

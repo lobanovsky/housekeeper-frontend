@@ -4,12 +4,11 @@ import { PlusOutlined } from '@ant-design/icons';
 
 import Table from 'components/table';
 import { Workspace, WorkspacesService } from 'backend/services/backend';
-import { useLoading } from 'hooks/use-loading';
+import { Loading, useLoading } from 'hooks/use-loading';
 import { showError, showMessage } from 'utils/notifications';
 import { workspaceColumns } from './columns';
 import { showWorkspaceEditModal } from './workspace-modal';
 import './styles.scss';
-import Loading from '../../../../components/loading';
 
 const rowClassName = (record: Workspace) => (record.active ? 'active' : '');
 

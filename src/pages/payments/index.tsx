@@ -1,12 +1,15 @@
 import React, { useCallback, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { Button, Tabs } from 'antd';
 import { ArrowDownOutlined, ArrowUpOutlined, UploadOutlined } from '@ant-design/icons';
 import { showFileUploadModal } from 'components/file-upload/modal';
+import { getIsAdmin } from 'store/selectors/auth';
 import IncomingPayments from './incoming';
 import OutgoingPayments from './outgoing';
 import './styles.scss';
 
 function Payments() {
+  const isAdmin = useSelector(getIsAdmin);
   const incomingTableRef = useRef(null);
   const outgoingTableRef = useRef(null);
 
@@ -34,10 +37,13 @@ function Payments() {
 
   return (
     <div className="payments view">
-      <Button size="small" className="upload-btn" type="dashed" onClick={showPaymentsUploadModal}>
-        <UploadOutlined />
-        Загрузить файл
-      </Button>
+      {isAdmin && (
+        <Button size="small" className="upload-btn" type="dashed" onClick={showPaymentsUploadModal}>
+          <UploadOutlined />
+          Загрузить файл
+        </Button>
+      )}
+
       <Tabs
         defaultActiveKey="incoming"
         type="card"

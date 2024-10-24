@@ -16,8 +16,8 @@ const onSuccessLoadUser = (userData: UserResponse & IUserData, dispatch: any) =>
   dispatch(loginSuccess({
     ...userData,
     roles: userData.role?.roleCode ? [userData.role?.roleCode as EnumUserRequestRole] : [],
-    isAdmin: userData.role?.roleCode === 'STAFF_ADMIN',
-    isSuperAdmin: userData.role?.roleCode === 'SUPER_ADMIN'
+    isAdmin: userData.role?.roleCode === EnumUserRequestRole.STAFF_ADMIN,
+    isSuperAdmin: userData.role?.roleCode === EnumUserRequestRole.SUPER_ADMIN
   }));
 };
 
@@ -33,12 +33,7 @@ const showWorkspaceSelectModal = ({
     title: 'Выберите пространство для работы',
     // eslint-disable-next-line react/jsx-no-undef
     content: <Menu
-      onClick={({
-                  item,
-                  key,
-                  keyPath,
-                  domEvent
-                }) => {
+      onClick={({ key }) => {
         const [workspaceIdStr, workspaceName = ''] = key.split(' - ');
         const workspaceId = parseInt(workspaceIdStr, 10);
         if (workspaceId) {

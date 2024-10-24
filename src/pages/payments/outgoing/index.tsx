@@ -1,17 +1,14 @@
 import React, { forwardRef, useCallback, useImperativeHandle } from 'react';
+import { useSelector } from 'react-redux';
 import Table from 'components/table';
 import { getPaymentColumns } from 'pages/payments/columns';
 import { PaymentService } from 'backend/services/backend';
 import { getPaymentFilters } from 'pages/payments/filters';
+import { getIsAdmin } from 'store/selectors/auth';
 import '../styles.scss';
-import { useSelector } from 'react-redux';
-import { getUser } from '../../../store/reducers/auth/selectors';
 
 const OutgoingPayments = forwardRef((props, ref) => {
-  const {
-    isAdmin,
-    isSuperAdmin
-  } = useSelector(getUser);
+  const isAdmin = useSelector(getIsAdmin);
   const tableRef = React.useRef(null);
 
   const reloadTable = useCallback(() => {
@@ -29,7 +26,7 @@ const OutgoingPayments = forwardRef((props, ref) => {
         rowKey="uuid"
         columns={getPaymentColumns({
           isOutgoing: true,
-          canEdit: isAdmin || isSuperAdmin
+          canEdit: isAdmin
         })}
         exportURL="reports/payments/outgoing"
         loadDataFn={PaymentService.findOutgoingPayments}

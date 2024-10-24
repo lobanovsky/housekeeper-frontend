@@ -8,8 +8,11 @@ import { useLoading } from '../../../hooks/use-loading';
 import { showCounterpartyModal } from './modal';
 
 import './style.scss';
+import { useSelector } from 'react-redux';
+import { getIsAdmin } from '../../../store/selectors/auth';
 
 export function Counterparties() {
+  const isAdmin = useSelector(getIsAdmin);
   const [data, setData] = useState([]);
   const [loading, showLoading, hideLoading] = useLoading();
   const [isEmptyTable, setIsEmptyTable] = useState(true);
@@ -34,22 +37,25 @@ export function Counterparties() {
 
   return (
     <div className={`view counterparties ${loading ? 'loading' : ''} ${isEmptyTable ? 'no-data' : ''}`}>
-      <Button
-        type="link"
-        className="add-btn"
-        onClick={() => {
-          showCounterpartyModal({
-            counterparty: {
-              id: 0,
-              name: ''
-            },
-            onFinish: loadData
-          });
-        }}
-      >
-        <PlusOutlined />
-        добавить компанию
-      </Button>
+      {isAdmin && (
+        <Button
+          type="link"
+          className="add-btn"
+          onClick={() => {
+            showCounterpartyModal({
+              counterparty: {
+                id: 0,
+                name: ''
+              },
+              onFinish: loadData
+            });
+          }}
+        >
+          <PlusOutlined />
+          добавить компанию
+        </Button>
+      )}
+
       <Table
         rowKey="id"
         loading={loading}

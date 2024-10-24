@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { NavigationItems } from 'navigation';
 import './style.scss';
 import { useSelector } from 'react-redux';
-import { getUser } from '../../store/reducers/auth/selectors';
+import { getUser } from '../../store/selectors/selectors';
 import { filterNavigationByUserRoles } from '../../navigation/utils';
 
 export function Sider() {

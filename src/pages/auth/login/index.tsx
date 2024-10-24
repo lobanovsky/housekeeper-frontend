@@ -1,20 +1,17 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Button, Card, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
+import { AuthService, LoginRequest } from 'backend/services/backend';
 import Loading from 'components/loading';
+import { loginStarted } from 'store/reducers/auth';
 import { AuthData, IUserData, ServerError } from 'utils/types';
 import { showError } from 'utils/notifications';
-import { useDispatch } from 'react-redux';
-import { AuthService, LoginRequest } from '../../../backend/services/backend';
-import './styles.scss';
-import { loginStarted } from '../../../store/reducers/auth';
 import { getUserData } from './helpers';
-
-// @ts-ignore
+import './styles.scss';
 
 function Login() {
-  // const { onGetToken } = useContext(AuthContext);
   const dispatch = useDispatch();
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
   const [credentials, setCredentials] = useState<LoginRequest>({
@@ -112,21 +109,6 @@ function Login() {
               Войти
             </Button>
           </div>
-
-          {/* <div */}
-          {/*   className="hint" */}
-          {/*   style={{ */}
-          {/*     marginTop: 32, */}
-          {/*     color: 'gray' */}
-          {/*   }} */}
-          {/* > */}
-          {/*   За помощью обращайтесь на &nbsp; */}
-          {/*   <Typography.Link */}
-          {/*     copyable={{ tooltips: ['Скопировать', 'Скопировано'] }} */}
-          {/*   > */}
-          {/*     docduckio@yandex.ru */}
-          {/*   </Typography.Link> */}
-          {/* </div> */}
         </div>
       </Card>
     </div>
