@@ -1,12 +1,11 @@
-import React from 'react';
-import { IUserData } from 'utils/types';
 import axios from 'axios';
-import { Avatar, Menu } from 'antd';
-import { loginSuccess, logout } from 'store/reducers/auth';
 import { axiosNotAuthorizedInterceptor } from 'backend/axios';
-import { modal } from 'global/NotificationsProvider';
-import { AvailableWorkspaceResponse, EnumUserRequestRole, UserResponse, UserService, Workspace } from '../../../backend/services/backend';
-import { showError } from '../../../utils';
+import { AvailableWorkspaceResponse, EnumUserRequestRole, UserResponse } from 'backend/services/backend';
+import { showWorkspaceSelectModal } from 'hooks/use-workspace-menu';
+import { EMPTY_USER, loginSuccess, logout } from 'store/reducers/auth';
+import { showError } from 'utils';
+import { IUserData } from 'utils/types';
+import { loadUserProfile } from './services';
 
 const onSuccessLoadUser = (userData: UserResponse & IUserData, dispatch: any) => {
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -21,49 +20,6 @@ const onSuccessLoadUser = (userData: UserResponse & IUserData, dispatch: any) =>
   }));
 };
 
-const showWorkspaceSelectModal = ({
-                                    grantedWorkspaces,
-                                    onOk
-                                  }: {
-  grantedWorkspaces: AvailableWorkspaceResponse[],
-  onOk: (selectedWorkspace: Workspace) => void
-}) => {
-  const modalCmp = modal.info({
-    className: 'workspace-selector',
-    title: 'Выберите пространство для работы',
-    // eslint-disable-next-line react/jsx-no-undef
-    content: <Menu
-      onClick={({ key }) => {
-        const [workspaceIdStr, workspaceName = ''] = key.split(' - ');
-        const workspaceId = parseInt(workspaceIdStr, 10);
-        if (workspaceId) {
-          modalCmp.destroy();
-          onOk({
-            id: workspaceId,
-            name: workspaceName || workspaceIdStr
-          });
-        }
-      }}
-      // @ts-ignore
-      items={grantedWorkspaces.map((workspace) => ({
-        key: `${workspace.id} - ${workspace.name}`,
-        label: <div className="workspace-item">
-          <Avatar style={{
-            // todo color
-            backgroundColor: 'gray',
-            color: 'white'
-          }}
-          >
-            {workspace.name ? workspace.name[0].toUpperCase() : '?'}
-          </Avatar>
-          {workspace.name}
-               </div>
-      }))}
-
-    />
-  });
-};
-
 export const getUserData = (authData: IUserData, dispatch: any) => {
   const {
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -72,45 +28,50 @@ export const getUserData = (authData: IUserData, dispatch: any) => {
   } = authData;
 
   const tokenStr = access_token ? `Bearer ${access_token}` : '';
-  UserService.getUser({
-    userId
-  }, { headers: { Authorization: tokenStr } })
-    .then((userProfile: UserResponse) => {
-      const resultUser: IUserData = {
-        ...authData,
-        ...userProfile
-      };
 
-      if ((userProfile.workspaces || []).length > 1 && !authData.workspaceId) {
-        showWorkspaceSelectModal({
-          grantedWorkspaces: resultUser.workspaces || [],
-          onOk: (selectedWorkspace) => {
-            resultUser.workspaceId = selectedWorkspace.id || 0;
-            resultUser.workspaceName = selectedWorkspace.name || '';
-            onSuccessLoadUser(resultUser, dispatch);
-          }
-        });
-      } else {
-        // если есть сохранённый в localStorage воркспейс, то берём его
-        if (authData.workspaceId) {
-          resultUser.workspaceId = authData.workspaceId;
-          resultUser.workspaceName = authData.workspaceName;
-        } else {
-          // иначе берём единственный из доступных
-          const grantedWorkspace = resultUser.workspaces.length ? resultUser.workspaces[0] : {
-            id: 0,
-            name: ''
-          };
-          resultUser.workspaceId = grantedWorkspace.id || 0;
-          resultUser.workspaceName = grantedWorkspace.name || '';
-        }
+  loadUserProfile(tokenStr, userId, (isSuccess, userProfile = { ...EMPTY_USER }) => {
+    const resultUser: IUserData = {
+      ...authData,
+      ...userProfile
+    };
 
-        onSuccessLoadUser(resultUser, dispatch);
-      }
-    })
-    .catch((e) => {
-      showError('Не удалось загрузить данные пользователя', e);
-      // @ts-ignore
+    let grantedWorkspaces = (userProfile?.workspaces || []);
+
+    if (!grantedWorkspaces.length) {
+      showError('Нет доступных пространств для работы. Пожалуйста, обратитесь к администратору сервиса');
       dispatch(logout());
-    });
+      return;
+    }
+
+    // Если есть сохранённый вп и он есть в грантед, то просто его "сохраняем" в грантед
+    // - чтобы мы сразу автоматом его выбрали (и сразу с цветом)
+    if (authData.workspaceId) {
+      const selectedWp = grantedWorkspaces.find((wp) => wp.id === authData.workspaceId);
+      if (selectedWp) {
+        grantedWorkspaces = [selectedWp];
+      }
+    }
+
+    if (grantedWorkspaces.length > 1) {
+      showWorkspaceSelectModal({
+        workspaces: resultUser.workspaces || [],
+        onOk: (selectedWorkspace: AvailableWorkspaceResponse) => {
+          resultUser.workspaceId = selectedWorkspace.id || 0;
+          resultUser.workspaceName = selectedWorkspace.name || '';
+          resultUser.workspaceColor = selectedWorkspace.color || '';
+          onSuccessLoadUser(resultUser, dispatch);
+        }
+      });
+    } else {
+      const {
+        id: onlyWpId,
+        name: onlyWpName,
+        color
+      } = grantedWorkspaces[0];
+      resultUser.workspaceId = onlyWpId;
+      resultUser.workspaceName = onlyWpName;
+      resultUser.workspaceColor = color || '';
+      onSuccessLoadUser(resultUser, dispatch);
+    }
+  });
 };

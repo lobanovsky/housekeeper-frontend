@@ -2,23 +2,32 @@ import React from 'react';
 import { Button, Popconfirm } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { DeleteOutlined } from '@ant-design/icons';
-import { Workspace } from 'backend/services/backend';
+import { WorkspaceResponse } from 'backend/services/backend';
+import { workspaceAvatarRenderer } from '../../../../utils/renderers';
 
 export const workspaceColumns = ({
                                    onEditClick,
                                    onDeleteClick
-                                 }: any): ColumnsType<Workspace> => [
+                                 }: any): ColumnsType<WorkspaceResponse> => [
   {
     title: 'Идентификатор',
     dataIndex: 'id'
   },
   {
     title: 'Наименование',
-    dataIndex: 'name'
+    dataIndex: 'name',
+    render: (name: string, record: WorkspaceResponse) => (
+      <div>
+        {workspaceAvatarRenderer(record)}
+        {' '}
+        {name}
+      </div>
+    )
+
   },
   {
     dataIndex: 'actions',
-    render: (value: any, record: Workspace) => (record.active ? (
+    render: (value: any, record: WorkspaceResponse) => (record.active ? (
       <Popconfirm
         title="Удалить пространство?"
         onCancel={(ev: React.MouseEvent<HTMLElement> | undefined) => {

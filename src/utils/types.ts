@@ -78,6 +78,7 @@ export interface ICredentials {
 
 export interface IUserData extends AuthData, UserResponse {
   userName?: string;
+  workspaceColor: string,
   workspaceId: number;
   workspaceName: string;
   workspaces: AvailableWorkspaceResponse[],

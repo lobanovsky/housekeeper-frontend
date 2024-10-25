@@ -1615,7 +1615,6 @@ export class MailingControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Ping by email
    */
@@ -1968,6 +1967,9 @@ export interface AvailableWorkspaceResponse {
 
   /**  */
   name: string;
+
+  /**  */
+  color?: string;
 }
 
 export interface RoleResponse {
@@ -2176,6 +2178,9 @@ export interface PageRoomVO {
 
 export interface PageableObject {
   /**  */
+  unpaged?: boolean;
+
+  /**  */
   paged?: boolean;
 
   /**  */
@@ -2183,9 +2188,6 @@ export interface PageableObject {
 
   /**  */
   pageSize?: number;
-
-  /**  */
-  unpaged?: boolean;
 
   /**  */
   offset?: number;
@@ -2237,10 +2239,10 @@ export interface RoomVO {
 
 export interface SortObject {
   /**  */
-  sorted?: boolean;
+  unsorted?: boolean;
 
   /**  */
-  unsorted?: boolean;
+  sorted?: boolean;
 
   /**  */
   empty?: boolean;
@@ -2871,7 +2873,7 @@ export interface IncomingPayment {
   comment?: string;
 }
 
-export interface PageWorkspace {
+export interface PageWorkspaceResponse {
   /**  */
   totalPages?: number;
 
@@ -2888,7 +2890,7 @@ export interface PageWorkspace {
   size?: number;
 
   /**  */
-  content?: Workspace[];
+  content?: WorkspaceResponse[];
 
   /**  */
   number?: number;
@@ -2904,6 +2906,23 @@ export interface PageWorkspace {
 
   /**  */
   empty?: boolean;
+}
+
+export interface WorkspaceResponse {
+  /**  */
+  id: number;
+
+  /**  */
+  createDate?: string;
+
+  /**  */
+  active?: boolean;
+
+  /**  */
+  name: string;
+
+  /**  */
+  color?: string;
 }
 
 export interface PageUserResponse {

@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUserData } from 'utils/types';
+import { AvailableWorkspaceResponse } from '../../../backend/services/backend';
 
 export const EMPTY_USER: IUserData = {
   id: 0,
@@ -12,6 +13,7 @@ export const EMPTY_USER: IUserData = {
   isAdmin: false,
   workspaceId: 0,
   workspaces: [],
+  workspaceColor: '',
   workspaceName: '',
   isSuperAdmin: false
 };
@@ -64,11 +66,13 @@ const authSlice = createSlice({
     workspaceChanged: (state: AuthStoreState, {
       payload: {
         id,
-        name
+        name,
+        color
       }
-    }: PayloadAction<{ id: number, name: string }>) => {
+    }: PayloadAction<AvailableWorkspaceResponse>) => {
       state.user.workspaceId = id;
       state.user.workspaceName = name;
+      state.user.workspaceColor = color || '';
     }
   }
 });

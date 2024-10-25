@@ -1,14 +1,16 @@
 import React, { MouseEvent, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { Avatar, Dropdown, Layout } from 'antd';
+import { Dropdown, Layout } from 'antd';
 
 import { SettingFilled, StarFilled, UserOutlined } from '@ant-design/icons';
-import { HouseIcon } from '../../icons/house';
-import { StoreState } from '../../store';
-import { logout, workspaceChanged } from '../../store/reducers/auth';
+import { HouseIcon } from 'icons/house';
+import { StoreState } from 'store';
+import { logout, workspaceChanged } from 'store/reducers/auth';
 import './styles.scss';
-import { AvailableWorkspaceResponse } from '../../backend/services/backend';
+import { AvailableWorkspaceResponse } from 'backend/services/backend';
+import { workspaceAvatarRenderer } from 'utils/renderers';
+import { useWorkspaceMenu } from 'hooks/use-workspace-menu';
 
 export function AppHeader() {
   const dispatch = useDispatch();
@@ -18,6 +20,23 @@ export function AppHeader() {
     user,
     isUserLoggedIn
   } = useSelector((state: StoreState) => state.auth);
+
+  const onChangeSelectedWorkspace = useCallback((wp: AvailableWorkspaceResponse) => {
+    dispatch(workspaceChanged({
+      id: wp.id,
+      name: wp.name,
+      color: wp.color
+    }));
+    navigate('/buildings');
+  }, []);
+
+  const {
+    menuItems,
+    onSelectWp
+  } = useWorkspaceMenu({
+    workspaces: user.workspaces || [],
+    onOk: onChangeSelectedWorkspace
+  });
 
   const displayName = useMemo(() => {
     const nameParts = user.name ? user.name.split(' ') : [];
@@ -33,6 +52,7 @@ export function AppHeader() {
     dispatch(logout());
   }, []);
 
+  // @ts-ignore
   return (
     <Layout.Header>
       <HouseIcon style={{
@@ -44,47 +64,23 @@ export function AppHeader() {
       {
         isUserLoggedIn && (
           <div className="user-info">
+            {workspaceAvatarRenderer({
+              id: user.workspaceId,
+              name: user.workspaceName,
+              color: user.workspaceColor
+            }, 'workspace-avatar')}
             {!!user.workspaceName && (user.workspaces || []).length > 1
               ? (
                 <Dropdown
                   className="workspace-selector"
                   placement="bottomRight"
+                  // @ts-ignore
                   menu={{
-                    className: 'workspaces-menu',
-                    onClick: ({
-                                item,
-                                key,
-                                keyPath,
-                                domEvent
-                              }) => {
-                      const [workspaceIdStr, workspaceName = ''] = key.split(' - ');
-                      const workspaceId = parseInt(workspaceIdStr, 10);
-                      if (workspaceId) {
-                        dispatch(workspaceChanged({
-                          id: workspaceId,
-                          name: workspaceName
-                        }));
-                        navigate('/buildings');
-                      }
-                    },
-                    items: (user.workspaces || []).map((workspace: AvailableWorkspaceResponse) => ({
-                      key: `${workspace.id} - ${workspace.name}`,
-                      label: <div className="workspace-item">
-                        <Avatar style={{
-                          marginRight: 4,
-                          // todo wp color
-                          backgroundColor: 'gray',
-                          color: 'white'
-                        }}
-                        >
-                          {workspace.name ? workspace.name[0].toUpperCase() : '?'}
-                        </Avatar>
-                        {workspace.name}
-                             </div>
-                    }))
+                    items: menuItems,
+                    onClick: onSelectWp
                   }}
                 >
-                  <span className="workspace-name">{user.workspaceName}</span>
+                  <span className="workspace-selected">{user.workspaceName}</span>
                 </Dropdown>
               ) : <span className="workspace-name">{user.workspaceName}</span>}
             <Dropdown

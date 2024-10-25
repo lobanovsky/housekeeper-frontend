@@ -1,5 +1,6 @@
-import React, { Typography } from 'antd';
+import React, { Avatar, Typography } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
+import { WorkspaceResponse } from '../backend/services/backend';
 
 const ACCOUNT_NUMBER_REGEX = /^\d{16,20}$/;
 
@@ -96,3 +97,18 @@ export const fioRenderer = (fullName: string): string => {
 
   return [lastName, firstName, secondName].join(' ');
 };
+
+export const workspaceAvatarRenderer = ({
+                                          name = '',
+                                          color = 'gray'
+                                        }: WorkspaceResponse, className: string = '') => (
+  <Avatar
+    className={className}
+    style={{
+      backgroundColor: color,
+      color: 'white'
+    }}
+  >
+    {name.length ? name[0].toUpperCase() : '?'}
+  </Avatar>
+);

@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Button, Table } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { CounterpartyService } from '../../../backend/services/backend';
+import { CounterpartyService } from 'backend/services/backend';
+import { useLoading } from 'hooks/use-loading';
+import { getIsAdmin } from 'store/selectors/auth';
+import { showError } from 'utils/notifications';
 import { counterpartyColumns } from './columns';
-import { showError } from '../../../utils/notifications';
-import { useLoading } from '../../../hooks/use-loading';
 import { showCounterpartyModal } from './modal';
 
 import './style.scss';
-import { useSelector } from 'react-redux';
-import { getIsAdmin } from '../../../store/selectors/auth';
 
 export function Counterparties() {
   const isAdmin = useSelector(getIsAdmin);
