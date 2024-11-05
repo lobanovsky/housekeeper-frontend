@@ -18,10 +18,10 @@ services:
       - BUILD_NUMBER=${TAG}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.housekeeper-ui.rule=Host(`housekeeper.docduck.io`)"
+      - "traefik.http.routers.housekpr-ui.rule=Host(`housekpr.docduck.io`)"
     networks:
-      - printdown-network
+      - housekpr-network
 
 networks:
-  printdown-network:
+  housekpr-network:
     external: true
