@@ -18,7 +18,7 @@ services:
       - BUILD_NUMBER=${TAG}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.housekpr-ui.rule=Host(`housekpr.docduck.io`)"
+      - "traefik.http.routers.housekpr-ui.rule=Host(`housekpr.ru`)"
     networks:
       - housekpr-network
 
