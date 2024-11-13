@@ -5,6 +5,7 @@ import { InfoCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 import { AccessResponse, EnumRoomVOType } from 'backend/services/backend';
 import { DictionariesContext } from 'context/AppContext';
 import { RoomTypeNames } from 'utils/constants';
+import { useSelector } from 'react-redux';
 import { AccessItem } from './components/access-item';
 import { showAddAccessItemModal } from './components/access-add-modal';
 import { FlatOwnerInfo } from './components/owner-property';
@@ -13,10 +14,13 @@ import { useRoomInfo } from './hooks/use-room-info';
 import './styles.scss';
 import { getRandomId } from '../../../../utils';
 import Loading from '../../../../components/loading';
+import { getIsAdmin } from '../../../../store/selectors/auth';
 
 export function FlatInfo() {
   const { roomId: selectedRoomStr = '' } = useParams();
   const { areas } = useContext(DictionariesContext);
+
+  const isAdmin = useSelector(getIsAdmin);
 
   const {
     roomInfo: {
@@ -107,7 +111,7 @@ export function FlatInfo() {
               {isLoadingAccesses && <Loading />}
               <div className="access-header">
                 <Typography.Title level={5}>Доступы</Typography.Title>
-                {grantedAreas.length ? (
+                {grantedAreas.length && isAdmin ? (
                   <Button
                     type="link"
                     size="small"
@@ -121,7 +125,7 @@ export function FlatInfo() {
                 ) : (
                   <Tooltip title="За выдачей доступов обращайтесь к администратору">
                     {/* @ts-ignore */}
-                    <InfoCircleTwoTone twoToneColor="orange" />
+                    <InfoCircleTwoTone style={{ fontSize: '12px' }} twoToneColor="#C7C7C7" />
                   </Tooltip>
                 )}
               </div>
