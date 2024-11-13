@@ -15,7 +15,7 @@ export function Buildings() {
   return (
     <div className="buildings view">
       {isLoading ? <Skeleton active /> : (
-        <Row gutter={32}>
+        <Row gutter={32} style={{ margin: 0 }}>
           <Col span={7}>
             <BuildingsSearchForm />
             <Menu
