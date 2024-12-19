@@ -45,7 +45,7 @@ jobs:
           key: ${{ secrets.HOST_KEY }}
           source: ".env, docker-compose.yaml"
           target: ${{ secrets.HOST_PROJECT_PATH }}
-          timeout: 300s
+          timeout: 900s
 
       - name: docker pull && up
         uses: appleboy/ssh-action@v1.2.0
