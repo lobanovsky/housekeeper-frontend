@@ -1,4 +1,4 @@
-import { Building } from '../../backend/services/backend';
+import { Building, EnumRoomVOType, RoomVO } from '../../backend/services/backend';
 
 export const MaxRoomsOnFloor = 10;
 
@@ -12,4 +12,12 @@ export const PhoneRegexes = [
 export const EmptyBuilding: Building = {
   id: 0,
   name: '',
+};
+
+export const EmptyRoom: RoomVO = {
+  id: 0,
+  number: '',
+  building: 0,
+  type: EnumRoomVOType.FLAT,
+  typeDescription: 'Квартира'
 };

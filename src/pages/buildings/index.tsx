@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router';
 import { Col, Menu, Row, Skeleton } from 'antd';
 import { Building, BuildingService, EnumBuildingType } from 'backend/services/backend';
@@ -11,6 +11,23 @@ export function Buildings() {
   const navigate = useNavigate();
   const { buildingId: selectedBuildingId = '' } = useParams();
   const [buildings, isLoading] = useRemoteData<Building[]>(BuildingService.findAll1);
+  const [selectedBuildingIds, setSelectedBuildingIds] = useState(parseInt(selectedBuildingId, 10) ? [selectedBuildingId] : []);
+
+  const selectBuilding = useCallback(({ key = '' }: { key: string }) => {
+    if (key) {
+      setSelectedBuildingIds([key]);
+      navigate(`/buildings/${key}`);
+    } else {
+      setSelectedBuildingIds([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (buildings?.length && !selectedBuildingId) {
+      const firstBuilding: Building = buildings[0];
+      selectBuilding({ key: String(firstBuilding.id) });
+    }
+  }, [buildings?.length]);
 
   return (
     <div className="buildings view">
@@ -19,12 +36,8 @@ export function Buildings() {
           <Col span={7}>
             <BuildingsSearchForm />
             <Menu
-              defaultSelectedKeys={parseInt(selectedBuildingId, 10) ? [selectedBuildingId] : []}
-              onClick={({ key = '' }) => {
-                if (key) {
-                  navigate(`/buildings/${key}`);
-                }
-              }}
+              selectedKeys={selectedBuildingIds}
+              onClick={selectBuilding}
               items={
                 (buildings || []).map((building) => ({
                   key: building.id || 0,

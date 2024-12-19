@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLoading } from './use-loading';
 import { showError } from '../utils/notifications';
-import { ServerError } from '../utils/types';
+import { ActionCallbackWithData, ServerError } from '../utils/types';
 import { IRequestOptions } from '../backend/services/backend';
 import { StoreState } from '../store';
 
@@ -20,7 +20,7 @@ function useRemoteData<T, OutputT = T>(loader: (options?: IRequestOptions) => Pr
   errorMsg: 'Не удалось загрузить данные',
   defaultShowLoading: false,
   dataConverter: undefined
-}): [OutputT | null, boolean, () => void] {
+}): [OutputT | null, boolean, (onSuccess?: ActionCallbackWithData<OutputT>) => void] {
   const {
     user,
     isUserLoggedIn,
@@ -30,7 +30,7 @@ function useRemoteData<T, OutputT = T>(loader: (options?: IRequestOptions) => Pr
   const [loading, showLoading, hideLoading] = useLoading(defaultShowLoading);
   const [data, setData] = useState<OutputT | null>(null);
 
-  const loadData = useCallback(() => {
+  const loadData = useCallback((onSuccess?: ActionCallbackWithData<OutputT>) => {
     if (!isUserLoggedIn || isCheckingToken) {
       return;
     }
@@ -42,6 +42,9 @@ function useRemoteData<T, OutputT = T>(loader: (options?: IRequestOptions) => Pr
         const result = dataConverter ? dataConverter(responseData) : responseData;
 
         setData(result as OutputT);
+        if (onSuccess) {
+          onSuccess(true, result as OutputT);
+        }
       })
       .catch((e: ServerError) => {
         showError(errorMsg, e);

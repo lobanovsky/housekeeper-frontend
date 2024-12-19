@@ -748,6 +748,31 @@ export class AccessControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   * Get the access by the owner id
+   */
+  findByOwner(
+    params: {
+      /**  */
+      ownerId: number;
+      /**  */
+      active?: boolean;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/access/owners/{owner-id}';
+      url = url.replace('{owner-id}', params['ownerId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { active: params['active'] };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
   /**
    * Get the overview by the plate number
    */
@@ -2010,6 +2035,9 @@ export interface UserResponse {
 
   /**  */
   code?: string;
+
+  /**  */
+  ownerId?: number;
 }
 
 export interface CounterpartyRequest {
@@ -2196,7 +2224,7 @@ export interface PageableObject {
   sort?: SortObject;
 }
 
-export interface RoomVO {
+export interface RoomVO_Old {
   /**  */
   id: number;
 
@@ -3255,6 +3283,7 @@ export enum EnumUserRequestRole {
   'SUPER_ADMIN' = 'SUPER_ADMIN',
   'STAFF_ADMIN' = 'STAFF_ADMIN',
   'STAFF_READ_ONLY' = 'STAFF_READ_ONLY',
+  'STAFF_OPERATOR' = 'STAFF_OPERATOR',
   'USER' = 'USER'
 }
 export enum EnumRoomFilterType {
@@ -3372,6 +3401,22 @@ export interface TopFilter {
   gateId?: number;
   startDate?: string;
   endDate?: string;
+}
+
+export interface RoomVO {
+  id: number;
+  street?: string;
+  building: number;
+  cadastreNumber?: string;
+  account?: string;
+  ownerName?: string;
+  number: string;
+  certificate?: string;
+  square?: number;
+  percentage?: number;
+  type: EnumRoomVOType;
+  typeDescription: string;
+  ownerIds?: number[];
 }
 
 

@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import { EmptyFunction } from 'utils/types';
 import { AreaEntity, Building, RoomVO } from '../../../../../backend/services/backend';
-import { EmptyBuilding } from '../../../constants';
+import { EmptyBuilding, EmptyRoom } from '../../../constants';
 
 export interface IAccessContext {
   roomInfo: RoomVO,
@@ -12,7 +12,7 @@ export interface IAccessContext {
 }
 
 export const AccessContext = createContext<IAccessContext>({
-  roomInfo: { id: 0 },
+  roomInfo: { ...EmptyRoom },
   ownerId: 0,
   grantedAreas: [],
   building: EmptyBuilding,

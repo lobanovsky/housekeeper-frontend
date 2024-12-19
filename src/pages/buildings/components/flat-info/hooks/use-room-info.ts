@@ -15,7 +15,7 @@ import { showError, useLoading } from 'utils';
 import { AccessValues, ServerError } from 'utils/types';
 import { addRandomIdToData } from 'utils/utils';
 import { sortPropertyByFlatType } from '../utils';
-import { EmptyBuilding } from '../../../constants';
+import { EmptyBuilding, EmptyRoom } from '../../../constants';
 
 interface OwnerFullInfo {
   info: OwnerEntity,
@@ -53,7 +53,7 @@ export function useRoomInfo({
   const [isLoadingAccesses, showAccessLoading, hideAccessLoading] = useLoading(false);
 
   const [roomInfo, setRoomInfo] = useState<RoomFullInfo>({
-    roomInfo: { id: 0 },
+    roomInfo: { ...EmptyRoom },
     accesses: [],
     ownerProperty: [],
     building: EmptyBuilding
@@ -149,7 +149,7 @@ export function useRoomInfo({
     ])
       .then(([flatParamsResult, accessesResult]) => {
         const result: RoomFullInfo = {
-          roomInfo: { id: 0 },
+          roomInfo: { ...EmptyRoom },
           building: { ...EmptyBuilding },
           accesses: [],
           ownerProperty: []
@@ -197,7 +197,6 @@ export function useRoomInfo({
 
   useEffect(() => {
     if (initialRoomId) {
-      console.log(`%c Load room info in hook [${initialRoomId}]`, 'color: blue');
       loadRoomFullInfo(initialRoomId);
     }
   }, [initialRoomId]);

@@ -57,6 +57,13 @@ module.exports = async (options) => {
       to: "export class WorkspacesControllerService"
     });
 
+    await replace({
+      files: outFile,
+      from: /export interface RoomVO/g,
+      to: "export interface RoomVO_Old"
+    });
+
+
     await fs.appendFile(outFile, `
 			
 export interface TopResponse {
@@ -71,6 +78,22 @@ export interface TopFilter {
 	gateId?: number;
 	startDate?: string;
 	endDate?: string;
+}
+
+export interface RoomVO {
+  id: number;
+  street?: string;
+  building: number;
+  cadastreNumber?: string;
+  account?: string;
+  ownerName?: string;
+  number: string;
+  certificate?: string;
+  square?: number;
+  percentage?: number;
+  type: EnumRoomVOType;
+  typeDescription: string;
+  ownerIds?: number[];
 }
 
 
