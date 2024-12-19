@@ -23,7 +23,7 @@ interface IFilterFormProps {
   isValidForm?: (filters: FilterFormValues) => boolean;
 }
 
-const FilterForm = React.forwardRef((props: IFilterFormProps, ref): JSX.Element => {
+const FilterForm = React.forwardRef((props: IFilterFormProps, ref): React.ReactElement => {
   const {
     onChangeFilters,
     filters,

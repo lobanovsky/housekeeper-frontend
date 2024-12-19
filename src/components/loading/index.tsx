@@ -7,7 +7,7 @@
  * @constructor
  */
 
-import React from 'react';
+import React, { ReactElement } from 'react';
 import Spin, { SpinProps } from 'antd/lib/spin';
 import './styles.scss';
 
@@ -15,7 +15,10 @@ interface ILoadingProps extends SpinProps {
   text?: string;
 }
 
-function Loading({ size, text }: ILoadingProps): JSX.Element {
+function Loading({
+                   size,
+                   text
+                 }: ILoadingProps): ReactElement {
   return (
     <div
       role="button"

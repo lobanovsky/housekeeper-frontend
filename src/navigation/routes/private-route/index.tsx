@@ -12,7 +12,7 @@ export function PrivatePage({
                               children,
                               roles = [],
                               path = ''
-                            }: { children: React.ReactNode, path?: string, roles?: EnumUserRequestRole[] }): JSX.Element {
+                            }: { children: React.ReactNode, path?: string, roles?: EnumUserRequestRole[] }): React.ReactElement {
   const {
     isLoggingIn,
     isCheckingToken,
