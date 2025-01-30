@@ -19,7 +19,8 @@ export const showFileUploadModal = ({
   };
 
   modal = Modal.info({
-    width,
+    // @ts-ignore
+    width: width || 800,
     closable: true,
     className: `modal-no-btns ${className}`,
     title,
