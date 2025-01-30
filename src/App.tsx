@@ -1,27 +1,22 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { App as AppContext, Layout } from 'antd';
 import NotificationsProvider from 'global/NotificationsProvider';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from 'store/reducers/auth';
 
+import { logout } from 'store/reducers/auth';
 import { AreaEntity, AreaService } from './backend/services/backend';
 import { DictionariesContext } from './context/AppContext';
-import { getUserData } from './pages/auth/login/helpers';
 import useRemoteData from './hooks/use-remote-data';
 import { AppHeader, PageHeader, Sider } from './layout';
 import { AppRoutes } from './navigation/routes';
-import { StoreState } from './store';
-import './App.scss';
-import { Buildings } from './pages/buildings';
 import { PrivatePage } from './navigation/routes/private-route';
+import { getUserData } from './pages/auth/login/helpers';
+import { Buildings } from './pages/buildings';
 import { BuildingScheme } from './pages/buildings/components/building-scheme';
 import { FlatInfo } from './pages/buildings/components/flat-info';
-
-const {
-  Content,
-  Footer
-} = Layout;
+import { StoreState } from './store';
+import './App.scss';
 
 function App() {
   const [areas] = useRemoteData<AreaEntity[]>(AreaService.findAll2, {
@@ -54,7 +49,7 @@ function App() {
               {isUserLoggedIn && <Sider />}
               <Layout>
                 <AppHeader />
-                <Content>
+                <Layout.Content>
                   {isUserLoggedIn && <PageHeader />}
                   <Routes>
                     <Route path="/buildings" element={<PrivatePage><Buildings /></PrivatePage>}>
@@ -88,7 +83,7 @@ function App() {
                       element={<Navigate replace to="/buildings" />}
                     />
                   </Routes>
-                </Content>
+                </Layout.Content>
                 {/* <Footer> */}
                 {/*   <div className="company-name">© 2020-2024 Бюро Лобановского</div> */}
                 {/* </Footer> */}

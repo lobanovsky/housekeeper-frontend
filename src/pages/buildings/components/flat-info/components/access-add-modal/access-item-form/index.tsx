@@ -29,7 +29,6 @@ export function AccessItemForm({
                                    phoneNumber,
                                    areaIds = [],
                                    phoneLabel,
-                                   areaPlaces = {},
                                    tenant,
                                    accessId
                                  }

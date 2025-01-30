@@ -38,6 +38,7 @@
     "object-curly-newline": 0,
     "no-plusplus": 0,
     "no-debugger": 1,
+    "no-console": 0,
     "no-nested-ternary": 0,
     "import/prefer-default-export": 0,
     "import/no-extraneous-dependencies": 0,

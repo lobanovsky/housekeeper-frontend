@@ -1,7 +1,6 @@
 import React from 'react';
 import { Typography } from 'antd';
 import { dateTimeRenderer } from 'utils/renderers';
-import { LogEntryResponse } from '../../../backend/services/backend';
 
 export const gateLogColumns = [
   {
@@ -14,7 +13,7 @@ export const gateLogColumns = [
     title: 'Квартира',
     // todo сделать ссылку на квартиру
 
-    render: (flatNumber: string, { buildingId }: LogEntryResponse) => flatNumber
+    render: (flatNumber: string) => flatNumber
   },
   {
     dataIndex: 'userName',

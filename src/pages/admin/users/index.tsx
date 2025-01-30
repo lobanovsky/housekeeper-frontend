@@ -4,7 +4,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { UserResponse, UserService } from 'backend/services/backend';
 import Table from 'components/table';
-import { useLoading } from 'hooks/use-loading';
+import { Loading, useLoading } from 'hooks/use-loading';
 import { StoreState } from 'store';
 import { showError, showMessage } from 'utils/notifications';
 import { ServerError } from 'utils/types';
@@ -13,8 +13,8 @@ import { userColumns } from './columns';
 import { useUserRoleOptions } from './hooks';
 import { userFilters } from './filters';
 import { sendInvitationToUser } from './services';
-import './style.scss';
 import { showUserModal } from './user-modal';
+import './style.scss';
 
 export function Users() {
   const {
@@ -49,7 +49,6 @@ export function Users() {
   }, [reloadTable, roleOptions.length]);
 
   const onEditClick = useCallback((user: UserResponse) => {
-    // todo
     showUserModal({
       user,
       roleOptions,
@@ -114,6 +113,7 @@ export function Users() {
 
   return (
     <div className="users-list">
+      {loading && <Loading />}
       <Table
         ref={tableRef}
         columns={tableColumns}

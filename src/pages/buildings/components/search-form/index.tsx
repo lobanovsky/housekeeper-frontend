@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 import { Input } from 'antd';
 import { MaskedInput } from 'antd-mask-input';
 import { SearchOutlined } from '@ant-design/icons';
@@ -11,7 +10,6 @@ import { showError } from 'utils/notifications';
 import './styles.scss';
 
 export function BuildingsSearchForm() {
-  const navigate = useNavigate();
   const [loading, showLoading, hideLoading] = useLoading();
   const [searchPhone, setSearchPhone] = useState('');
   const [searchCarNun, setSearchCarNum] = useState('');

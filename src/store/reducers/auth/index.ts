@@ -52,7 +52,7 @@ const authSlice = createSlice({
       state.workspaceId = payload.workspaceId || 0;
       state.workspaceName = payload.workspaceName || '';
     },
-    loginError: (state: AuthStoreState, { payload }: PayloadAction<any>) => {
+    loginError: (state: AuthStoreState) => {
       state.isLoggingIn = false;
       state.isUserLoggedIn = false;
       state.isCheckingToken = false;

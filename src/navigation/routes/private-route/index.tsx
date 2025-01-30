@@ -11,10 +11,8 @@ import { EnumUserRequestRole } from '../../../backend/services/backend';
 export function PrivatePage({
                               children,
                               roles = [],
-                              path = ''
-                            }: { children: React.ReactNode, path?: string, roles?: EnumUserRequestRole[] }): React.ReactElement {
+                            }: { children: React.ReactNode, roles?: EnumUserRequestRole[] }): React.ReactElement {
   const {
-    isLoggingIn,
     isCheckingToken,
     isUserLoggedIn,
     user

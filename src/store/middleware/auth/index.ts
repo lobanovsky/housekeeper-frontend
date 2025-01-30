@@ -28,7 +28,7 @@ export const authMiddleware = createListenerMiddleware();
 
 authMiddleware.startListening({
   matcher: isAnyOf(loginError),
-  effect: async (action: any, listenerApi: any) => {
+  effect: async () => {
     delete axios.defaults.headers.Authorization;
   }
 

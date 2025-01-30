@@ -24,11 +24,8 @@ export const getNavigationItemByPathname = (pathname: string, item: MenuItemType
   return result;
 };
 
-export const userHasPermissions = (roles: EnumUserRequestRole[], userRoles: EnumUserRequestRole[]) => {
-  const result = !roles.length || roles.some((requiredRole) => userRoles.includes(requiredRole));
-
-  return result;
-};
+// eslint-disable-next-line max-len
+export const userHasPermissions = (roles: EnumUserRequestRole[], userRoles: EnumUserRequestRole[]) => !roles.length || roles.some((requiredRole) => userRoles.includes(requiredRole));
 
 export const filterNavigationByUserRoles = (navigationItems: NavigationType, userRoles: EnumUserRequestRole[]) => {
   const result: NavigationType = [];

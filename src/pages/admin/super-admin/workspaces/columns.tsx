@@ -5,10 +5,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { WorkspaceResponse } from 'backend/services/backend';
 import { workspaceAvatarRenderer } from '../../../../utils/renderers';
 
-export const workspaceColumns = ({
-                                   onEditClick,
-                                   onDeleteClick
-                                 }: any): ColumnsType<WorkspaceResponse> => [
+export const workspaceColumns = ({ onDeleteClick }: any): ColumnsType<WorkspaceResponse> => [
   {
     title: 'Идентификатор',
     dataIndex: 'id'

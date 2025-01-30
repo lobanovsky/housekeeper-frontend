@@ -1,20 +1,21 @@
-import React, { useCallback, useContext, useEffect, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { useParams } from 'react-router';
+import { useSelector } from 'react-redux';
 import { Button, Card, Empty, Tooltip, Typography } from 'antd';
 import { InfoCircleTwoTone, PlusOutlined } from '@ant-design/icons';
+
 import { AccessResponse, EnumRoomVOType } from 'backend/services/backend';
+import Loading from 'components/loading';
 import { DictionariesContext } from 'context/AppContext';
+import { getIsAdmin } from 'store/selectors/auth';
 import { RoomTypeNames } from 'utils/constants';
-import { useSelector } from 'react-redux';
+import { getRandomId } from 'utils';
 import { AccessItem } from './components/access-item';
 import { showAddAccessItemModal } from './components/access-add-modal';
 import { FlatOwnerInfo } from './components/owner-property';
 import { AccessContext, IAccessContext } from './context/AccessContext';
 import { useRoomInfo } from './hooks/use-room-info';
 import './styles.scss';
-import { getRandomId } from '../../../../utils';
-import Loading from '../../../../components/loading';
-import { getIsAdmin } from '../../../../store/selectors/auth';
 
 export function FlatInfo() {
   const { roomId: selectedRoomStr = '' } = useParams();
@@ -29,7 +30,6 @@ export function FlatInfo() {
       ownerProperty,
       building
     },
-    loadRoomFullInfo,
     loadAccesses,
     grantedAreas,
     ownerId,
@@ -76,12 +76,6 @@ export function FlatInfo() {
   const showAccessAddModal = useCallback(() => {
     showAddAccessItemModal(flatContextState.value);
   }, [flatContextState.changeId]);
-
-  useEffect(() => {
-    const parsedRoomId = parseInt(selectedRoomStr, 10);
-    console.log(`%c Flat info [${parsedRoomId}] mounted!`, 'color: red');
-    // loadRoomFullInfo(parsedRoomId);
-  }, [selectedRoomStr]);
 
   // @ts-ignore
   return (

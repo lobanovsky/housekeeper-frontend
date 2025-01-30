@@ -22,7 +22,6 @@ function useRemoteData<T, OutputT = T>(loader: (options?: IRequestOptions) => Pr
   dataConverter: undefined
 }): [OutputT | null, boolean, (onSuccess?: ActionCallbackWithData<OutputT>) => void] {
   const {
-    user,
     isUserLoggedIn,
     isCheckingToken
   } = useSelector((state: StoreState) => state.auth);
