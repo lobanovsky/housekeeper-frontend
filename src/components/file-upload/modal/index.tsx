@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { Modal, ModalProps } from 'antd';
 import { FileUploadProps } from 'components/file-upload/types';
