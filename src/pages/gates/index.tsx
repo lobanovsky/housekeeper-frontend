@@ -27,7 +27,7 @@ function Gates() {
       url: '/files/eldes-gate/importer',
       successMsg: 'Файл с шлагбаумами загружен',
       errorMsg: 'Не удалось загрузить файл с шлагбаумами',
-      onFinish: (isSuccess) => {
+      onFinish: (isSuccess: boolean) => {
         if (isSuccess) {
           reloadTables();
         }
