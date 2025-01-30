@@ -20,8 +20,8 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.housekpr-ui.rule=Host(`housekpr.ru`)"
     networks:
-      - housekpr-network
+      - printdown-network
 
 networks:
-  housekpr-network:
+  printdown-network:
     external: true
