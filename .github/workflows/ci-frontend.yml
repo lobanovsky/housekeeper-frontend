@@ -53,7 +53,7 @@ jobs:
           username: ${{ secrets.HOST_USERNAME }}
           key: ${{ secrets.HOST_KEY }}
           script: |
-            docker login --username json_key --password-stdin cr.yandex <<< '${{ secrets.YC_ADMIN_SA_JSON_CREDENTIALS }}'
+            echo ${{ secrets.YA_OAUTH }} |docker login --username oauth --password-stdin cr.yandex
             cd ${{ secrets.HOST_PROJECT_PATH }}            
             docker compose pull
             docker compose up -d
