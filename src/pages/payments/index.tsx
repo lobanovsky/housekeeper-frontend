@@ -27,7 +27,7 @@ function Payments() {
       url: '/files/payments/importer',
       successMsg: 'Файл с платежами загружен',
       errorMsg: 'Не удалось загрузить файл с платежами',
-      onFinish: (isSuccess) => {
+      onFinish: (isSuccess: boolean) => {
         if (isSuccess) {
           reloadTables();
         }

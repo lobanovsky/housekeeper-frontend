@@ -40,7 +40,7 @@ export function Users() {
         name: ''
       },
       roleOptions,
-      onFinish: (isSuccess) => {
+      onFinish: (isSuccess: boolean) => {
         if (isSuccess) {
           reloadTable();
         }
@@ -53,7 +53,7 @@ export function Users() {
     showUserModal({
       user,
       roleOptions,
-      onFinish: (isSuccess) => {
+      onFinish: (isSuccess: boolean) => {
         if (isSuccess) {
           reloadTable();
         }
