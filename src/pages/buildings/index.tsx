@@ -31,6 +31,14 @@ export function Buildings() {
 
   return (
     <div className="buildings view">
+      <div style={{
+        color: 'red',
+        fontSize: '28px'
+      }}
+      >
+{' '}
+Всем привет
+      </div>
       {isLoading ? <Skeleton active /> : (
         <Row gutter={32} style={{ margin: 0 }}>
           <Col span={7}>
