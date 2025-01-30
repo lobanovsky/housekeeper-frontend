@@ -3,7 +3,8 @@ import { Modal, ModalProps } from 'antd';
 import { FileUploadProps } from 'components/file-upload/types';
 import { FileUpload } from '../index';
 
-interface FileUploadModalProps extends Omit<FileUploadProps, 'closeModal'>, ModalProps {
+interface FileUploadModalProps extends Omit<FileUploadProps, 'closeModal' | 'width'>, ModalProps {
+  width?: number;
 }
 
 export const showFileUploadModal = ({
@@ -19,7 +20,6 @@ export const showFileUploadModal = ({
   };
 
   modal = Modal.info({
-    // @ts-ignore
     width: width || 800,
     closable: true,
     className: `modal-no-btns ${className}`,
