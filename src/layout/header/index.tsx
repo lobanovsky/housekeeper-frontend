@@ -1,7 +1,7 @@
 import React, { MouseEvent, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { Dropdown, Layout } from 'antd';
+import { Dropdown, Layout, Typography } from 'antd';
 
 import { SettingFilled, StarFilled, UserOutlined } from '@ant-design/icons';
 import { HouseIcon } from 'icons/house';
@@ -11,6 +11,8 @@ import './styles.scss';
 import { AvailableWorkspaceResponse } from 'backend/services/backend';
 import { workspaceAvatarRenderer } from 'utils/renderers';
 import { useWorkspaceMenu } from 'hooks/use-workspace-menu';
+
+const GitCommitHash = process.env.REACT_APP_GIT_SHA ? process.env.REACT_APP_GIT_SHA.substring(0, 15) : '';
 
 export function AppHeader() {
   const dispatch = useDispatch();
@@ -87,6 +89,23 @@ export function AppHeader() {
               className="user-name"
               menu={{
                 items: [
+                  {
+                    key: 'info',
+                    label: <div
+                      role="button"
+                      onClick={(ev: any) => {
+                        ev.stopPropagation();
+                      }}
+                    >
+                      Сборка:
+                      {' '}
+                      <Typography.Text
+                        copyable={GitCommitHash ? { text: process.env.REACT_APP_GIT_SHA } : false}
+                      >
+                        {GitCommitHash || ' - '}
+                      </Typography.Text>
+                           </div>
+                  },
                   {
                     key: 'logout',
                     label: 'Выход',
