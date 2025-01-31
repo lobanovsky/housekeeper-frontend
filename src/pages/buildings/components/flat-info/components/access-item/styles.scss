@@ -55,6 +55,10 @@
           }
         }
 
+        .anticon.anticon-copy {
+          @include rowActionButtonStyle(#b5b5b5);
+        }
+
 
       }
 

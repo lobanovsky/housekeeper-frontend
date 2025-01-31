@@ -67,7 +67,7 @@ export const summRenderer = (amount: number | string, options = {}) => {
   return formatter.format(amountNumber);
 };
 
-export const phoneNumberRenderer = (phoneStr: string = '') => {
+export const phoneNumberRenderer = (phoneStr: string = '', copyable = true) => {
   const phoneOnlyDigits = phoneStr.replace(/\D/g, '');
   if (!PhoneBackendRegex.test(phoneOnlyDigits)) {
     return phoneStr;
@@ -83,8 +83,10 @@ export const phoneNumberRenderer = (phoneStr: string = '') => {
     return '';
   }
 
-  return `+7 (${code}) ${Object.values(otherGroups)
+  const formattedPhone = `+7 (${code}) ${Object.values(otherGroups)
     .join('-')}`;
+
+  return copyable ? <Typography.Text copyable={{ text: phoneOnlyDigits }}>{formattedPhone}</Typography.Text> : formattedPhone;
 };
 
 export const fioRenderer = (fullName: string): string => {
