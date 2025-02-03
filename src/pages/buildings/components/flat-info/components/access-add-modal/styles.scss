@@ -1,13 +1,40 @@
 @import '../../../../../../colors';
 
-.access-add-form {
-  .ant-alert.ant-alert-info {
-    padding: 8px 12px;
-    //border-color:
-    background-color: rgba(243, 248, 251, 0.8);
-    border-color: rgba(146, 194, 238, 0.6);
 
+.app-static-modal.access-add-modal {
+  .title {
+    //margin-bottom: 0.5em;
+    font-weight: 500;
+
+    //
+
+    .phone-number {
+      margin: 0 8px;
+      color: #0c4daa
+      //font-weight: 500;
+    }
+
+    .phone-label {
+      font-weight: normal;
+      font-size: 15px;
+      color: rgba(80, 80, 80, 0.9);
+    }
   }
+}
+
+.access-add-form {
+  .access-author {
+    text-align: end;
+    color: rgba(60, 60, 60, 0.9);
+  }
+
+  //.ant-alert.ant-alert-info {
+  //  padding: 8px 12px;
+  //  //border-color:
+  //  background-color: rgba(243, 248, 251, 0.8);
+  //  border-color: rgba(146, 194, 238, 0.6);
+  //
+  //}
 
   h5 {
     margin-top: 18px;

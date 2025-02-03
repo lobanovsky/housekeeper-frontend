@@ -73,7 +73,7 @@ export function AccessItem({ access }: { access: AccessResponse }) {
               trigger={['click']}
             >
               <div className="phone-number">
-                {phoneNumberRenderer(phoneNumber)}
+                {phoneNumberRenderer(phoneNumber, true)}
                 {tenant && <Tooltip mouseEnterDelay={0.2} title="Арендатор"><span className="tenant-icon">А</span></Tooltip>}
               </div>
             </Popover>

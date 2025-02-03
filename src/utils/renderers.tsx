@@ -67,7 +67,7 @@ export const summRenderer = (amount: number | string, options = {}) => {
   return formatter.format(amountNumber);
 };
 
-export const phoneNumberRenderer = (phoneStr: string = '', copyable = true) => {
+export const phoneNumberRenderer = (phoneStr: string = '', copyable = false) => {
   const phoneOnlyDigits = phoneStr.replace(/\D/g, '');
   if (!PhoneBackendRegex.test(phoneOnlyDigits)) {
     return phoneStr;

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Alert, Button } from 'antd';
+import { Button } from 'antd';
 import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
 import { AccessService, UpdateAccessRequest } from 'backend/services/backend';
 import Loading from 'components/loading';
@@ -123,15 +123,10 @@ function AddAccessForm(props: AccessFormProps & { closeModal: EmptyFunction, }) 
   return (
     <div className="access-add-form">
       {loading && <Loading />}
-      <Alert
-        type="info"
-        description={(
-          <>
-            <span style={{ fontWeight: 500 }}>Выдаёт:&nbsp;</span>
-            {`${ownerName} (${roomType ? RoomTypeNames[roomType] : ''} ${number})`}
-          </>
-        )}
-      />
+      <div className="access-author">
+        <span>от&nbsp;</span>
+        {`${ownerName} (${roomType ? RoomTypeNames[roomType] : ''} ${number})`}
+      </div>
       <AccessItemForm
         key={accessId}
         isEdit={isEdit}
@@ -167,9 +162,20 @@ export const showAddAccessItemModal = (props: AccessFormProps) => {
   const isEdit = !!props.access?.accessId;
   showModal({
     width: 800,
-    className: 'phone-add-modal',
+    className: 'access-add-modal',
     // eslint-disable-next-line max-len
-    title: isEdit ? `Доступ для ${phoneNumberRenderer(access?.phoneNumber)}${access?.phoneLabel ? ` (${access.phoneLabel})` : ''}` : 'Новый доступ',
+    title:
+      <div className="title">
+        {isEdit ? (
+          <>
+            Доступ для
+            <span className="phone-number">{phoneNumberRenderer(access?.phoneNumber)}</span>
+            {access?.phoneLabel && (
+              <span className="phone-label">{access.phoneLabel}</span>
+            )}
+          </>
+        ) : 'Новый доступ'}
+      </div>,
     closable: true,
     // eslint-disable-next-line react/jsx-props-no-spreading
     getContent: ({ closeModal }) => <AddAccessForm {...props} closeModal={closeModal} />
