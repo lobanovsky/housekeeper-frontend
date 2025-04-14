@@ -1,8 +1,8 @@
 name: Build and Deploy
 
 on:
-#  push:
-#    branches: [ "master" ]
+  push:
+    branches: [ "master" ]
   workflow_dispatch:
 
 permissions:
@@ -11,7 +11,7 @@ permissions:
 jobs:
 
   build:
-    name: Build
+    name: Build and Deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -40,21 +40,21 @@ jobs:
       - name: copy files to host
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.HOST_IP }}
-          username: ${{ secrets.HOST_USERNAME }}
-          key: ${{ secrets.HOST_KEY }}
-          source: ".env, docker-compose.yaml"
-          target: ${{ secrets.HOST_PROJECT_PATH }}
+          host: ${{ secrets.MR17_HOST_IP }}
+          username: ${{ secrets.MR17_HOST_USERNAME }}
+          key: ${{ secrets.MR17_HOST_KEY }}
+          source: ".env, docker-compose.yml"
+          target: ${{ secrets.MR17_HOST_PROJECT_PATH }}
 
       - name: docker pull && up
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST_IP }}
           username: ${{ secrets.HOST_USERNAME }}
-          key: ${{ secrets.HOST_KEY }}
+          key: ${{ secrets.MR17_HOST_KEY }}
           script: |
             echo ${{ secrets.YA_OAUTH }} |docker login --username oauth --password-stdin cr.yandex
-            cd ${{ secrets.HOST_PROJECT_PATH }}            
+            cd ${{ secrets.MR17_HOST_PROJECT_PATH }}            
             docker compose pull
             docker compose up -d
             docker logout cr.yandex

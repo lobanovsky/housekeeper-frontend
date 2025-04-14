@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+
+  housekeeper-frontend:
+    build:
+      context: .
+      dockerfile: ${DOCKERFILE:-Dockerfile}
+    image: ${CONTAINER_REGISTRY}/housekeeper-frontend:${TAG}
+    container_name: housekeeper-frontend
+    restart: always
+    volumes:
+      - ".:/usr/src/app"
+      - "/usr/src/app/node_modules"
+    ports:
+      - "80:80"
+    environment:
+      - BUILD_NUMBER=${TAG}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.housekpr.rule=Host(`housekpr.ru`)"
+    networks:
+      - housekpr-network
+
+networks:
+  housekpr-network:
+    external: true
