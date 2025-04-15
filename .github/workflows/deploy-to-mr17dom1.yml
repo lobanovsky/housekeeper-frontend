@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and Deploy to mr17dom1
 
 on:
   push:
@@ -49,8 +49,8 @@ jobs:
       - name: docker pull && up
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.HOST_IP }}
-          username: ${{ secrets.HOST_USERNAME }}
+          host: ${{ secrets.MR17_HOST_IP }}
+          username: ${{ secrets.MR17_HOST_USERNAME }}
           key: ${{ secrets.MR17_HOST_KEY }}
           script: |
             echo ${{ secrets.YA_OAUTH }} |docker login --username oauth --password-stdin cr.yandex
