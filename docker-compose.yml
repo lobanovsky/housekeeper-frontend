@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
 
   housekeeper-frontend:
@@ -13,7 +11,7 @@ services:
       - ".:/usr/src/app"
       - "/usr/src/app/node_modules"
     ports:
-      - "80:80"
+      - "80"
     environment:
       - BUILD_NUMBER=${TAG}
     labels:
