@@ -655,7 +655,7 @@ export class CounterpartyControllerService {
 
 export class AccessControllerService {
   /**
-   * Edit the area access by the phone number
+   * Редактирование доступа к территории по номеру телефона
    */
   updateAccess(
     params: {
@@ -680,7 +680,7 @@ export class AccessControllerService {
     });
   }
   /**
-   * Block the area access by the phone number
+   * Заблокировать доступ к территории по номеру телефона
    */
   deleteAccess(
     params: {
@@ -703,7 +703,7 @@ export class AccessControllerService {
     });
   }
   /**
-   * Create the area access by the phone number
+   * Создание доступа к территории по номеру телефона
    */
   createAccess(
     params: {
@@ -725,7 +725,7 @@ export class AccessControllerService {
     });
   }
   /**
-   * Get the access by the room id
+   * Получить доступы по id комнаты
    */
   findByRoom(
     params: {
@@ -750,7 +750,31 @@ export class AccessControllerService {
   }
 
   /**
-   * Get the access by the owner id
+   * Get the access by the phone number
+   */
+  findByPhone(
+    params: {
+      /**  */
+      phoneNumber: string;
+      /**  */
+      active?: boolean;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/access/phones/{phone-number}';
+      url = url.replace('{phone-number}', params['phoneNumber'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { active: params['active'] };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Получить доступы по id владельца
    */
   findByOwner(
     params: {
@@ -774,7 +798,7 @@ export class AccessControllerService {
     });
   }
   /**
-   * Get the overview by the plate number
+   * Получить обзор доступа по номеру автомобиля
    */
   overview(
     params: {
@@ -812,7 +836,7 @@ export class AccessControllerService {
     });
   }
   /**
-   * Export the access to .csv by the area id
+   * Экспорт доступов в Eldes-формат по id территории
    */
   exportAccess(
     params: {
@@ -1340,6 +1364,29 @@ export class LogEntryControllerService {
       axios(configs, resolve, reject);
     });
   }
+
+  /**
+   * Создать запись в журнале
+   */
+  createLogEntry(
+    params: {
+      /** requestBody */
+      body?: LogEntryRequest;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/log-entries/entries';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
   /**
    * Get all statuses of log entry
    */
@@ -1698,6 +1745,40 @@ export class DecisionControllerService {
   }
 }
 
+export class DebtControllerService {
+  /**
+   *
+   */
+  loadDebts(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/debts/load-from-excel';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   *
+   */
+  generateDebts(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/debts/generator';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export class RoomReportControllerService {
   /**
    * Print rooms
@@ -1774,6 +1855,92 @@ export class DecisionReportControllerService {
   }
 }
 
+export class ReceiptControllerService {
+  /**
+   *
+   */
+  getReceipt(
+    params: {
+      /**  */
+      year: number;
+      /**  */
+      month: number;
+      /**  */
+      type: string;
+      /**  */
+      payment: string;
+      /**  */
+      number: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/receipt';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = {
+        year: params['year'],
+        month: params['month'],
+        type: params['type'],
+        payment: params['payment'],
+        number: params['number']
+      };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   *
+   */
+  getMergedReceipt(
+    params: {
+      /**  */
+      year: number;
+      /**  */
+      month: number;
+      /**  */
+      type: string;
+      /**  */
+      number: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/receipt/merged';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = {
+        year: params['year'],
+        month: params['month'],
+        type: params['type'],
+        number: params['number']
+      };
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+
+  /**
+   *
+   */
+  getAvailableMonths(options: IRequestOptions = {}): Promise<AvailableMonthsResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/receipt/available-months';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export class OwnerControllerService {
   /**
    *
@@ -1826,6 +1993,23 @@ export class GateControllerService {
   getAllGates(options: IRequestOptions = {}): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/gates';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      /** 适配ios13，get请求不允许带body */
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class CounterControllerService {
+  /**
+   * Инициализация индивидуальных счетчиков электроэнергии
+   */
+  initElectricityCounters(options: IRequestOptions = {}): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/counters/electro/init';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
 
@@ -2171,16 +2355,16 @@ export interface RoomFilter {
 
 export interface PageRoomVO {
   /**  */
-  totalPages?: number;
-
-  /**  */
   totalElements?: number;
 
   /**  */
-  pageable?: PageableObject;
+  totalPages?: number;
 
   /**  */
-  numberOfElements?: number;
+  first?: boolean;
+
+  /**  */
+  last?: boolean;
 
   /**  */
   size?: number;
@@ -2195,10 +2379,10 @@ export interface PageRoomVO {
   sort?: SortObject;
 
   /**  */
-  first?: boolean;
+  numberOfElements?: number;
 
   /**  */
-  last?: boolean;
+  pageable?: PageableObject;
 
   /**  */
   empty?: boolean;
@@ -2206,7 +2390,10 @@ export interface PageRoomVO {
 
 export interface PageableObject {
   /**  */
-  unpaged?: boolean;
+  offset?: number;
+
+  /**  */
+  sort?: SortObject;
 
   /**  */
   paged?: boolean;
@@ -2218,10 +2405,7 @@ export interface PageableObject {
   pageSize?: number;
 
   /**  */
-  offset?: number;
-
-  /**  */
-  sort?: SortObject;
+  unpaged?: boolean;
 }
 
 export interface RoomVO_Old {
@@ -2267,13 +2451,13 @@ export interface RoomVO_Old {
 
 export interface SortObject {
   /**  */
-  unsorted?: boolean;
+  empty?: boolean;
 
   /**  */
   sorted?: boolean;
 
   /**  */
-  empty?: boolean;
+  unsorted?: boolean;
 }
 
 export interface OutgoingPaymentsFilter {
@@ -2349,16 +2533,16 @@ export interface RangeRequest {
 
 export interface PagePaymentVO {
   /**  */
-  totalPages?: number;
-
-  /**  */
   totalElements?: number;
 
   /**  */
-  pageable?: PageableObject;
+  totalPages?: number;
 
   /**  */
-  numberOfElements?: number;
+  first?: boolean;
+
+  /**  */
+  last?: boolean;
 
   /**  */
   size?: number;
@@ -2373,10 +2557,10 @@ export interface PagePaymentVO {
   sort?: SortObject;
 
   /**  */
-  first?: boolean;
+  numberOfElements?: number;
 
   /**  */
-  last?: boolean;
+  pageable?: PageableObject;
 
   /**  */
   empty?: boolean;
@@ -2602,16 +2786,16 @@ export interface LogEntryResponse {
 
 export interface PageLogEntryResponse {
   /**  */
-  totalPages?: number;
-
-  /**  */
   totalElements?: number;
 
   /**  */
-  pageable?: PageableObject;
+  totalPages?: number;
 
   /**  */
-  numberOfElements?: number;
+  first?: boolean;
+
+  /**  */
+  last?: boolean;
 
   /**  */
   size?: number;
@@ -2626,13 +2810,83 @@ export interface PageLogEntryResponse {
   sort?: SortObject;
 
   /**  */
-  first?: boolean;
+  numberOfElements?: number;
 
   /**  */
-  last?: boolean;
+  pageable?: PageableObject;
 
   /**  */
   empty?: boolean;
+}
+
+export interface LogEntryRequest {
+  /**  */
+  deviceId?: string;
+
+  /**  */
+  deviceKey?: string;
+
+  /**  */
+  dateTime: string;
+
+  /**  */
+  status?: EnumLogEntryRequestStatus;
+
+  /**  */
+  method?: EnumLogEntryRequestMethod;
+
+  /**  */
+  phoneNumber?: string;
+}
+
+export interface LogEntry {
+  /**  */
+  id: number;
+
+  /**  */
+  createDate?: string;
+
+  /**  */
+  source?: string;
+
+  /**  */
+  gateId?: number;
+
+  /**  */
+  gateName?: string;
+
+  /**  */
+  dateTime: string;
+
+  /**  */
+  status?: EnumLogEntryStatus;
+
+  /**  */
+  userName?: string;
+
+  /**  */
+  flatNumber?: string;
+
+  /**  */
+  cell?: string;
+
+  /**  */
+  method?: EnumLogEntryMethod;
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  line?: string;
+
+  /**  */
+  uuid?: string;
+
+  /**  */
+  deviceId?: string;
+
+  /**  */
+  deviceKey?: string;
 }
 
 export interface FileFilter {
@@ -2673,16 +2927,16 @@ export interface FileVO {
 
 export interface PageFileVO {
   /**  */
-  totalPages?: number;
-
-  /**  */
   totalElements?: number;
 
   /**  */
-  pageable?: PageableObject;
+  totalPages?: number;
 
   /**  */
-  numberOfElements?: number;
+  first?: boolean;
+
+  /**  */
+  last?: boolean;
 
   /**  */
   size?: number;
@@ -2697,10 +2951,10 @@ export interface PageFileVO {
   sort?: SortObject;
 
   /**  */
-  first?: boolean;
+  numberOfElements?: number;
 
   /**  */
-  last?: boolean;
+  pageable?: PageableObject;
 
   /**  */
   empty?: boolean;
@@ -2903,16 +3157,16 @@ export interface IncomingPayment {
 
 export interface PageWorkspaceResponse {
   /**  */
-  totalPages?: number;
-
-  /**  */
   totalElements?: number;
 
   /**  */
-  pageable?: PageableObject;
+  totalPages?: number;
 
   /**  */
-  numberOfElements?: number;
+  first?: boolean;
+
+  /**  */
+  last?: boolean;
 
   /**  */
   size?: number;
@@ -2927,10 +3181,10 @@ export interface PageWorkspaceResponse {
   sort?: SortObject;
 
   /**  */
-  first?: boolean;
+  numberOfElements?: number;
 
   /**  */
-  last?: boolean;
+  pageable?: PageableObject;
 
   /**  */
   empty?: boolean;
@@ -2955,16 +3209,16 @@ export interface WorkspaceResponse {
 
 export interface PageUserResponse {
   /**  */
-  totalPages?: number;
-
-  /**  */
   totalElements?: number;
 
   /**  */
-  pageable?: PageableObject;
+  totalPages?: number;
 
   /**  */
-  numberOfElements?: number;
+  first?: boolean;
+
+  /**  */
+  last?: boolean;
 
   /**  */
   size?: number;
@@ -2979,10 +3233,10 @@ export interface PageUserResponse {
   sort?: SortObject;
 
   /**  */
-  first?: boolean;
+  numberOfElements?: number;
 
   /**  */
-  last?: boolean;
+  pageable?: PageableObject;
 
   /**  */
   empty?: boolean;
@@ -3002,6 +3256,11 @@ export interface FloorResponse {
 
   /**  */
   rooms?: RoomVO[];
+}
+
+export interface AvailableMonthsResponse {
+  /**  */
+  months?: string[];
 }
 
 export interface AnnualPaymentVO {
@@ -3165,6 +3424,9 @@ export interface GateResponse {
 
   /**  */
   imei?: string;
+
+  /**  */
+  areaId?: number;
 }
 
 export interface FileTypeResponse {
@@ -3244,6 +3506,63 @@ export interface AccountResponse {
 
   /**  */
   description?: string;
+}
+
+export interface AccessEntity {
+  /**  */
+  id: number;
+
+  /**  */
+  createDate?: string;
+
+  /**  */
+  active?: boolean;
+
+  /**  */
+  ownerId?: number;
+
+  /**  */
+  areas?: Area[];
+
+  /**  */
+  phoneNumber?: string;
+
+  /**  */
+  phoneLabel?: string;
+
+  /**  */
+  tenant?: boolean;
+
+  /**  */
+  blockDateTime: string;
+
+  /**  */
+  blockReason?: EnumAccessEntityBlockReason;
+
+  /**  */
+  cars?: Car[];
+
+  /**  */
+  updateDate: string;
+}
+
+export interface Area {
+  /**  */
+  areaId?: number;
+
+  /**  */
+  places?: string[];
+}
+
+export interface Car {
+  /**  */
+  plateNumber?: string;
+
+  /**  */
+  description?: string;
+
+  /**  */
+  active?: boolean;
 }
 
 export interface OverviewArea {
@@ -3338,6 +3657,40 @@ export enum EnumLogEntryFilterStatus {
 export enum EnumLogEntryFilterMethod {
   'CALL' = 'CALL',
   'APP' = 'APP',
+  'CLOUD' = 'CLOUD',
+  'PROGRESSIVE_WEB_APPS' = 'PROGRESSIVE_WEB_APPS',
+  'UNDEFINED' = 'UNDEFINED'
+}
+
+export enum EnumLogEntryRequestStatus {
+  'OPENED' = 'OPENED',
+  'AUTH_FAILED' = 'AUTH_FAILED',
+  'NUM_DELETED' = 'NUM_DELETED',
+  'USER_ADDED' = 'USER_ADDED',
+  'UNDEFINED' = 'UNDEFINED'
+}
+
+export enum EnumLogEntryRequestMethod {
+  'CALL' = 'CALL',
+  'APP' = 'APP',
+  'CLOUD' = 'CLOUD',
+  'PROGRESSIVE_WEB_APPS' = 'PROGRESSIVE_WEB_APPS',
+  'UNDEFINED' = 'UNDEFINED'
+}
+
+export enum EnumLogEntryStatus {
+  'OPENED' = 'OPENED',
+  'AUTH_FAILED' = 'AUTH_FAILED',
+  'NUM_DELETED' = 'NUM_DELETED',
+  'USER_ADDED' = 'USER_ADDED',
+  'UNDEFINED' = 'UNDEFINED'
+}
+
+export enum EnumLogEntryMethod {
+  'CALL' = 'CALL',
+  'APP' = 'APP',
+  'CLOUD' = 'CLOUD',
+  'PROGRESSIVE_WEB_APPS' = 'PROGRESSIVE_WEB_APPS',
   'UNDEFINED' = 'UNDEFINED'
 }
 export enum EnumFileFilterFileType {
@@ -3389,6 +3742,12 @@ export enum EnumBuildingType {
   'UNDERGROUND_PARKING' = 'UNDERGROUND_PARKING'
 }
 
+export enum EnumAccessEntityBlockReason {
+  'MANUAL' = 'MANUAL',
+  'EXPIRED' = 'EXPIRED'
+}
+
+
 export interface TopResponse {
   count: number,
   id: number,
@@ -3437,3 +3796,4 @@ export const OwnerService = new OwnerControllerService();
 export const AuthService = new AuthentificationService();
 export const UserService = new UserControllerService();
 export const WorkspacesService = new WorkspacesControllerService();
+export const ReceiptService = new ReceiptControllerService();

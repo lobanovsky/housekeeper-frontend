@@ -5,7 +5,7 @@ import { App as AppContext, Layout } from 'antd';
 import NotificationsProvider from 'global/NotificationsProvider';
 
 import { logout } from 'store/reducers/auth';
-import { AreaEntity, AreaService } from './backend/services/backend';
+import { AreaEntity, AreaService, AvailableMonthsResponse, ReceiptService } from './backend/services/backend';
 import { DictionariesContext } from './context/AppContext';
 import useRemoteData from './hooks/use-remote-data';
 import { AppHeader, PageHeader, Sider } from './layout';
@@ -21,6 +21,11 @@ import './App.scss';
 function App() {
   const [areas] = useRemoteData<AreaEntity[]>(AreaService.findAll2, {
     errorMsg: 'Не удалось загрузить список типов доступов'
+  });
+
+  const [paymentMonths = []] = useRemoteData<AvailableMonthsResponse, string[]>(ReceiptService.getAvailableMonths, {
+    errorMsg: 'Не удалось загрузить список месяцев для квитанций',
+    dataConverter: ({ months = [] }: AvailableMonthsResponse) => months
   });
 
   const dispatch = useDispatch();
@@ -41,7 +46,11 @@ function App() {
   return (
     <div className="App">
       {/* eslint-disable-next-line react/jsx-no-constructed-context-values */}
-      <DictionariesContext.Provider value={{ areas: areas || [] }}>
+      <DictionariesContext.Provider value={{
+        areas: areas || [],
+        paymentMonths: paymentMonths || []
+      }}
+      >
         <AppContext>
           <NotificationsProvider />
           <BrowserRouter>

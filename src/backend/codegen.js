@@ -114,6 +114,7 @@ export const OwnerService = new OwnerControllerService();
 export const AuthService = new AuthentificationService();
 export const UserService = new UserControllerService();
 export const WorkspacesService = new WorkspacesControllerService();
+export const ReceiptService = new ReceiptControllerService();
 	`, (err) => {
       if (err) {
         console.error("Append error");

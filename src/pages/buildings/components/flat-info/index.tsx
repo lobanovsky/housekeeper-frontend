@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useMemo } from 'react';
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
-import { Button, Card, Empty, Tooltip, Typography } from 'antd';
+import { Button, Card, Empty, Select, Tooltip, Typography } from 'antd';
 import { InfoCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 
 import { AccessResponse, EnumRoomVOType } from 'backend/services/backend';
@@ -16,10 +16,14 @@ import { FlatOwnerInfo } from './components/owner-property';
 import { AccessContext, IAccessContext } from './context/AccessContext';
 import { useRoomInfo } from './hooks/use-room-info';
 import './styles.scss';
+import dayjs from 'dayjs';
 
 export function FlatInfo() {
   const { roomId: selectedRoomStr = '' } = useParams();
-  const { areas } = useContext(DictionariesContext);
+  const {
+    areas,
+    paymentMonths
+  } = useContext(DictionariesContext);
 
   const isAdmin = useSelector(getIsAdmin);
 
@@ -39,6 +43,19 @@ export function FlatInfo() {
     roomId: parseInt(selectedRoomStr, 10),
     allAreas: areas
   });
+
+  const paymentMonthOptions = useMemo(() => paymentMonths.map((monthStr) => {
+    const date = dayjs(monthStr, 'YYYY-MM');
+    const localizedValue = date.format('MMMM YYYY');
+    return (
+      <Select.Option
+        key={monthStr}
+        value={monthStr}
+      >
+        {localizedValue}
+      </Select.Option>
+    );
+  }), [paymentMonths.length]);
 
   const reloadInfo = useCallback(() => {
     const parsedRoomId = parseInt(selectedRoomStr, 10);
@@ -79,61 +96,73 @@ export function FlatInfo() {
 
   // @ts-ignore
   return (
-    <AccessContext.Provider value={flatContextState.value}>
-      <Card
-        size="small"
-        className="flat-info-card"
-        loading={loading}
-        title={(
-          <div className="flat-title card-title">
-            <Typography.Title level={5}>
-              {RoomTypeNames[roomInfo.type as EnumRoomVOType]}
-              {roomInfo.number}
-            </Typography.Title>
-            <div className="address">
-              {roomInfo.street && roomInfo.building
-                ? `${roomInfo.street}, д. ${roomInfo.building}`
-                : ''}
-            </div>
-          </div>
-        )}
-      >
-        <div className="flat-info">
-          <FlatOwnerInfo roomInfo={roomInfo} ownerProperties={ownerProperty} />
-          {!loading && (
-            <div className="flat-accesses">
-              {isLoadingAccesses && <Loading />}
-              <div className="access-header">
-                <Typography.Title level={5}>Доступы</Typography.Title>
-                {grantedAreas.length && isAdmin ? (
-                  <Button
-                    type="link"
-                    size="small"
-                    className="add-btn"
-                    onClick={showAccessAddModal}
-                  >
-                    {/* @ts-ignore */}
-                    <PlusOutlined />
-                    {/* добавить */}
-                  </Button>
-                ) : (
-                  <Tooltip title="За выдачей доступов обращайтесь к администратору">
-                    {/* @ts-ignore */}
-                    <InfoCircleTwoTone style={{ fontSize: '12px' }} twoToneColor="#C7C7C7" />
-                  </Tooltip>
-                )}
+    <div>
+      <AccessContext.Provider value={flatContextState.value}>
+        <Card
+          size="small"
+          className="flat-info-card"
+          loading={loading}
+          title={(
+            <div className="flat-title card-title">
+              <Typography.Title level={5}>
+                {RoomTypeNames[roomInfo.type as EnumRoomVOType]}
+                {roomInfo.number}
+              </Typography.Title>
+              <div className="address">
+                {roomInfo.street && roomInfo.building
+                  ? `${roomInfo.street}, д. ${roomInfo.building}`
+                  : ''}
               </div>
-              {accesses.length ? (
-                <div className={`accesses-list ${allAccessesAreasCount ? `same-length length-${allAccessesAreasCount}` : ''}`}>
-                  {accesses.map((accessInfo: AccessResponse) => (
-                    <AccessItem key={accessInfo.accessId} access={accessInfo} />
-                  ))}
-                </div>
-              ) : <Empty description="нет доступов" />}
             </div>
           )}
-        </div>
-      </Card>
-    </AccessContext.Provider>
+        >
+          <div className="flat-info">
+            <FlatOwnerInfo roomInfo={roomInfo} ownerProperties={ownerProperty} />
+            {!loading && (
+              <div className="flat-accesses">
+                {isLoadingAccesses && <Loading />}
+                <div className="access-header">
+                  <Typography.Title level={5}>Доступы</Typography.Title>
+                  {grantedAreas.length && isAdmin ? (
+                    <Button
+                      type="link"
+                      size="small"
+                      className="add-btn"
+                      onClick={showAccessAddModal}
+                    >
+                      {/* @ts-ignore */}
+                      <PlusOutlined />
+                      {/* добавить */}
+                    </Button>
+                  ) : (
+                    <Tooltip title="За выдачей доступов обращайтесь к администратору">
+                      {/* @ts-ignore */}
+                      <InfoCircleTwoTone style={{ fontSize: '12px' }} twoToneColor="#C7C7C7" />
+                    </Tooltip>
+                  )}
+                </div>
+                {accesses.length ? (
+                  <div className={`accesses-list ${allAccessesAreasCount ? `same-length length-${allAccessesAreasCount}` : ''}`}>
+                    {accesses.map((accessInfo: AccessResponse) => (
+                      <AccessItem key={accessInfo.accessId} access={accessInfo} />
+                    ))}
+                  </div>
+                ) : <Empty description="нет доступов" />}
+              </div>
+            )}
+          </div>
+        </Card>
+
+        <Card
+          size="small"
+          style={{ marginTop: 24 }}
+          className="print-card"
+          loading={loading}
+          title="Печать квитанции"
+        >
+          Печать
+        </Card>
+      </AccessContext.Provider>
+    </div>
   );
 }
