@@ -36,7 +36,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/housekeeper:${{ env.SHORT_SHA }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/housekeeper-frontend:${{ env.SHORT_SHA }}
 
   deploy:
     name: Deploy to Ubuntu Server
