@@ -23,8 +23,8 @@ export const filterOption = (input: string, option: OptionProps | undefined) => 
 };
 
 export const parseUTF8FileName = (fileNameStr: string) => {
-  let fileName = fileNameStr.replace('attachment; filename="', '');
-  fileName = fileName.slice(0, fileName.length - 1);
+  let fileName = fileNameStr.replace('attachment; filename=', '');
+  fileName = fileName.slice(0, fileName.length);
   return decodeURI(fileName);
 };
 
