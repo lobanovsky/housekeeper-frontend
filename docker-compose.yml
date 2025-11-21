@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: ${DOCKERFILE:-Dockerfile}
-    image: ${CONTAINER_REGISTRY}/housekeeper-frontend:${TAG}
+    image: lobanovsky/housekeeper-frontend:${TAG}
     container_name: housekeeper-frontend
     restart: always
     volumes:
