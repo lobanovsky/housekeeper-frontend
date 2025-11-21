@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useMemo } from 'react';
 import { useParams } from 'react-router';
 import { useSelector } from 'react-redux';
-import { Button, Card, Empty, Select, Tooltip, Typography } from 'antd';
+import { Button, Card, Empty, Tooltip, Typography } from 'antd';
 import { InfoCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 
 import { AccessResponse, EnumRoomVOType } from 'backend/services/backend';
@@ -10,13 +10,10 @@ import { DictionariesContext } from 'context/AppContext';
 import { getIsAdmin } from 'store/selectors/auth';
 import { RoomTypeNames } from 'utils/constants';
 import { getRandomId } from 'utils';
-import { AccessItem } from './components/access-item';
-import { showAddAccessItemModal } from './components/access-add-modal';
-import { FlatOwnerInfo } from './components/owner-property';
+import { AccessItem, FlatOwnerInfo, ReceiptPrintPanel, showAddAccessItemModal } from './components';
 import { AccessContext, IAccessContext } from './context/AccessContext';
 import { useRoomInfo } from './hooks/use-room-info';
 import './styles.scss';
-import dayjs from 'dayjs';
 
 export function FlatInfo() {
   const { roomId: selectedRoomStr = '' } = useParams();
@@ -43,19 +40,6 @@ export function FlatInfo() {
     roomId: parseInt(selectedRoomStr, 10),
     allAreas: areas
   });
-
-  const paymentMonthOptions = useMemo(() => paymentMonths.map((monthStr) => {
-    const date = dayjs(monthStr, 'YYYY-MM');
-    const localizedValue = date.format('MMMM YYYY');
-    return (
-      <Select.Option
-        key={monthStr}
-        value={monthStr}
-      >
-        {localizedValue}
-      </Select.Option>
-    );
-  }), [paymentMonths.length]);
 
   const reloadInfo = useCallback(() => {
     const parsedRoomId = parseInt(selectedRoomStr, 10);
@@ -152,16 +136,7 @@ export function FlatInfo() {
             )}
           </div>
         </Card>
-
-        <Card
-          size="small"
-          style={{ marginTop: 24 }}
-          className="print-card"
-          loading={loading}
-          title="Печать квитанции"
-        >
-          Печать
-        </Card>
+        <ReceiptPrintPanel flatNumber={roomInfo.number} paymentMonths={paymentMonths} />
       </AccessContext.Provider>
     </div>
   );
