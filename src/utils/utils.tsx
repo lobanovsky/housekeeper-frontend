@@ -5,16 +5,18 @@ import { saveAs } from 'file-saver';
 import axios from 'axios';
 import { showError } from 'utils/notifications';
 import { SERVER_DATE_FORMAT } from './constants';
-import { ActionFinishCallback, SelectedDatesShort } from './types';
+import { ActionCallbackWithData, SelectedDatesShort } from './types';
 import { dateRenderer } from './renderers';
 import { IRequestConfig } from '../backend/services/backend';
 
-export const getRandomId = () => dayjs().unix()
+export const getRandomId = () => dayjs()
+    .unix()
   + Math.round(Math.random() * 10000) + Math.round(Math.random() * 100);
 
 export const filterOption = (input: string, option: OptionProps | undefined) => {
   if (option && option.children) {
-    const value = String(option.children).toLowerCase();
+    const value = String(option.children)
+      .toLowerCase();
     return value.indexOf(input.toLowerCase()) >= 0;
   }
   return false;
@@ -27,10 +29,17 @@ export const parseUTF8FileName = (fileNameStr: string) => {
 };
 
 export const downloadFile = ({
-                               method = 'get', requestParams = {}, onFinish, ...restParams
+                               method = 'get',
+                               requestParams = {},
+                               onFinish,
+                               instantPrint = false,
+                               type = '',
+                               ...restParams
                              }: {
   requestParams?: Record<string, string | number | boolean>,
-  onFinish?: ActionFinishCallback
+  onFinish?: ActionCallbackWithData<any>,
+  type?: string,
+  instantPrint?: boolean;
 } & IRequestConfig) => {
   axios({
     ...restParams,
@@ -38,23 +47,76 @@ export const downloadFile = ({
     method: method.toUpperCase(),
     responseType: 'blob',
     data: requestParams || {}
-  }).then((response) => {
-    const blob = new Blob([response.data]);
-    let loadFileName = 'Файл.txt';
-    if (response.headers && Object.prototype.hasOwnProperty.call(response.headers, 'content-disposition')) {
-      const fileNameStr = response.headers['content-disposition'];
-      if (fileNameStr) {
-        loadFileName = parseUTF8FileName(fileNameStr);
-      }
-    }
-
-    saveAs(blob, loadFileName);
-    if (onFinish) {
-      onFinish(true);
-    }
   })
+    .then((response) => {
+      const blob = new Blob([response.data], type ? { type } : {});
+      let loadFileName = 'Файл.txt';
+      if (response.headers && Object.prototype.hasOwnProperty.call(response.headers, 'content-disposition')) {
+        const fileNameStr = response.headers['content-disposition'];
+        if (fileNameStr) {
+          loadFileName = parseUTF8FileName(fileNameStr);
+        }
+      }
+
+      if (instantPrint) {
+        const blobURL = URL.createObjectURL(blob);
+        const pdfWindow = window.open(blobURL);
+
+        // Call print on it
+        pdfWindow?.print();
+        if (onFinish) {
+          onFinish(true);
+        }
+      } else {
+        saveAs(blob, loadFileName);
+        if (onFinish) {
+          onFinish(true);
+        }
+      }
+    })
     .catch((e) => {
       showError('Не удалось скачать файл', e);
+      if (onFinish) {
+        onFinish(false);
+      }
+    });
+};
+
+export const printFile = ({
+                            method = 'get',
+                            requestParams = {},
+                            onFinish,
+
+                            type = '',
+                            ...restParams
+                          }: {
+  requestParams?: Record<string, string | number | boolean>,
+  onFinish?: ActionCallbackWithData<any>,
+  fileName?: string,
+  type?: string,
+  instantPrint?: boolean;
+} & IRequestConfig) => {
+  axios({
+    ...restParams,
+    params: method.toLowerCase() === 'get' ? requestParams : {},
+    method: method.toUpperCase(),
+    responseType: 'blob',
+    data: requestParams || {}
+  })
+    .then((response) => {
+      const blob = new Blob([response.data], type ? { type } : {});
+
+      const blobURL = URL.createObjectURL(blob);
+      const pdfWindow = window.open(blobURL);
+
+      // Call print on it
+      pdfWindow?.print();
+      if (onFinish) {
+        onFinish(true);
+      }
+    })
+    .catch((e) => {
+      showError('Не удалось распечатать файл', e);
       if (onFinish) {
         onFinish(false);
       }

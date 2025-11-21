@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import { DownloadOutlined, LoadingOutlined } from '@ant-design/icons';
+import { DownloadOutlined, LoadingOutlined, PrinterOutlined } from '@ant-design/icons';
 import { Button, Card, Select } from 'antd';
 import qs from 'qs';
 
 import { EnumRoomVOType } from 'backend/services/backend';
 import { useLoading } from 'hooks/use-loading';
-import { downloadFile } from 'utils/utils';
+import { downloadFile, printFile } from 'utils/utils';
 
 export function ReceiptPrintPanel({
                                     flatNumber,
@@ -28,7 +28,9 @@ export function ReceiptPrintPanel({
     );
   }), [paymentMonths.length]);
 
-  const printReceipt = useCallback(() => {
+  //
+
+  const downloadReceipt = useCallback(() => {
     const [yearNumber, monthNumber] = month.split('-');
     const paramsStr = qs.stringify({
       year: yearNumber,
@@ -39,6 +41,24 @@ export function ReceiptPrintPanel({
     showLoading();
     downloadFile({
       method: 'get',
+      url: `/receipt/merged?${paramsStr}`,
+      onFinish: hideLoading
+    });
+  }, [month, flatNumber]);
+
+  const printReceipt = useCallback(() => {
+    const [yearNumber, monthNumber] = month.split('-');
+    const paramsStr = qs.stringify({
+      year: yearNumber,
+      month: monthNumber,
+      type: EnumRoomVOType.FLAT,
+      number: flatNumber
+    });
+
+    showLoading();
+    printFile({
+      method: 'get',
+      type: 'application/pdf',
       url: `/receipt/merged?${paramsStr}`,
       onFinish: hideLoading
     });
@@ -73,13 +93,28 @@ export function ReceiptPrintPanel({
             return;
           }
 
-          printReceipt();
+          downloadReceipt();
         }}
       >
         {loading ? <LoadingOutlined /> : <DownloadOutlined />}
         {' '}
         Скачать квитанцию
       </Button>
+      <Button
+        type="link"
+        style={{ marginLeft: 24 }}
+        onClick={() => {
+          if (loading) {
+            return;
+          }
+
+          printReceipt();
+        }}
+      >
+        <PrinterOutlined />
+        Распечатать
+      </Button>
+
     </Card>
   );
 }
