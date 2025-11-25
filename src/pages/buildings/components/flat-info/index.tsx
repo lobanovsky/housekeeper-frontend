@@ -136,7 +136,12 @@ export function FlatInfo() {
             )}
           </div>
         </Card>
-        <ReceiptPrintPanel flatNumber={roomInfo.number} paymentMonths={paymentMonths} />
+        {/* eslint-disable-next-line max-len */}
+        <ReceiptPrintPanel
+          flatNumber={roomInfo.number}
+          isParking={building?.type === 'UNDERGROUND_PARKING'}
+          paymentMonths={paymentMonths}
+        />
       </AccessContext.Provider>
     </div>
   );

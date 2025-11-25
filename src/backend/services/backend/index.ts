@@ -748,7 +748,6 @@ export class AccessControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Get the access by the phone number
    */
@@ -1364,7 +1363,6 @@ export class LogEntryControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    * Создать запись в журнале
    */
@@ -1762,7 +1760,6 @@ export class DebtControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -1891,7 +1888,6 @@ export class ReceiptControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -1924,7 +1920,6 @@ export class ReceiptControllerService {
       axios(configs, resolve, reject);
     });
   }
-
   /**
    *
    */
@@ -3661,7 +3656,6 @@ export enum EnumLogEntryFilterMethod {
   'PROGRESSIVE_WEB_APPS' = 'PROGRESSIVE_WEB_APPS',
   'UNDEFINED' = 'UNDEFINED'
 }
-
 export enum EnumLogEntryRequestStatus {
   'OPENED' = 'OPENED',
   'AUTH_FAILED' = 'AUTH_FAILED',
@@ -3669,7 +3663,6 @@ export enum EnumLogEntryRequestStatus {
   'USER_ADDED' = 'USER_ADDED',
   'UNDEFINED' = 'UNDEFINED'
 }
-
 export enum EnumLogEntryRequestMethod {
   'CALL' = 'CALL',
   'APP' = 'APP',
@@ -3677,7 +3670,6 @@ export enum EnumLogEntryRequestMethod {
   'PROGRESSIVE_WEB_APPS' = 'PROGRESSIVE_WEB_APPS',
   'UNDEFINED' = 'UNDEFINED'
 }
-
 export enum EnumLogEntryStatus {
   'OPENED' = 'OPENED',
   'AUTH_FAILED' = 'AUTH_FAILED',
@@ -3685,7 +3677,6 @@ export enum EnumLogEntryStatus {
   'USER_ADDED' = 'USER_ADDED',
   'UNDEFINED' = 'UNDEFINED'
 }
-
 export enum EnumLogEntryMethod {
   'CALL' = 'CALL',
   'APP' = 'APP',
@@ -3741,12 +3732,10 @@ export enum EnumBuildingType {
   'APARTMENT_BUILDING' = 'APARTMENT_BUILDING',
   'UNDERGROUND_PARKING' = 'UNDERGROUND_PARKING'
 }
-
 export enum EnumAccessEntityBlockReason {
   'MANUAL' = 'MANUAL',
   'EXPIRED' = 'EXPIRED'
 }
-
 
 export interface TopResponse {
   count: number,

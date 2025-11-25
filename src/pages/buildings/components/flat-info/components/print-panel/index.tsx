@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import { DownloadOutlined, LoadingOutlined, PrinterOutlined } from '@ant-design/icons';
+import { DownloadOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Button, Card, Select } from 'antd';
 import qs from 'qs';
 
@@ -10,8 +10,9 @@ import { downloadFile, printFile } from 'utils/utils';
 
 export function ReceiptPrintPanel({
                                     flatNumber,
+                                    isParking = false,
                                     paymentMonths
-                                  }: { flatNumber: string, paymentMonths: string[] }) {
+                                  }: { flatNumber: string, isParking: boolean, paymentMonths: string[] }) {
   const [loading, showLoading, hideLoading] = useLoading();
   const [month, setMonth] = useState<string>('');
 
@@ -35,7 +36,7 @@ export function ReceiptPrintPanel({
     const paramsStr = qs.stringify({
       year: yearNumber,
       month: monthNumber,
-      type: EnumRoomVOType.FLAT,
+      type: isParking ? 'PARKING_SPACE' : EnumRoomVOType.FLAT,
       number: flatNumber
     });
     showLoading();
@@ -86,7 +87,6 @@ export function ReceiptPrintPanel({
         {paymentMonthOptions}
       </Select>
       <Button
-        type="link"
         style={{ marginLeft: 24 }}
         onClick={() => {
           if (loading) {
@@ -100,20 +100,20 @@ export function ReceiptPrintPanel({
         {' '}
         Скачать квитанцию
       </Button>
-      <Button
-        type="link"
-        style={{ marginLeft: 24 }}
-        onClick={() => {
-          if (loading) {
-            return;
-          }
+      {/* <Button */}
+      {/*   type="link" */}
+      {/*   style={{ marginLeft: 24 }} */}
+      {/*   onClick={() => { */}
+      {/*     if (loading) { */}
+      {/*       return; */}
+      {/*     } */}
 
-          printReceipt();
-        }}
-      >
-        <PrinterOutlined />
-        Распечатать
-      </Button>
+      {/*     printReceipt(); */}
+      {/*   }} */}
+      {/* > */}
+      {/*   <PrinterOutlined /> */}
+      {/*   Распечатать */}
+      {/* </Button> */}
 
     </Card>
   );
