@@ -17,6 +17,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.housekpr.rule=Host(`housekpr.ru`)"
+      - "traefik.http.routers.housekpr.entrypoints=https"
+      - "traefik.http.routers.housekpr.tls=true"
+      - "traefik.http.routers.housekpr.tls.certresolver=letsEncrypt"
     networks:
       - housekpr-network
 
