@@ -37,6 +37,8 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/housekeeper-frontend:${{ env.SHORT_SHA }}
+          build-args: |
+            REACT_APP_BACKEND_URL=${{ secrets.REACT_APP_BACKEND_URL }}
 
   deploy:
     name: Deploy to Ubuntu Server

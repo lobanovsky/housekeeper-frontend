@@ -1,70 +1,127 @@
 # HouseKeeper Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Frontend-приложение HouseKeeper для управления домами, помещениями, платежами, пользователями и связанными сущностями. Проект собран на Create React App и использует React 18, TypeScript, Redux Toolkit, React Router, Ant Design, SCSS и Axios.
 
-## Available Scripts
+## Требования
 
-In the project directory, you can run:
+- Node.js 20 рекомендуется, так как Docker-сборка использует `node:20`.
+- npm и зависимости из `package-lock.json`.
 
-### `npm start`
+Установка зависимостей:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+npm install
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Локальный запуск
 
-### `npm test`
+```bash
+npm start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Приложение откроется на `http://localhost:3000`. Dev-сервер автоматически перезагружает страницу при изменениях в исходниках.
 
-### `npm run build`
+## Переменные окружения
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Backend API задаётся переменной `REACT_APP_BACKEND_URL`. Она используется в `src/backend/axios.ts` как `axios.defaults.baseURL`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Важно: в Create React App все переменные `REACT_APP_*` встраиваются в bundle **во время сборки**. Если изменить переменную окружения в уже запущенном nginx-контейнере, собранный frontend не изменится.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Файлы окружения:
 
-### `npm run eject`
+- `.env` — общие значения для всех режимов.
+- `.env.development` — значения для `npm start`.
+- `.env.production` — значения для `npm run build`.
+- `.env.local`, `.env.development.local`, `.env.production.local` — локальные override-файлы, игнорируются git.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Пример локального override:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+REACT_APP_BACKEND_URL=https://backend.housekpr.ru/api
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Команды
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm start
+```
 
-## Learn More
+Запускает приложение в development-режиме.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+npm test
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Запускает Jest/React Testing Library через CRA в watch-режиме.
 
-### Code Splitting
+```bash
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Собирает production bundle в директорию `build/`. В сборку также встраивается `REACT_APP_GIT_SHA` из текущего git-коммита.
 
-### Analyzing the Bundle Size
+```bash
+npm run lint:fix
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Запускает ESLint для `src/**/*.ts` и `src/**/*.tsx` с автоматическим исправлением доступных ошибок.
 
-### Making a Progressive Web App
+```bash
+npm run swagger:codegen
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Генерирует backend API-клиент в `src/backend/services/backend`.
 
-### Advanced Configuration
+## Структура проекта
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- `src/index.tsx`, `src/App.tsx` — точки входа приложения.
+- `src/pages/` — страницы и feature-разделы: `auth`, `buildings`, `payments`, `gates`, `admin`, `rooms`.
+- `src/components/` — переиспользуемые UI-компоненты.
+- `src/layout/` — общий layout, header, sider и page header.
+- `src/store/` — Redux store, reducers, selectors и middleware.
+- `src/navigation/` — маршруты, типы роутинга и private route.
+- `src/backend/` — Axios-конфигурация, кодогенерация и сгенерированные API-сервисы.
+- `src/hooks/`, `src/utils/`, `src/context/`, `src/icons/` — общие хуки, утилиты, контекст и иконки.
+- `public/` — статические ресурсы CRA.
+- `conf/` — nginx-конфигурация для Docker-образа.
 
-### Deployment
+## API-клиент
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Базовый URL backend задаётся через `REACT_APP_BACKEND_URL`. Общие настройки Axios находятся в `src/backend/axios.ts`: base URL, timeout, обработка 401/403 и сериализация query-параметров.
 
-### `npm run build` fails to minify
+Сервисы backend генерируются через `npm run swagger:codegen`. Скрипт использует `src/backend/task.js` и складывает результат в `src/backend/services/backend`. После регенерации проверьте diff, потому что эти файлы входят в кодовую базу.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Docker и деплой
+
+`Dockerfile` собирает frontend в node builder stage, затем копирует `build/` в nginx image.
+
+Backend URL для Docker-сборки передаётся build argument:
+
+```bash
+docker build --build-arg REACT_APP_BACKEND_URL=https://backend.housekpr.ru/api .
+```
+
+GitHub Actions workflow `.github/workflows/deploy-to-mr17dom1.yml` передаёт `REACT_APP_BACKEND_URL` из repository secret с таким же именем. Для production-деплоя убедитесь, что secret `REACT_APP_BACKEND_URL` задан.
+
+`docker-compose.yml` используется на сервере для запуска опубликованного образа `lobanovsky/housekeeper-frontend:${TAG}` за Traefik.
+
+## Стиль кода
+
+Форматирование задаётся Prettier:
+
+- одинарные кавычки;
+- tabs, `tabWidth: 4`;
+- `printWidth: 100`;
+- одинарные кавычки в JSX.
+
+ESLint расширяет `react-app`, `react-app/jest`, Airbnb, Airbnb TypeScript и `plugin:import/typescript`. Перед pull request запускайте `npm run lint:fix` и проверяйте оставшиеся предупреждения вручную.
+
+## Тестирование
+
+Тесты запускаются командой:
+
+```bash
+npm test
+```
+
+Проект использует Jest и React Testing Library. Новые тесты лучше размещать рядом с тестируемым компонентом или модулем в формате `*.test.tsx` / `*.test.ts`. Для UI-изменений покрывайте видимое поведение пользователя, а не внутреннюю реализацию компонента.

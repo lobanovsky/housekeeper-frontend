@@ -1,6 +1,7 @@
 # build environment
 FROM node:20 as builder
 ARG ENV
+ARG REACT_APP_BACKEND_URL
 RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
@@ -8,7 +9,8 @@ COPY package.json /usr/src/app/package.json
 COPY package-lock.json /usr/src/app/package-lock.json
 RUN npm install --silent --legacy-peer-deps
 COPY . /usr/src/app
-RUN if [ "$ENV" = "DEV" ]; then npm run build:dev; else npm run build; fi
+RUN if [ -z "$REACT_APP_BACKEND_URL" ]; then unset REACT_APP_BACKEND_URL; fi; \
+    if [ "$ENV" = "DEV" ]; then npm run build:dev; else npm run build; fi
 
 # production environment
 FROM nginx:alpine
@@ -16,10 +18,7 @@ RUN rm -rf /etc/nginx/conf.d
 COPY conf /etc/nginx
 COPY --from=builder /usr/src/app/build /usr/share/nginx/html
 
-# Copy .env file and shell script to container
 WORKDIR /usr/share/nginx/html
-COPY .env .
-COPY .env.development .
 
 # Add bash
 RUN apk add --no-cache bash
