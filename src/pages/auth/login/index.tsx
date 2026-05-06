@@ -4,8 +4,9 @@ import { Button, Card, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
 import { AuthService, LoginRequest } from 'backend/services/backend';
+import { clearAxiosAuthorization } from 'backend/axios';
 import Loading from 'components/loading';
-import { loginStarted } from 'store/reducers/auth';
+import { loginError, loginStarted } from 'store/reducers/auth';
 import { AuthData, IUserData, ServerError } from 'utils/types';
 import { showError } from 'utils/notifications';
 import { getUserData } from './helpers';
@@ -22,6 +23,7 @@ function Login() {
   const isValidForm = useMemo(() => !!(credentials.email && credentials.password), [credentials.email, credentials.password]);
 
   const doLogin = useCallback((inputCredentials: LoginRequest, onFinish: any) => {
+    clearAxiosAuthorization();
     // @ts-ignore
     dispatch(loginStarted());
     AuthService.token({ body: inputCredentials })
@@ -29,9 +31,11 @@ function Login() {
         onFinish(true, userProfile);
       })
       .catch((error) => {
+        // @ts-ignore
+        dispatch(loginError());
         onFinish(false, error);
       });
-  }, []);
+  }, [dispatch]);
 
   const loginCallback = useCallback(() => {
     setIsLoggingIn(true);
@@ -47,7 +51,7 @@ function Login() {
         showError('Не удалось авторизоваться', error as ServerError);
       }
     });
-  }, [credentials.password, credentials.email]);
+  }, [credentials, dispatch, doLogin]);
 
   return (
     <div className="view login">

@@ -7,11 +7,24 @@ import { showError } from 'utils';
 import { IUserData } from 'utils/types';
 import { loadUserProfile } from './services';
 
+let notAuthorizedInterceptorId: number | null = null;
+
+const registerNotAuthorizedInterceptor = (dispatch: any) => {
+  if (notAuthorizedInterceptorId !== null) {
+    axios.interceptors.response.eject(notAuthorizedInterceptorId);
+  }
+
+  notAuthorizedInterceptorId = axios.interceptors.response.use(
+    (response) => response,
+    (resp) => axiosNotAuthorizedInterceptor(resp, dispatch)
+  );
+};
+
 const onSuccessLoadUser = (userData: UserResponse & IUserData, dispatch: any) => {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const { access_token } = userData;
   axios.defaults.headers.Authorization = access_token ? `Bearer ${access_token}` : '';
-  axios.interceptors.response.use((response) => response, (resp) => axiosNotAuthorizedInterceptor(resp, dispatch));
+  registerNotAuthorizedInterceptor(dispatch);
   dispatch(loginSuccess({
     ...userData,
     roles: userData.role?.roleCode ? [userData.role?.roleCode as EnumUserRequestRole] : [],

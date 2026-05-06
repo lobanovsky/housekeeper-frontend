@@ -1,6 +1,6 @@
 import { createListenerMiddleware, isAnyOf } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { loginError } from '../../reducers/auth';
+import { clearAxiosAuthorization } from 'backend/axios';
+import { loginError, logout } from '../../reducers/auth';
 
 export const authMiddleware = createListenerMiddleware();
 //
@@ -27,9 +27,9 @@ export const authMiddleware = createListenerMiddleware();
 // });
 
 authMiddleware.startListening({
-  matcher: isAnyOf(loginError),
+  matcher: isAnyOf(loginError, logout),
   effect: async () => {
-    delete axios.defaults.headers.Authorization;
+    clearAxiosAuthorization();
   }
 
 });

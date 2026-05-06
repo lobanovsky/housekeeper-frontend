@@ -4,10 +4,16 @@ import { serviceOptions } from './services/backend';
 import { showError } from '../utils';
 import { logout } from '../store/reducers/auth';
 
+export const clearAxiosAuthorization = () => {
+  delete axios.defaults.headers.Authorization;
+  delete axios.defaults.headers.common.Authorization;
+};
+
 export const axiosNotAuthorizedInterceptor = (error: any, dispatch: any) => {
   // Reject promise if usual error
   if (error.response && (error.response.status === 401 || error.response.status === 403)) {
     showError('Время сессии истекло. Пожалуйста, авторизуйтесь заново');
+    clearAxiosAuthorization();
     // @ts-ignore
     dispatch(logout());
   }
